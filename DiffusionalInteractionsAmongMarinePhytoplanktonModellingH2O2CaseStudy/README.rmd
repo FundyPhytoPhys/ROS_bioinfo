@@ -1,0 +1,18 @@
+---
+title: "README"
+output: html_document
+---
+
+This is a README for Reactive Oxygen Species Production and Scavenging; Genomic Patterns Across Marine Phytoplankton. 
+
+`ROSDiffusionManuscript.Rmd` imports data from three GoogleSheets (duplicated as .csv in this repository), generates models, plots the outputs and creates the manuscript.
+
+GoogleSheet links: 
+CellSpaceMeta contains information about the cell spacing and cell size for representative phytoplankters across diverse habitats; https://docs.google.com/spreadsheets/d/1DclsGlEb9R_qrduluYjWQ_OziLSrRzwLfgW9tzW_kNg/edit#gid=425624204
+
+ROSDiffusion contains information about the properties of different ROS including the Seawater concentrations, lifetime and diffusion coefficient; https://docs.google.com/spreadsheets/d/1ds8brzxLzTitaVCv3Evf2extGqJfrKjQynyAVx5m7hg/edit#gid=663628435
+
+CellROSConc contains information about intracellular concentrations of H2O@ in different organisms; https://docs.google.com/spreadsheets/d/1bxTIKTNfv-n3Y-JMJCOlt14Ec3e4tSdBQZg-HiuypOY/edit#gid=0
+
+
+
