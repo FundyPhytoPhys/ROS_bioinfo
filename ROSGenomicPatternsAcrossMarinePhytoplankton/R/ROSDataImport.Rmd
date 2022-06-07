@@ -1,0 +1,267 @@
+---
+title: "Reactive Oxygen Species Production and Detoxification; Patterns Across Marine Phytoplankton"
+author:
+- Naaman Omar
+- Katherine E. Fleury
+- Brian D. Beardsall
+- Ondrej Prasil
+- Douglas A. Campbell
+date: "`r format(Sys.Date())`"
+output:
+  bookdown::html_document2:
+    toc: true
+    toc_depth: 6
+    fig_caption: yes
+  
+bibliography: ROSPhytoplankton.bib
+csl: plos-one.csl
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, error = FALSE, message = FALSE) 
+```
+
+```{r packages and paths, include = FALSE}
+library(tidyverse)
+library(magrittr)
+library(cowplot)
+library(broom)
+library(chngpt)
+library(ggpubr)
+library(glue)
+library(smatr)
+#https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html#installation
+library(kableExtra)
+options(kableExtra.auto_format = FALSE)
+library(rcompanion)
+library(corrplot)
+library(knitr)
+#library(PanVizGenerator)
+library(ggiraphExtra)
+library(googlesheets4)
+googlesheets4::gs4_deauth() 
+```
+
+```{r assign filepaths, include = FALSE}
+SnakemakeOutput <- file.path("..", "ROSGeneCounts", "output")
+OldSnakemakeOutput <- file.path("..", "OldMaterial", "ROSGeneCounts_old", "output")
+Figures <- file.path("..", "Figures")
+DataIn <- file.path("..", "DataIn")
+FigureMaterial <- file.path("..", "FigureMaterial")
+DataOut <- file.path("..", "DataProcessed")
+```
+
+```{r}
+# Import combinedHits, which is the output from snakemake
+CombinedHits <- read_csv(file.path(SnakemakeOutput, "combinedHits.csv"))
+ROSEnzymes <- read_csv(file.path(DataIn, "ROSEnzymeList.csv"))
+```
+
+
+```{r}
+# ROSGene_count the number of genes for each enzyme within each genome.
+# MetaData <- read_csv(file.path(DataIn, "CellGenomeMetrics.csv")) %>%
+  # dplyr::select(c(Genus, species, Strain, FileName, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, PennateCentric))
+MetaData <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1kXm0GvMdTRbF12cG5Bps-2e_4MTjgUX7iUOjqiu-_c0/edit#gid=0") %>%
+  dplyr::select(c(Genus, species, Strain, FileName, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, PennateCentric, ColonySpecies)) %>% 
+  mutate(Strain = as.character(Strain))
+KOROSEnzymes <- ROSEnzymes %>% 
+  select(ECNumber, KO) %>%
+  separate_rows(KO, sep = ";")
+KOCombinedHits <- CombinedHits %>%
+  separate_rows(KEGG_ko, sep = ",") %>%
+  mutate_at("KEGG_ko", str_replace, "ko:", "") %>%
+  filter(is.na(EC),
+         !is.na(KEGG_ko),
+         KEGG_ko != "-") %>%
+  left_join(., 
+            ROSEnzymes %>%
+              select(ECNumber, KO) %>%
+              separate_rows(KO, sep = ";"), 
+            by = c("KEGG_ko" = "KO")) %>%
+  filter(!is.na(ECNumber)) %>%
+  select(-EC) %>%
+  rename(EC = ECNumber) %>%
+  distinct(genome, query_name, EC, .keep_all = FALSE)
+CombinedHits %<>%
+  distinct(genome, query_name, .keep_all = TRUE) %>%
+  left_join(., KOCombinedHits, by = c("query_name", "genome")) %>%
+  mutate(EC = if_else(is.na(EC.x), EC.y, EC.x)) %>%
+  select(-c(EC.x, EC.y)) %>%
+  group_by(EC, genome) %>%
+  mutate(ROSGene_count = n()) %>%
+  ungroup() %>%
+  group_by(genome) %>%
+  mutate(TotalDetectedEnzymes = n()) %>%
+  ungroup()  %>%
+  distinct(genome, EC, .keep_all = TRUE)
+MergedData <- full_join(x = MetaData, y = ROSEnzymes, by = character()) %>%
+  left_join(., CombinedHits, by = c("FileName" = "genome", "ECNumber" = "EC")) %>%
+  filter(!is.na(FileName),
+         RemoveEnzyme != "1") %>%
+  # group_by(EnzymeName, FileName, ECNumber) %>%
+  # mutate(ROSGene_count = n()) %>%
+  # ungroup() %>%
+  # fill in missing sets with a count of 0 XXX figure out how to do this using the complete function
+  complete(., nesting(FileName, EnzymeName, ECNumber, HyPe, SupOx, NitOx), fill = list(ROSGene_count = 0))# %>%
+  # filter(ECNumber %notin% "1.10.3.17" & SupOx %notin% "Production")
+  # filter(ECNumber == "1.10.3.17" & SupOx == "Production")
+  # distinct(FileName, ECNumber, EnzymeName, .keep_all = TRUE)
+```
+
+
+XXX Why do we have 22052 of data from MergedData but running the first 2 lines of it yields 24492 rows? Are we losing ~2000 rows of data?
+```{r}
+write_csv(MergedData, file.path(DataOut, "AutomatedCounts.csv"))
+saveRDS(MergedData, file = file.path(DataOut, "AutomatedCounts.Rds"))
+```
+
+```{r manual colour scale, include = FALSE}
+TaxaColors = c("Green" = "darkgreen", 
+               "Diatom" = "brown4", 
+               "Haptophyte" = "royalblue", 
+               "Pelagophyte" = "navy", 
+               "Eustigmatophyte" = "purple", 
+               "Dinoflagellate" = "orange", 
+               # "Ochromonadaceae" = "hotpink", 
+               "Cryptophyte" = "seashell4", 
+               "Red" = "red2", 
+               "Prokaryote" = "darkgoldenrod3", 
+               "Pelagophyte" = "tan4", 
+               "Raphidophyte" = "olivedrab", #"Symbiodinium"= "goldenrod1"
+               "Chrysophyte" = "firebrick1")
+saveRDS(TaxaColors, file = file.path(DataOut, "TaxaColours.Rds")) 
+```
+
+Rowwise mins for radii
+<https://dplyr.tidyverse.org/articles/rowwise.html>
+
+```{r tidying data, include=FALSE}
+MergedData %<>%
+  mutate(Rad1_um = as.numeric(Rad1_um),
+         Rad2_um = as.numeric(Rad2_um),
+         Rad3_um = as.numeric(Rad3_um),
+         SA_um2 = 4*pi*(((((Rad1_um*Rad2_um)^1.6)+((Rad1_um*Rad3_um)^1.6)+((Rad2_um*Rad3_um)^1.6))/3)^0.625),
+         Volume_um3 = (4/3)*pi*Rad1_um*Rad2_um*Rad3_um,
+         SAVol_um = SA_um2/Volume_um3,
+         ROSGene_count = as.numeric(ROSGene_count),
+         #Diameter = as.numeric(Rad1_um*2),
+         # Radius_um = dplyr::rowwise(as.numeric(Rad1_um)) %>% min(.$Rad1_um, .$Rad2_um, .$Rad3_um),
+         Radius_um = as.numeric(Rad1_um),
+         log_Radius_um = log10(as.numeric(Rad1_um)),
+         log_GenomeSize_mbp = log10(as.numeric(GenomeSize_mbp)),
+         log_GeneModels_count = log10(as.numeric(GeneModels_count)),
+         log_Gene_count = log10(as.numeric(ROSGene_count)+1),
+         Latitude = as.numeric(as.character(Latitude)),
+         abs_Latitude = abs(Latitude),
+         log_Volume_um3 = log10(as.numeric(Volume_um3)),
+         log_SA_um2 = log10(as.numeric(SA_um2)),
+         GeneModels_count = as.numeric(GeneModels_count),
+         log_SAVol_um = log10(as.numeric(SAVol_um)), 
+         Name = interaction(Genus, species, Strain, sep = " ")) %>%
+  filter(Taxa != "Symbiodinium", 
+         Marine == "yes",
+         FileName != "Nitzschia_palea-dna-trans") 
+# Removed from group_by for causing an error , HyPe, NitOx, SupOx
+MergedData %<>%
+  group_by(FileName, HyPe) %>%
+  dplyr::mutate(HyPe_count = case_when(HyPe == "Production" ~ sum(ROSGene_count),
+                                HyPe == "Scavenging" ~ sum(ROSGene_count))) %>%
+  ungroup() %>% 
+  group_by(FileName, NitOx) %>%
+  dplyr::mutate(NitOx_count = case_when(NitOx == "Production" ~ sum(ROSGene_count),
+                                NitOx == "Scavenging" ~ sum(ROSGene_count))) %>%
+  ungroup() %>%
+  group_by(FileName, SupOx) %>%
+  dplyr::mutate(SupOx_count = case_when(SupOx == "Production" ~ sum(ROSGene_count),
+                                SupOx == "Scavenging" ~ sum(ROSGene_count))) %>%
+  ungroup() %>% 
+  group_by(FileName) %>%
+  mutate(TotalROSGene_count = sum(ROSGene_count)) %>%
+  ungroup()
+WideData <- MergedData[,c("Genus", "species", "Strain", "Taxa", "Ome", "EnzymeName", "ROSGene_count")] %>%
+  distinct(.keep_all = TRUE) %>%
+  pivot_wider(., names_from = EnzymeName, values_from = ROSGene_count )
+WideData_cap <- "Supplemental Table 2: ROS Enzyme Count per Organism"
+ln_log10_conversion <- 2.30258499 # Divide to convert ln to log10; Multiply to convert ln to log10
+```
+
+```{r Omes, include = FALSE}
+`%notin%` <- Negate(`%in%`)
+transcriptomes <- MergedData %>%
+  filter(Ome == "Transcriptome")
+genomes <- MergedData %>%
+  filter(Ome == "Genome")
+OmesPairs <- inner_join(genomes, transcriptomes, by = c("Genus", "species", "Strain", "EnzymeName", "Taxa", "Flagella", "Name", "Radius_um", "Latitude", "ECNumber", "Rad1_um", "Rad2_um", "Rad3_um", "Longitude", "ColonySpecies"), suffix = c(".g", ".t"))
+MergedData %<>%
+  dplyr::mutate(TransWGenomePresent = case_when(FileName %in% OmesPairs$FileName.t ~ "Remove",
+                                    FileName %notin% OmesPairs$FileName.t ~ "Keep"))
+MergedData %<>% 
+  filter(FileName %notin% OmesPairs$FileName.t)
+rm(transcriptomes)
+rm(genomes)
+```
+
+```{r HyPeDiff}
+HyPeProduction <- MergedData %>%
+  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, HyPe_count) %>%
+  filter(HyPe == "Production") %>% 
+  unique()
+HyPeScavenging <- MergedData %>% 
+  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, HyPe_count) %>%
+  filter(HyPe == "Scavenging") %>%
+  unique()
+HyPeMerged <- full_join(HyPeProduction, HyPeScavenging, by = c("FileName", "Genus", "species", "Strain", "Name", "Ome", "Taxa", "Rad1_um", "Rad2_um", "Rad3_um", "Flagella", "GenomeSize_mbp", "GeneModels_count", "Latitude", "Longitude", "Marine", "PennateCentric", "SA_um2", "Volume_um3", "SAVol_um", "Radius_um", "log_Radius_um", "log_GenomeSize_mbp", "log_GeneModels_count", "abs_Latitude", "log_Volume_um3", "log_SA_um2", "log_SAVol_um"),  suffix = c(".p", ".s")) %>% 
+  mutate_all(funs(ifelse(is.na(.), 0, .))) %>%
+  mutate(HyPeDiff = (HyPe_count.p - HyPe_count.s))
+rm(HyPeProduction)
+rm(HyPeScavenging)
+```
+
+```{r SupOxDiff}
+SupOxProduction <- MergedData %>%
+  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, SupOx, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, SupOx_count) %>%
+  filter(SupOx == "Production") %>% 
+  unique()
+SupOxScavenging <- MergedData %>% 
+  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, SupOx, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, SupOx_count) %>%
+  filter(SupOx == "Scavenging") %>% 
+  unique()
+SupOxMerged <- full_join(SupOxProduction, SupOxScavenging, by = c("FileName", "Genus", "species", "Strain", "Name", "Ome", "Taxa", "Rad1_um", "Rad2_um", "Rad3_um", "Flagella", "GenomeSize_mbp", "GeneModels_count", "Latitude", "Longitude", "Marine", "PennateCentric", "SA_um2", "Volume_um3", "SAVol_um", "Radius_um", "log_Radius_um", "log_GenomeSize_mbp", "log_GeneModels_count", "abs_Latitude", "log_Volume_um3", "log_SA_um2", "log_SAVol_um"),  suffix = c(".p", ".s")) %>% 
+  mutate_all(funs(ifelse(is.na(.), 0, .))) %>%
+  mutate(SupOxDiff = (SupOx_count.p - SupOx_count.s))
+  
+rm(SupOxProduction)
+rm(SupOxScavenging)
+```
+
+```{r NitOxDiff}
+NitOxProduction <- MergedData %>%
+  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, NitOx, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, NitOx_count) %>%
+  filter(NitOx == "Production") %>% 
+  unique()
+NitOxScavenging <- MergedData %>% 
+  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, NitOx, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, NitOx_count) %>%
+  filter(NitOx == "Scavenging") %>% 
+  unique()
+NitOxMerged <- full_join(NitOxProduction, NitOxScavenging, by = c("FileName", "Genus", "species", "Strain", "Name", "Ome", "Taxa", "Rad1_um", "Rad2_um", "Rad3_um", "Flagella", "GenomeSize_mbp", "GeneModels_count", "Latitude", "Longitude", "Marine", "PennateCentric", "SA_um2", "Volume_um3", "SAVol_um", "Radius_um", "log_Radius_um", "log_GenomeSize_mbp", "log_GeneModels_count", "abs_Latitude", "log_Volume_um3", "log_SA_um2", "log_SAVol_um"),  suffix = c(".p", ".s")) %>% 
+  mutate_all(funs(ifelse(is.na(.), 0, .))) %>%
+  mutate(NitOxDiff = (NitOx_count.p - NitOx_count.s))
+rm(NitOxProduction)
+rm(NitOxScavenging)
+```
+
+```{r save data}
+write_csv(MergedData, file.path(DataOut, "MergedData.csv"))
+saveRDS(MergedData, file = file.path(DataOut, "MergedData.Rds"))
+write_csv(WideData, file.path(DataOut, "WideData.csv"))
+saveRDS(WideData, file = file.path(DataOut, "WideData.Rds"))
+saveRDS(HyPeMerged, file = file.path(DataOut, "HyPeMerged.Rds"))
+saveRDS(SupOxMerged, file = file.path(DataOut, "SupOxMerged.Rds"))
+saveRDS(NitOxMerged, file = file.path(DataOut, "NitOxMerged.Rds"))
+saveRDS(OmesPairs, file = file.path(DataOut, "OmesPairs.Rds"))
+```
