@@ -2,3 +2,11 @@
 .Rproj.user
 OldMaterial/*
 ROSGenomicPatternsAcrossMarinePhytoplankton/ROSGeneCounts/output/*
+*.fasta
+*.log
+*.docx
+Work/*
+ROSGenomicPatternsAcrossMarinePhytoplankton/ROSGeneCounts/.snakemake/*
+FigureMaterial/*
+DiffusionalInteractionsAmongMarinePhytoplanktonModellingH2O2CaseStudy/Comments/*
+*.Rproj
