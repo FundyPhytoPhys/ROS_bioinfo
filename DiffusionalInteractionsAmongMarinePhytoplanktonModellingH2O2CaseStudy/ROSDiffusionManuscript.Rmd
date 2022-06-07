@@ -1,0 +1,935 @@
+---
+title: "Diffusional Interactions among Marine Phytoplankton and Bacterioplankton; Modelling H~2~O~2~ as a Case Study"
+author:
+- Naaman M. Omar:
+    institute: mta
+- Ondřej Prášil:
+    institute: algatech
+- J. Scott P. McCain:
+    institute: mit
+- Douglas A. Campbell:
+    institute: mta
+    email: dcampbel@mta.ca
+    correspondence: TRUE
+institute:
+  - mta: 'Department of Biology, Mount Allison University, Sackville NB, Canada, E4L1G7'
+  - algatech: 'Center Algatech, Laboratory of Photosynthesis, Novohradska 237, CZ 37981, Trebon, Czech Republic'
+  - mit: 'Department of Biology, Massachusetts Institute of Technology, Boston, Massachusetts, United States of America, 02142'
+abstract: "**Abstract** Marine phytoplankton vary widely in size across taxa, and in cell suspension densities across habitats and growth states. Cell suspension density and total biovolume determine the bulk influence of a phytoplankton community upon its environment. Cell suspension density also determines the inter-cellular spacings separating phytoplankton cells from each other, or from co-occurring bacterioplankton. Inter-cellular spacing then determines the mean diffusion paths for exchanges of solutes among co-occurring cells. Marine phytoplankton and bacterioplankton both produce and scavenge Reactive Oxygen Species (ROS), to maintain intracellular ROS homeostasis to support their cellular processes, while limiting damaging reactions. Among ROS, hydrogen peroxide (H~2~O~2~) has relatively low reactivity, long intracellular and extracellular lifetimes, and readily crosses cell membranes. Our objective was to quantify how cells can influence other cells via diffusional interactions, using H~2~O~2~ as a case study. To visualize and constrain potentials for cell-to-cell exchanges of H~2~O~2~ we simulated the decrease of [H~2~O~2~] outwards from representative phytoplankton taxa maintaining internal [H~2~O~2~] above representative seawater [H~2~O~2~]. [H~2~O~2~] gradients outwards from static cell surfaces were dominated by volumetric dilution, with only a negligible influence from decay. The simulated [H~2~O~2~] fell to background [H~2~O~2~] within ~3.1 µm from a *Prochlorococcus* cell surface, but extended outwards 90 µm from a diatom cell surface. More rapid decays of other, less stable ROS, would lower these threshold distances. Bacterioplankton lowered simulated local [H~2~O~2~] below background only out to 1.2 µm from the surface of a static cell, even though bacterioplankton collectively act to influence seawater ROS. These small diffusional spheres around cells mean that direct cell-to-cell exchange of H~2~O~2~ is unlikely in oligotrophic habits with widely spaced, small cells; moderate in eutrophic habits with shorter cell-to-cell spacing; but extensive within phytoplankton colonies."
+keywords: "Hydrogen Peroxide, Diffusion, Phytoplankton"
+output:
+  bookdown::html_document2:
+    code_folding: show
+    keep_md: yes
+    fig_caption: yes
+    pandoc_args:
+      - '--lua-filter=scholarly-metadata.lua'
+      - '--lua-filter=author-info-blocks.lua'
+  bookdown::word_document2:
+    fig_caption: yes
+    reference_docx: KnitTemplate.docx
+    pandoc_args:
+      - '--lua-filter=scholarly-metadata.lua'
+      - '--lua-filter=author-info-blocks.lua'  
+bibliography: ROS_Phytoplankton.bib
+csl: microorganisms.csl
+always_allow_html: true
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{css, include = FALSE}
+p.caption {
+  font-size: 18px;
+}
+```
+
+
+```{r setup, include = FALSE}
+#Check path to '../Figures' to see if it needs to be 'Figs/' for GitHub?
+knitr::opts_chunk$set(echo = TRUE, message = FALSE)
+knitr::opts_chunk$set(fig.path='../Figures/')
+```
+
+```{r libraries, include = FALSE}
+library(pracma)
+library(tidyverse)
+library(broom)
+library(ggpubr)
+library(ggforce)
+#library(gg3D)
+#library(plotly)
+library(glue)
+library(cowplot)
+library(kableExtra)
+options(kableExtra.auto_format = TRUE)
+library(googledrive)
+library(googlesheets4)
+googlesheets4::gs4_deauth()
+```
+
+```{r filepaths, include = FALSE}
+Figures <- file.path("..", "Figures", 'ROSDiffusion2021Manuscript')
+DataIn <- file.path("..", "DataIn")
+FigureMaterial <- file.path("..", "FigureMaterial")
+```
+
+
+```{r Colours, include = FALSE}
+#set colours for plotting cell spacing
+#Colour blind friendly palette
+blindcolours = c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+
+#black, orange, light blue, green
+
+# #TaxaColours = c("green", "blue", "brown", "red", "blue", "darkgreen", "brown", "brown")
+# TaxaColours = c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+
+#MetabColours = c("Phyto" = "darkgreen", "Hetero" = "darkred")
+# MetabColours = c("Phyto" = "#009E73",  "Hetero" = "#E69F00")
+MetabColours = c("Phyto" = "#40B0A6",  "Hetero" = "#E1BE6A")
+
+
+HabitatColours = c("Colony" = "#D55E00", "Eutrophic" = "#CC79A7", "Mesotrophic" =  "#56B4E9",  "Oligotrophic" = "#0072B2")
+```
+
+```{r ScientificTen, include = FALSE}
+ScientificTen <- function(x, sf = 2){
+  y <- format(signif(x, sf), scientific = TRUE) %>% as.character()
+  z <- str_split(y, pattern = "e")[[1]]
+  if(z[2]<0){
+    return(glue(z[1],"×10","^",str_replace_all(z[2], "[[+]]", ""),"^"))
+  }
+  else{
+    return(glue(z[1],"×10","^",z[2],"^"))
+  }
+}
+```
+
+
+# Introduction {.unnumbered}  
+
+## Marine Phytoplankton {.unnumbered}
+
+Phytoplankton are a polyphyletic functional grouping of ~275,000 species of oxygenic photosynthetic microorganisms that grow while suspended in marine or freshwater habitats
+[@reynoldsEcologyPhytoplankton2006;@falkowskiEvolutionModernEukaryotic2004]. Phytoplankton interact with their aqueous environment [@purcellLifeLowReynolds1976], and with co-occurring bacterioplankton cells, through diffusion of nutrients, toxic compounds and signaling
+molecules, notably including Reactive Oxygen Species (ROS). Phytoplankton span a wide size
+range [@finkelPhytoplanktonChangingWorld2010] (Table \@ref(tab:CellSpaceMeta)), which directly affects their diffusional interactions. Larger cells have longer paths for
+intra-cellular diffusion or transport paths for solutes, and can
+therefore potentially impose larger concentration gradients between
+their internal cell contents and the local microenvironment. Larger cells also have
+lower surface to volume ratios which impose limits on their
+trans-membrane transport per biovolume of the cell
+[@stolteEffectPhytoplanktonCell1995]. On the other hand, some larger cells have dynamic control over their sinking through water, and
+can thereby refresh their surface boundary layers more effectively than can smaller
+cells [@gemmellDynamicSinkingBehaviour2016, @purcellLifeLowReynolds1976].
+
+## Phytoplankton Cell Spacing in Oceans {.unnumbered}
+
+```{r read CellSpaceMeta, echo=FALSE}
+#CellSpaceMeta dataframe with literature data on cell suspension densities and cell sizes for for representative phytoplankton and heterotroph taxa taken from representative oligotrophic and eutrophic habitats.
+
+CellSpaceMeta <-  googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1DclsGlEb9R_qrduluYjWQ_OziLSrRzwLfgW9tzW_kNg/edit#gid=425624204") %>% 
+  filter(Remove != 1)
+
+
+#Fix superscript, spacing and font in col.names; output may differ in .Rmd vs. after knit?
+#Add blank lines between Habitats
+
+```
+
+Phytoplankton and bacterioplankton cell numbers in the ocean vary widely, and therefore so do inter-cellular distance (Table \@ref(tab:CellSpaceMeta)). Direct colonization of phytoplankton by bacteria [@bertrandPhytoplanktonBacterialInteractions2015], or colony-forming phytoplankters bring multiple cells into yet closer local proximities. For example, within *Phaeocystis* colonies cell densities reach `r ScientificTen(as.numeric(CellSpaceMeta %>% filter(Habitat == "Colony", Taxa == "Phaeocystis") %>% select(CellCount_m3))/1000000, sf = 2)` cells mL^-1^ [@jakobsenEffectsProtozoanGrazing2002].
+
+```{r CellSpaceMeta, echo=FALSE}
+CellSpaceMeta %>%
+  select(-c(XYZAxes_mm, RawData, ...8, Remove)) %>%
+  arrange(desc(Habitat), Taxa) %>%
+  #mutate_if(is.numeric, format, digits=2, nsmall = 0) %>%
+  mutate(CellCount_m3 = format(CellCount_m3, digits=2, nsmall = 0)) %>%
+  mutate(Rad_um = format(Rad_um, digits=1, nsmall = 0)) %>%
+  kable("html", caption = "Phytoplankton and bacterioplankton cell sizes and representative suspension densities", col.names = c("Habitat", "Taxa", "Metabolism", "Cell m^-3^", "Cell Radius µm","Citation")) %>%
+  kableExtra::row_spec(c(11,15,23), extra_css = "border-bottom: 1px solid") %>%
+  kable_classic()
+```
+
+
+These wide ranges of cell suspension densities for phytoplankton and bacterioplankton across habitats strongly influence the extent to which the growth and activity of a phytoplankton
+population or community alters, or even governs, solute concentrations in the local habitat
+[@pintoaDensitydependentPatternsThiamine2003; @fogelRelationshipCarbonAvailability2020;
+@hansenGrowthLimitationMarine2007; @averyHydrogenPeroxideBermuda2005]. Beyond the bulk activities of the phytoplankton population or community, differences in cell suspension densities mean the diffusional path lengths for solutes separating individual cells vary by orders of magnitude across habitats and taxa. Intercellular distances then influence whether the activity of an individual cell can directly influence the microenvironment of neighbouring cells [@kearnsAlgalExtracellularProducts2002]. 
+
+Our understanding of the taxa- and habitat-specific effects of cell-to-cell separation is then influenced by schematic visualizations of phytoplankton communities with implied cell suspension densities far higher than is realistic, or with cell symbol sizes scaled differently than the scaling of the spatial axes [@billerProchlorococcusStructureFunction2015]. Symbol size scaling exaggerated relative to the scaling of the spatial axes allows schematic visualizations of cells, but can give a visual impression of a community with fairly close cell-to-cell interactions. In our visualizations, we maintain cell symbol size at the same size scaling as the spatial axes (Figure \@ref(fig:CellSpaceCircleAxisplot)).
+
+## Reactive Oxygen Species {.unnumbered}
+
+Electrons can transfer from photosynthetic or respiratory electron transport to reduce O~2~ to form the superoxide radical, a Reactive Oxygen Species (ROS) [@kozulevaMinimizingElectronFlow2020; @sharmaReactiveOxygenSpecies2012] (Reaction \@ref(eq:SequentialAddition)).
+
+ROS include both radicals (superoxide, nitric oxide and hydroxyl radicals) and non radicals (hydrogen peroxide, singlet oxygen and peroxynitrite) which are more reactive than ground state di-oxygen molecules [@liDefiningROSBiology2016; @radiOxygenRadicalsNitric2018]. Reduction of O~2~ to H~2~O requires the sequential addition of four electrons, and therefore progresses through three ROS intermediates; superoxide (O~2~^•−^), hydrogen  peroxide  (H~2~O~2~) and hydroxyl radical (OH^•^) (Reaction \@ref(eq:SequentialAddition)) [@fridovichOxygenToxicityRadical1998]. ROS are by-products of both photosynthetic and heterotrophic metabolism, but are also generated
+abiotically in seawater [@zinserMicrobialContributionReactive2018]. 
+
+\begin{equation}
+  \begin{multline}
+    O_2 + e^- → O_2^{•-} \\
+    O_2^{•-} + 2H^+ + e^- → H_2O_2 \\
+    H_2O_2 + H^+ + e^- → H_2O + OH^• \\
+    OH^• + e^- + H^+ → H_2O 
+    (\#eq:SequentialAddition)
+  \end{multline}
+\end{equation}
+
+Biogenic production of extracellular ROS mediated by microorganisms is a significant contributor to marine environments [@zhangExtensiveDarkBiological2016; @diazWidespreadProductionExtracellular2013], mediated by taxa ranging from heterotrophic bacteria to diatoms including those from the *Thalassiosira* and *Coscinodiscus* genera [@diazProductionExtracellularReactive2018; @diazProductionExtracellularSuperoxide2018; @diazWidespreadProductionExtracellular2013; @roseMeasurementImplicationsNonphotochemically2008; @schneiderSpeciesLevelVariabilityExtracellular2016; @sutherlandExtracellularSuperoxideProduction2019; @kustkaExtracellularProductionSuperoxide2005; @hanselDynamicsExtracellularSuperoxide2016].
+
+ROS are important at low concentrations due to their role in cell signaling [@mittlerROSSignalingNew2011; @rheeH2O2NecessaryEvil2006; @delrioROSGenerationPeroxisomes2016; @delrioReactiveOxygenSpecies2009; @foyerRedoxHomeostasisAntioxidant2005; @schmittReactiveOxygenSpecies2014; @millerReactiveOxygenSpecies2010] and lipid accumulation [@shiReactiveOxygenSpeciesMediated2017]. In order to benefit from ROS, organisms must maintain ROS levels above the cytostatic threshold, the minimum concentration of ROS required to maintain normal cellular processes, as well as below the cytotoxic threshold, the level at which the negative effects of ROS outweigh the positives [@mittlerROSAreGood2017]. 
+
+## Concentrations and Properties of H~2~O~2~ {.unnumbered}
+
+H~2~O~2~ is an uncharged compound documented in the ocean at concentrations of 10^-9^ to 10^-6^ mol L^-1^ [@diazProductionExtracellularReactive2018; @schneiderKINETICSBIOLOGICALHYDROGEN2015] depending upon location and conditions. These [H~2~O~2~] are high enough to significantly contribute to the redox cycling of copper [@milleroRateReductionCopper1991; @moffettReactionKineticsHydrogen1987]. [H~2~O~2~] in seawater increases after precipitation, including rain and snowfall [@zinserMicrobialContributionReactive2018; @averyHydrogenPeroxideBermuda2005; @kellyMeasurementsPeroxidesCloudwater1985]. [H~2~O~2~] in seawater also follow a diurnal cycle with a peak at mid-day [@morrisDielRegulationHydrogen2016; @averyHydrogenPeroxideBermuda2005; @yuanDistributionHydrogenPeroxide2001], which suggests significant direct or indirect photochemical or photobiological generation of H~2~O~2~.  [H~2~O~2~] also exhibits latitudinal variation at the surface, higher in the brighter, warmer, mid to low latitudes compared to the colder, darker, higher latitudes [@yuanDistributionHydrogenPeroxide2001]. @yuanDistributionHydrogenPeroxide2001 suggest that regional variation in [H~2~O~2~] may be caused by the depth of the mixed layer and the concentration of total dissolved organic carbon. Abiotic production rates of H~2~O~2~ vary from 0.28 to 4.2 pM s^-1^ in near surface open ocean waters vs. 1.0 to 84.4 pM s^-1^ in coastal sites [@zinserMicrobialContributionReactive2018].
+
+The diffusion coefficients (a measure of how quickly a molecule travels via diffusion), and therefore the diffusional mobilities, of ROS
+through seawater vary widely.  Diffusion coefficients in water decrease with increasing molecular mass, and from uncharged to charged compounds. Diffusion coefficients are strongly influenced by temperature and slightly influenced by pressure. For H~2~O~2~ at ~20°C the diffusion coefficient is ~1500 µm^2^ µs^-1^ (note conversion of units from more typical reporting of cm^2^ s^-1^) [@tjellDiffusionRateHydrogen2018].  In aquatic systems, H~2~O~2~ has extra-cellular lifetimes of hours to days  [@lesserOXIDATIVESTRESSMARINE2006; @diazProductionExtracellularReactive2018] before decay.
+
+
+H~2~O~2~ is acutely toxic to most cells in the range of 10^-5^ to 10^-4^ mol L^-1^ range [@halliwellFreeRadicalsBiology1999], about 10-fold higher than seawater concentrations [@diazProductionExtracellularReactive2018; @schneiderKINETICSBIOLOGICALHYDROGEN2015]. We found few quantitative estimates of the intracellular concentrations of H~2~O~2~ within cells [@gonzalez-flechaHomeostaticRegulationIntracellular1997; @lyublinskayaMeasuringIntracellularConcentration2019; @stoneHydrogenPeroxideSignaling2006a; @siesHydrogenPeroxideCentral2017; @seaverHydrogenPeroxideFluxes2001; @huangQuantifyingIntracellularHydrogen2014; @liImprovedMeasurementsScant2018], with a particular lack of measurements from
+phytoplankton. Limited data, from mammalian cells, supports an intracellular H~2~O~2~ concentration of 10^-6^ M [@formanWhatConcentrationHydrogen2016].  Although only weakly directly reactive, H~2~O~2~ can react with thiols and methionine [@winterbournThiolChemistrySpecificity2008] and thereby modulate gene expression and transcription [@apelREACTIVEOXYGENSPECIES2004; @fedurayevHydrogenPeroxideParticipates2018]. Meanwhile, limited experimental data indicates that heterotrophic bacteria maintain an internal [H~2~O~2~] of 1/10 of the external [H~2~O~2~] when extracellular H~2~O~2~ is present [@seaverHydrogenPeroxideFluxes2001; @liImprovedMeasurementsScant2018], as it is in seawater. @seaverHydrogenPeroxideFluxes2001 also predicted an intracellular steady-state [H~2~O~2~] of 20 nM in the absence of extracellular H~2~O~2~, which is far below the toxic threshold of intracellular H~2~O~2~ [@liImprovedMeasurementsScant2018], and is likely for the maintenance of physiological roles of H~2~O~2~. Cytotoxic effects of H~2~O~2~, including lipid damage, are primarily caused by H~2~O~2~ converting to the hydroxyl radical, which is strongly oxidative [@lesserOXIDATIVESTRESSMARINE2006]. Interestingly, H~2~O~2~ may be used as a terminal electron acceptor in the absence of oxygen in *Escherichia coli* [@khademianEscherichiaColiCytochrome2017].
+
+H~2~O~2~ readily crosses the cell membrane [@halliwellFreeRadicalsBiology1999] primarily through aquaporins [@bienertAquaporinfacilitatedTransmembraneDiffusion2014; @almasalmehStructuralDeterminantsHydrogen2014; @wangCharacterizationAquaporindrivenHydrogen2020; @millerAquaporin3MediatesHydrogen2010]. As a result, intracellular H~2~O~2~ exchanges with extracellular  H~2~O~2~, but cells can nevertheless maintain intracellular [H~2~O~2~] significantly different than extracellular  [H~2~O~2~] [@seaverHydrogenPeroxideFluxes2001]. Other ROS rarely cross cell membranes and therefore the intra- and extra-cellular pools are not directly connected, although they may influence each other indirectly through transformations to other ROS, for example dismutation of intracellular O~2~^•-^ to form intracellular H~2~O~2~ which can then exchange with extracellular H~2~O~2~, and vice versa. 
+
+
+A significant fraction of H~2~O~2~ destruction in aqueous systems may be attributed to the activities of heterotrophic microbes [@bondHeterotrophicBacteriaExhibit2020], although heterotrophs are minor contributors to bulk [H~2~O~2~]. Microbial scavenging of H~2~O~2~ indeed increases the survival of *Prochlorococcus* through extended periods of darkness, as demonstrated through co-culture studies [@coeSurvivalProchlorococcusExtended2016] with 'helper' bacteria which carry genes for catalase. In the open ocean, bulk [H~2~O~2~] levels generally remain below the cytotoxic threshold, partly because heterotrophic organisms provide catalase [@zinserCrossprotectionHydrogenPeroxide2018]. 
+
+Changes in [H~2~O~2~], or other ROS, around a cell will depend upon net production, or consumption by the cell, which generate net release (or uptake) of [H~2~O~2~] from the cell after any intra-cellular or cell-associated scavenging. These inputs can interact to generate a diffusion-generated gradient of [H~2~O~2~] around the cell, above or below, seawater [H~2~O~2~]. Whether or not a cell establishes a zone of [H~2~O~2~] different from the [H~2~O~2~] background also depends upon extra-cellular destruction and diffusion rates. The extent of this altered zone will then influence downstream processes. For specific cell-cell interactions or responses a cell has to change the [H~2~O~2~] in the local microenvironment sufficiently to provoke a response in neighbouring cells. Beyond this local sphere of influence around an individual cell, the collective activity of cells in a community contributes to generating a general seawater [H~2~O~2~], which in turn influence cellular gene expression and metabolism.
+
+## Goals  {.unnumbered}
+
+Microbes consume and produce H~2~O~2~, thereby potentially helping, or at least influencing, other microbes. We sought to quantify the influences of cell density and cell size have on how these potential microbial interactions. H~2~O~2~ presents a good case study for diffusional interactions among microbes. H~2~O~2~ readily traverses cell membranes, and there is information on background concentrations of H~2~O~2~ in seawater, H~2~O~2~ diffusion coefficients in seawater and some estimates of cellular concentrations of H~2~O~2~, as either absolute values or ratios compared to external [H~2~O~2~]. We can can therefore approximate concentration gradients generated by [H~2~O~2~] diluting outwards from a cell maintaining a homeostatic intracellular [H~2~O~2~] higher than seawater [H~2~O~2~], or the concentration gradient inwards towards a hypothetical cell maintaining a homeostatic intracellular [H~2~O~2~] lower than seawater [H~2~O~2~]. We can use these simple approximations to generate quantitative thresholds for when H~2~O~2~ released from a cell can directly influence neighbouring cells. In short, how much, and how far, can a phytoplankton or bacterioplankton cell change the local [H~2~O~2~].
+
+# Results and Discussion  {.unnumbered}
+
+## Cell to Cell Spacing Across Habitats and Taxa  {.unnumbered}
+Possible cell-to-cell exchanges of H~2~O~2~ are mediated by diffusions through inter-cellular path lengths, varying by orders of magnitude across habitats and taxa. To understand such diffusional exchanges we need realistic visualizations of cell spacings, achieved by maintaining cell symbol size at the same size scaling as the spatial axes (Figure \@ref(fig:CellSpaceCircleAxisplot)). In the visualization of randomized cell spacing under oligotrophic conditions, we see wide spacing among cells, because the small cell symbols are on the same size scaling as the spatial axes. In the visualization of randomized cell spacing under eutrophic conditions, some cells are in close proximity. Note that this standardized scaling visualization approach is only feasible with highly expanded spatial axes such as the 1 mm axis used in Figure \@ref(fig:CellSpaceCircleAxisplot), equivalent to simulation of only 1 µL. Attempting to visualize 10 mm axes, equivalent to a 1 mL volume, causes the cell symbol size to shrink below visibility (data not presented). A further nuance not captured in these visualizations and subsequent simulations is non-random clustering of cells, as perhaps around particles of marine snow.
+
+```{r CellSpace, echo=FALSE}
+#Use CellSpaceMeta to generate CellSpace dataframe with approximations of cell-cell spacing.
+
+#generate an alternate data frame for a colony?
+#this estimator is simplistic; it starts from an assumption of evenly spaced cells through the volume, and then 
+#https://forum.cosmoquest.org/showthread.php?93443-Average-separation-of-objects-within-a-volume
+# if I select a star at random as my starting point, in a randomly distributed bunch of stars, what is the expectation value of the distance to the closest star? Then you would pick a large volume that has N >> 1 stars of interest inside it, the characteristic density of the region you are sampling. Say the volume is V. You could then map out the probability distribution, as a function of distance D, that there are no stars closer than D. This requires you take the ratio (V - 4/3 Pi D3) / V, which is the probability that each star misses the volume of interest, and raise that ratio to the N power, to get the probability no stars are in that volume. Taking the limit of large N, you get that the probability is exp[-4/3 Pi D3 N/V]. So that gives you the probability of finding zero stars out to D. To get the average distance of the nearest star, just integrate that over the volume element and weighted by D, dividing by the normalization integral that lacks the extra power of D.
+# 
+# The answer I get comes out the gamma function of 4/3, times the cube root of (3V / 4 * Pi * N). Wolframalpha tells me that is 0.55 times the cube root of (V/N). That's about half what Murphy used, perhaps because regular spacing gives the maximum possible nearest-neighbor separation, not the average nearest-neighbor separation. So the simplified calculation is pessimistic by about a factor of 2-- if you only want to get to the closest star, you'll only need about half that range, unless you are unlucky. 
+
+#We then 'jitter' the results
+
+#Cell counts <1 x10^7 cells m-3 fail to generate a point on axes of 1 mm = 1 ul plotted volume;  because there  are < 0.01 cells per ul at 1 x 10^7 cells m-3
+
+#1 ul is 1 mm^3, Cube root of 1 mm^3 is 1 mm; keeps arithmetic simple as long as cell counts are high enough so that a taxa x habitat is represented by > 1 cell ul-1
+
+CellSpace <- CellSpaceMeta %>%
+  #filter(Taxa != "Phaeocystis") %>%
+  mutate(Rad_mm = Rad_um/1000) %>%
+  mutate(CellCount_uL = CellCount_m3/1000000000) %>%
+  mutate(CellSpace_mm = (((1/(CellCount_uL))^(1/3)) * 0.55)) %>%
+  mutate(DistanceAxisX_mm = pmap(list(CellSpace_mm, XYZAxes_mm, CellCount_uL), function(space, axes_mm, cellcount) abs(jitter(sample(seq(from = 0, to = axes_mm, by = space), cellcount, replace =  TRUE), factor = 2)))) %>%
+  mutate(DistanceAxisY_mm = pmap(list(CellSpace_mm, XYZAxes_mm, CellCount_uL), function(space, axes_mm, cellcount) abs(jitter(sample(seq(from = 0, to = axes_mm, by = space), cellcount, replace =  TRUE), factor = 2)))) %>%
+  mutate(DistanceAxisZ_mm = pmap(list(CellSpace_mm, XYZAxes_mm, CellCount_uL), function(space, axes_mm, cellcount) abs(jitter(sample(seq(from = 0, to = axes_mm, by = space), cellcount, replace =  TRUE), factor = 2)))) %>%
+  select(-c(`...8`, RawData, Remove))
+
+```
+
+
+```{r CellSpaceCircleAxisplot, fig.cap = CellSpaceCircleplot_cap, fig.height= 6, fig.width= 5, echo=FALSE}
+#plot cells with symbol size = Size_mm scaled to 1 mm axes
+CellSpace$facet <- factor(CellSpace$Habitat, levels = c("Oligotrophic", "Eutrophic"))
+
+CellSpaceCircleplot_cap <- glue("Phytoplankton and Heterotrophic Bacteria Spacing from Eutrophic or Oligotrophic Environments, with cell size on the same scaling as the 1 mm XY spatial axes.", " A 1 mm Z spatial axis is coded with fainter points farther back.", sep = " ")
+
+# CellSpaceCircleplot <- CellSpace %>%
+#   filter((grepl("grob", Cite_key) & grepl("Hetero", Metabolism)) | (grepl("albrecht", Cite_key) | grepl("agusti", Cite_key))) %>%
+#   filter(Habitat != "Mesotrophic") %>%
+#   unnest(c(DistanceAxisX_mm, DistanceAxisY_mm, DistanceAxisZ_mm)) %>%
+#   #filter(DistanceAxisZ_mm <= 1) %>%
+#   ggplot() +
+#   geom_circle(aes(x0 = DistanceAxisX_mm, y0 = DistanceAxisY_mm, r = Rad_mm,  colour = Metabolism, fill = Metabolism, alpha = DistanceAxisZ_mm))+
+#   scale_colour_manual(values = MetabColours) +
+#   scale_fill_manual(values = MetabColours) +
+#   scale_alpha(range = c(0, 1), guide = "none") +
+#   facet_grid(rows = vars(Habitat)) +
+#   #guides(alpha = "none") + 
+#   coord_fixed(ratio = 1, xlim = c(0,1), y = c(0,1)) +
+#   labs(title = "Phytoplankton and Heterotrophic Bacteria Spacing",
+#        subtitle = "Cell size is on the same scaling as the 1 mm XY spatial axes.") +
+#   theme_bw()
+
+CellSpaceCircleAxisplot <- CellSpace %>%
+  filter((grepl("grob", Cite_key) & grepl("Hetero", Metabolism)) | (grepl("albrecht", Cite_key) | grepl("agusti", Cite_key))) %>%
+  filter(Habitat != "Mesotrophic", Habitat != "Colony") %>%
+  unnest(c(DistanceAxisX_mm, DistanceAxisY_mm, DistanceAxisZ_mm)) %>%
+  #filter(DistanceAxisZ_mm <= 1) %>%
+  ggplot() +
+  geom_circle(aes(x0 = DistanceAxisX_mm, y0 = DistanceAxisY_mm, r = Rad_mm,  colour = Metabolism, fill = Metabolism, alpha = DistanceAxisZ_mm))+
+  scale_colour_manual(values = MetabColours) +
+  scale_fill_manual(values = MetabColours) +
+  scale_alpha(range = c(0, 1), guide = "none") +
+  facet_grid(rows = vars(facet)) +
+  #guides(alpha = "none") + 
+  coord_fixed(ratio = 1, xlim = c(0,1), y = c(0,1)) +
+  labs(#title = "Phytoplankton and Heterotrophic Bacteria Spacing",
+       #subtitle = "Cell size is on the same scaling as the 1 mm XY spatial axes.",
+       x = "Distance (mm)",
+       y = "Distance (mm)") +
+  theme_bw() +
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        legend.position = "top") 
+
+CellSpaceCircleAxisplot
+
+ggsave(CellSpaceCircleAxisplot, file = file.path(Figures, "Figure1.png"), height= 6, width= 5, units = "in")
+```
+
+
+
+```{r ROSDiffusion, echo=FALSE, messages = FALSE, warning = FALSE}
+ROSDiffusion <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1ds8brzxLzTitaVCv3Evf2extGqJfrKjQynyAVx5m7hg/edit#gid=663628435") %>%
+  mutate(`DiffCoef_um^2^us` = as.numeric(`DiffCoef_um^2^us`)) %>%
+  filter(ROSSymbol == "H~2~O~2~") %>%
+  select(-c(DiffusionDistance_nm, DiffusionDistanceCitation))
+
+# Edit columns to include in kable
+# ROSDiffusion %>%
+#   mutate_if(is.numeric, format, digits=2, nsmall = 0) %>%
+#   kable(caption = "Diffusion and Stability of H~2~O~2~",  digits = 20) %>%
+#   kable_classic()
+```
+
+
+## H~2~O~2~ Concentration Gradients Around Cells {.unnumbered}
+
+```{r CellROSConc, echo=FALSE, messages = FALSE, warning = FALSE}
+CellROSConc <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1bxTIKTNfv-n3Y-JMJCOlt14Ec3e4tSdBQZg-HiuypOY/edit#gid=0")  %>%
+  filter(ROSSymbol ==  "H~2~O~2~")
+
+# CellROSConc %>%
+#   select(-c(ROS, ROSSymbol, Notes)) %>%
+#   mutate_if(is.numeric, format, digits=2, nsmall = 0) %>%
+#   kable(caption = "Intracellular Concentrations of H~2~O~2~", digits = 6) %>%
+#   kable_classic()
+```
+
+```{r ros diffusion setup, include = FALSE}
+MinTime = 0.00001
+MaxTime = 100
+TimeSteps = log10(MaxTime/MinTime)
+
+#generate time steps for ROS moving out from cell
+#add CellSpaceMeta to include cell radii
+
+ROSDistH2O2 <- tibble(us = c(0, rep(logseq(x1 = MinTime, x2 = MaxTime, n = TimeSteps*5), times = 1)),
+                  ROS = c(rep_len("H~2~O~2~", length.out = TimeSteps*5 + 1))) %>%
+  left_join(x = ., y = ROSDiffusion, by = c("ROS" = "ROSSymbol")) %>%
+  select(-ROS.y) %>%
+  left_join(x = ., y = CellSpaceMeta, by = character()) %>%
+  select(-c(`...8`, RawData, Remove))
+
+```
+
+
+```{r ros diffusion dilution decay simulation, include = FALSE}                
+            
+ROSDistH2O2 <- ROSDistH2O2 %>%
+  mutate(CellConc_M = case_when(ROS == "H~2~O~2" | Metabolism == "Phyto" ~ 1e-6,
+                                     ROS == "H~2~O~2" | Metabolism == "Hetero" ~ SeawaterLow_M * 0.1), #
+         Diffuse_um = sqrt(`DiffCoef_um^2^us`*us))
+
+#cell radius is not negligible and that affects dilution by the DiffuseSphere_um3
+ROSDistH2O2 <- ROSDistH2O2 %>%
+  mutate(DiffuseRad_um = Diffuse_um + Rad_um,
+         DiffuseSphere_um3 = (4/3)*pi*(DiffuseRad_um)^3)
+
+#for each combination of Habitat, Taxa, ROS and Metabolism, generate dilution gradients out from Phyto cells and towards Hetero cells
+ROSDistH2O2 <- ROSDistH2O2 %>%
+  group_by(Habitat, Taxa, ROS, Cite_key) %>% 
+  mutate(DilConc_M = case_when(Metabolism == "Phyto" ~ CellConc_M * ((4/3)*pi*(Rad_um)^3)/(DiffuseSphere_um3),
+                               Metabolism == "Hetero" ~ CellConc_M * (DiffuseSphere_um3)/((4/3)*pi*(Rad_um)^3))) %>%
+  ungroup()  
+
+#As ROS diffuses and dilutes out from the cell it is also subject to decay while above background
+#Estimate as separate columns in data frame for trouble shooting
+ROSDistH2O2 <- ROSDistH2O2 %>%
+  group_by(Habitat, Taxa, ROS, Cite_key) %>%
+  mutate(muSlow_us1 = 1/(LifetimeHigh_s*1000000),
+         muFast_us1 =  1/(LifetimeLow_s*1000000)) %>%
+  mutate(DilSlowConc_M = case_when(Metabolism == "Phyto" ~ DilConc_M * exp(-muSlow_us1 * us) ,
+                               Metabolism == "Hetero" ~ DilConc_M)) %>%
+  mutate(DilFastConc_M = case_when(Metabolism == "Phyto" ~ DilConc_M * exp(-muFast_us1 * us),
+                               Metabolism == "Hetero" ~ DilConc_M)) %>%
+  ungroup()
+```
+
+
+Figure \@ref(fig:ROSRadplot) shows a light blue background for the approximate range of natural [H~2~O~2~] in seawater, with the simulated profiles of [H~2~O~2~] moving outward from  a 'Bacterioplankton' cell with intracellular [H~2~O~2~] maintained below seawater [H~2~O~2~]; or outward from small phytoplankton cells of different sizes with intracellular [H~2~O~2~] maintained at 1 µmol L^-1^ [@siesHydrogenPeroxideCentral2017], near the highest concentrations expected for seawater [ROS]. For [H~2~O~2~] generators (nominally, phytoplankton of different sizes), [H~2~O~2~] concentrations are highest near the cell surface and decrease with distance outwards. For [H~2~O~2~] consumers (nominally, bacterioplankton), [H~2~O~2~] concentrations are lowest near the cell surface.
+
+Decay is a key influence on the pseudo-steady state bulk [H~2~O~2~] in seawater, but for our conceptual estimates of [H~2~O~2~] changing within the local region of the cell, the dilution term (black points, Figure \@ref(fig:ROSRadplot)) dominates the concentration gradient moving out from the cell. Including the influence of the decay term (red points, Figure \@ref(fig:ROSRadplot)) has only a negligible influence on [H~2~O~2~] moving out from the phytoplankton cell over simulated timescales of < 100 µs and distances of ~ 100 µm. For other, less stable ROS, decay would become a significant influence, acting to narrow the local concentration gradients around cells.  
+
+Seawater contains H~2~O~2~ which varies significantly depending upon conditions and region. At some threshold distance out from the cell specific sphere of influence upon local [ROS] reaches the seawater  [H~2~O~2~] (Figure
+\@ref(fig:ROSRadplot)), beyond which distance net  [H~2~O~2~] production or consumption by the specific cell has no local influence on  [H~2~O~2~], but is simply one input into the wider seawater [H~2~O~2~]. All other factors being equal, in our estimations the region over which a cell changes the local [H~2~O~2~] away from seawater [H~2~O~2~] increases with cell radius. This wider influence of cells with larger cell radii results primarily from the volume of the intracellular homeostatic  [H~2~O~2~] increasing as the cube of cellular radius (Figure \@ref(fig:ROSRadplot)). 
+
+```{r calculating us_thresh and um_thresh, include = FALSE}
+# The µs_thresh value depends upon the diffusion coefficient for ROS which determines how far ROS moves out from the cell radius in a given time interval, and thus the ROS dilution factor over a given time interval.
+
+#Algebra for threshold estimates for Phyto, accounting for diffusion out from the cell and decay of ROS down from an elevated level
+
+# SeawaterLow_M = (CellConc_M * (DiffuseSphere_um3[1])/(DiffuseSphere_um3)) * exp(-muFast_us1 * us_thresh)
+
+# SeawaterLow_M = (CellConc_M * ((4/3)*pi*DiffuseRad_um[1]^3)/((4/3)*pi*DiffuseRad_um^3)) *  exp(-muFast_us1 * us_thresh)
+
+# SeawaterLow_M = CellConc_M * ((DiffuseRad_um[1]^3)/(DiffuseRad_um^3)) *  exp(-muFast_us1 * us_thresh)
+
+# SeawaterLow_M = CellConc_M * ((Rad_um + sqrt(`DiffCoef_um^2^us`*us[1]))^3) /((Rad_um + sqrt(`DiffCoef_um^2^us`*us_thresh))^3) *  exp(-muFast_us1 * us_thresh)
+
+# SeawaterLow_M / (CellConc_M  * ((Rad_um + sqrt(`DiffCoef_um^2^us`*us[1]))^3)) = (1/((Rad_um + sqrt(`DiffCoef_um^2^us`*us_thresh))^3)) *  exp(-muFast_us1 * us_thresh)
+
+# SeawaterLow_M / (CellConc_M  * ((Rad_um + sqrt(`DiffCoef_um^2^us`*us[1]))^3))  = k
+
+# (1/((Rad_um + sqrt(`DiffCoef_um^2^us`*us_thresh))^3)) *  exp(-muFast_us1 * us_thresh) = k
+
+# ((Rad_um + sqrt(`DiffCoef_um^2^us`*us_thresh))^-1) *  exp(-muFast_us1 * us_thresh/3) = k^(1/3)
+
+# Rad_um + sqrt(`DiffCoef_um^2^us`*us_thresh)  = exp(-muFast_us1 * us_thresh/3) / k^(1/3)
+
+# sqrt(`DiffCoef_um^2^us`*us_thresh)  = exp(-muFast_us1 * us_thresh/3) / k^(1/3) - Rad_um
+
+# sqrt(`DiffCoef_um^2^us`*us_thresh) / exp(-muFast_us1 * us_thresh/3) = 1 / k^(1/3) - Rad_um
+
+# `DiffCoef_um^2^us`*us_thresh * exp(muFast_us1 * us_thresh * 2/3) = ((1 / k^(1/3)) - Rad_um)^2
+
+# us_thresh * exp(muFast_us1 * us_thresh * 2/3) = ((1 / k^(1/3) - Rad_um)^2)/`DiffCoef_um^2^us`
+
+# muFast_us1 * us_thresh * 2/3 = Y
+
+# us_thresh = Y / (muFast_us1 * 2/3)
+
+# us_thresh * exp(muFast_us1 * us_thresh * 2/3) = ((1 / k^(1/3) - Rad_um)^2)/`DiffCoef_um^2^us`
+
+# Y / (muFast_us1 * 2/3) * exp(Y) = ((1 / k^(1/3) - Rad_um)^2)/`DiffCoef_um^2^us`
+
+# (Y * exp(Y)) / (muFast_us1 * 2/3) = ((1 / k^(1/3) - Rad_um)^2)/`DiffCoef_um^2^us`
+
+# (Y * exp(Y)) = ((1 / k^(1/3) - Rad_um)^2)/`DiffCoef_um^2^us` * (muFast_us1 * 2/3)
+
+# Lamberts W can be used to solve this equation. If x * exp(x) = omega, then x = LambertW::W(omega)
+
+# (Y * exp(Y)) = ((1 / k^(1/3) - Rad_um)^2)/`DiffCoef_um^2^us` * (muFast_us1 * 2/3)
+
+# Y = LambertW::W(((1 / k^(1/3)) - Rad_um)^2)/`DiffCoef_um^2^us` * (muFast_us1 * 2/3)
+
+# SeawaterLow_M / (CellConc_M  * ((Rad_um + sqrt(`DiffCoef_um^2^us`*us[1]))^3))  = k
+
+# Y = LambertW::W((1 / (SeawaterLow_M / (CellConc_M  * ((Rad_um + sqrt(`DiffCoef_um^2^us`*MinTime))^3)))^(1/3) - Rad_um)^2)/`DiffCoef_um^2^us` * (muFast_us1 * 2/3)
+
+# muFast_us1 * us_thresh * 2/3 = Y
+
+# muFast_us1 * us_thresh * 2/3 = LambertW::W((1 / (SeawaterLow_M / (CellConc_M  * ((Rad_um + sqrt(`DiffCoef_um^2^us`*MinTime))^3)))^(1/3) - Rad_um)^2)/`DiffCoef_um^2^us` * (muFast_us1 * 2/3)
+
+#Algebra for threshold estimates for Hetero, accounting only for diffusion towards the cell; time dependent decay not included because cell is lowering [ROS] below background
+
+#When diffusion reaches threshold:
+
+# SeawaterLow_M = (CellConc_M * (DiffuseSphereThresh_um3)/((4/3)*pi*Rad_um^3))
+# 
+# SeawaterLow_M = (CellConc_M * ((4/3)*pi*um_thresh^3)/((4/3)*pi*Rad_um^3))
+# 
+# SeawaterLow_M = (CellConc_M * (um_thresh^3/Rad_um^3))
+# 
+# SeawaterLow_M/CellConc_M = (um_thresh^3/Rad_um^3)
+# 
+# SeawaterLow_M/CellConc_M = (um_thresh/Rad_um)^3
+# 
+# (SeawaterLow_M/CellConc_M)^1/3 = um_thresh/Rad_um
+# 
+# ((SeawaterLow_M/CellConc_M)^1/3) * Rad_um = um_thresh
+
+ROSDistH2O2 <- ROSDistH2O2 %>%
+  group_by(Habitat, Taxa, ROS, Cite_key) %>%
+  mutate(us_threshLow = case_when(Metabolism == "Phyto" ~ (LambertW::W((((1 / (SeawaterLow_M / (CellConc_M  * ((Rad_um)^3)))^(1/3) - Rad_um)^2)/`DiffCoef_um^2^us`) * ((muFast_us1 * 2/3)))) / ((muFast_us1) * 2/3),
+                               Metabolism == "Hetero"  ~ ((((SeawaterLow_M * ((Rad_um)^3))/CellConc_M)^1/3 - Rad_um)^2)/`DiffCoef_um^2^us`),
+         um_threshLow = case_when(Metabolism == "Phyto" ~ sqrt(`DiffCoef_um^2^us` * us_threshLow) + Rad_um,
+                               Metabolism == "Hetero" ~ (SeawaterLow_M/CellConc_M)^1/3  * Rad_um) - Rad_um) %>% 
+  ungroup()
+
+```
+
+```{r ROSRadplot,  fig.cap = ROSRadplot_cap, fig.height= 7, fig.width= 9, echo=FALSE}
+
+ROSRadplot_cap <- glue( "Estimates of concentration gradients of [H~2~O~2~] vs. distance outwards from 'Heterotrophic' Bacterioplankton cell maintaining an internal [H~2~O~2~] below seawater background [H~2~O~2~] (blue band); or outwards from 'Phytoplankton' cells of different radii, maintaining an internal [H~2~O~2~] equal to 1/10 the cytotoxic threshold for [H~2~O~2~]. Orange indicates cytotoxic concentration range for [H~2~O~2~] (1 x 10^-5^ to 1 x 10^-4^M). Black points show modelled [H~2~O~2~] under the influence of dilution alone. Red points show modelled [H~2~O~2~] under superimposed influences of dilution and (negligible) decay of H~2~O~2~. Vertical green lines indicate the cell surface. Vertical dashed lines indicate threshold radii out from cells, where [H~2~O~2~] around the cell falls or rises to seawater background levels.  Beyond that threshold the cell has no specific, local influence upon seawater [H~2~O~2~].", sep = " ")
+
+ # ROSDistH2O2 %>%
+ #  filter(Taxa %in% c("Bacterioplankton", "Prochlorococcus", "Synechococcus", "PicoEukaryotes", "Diatoms")) %>%
+ #  mutate(AlphaSea = log10(SeawaterHigh_M)/log10(SeawaterLow_M),
+ #         AlphaCell = log10(1e-5)/log10(1e-4)) %>%
+ #  ggplot() +
+ #  geom_rect(aes(xmin= min(log10(DiffuseRad_um), na.rm = TRUE), xmax = max(log10(DiffuseRad_um), na.rm = TRUE ), ymin = log10(SeawaterLow_M), ymax = log10(SeawaterHigh_M)), fill = "lightblue") +
+ #  geom_rect(aes(xmin = -0.5, xmax = log10(DiffuseRad_um), ymin = log10(1e-5), ymax = log10(1e-4)), fill = "darkgoldenrod1") +
+ #  geom_point(aes(x = log10(DiffuseRad_um), y = log10(DilConc_M))) +
+ #  geom_line(aes(x = log10(DiffuseRad_um), y = log10(DilFastConc_M))) +
+ #  geom_point(aes(x = log10(DiffuseRad_um), y = log10(DilFastConc_M)), colour = "red", size = 0.1) + 
+ #  geom_vline(aes(xintercept = log10(Rad_um)), color = "darkgreen") + # Green line is the cell wall
+ # 
+ #  facet_grid(cols = vars(Taxa)) +
+ #  geom_vline(aes(xintercept = log10(um_threshLow)), linetype = "dashed") + 
+ #  coord_cartesian(ylim = c(log10(ROSDistH2O2$SeawaterLow_M[[1]]) -1, log10(1e-4))) +
+ #  theme_bw()
+
+ROSRadplot <-ROSDistH2O2 %>%
+  filter(Taxa %in% c("Bacterioplankton", "Prochlorococcus", "Synechococcus", "PicoEukaryotes", "Diatoms")) %>%
+  mutate(AlphaSea = log10(SeawaterHigh_M)/log10(SeawaterLow_M),
+         AlphaCell = log10(1e-5)/log10(1e-4),
+         FacetTaxa = factor(Taxa, levels = c("Bacterioplankton", "Prochlorococcus", "Synechococcus", "PicoEukaryotes", "Diatoms"))) %>%
+  ggplot() +
+  geom_rect(aes(xmin= log10(DiffuseRad_um), xmax = max(log10(DiffuseRad_um), na.rm = TRUE ), ymin = log10(SeawaterLow_M), ymax = log10(SeawaterHigh_M)), fill = "lightblue") +
+  geom_rect(aes(xmin = -0.5, xmax = log10(DiffuseRad_um), ymin = log10(1e-5), ymax = log10(1e-4)), fill = "darkgoldenrod1") +
+  geom_point(aes(x = log10(DiffuseRad_um), y = log10(DilConc_M))) +
+  geom_line(aes(x = log10(DiffuseRad_um), y = log10(DilFastConc_M))) +
+  geom_point(aes(x = log10(DiffuseRad_um), y = log10(DilFastConc_M)), colour = "red", size = 0.1) + 
+  geom_vline(aes(xintercept = log10(Rad_um)), color = "darkgreen") + # Green line is the cell wall
+  facet_grid(cols = vars(FacetTaxa)) +
+  labs(x = ~log[10] ~"["~H[2]~O[2]~"]"~  "Diffusion Radius (µm)",
+         y = ~log[10] ~"["~H[2]~O[2]~"]"~  "by dilution (M)") +
+  geom_vline(aes(xintercept = log10(um_threshLow)), linetype = "dashed") + 
+  coord_cartesian(ylim = c(log10(ROSDistH2O2$SeawaterLow_M[[1]]) -1, log10(1e-4))) +
+  theme_bw() +
+  scale_y_continuous(breaks = c(-4, -6, -8, -10), labels = c("−4", "−6", "−8", "−10"))
+  
+ROSRadplot
+
+ggsave(ROSRadplot, file = file.path(Figures, "Figure2.png"), height= 7, width= 9, units = "in")
+
+```
+
+
+In this simple estimate a heterotrophic bacterioplankton cell maintaining intracellular [H~2~O~2~] at 1/10 of the external seawater [H~2~O~2~] locally drops [H~2~O~2~] below the lower end of the seawater [H~2~O~2~] for a radius of only `r signif(as.numeric(unique(ROSDistH2O2 %>% filter(ROS == "H~2~O~2~") %>% filter(Metabolism == "Hetero") %>% filter(Taxa == "Bacterioplankton") %>% select(um_threshLow))), digits = 2)` µm. If the bacterioplankton cell were to maintain an intracellular [H~2~O~2~] of <1/10 of the external seawater [H~2~O~2~], the threshold distances would be greater. 
+The phytoplankton cells maintaining intracellular [H~2~O~2~] at 1 µmol L^-1^ influence local [H~2~O~2~] above a low background level of seawater [H~2~O~2~] for radii of `r signif(as.numeric(unique(ROSDistH2O2 %>% filter(ROS == "H~2~O~2~") %>% filter(Metabolism == "Phyto") %>% filter(Taxa == "Prochlorococcus") %>% select(um_threshLow))), digits = 2)` µm for *Prochlorococcus* up to `r signif(as.numeric(unique(ROSDistH2O2 %>% filter(ROS == "H~2~O~2~") %>% filter(Metabolism == "Phyto") %>% filter(Taxa == "Diatoms") %>% select(um_threshLow))), digits = 2)` µm for diatoms, or even more for yet larger phytoplankters not simulated.  Furthermore, these threshold distances apply to the lowest published estimates for seawater [H~2~O~2~].  Under environments with higher seawater [H~2~O~2~] the threshold distances would be smaller. 
+
+## Visualizing Cell to Cell Exchange of [H~2~O~2~] {.unnumbered}
+
+We next combine our visualizations of cell suspensions from eutrophic, oligotrophic, or  colonial habitats, overlaid with the mathematical expressions of cell-specific spheres of [H~2~O~2~] above or below seawater levels, to visualize the extent to which cells directly influence the [H~2~O~2~] environments of their neighbours.
+
+```{r CellSpaceH2O2LowPlot, fig.cap = CellSpaceH2O2LowPlot_cap, fig.height= 6, fig.width= 5, echo=FALSE}
+CellSpaceH2O2LowPlot_cap <- glue("Simulations of [H~2~O~2~] above seawater [H~2~O~2~] (pale blue) out from Phytoplankton cells (green spheres, spanning a size range), or [H~2~O~2~] below seawater [H~2~O~2~] out from Bacterioplankton cells (red spheres, single nominal cell size).  Cell position along a third Z axis is simulated by the 'alpha' with lighter cells further back.", sep = " ")
+
+
+
+CellSpaceH2O2LowPlot <- ROSDistH2O2 %>%
+  select(Taxa, um_threshLow, us_threshLow) %>%
+  unique() %>%
+  left_join(., CellSpace, by = c("Taxa")) %>%
+  unnest(c(DistanceAxisX_mm, DistanceAxisY_mm, DistanceAxisZ_mm)) %>%
+  filter((grepl("grob", Cite_key) & grepl("Hetero", Metabolism)) | (grepl("albrecht", Cite_key) | grepl("agusti", Cite_key))) %>%
+  filter(Habitat != "Mesotrophic", Habitat != "Colony") %>%
+  # select(Taxa, Habitat, Cite_key, CellCount_m3) %>% unique()
+  ggplot() +
+  geom_circle(aes(x0 = DistanceAxisX_mm, y0 = DistanceAxisY_mm, r = Rad_um/1000, fill = Metabolism, alpha = DistanceAxisZ_mm, color = Metabolism)) +
+  geom_circle(aes(x0 = DistanceAxisX_mm, y0 = DistanceAxisY_mm, r = um_threshLow/1000, alpha = DistanceAxisZ_mm, fill = Metabolism), color = NA) +
+  guides(alpha = "none") +
+  scale_fill_manual(values = MetabColours) +
+  scale_colour_manual(values = MetabColours) + 
+  scale_alpha_continuous(range = c(0.0001 ,1)) +
+  coord_fixed(ratio = 1, xlim = c(0,1), ylim = c(0,1)) +
+  facet_grid(rows = vars(facet)) +
+  theme_bw() +
+  labs(x = "Distance (mm)",
+         y = "Distance (mm)") +
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        legend.position = "top") 
+
+CellSpaceH2O2LowPlot
+
+ggsave(CellSpaceH2O2LowPlot, file = file.path(Figures, "Figure3.png"), height= 6, width= 5, units = "in")
+
+```
+
+In Eutrophic habitats bacterioplankters are numerous, but their small cell size, and correspondingly small cell-specific spheres of upon local [H~2~O~2~], mean that their individual contributions towards local [H~2~O~2~] are negligible (Figure
+\@ref(fig:CellSpaceH2O2LowPlot)), even though their collective influence upon background [H~2~O~2~] may be considerable [@coeSurvivalProchlorococcusExtended2016; @zinserCrossprotectionHydrogenPeroxide2018]. Phytoplankton cells, particularly the larger taxa, can however influence local [H~2~O~2~] over wider distances, leading to overlaps in their  cell-specific spheres of influence (Figure
+\@ref(fig:CellSpaceH2O2LowPlot)) with bacterioplankton and with other phytoplankton, and opening the possibility of direct cell-to-cell signaling or cell-to-cell metabolic influences through [H~2~O~2~], beyond contributions to background seawater [H~2~O~2~]. In Oligotrophic habitats wider cell-to-cell spacings, and generally smaller cell sizes, make direct cell-to-cell reciprocal influences upon local [H~2~O~2~] unlikely, although the phytoplankton and bacterioplankton as a whole indeed contribute to establishment of the background [H~2~O~2~].
+
+For phytoplankters growing colonially, the [H~2~O~2~] leaving specific cells within the colony strongly influence the local [H~2~O~2~] environments of neighbouring cells in the colony (Figure \@ref(fig:CellSpaceH2O2PhaeoPlot)).  Such a colony could also be usefully simulated as a single homeostatic sphere of [H~2~O~2~], with a significant local sphere of influence beyond the colony. Although we did not include bacteria in (Figure \@ref(fig:CellSpaceH2O2PhaeoPlot)), in fact *Phaeocystis antarctica* colonies have rich bacterial components [@zhuBacterialCompositionAssociated2021], which may greatly alter the local H~2~O~2~ environment within the colony, beyond the activities of the *Phaeocystis* cells.
+
+```{r CellSpaceH2O2PhaeoPlot, fig.cap = CellSpaceH2O2PhaeoPlot_cap, echo=FALSE}
+CellSpaceH2O2PhaeoPlot_cap <- glue("Simulation of [H~2~O~2~] above seawater [H~2~O~2~] within a *Phaeocystis* colony. Note the expansion of the axes scales to 0.1 mm.  Cell position along a third Z axis is simulated by the 'alpha' with lighter cells further back.", sep = " ")
+
+CellSpaceH2O2PhaeoPlot <- ROSDistH2O2 %>% 
+  select(Taxa, um_threshLow, us_threshLow) %>%
+  unique() %>%
+  left_join(., CellSpace, by = c("Taxa")) %>%
+  filter(grepl("Phaeocystis", Taxa)) %>%
+  filter(Metabolism != "Hetero") %>%
+  unnest(c(DistanceAxisX_mm, DistanceAxisY_mm, DistanceAxisZ_mm)) %>%
+  filter(DistanceAxisX_mm <= 0.1,
+         DistanceAxisY_mm <= 0.1,
+         DistanceAxisZ_mm <= 0.1) %>%
+  ggplot() +
+  geom_circle(aes(x0 = DistanceAxisX_mm, y0 = DistanceAxisY_mm, r = Rad_um/1000, fill = Metabolism, alpha = DistanceAxisZ_mm), colour = NA) +
+  geom_circle(aes(x0 = DistanceAxisX_mm, y0 = DistanceAxisY_mm, r = um_threshLow/1000, fill = Metabolism, alpha = DistanceAxisZ_mm), colour = NA) +
+  scale_fill_manual(values = MetabColours) +
+  scale_colour_manual(values = MetabColours) + 
+  # guides(alpha = "none") +
+  guides(scale_fill_manual = "none") +
+  guides(scale_colour_manual = "none") +
+  coord_fixed(ratio = 1, xlim = c(0,0.1), ylim = c(0,0.1)) +
+  facet_grid(cols = vars(Habitat)) +
+  theme_bw() +
+  theme(legend.position = "none") +
+  labs(x = "Distance (mm)",
+       y = "Distance (mm)") +
+  theme(panel.background = element_rect(fill = "azure"), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) 
+
+CellSpaceH2O2PhaeoPlot
+
+ggsave(CellSpaceH2O2PhaeoPlot, file = file.path(Figures, "Figure4.png"), height= 6, width= 6, units = "in")
+# 
+```
+
+## Threshold Distances for Cell to Cell Exchange of [H~2~O~2~] {.unnumbered}
+
+We find that cell size, cell suspension density, cellular [H~2~O~2~] and seawater [H~2~O~2~] interact to influence the potential for direct cell-to-cell diffusional interactions. We sought to generalize the estimations presented earlier for combinations of Taxa x Habitat (Figure \@ref(fig:CellSpaceH2O2LowPlot) to summarize how these variables potentially affect cell-to-cell interactions via H~2~O~2~ (Figure \@ref(fig:H2O2PhytoplanktonInteractionPlot))).
+
+```{r H2O2PhytoplanktonInteractionPlot, fig.cap = H2O2PhytoplanktonInteractionPlot_cap, echo=FALSE}
+H2O2PhytoplanktonInteractionPlot_cap <- glue("Thresholds for direct phytoplankton cell-to-cell interaction through [H~2~O~2~] above seawater background.  The X axis shows a range of cell m^-3^ (which in turn governs cell-to-cell distances), while the Y axis shows radii for cell specific spheres of influence upon [H~2~O~2~] (a function of cell size, intracellular [H~2~O~2~] and seawater [H~2~O~2~]).  The areas below the threshold lines show combinations where phytoplankton cell-to-cell distance exceeds the cell specific [H~2~O~2~] distance, so direct cell-to-cell interactions mediated by [H~2~O~2~] are unlikely.  The area above the threshold lines show combinations where phytoplankton cell-to-cell distance is less than the cell specific [H~2~O~2~] distance, so direct cell-to-cell interactions mediated by [H~2~O~2~] are feasible.  The four threshold lines refer to a range of ratios of phytoplankton intracellular to extracellular [H~2~O~2~].  Data points from different habitats show that direct phytoplankton cell-to-cell interactions are likely only within the *Phaeocystis* colony, whereas single phytoplankton cells are generally too small or too distant for direct interactions.", sep = " ")
+
+#Generate Combinations for Simulation
+CellCount_m3 <- tibble(CellCount_m3 = logseq(x1 = 1e7, x2 = 1e16, n = 38))
+Rad_um <- tibble(Rad_um = c(seq(from = 0.3, to = 30, by = .1), seq(from = 30, to = 40, by = 1)))
+Seawater_M <- tibble(Seawater_M = c(1e-9, 1e-8, 1e-7, 1e-6))
+CellConc_M <- tibble(CellConc_M = c(1e-9, 1e-8, 1e-7,1e-6))
+
+H2O2Matrix <- left_join(x = CellCount_m3, y = Rad_um, by = character())
+H2O2Matrix <- left_join(x = H2O2Matrix, y = Seawater_M, by = character())
+H2O2Matrix <- left_join(x = H2O2Matrix, y = CellConc_M, by = character())
+
+H2O2Matrix <- H2O2Matrix %>%
+  mutate(`DiffCoef_um^2^us` = as.numeric(ROSDiffusion %>% filter(ROS == "Hydrogen Peroxide") %>% select(`DiffCoef_um^2^us`)),
+         LifetimeLow_s = as.numeric(ROSDiffusion %>% filter(ROS == "Hydrogen Peroxide") %>% select(LifetimeLow_s)),
+         LifetimeHigh_s = as.numeric(ROSDiffusion %>% filter(ROS == "Hydrogen Peroxide") %>% select(LifetimeHigh_s)),
+         muSlow_us1 = 1/(LifetimeHigh_s*1000000),
+         muFast_us1 =  1/(LifetimeLow_s*1000000),
+         Rad_mm = Rad_um/1000,
+         CellCount_uL = CellCount_m3/1000000000,
+         CellSpace_mm = (((1/(CellCount_uL))^(1/3)) * 0.55),
+         CellSpace_um = CellSpace_mm * 1000,
+         InOutRatio = CellConc_M/Seawater_M) %>%
+    mutate(us_thresh =  (LambertW::W((((1 / (Seawater_M / (CellConc_M  * ((Rad_um)^3)))^(1/3) - Rad_um)^2)/`DiffCoef_um^2^us`) * ((muFast_us1 * 2/3)))) / ((muFast_us1) * 2/3),
+         um_thresh = sqrt(`DiffCoef_um^2^us` * us_thresh) + Rad_um) %>%
+  mutate(SpaceThresh = CellSpace_um/um_thresh)
+
+#There is something weird here because us = 0, so  the complicated equation collapses to:
+
+# (LambertW::W((((1 / (Seawater_M / (CellConc_M  * ((Rad_um)^3)))^(1/3) - Rad_um)^2)/`DiffCoef_um^2^us`) * ((muFast_us1 * 2/3)))) / ((muFast_us1) * 2/3)
+
+H2O2MatrixThresh <-  H2O2Matrix %>%
+  filter(um_thresh >= CellSpace_um) %>%
+  filter(CellConc_M >= Seawater_M) %>%
+  group_by(Rad_um, CellConc_M, Seawater_M) %>%
+  #filter(CellCount_m3 == min(CellCount_m3, na.rm = TRUE)) %>%
+  ungroup() %>%
+  group_by(CellCount_m3, CellConc_M, Seawater_M) %>%
+  mutate(RadMin_um = min(Rad_um, na.rm = TRUE),
+         RadMax_um = max(Rad_um, na.rm = TRUE)) %>%
+  ungroup()
+
+# H2O2MatrixThresh %>%
+#   # filter(CellConc_M == 1e-6,
+#   #         Seawater_M == 1e-9) %>%
+#   ggplot() +
+#   geom_ribbon(aes(x = log10(CellCount_m3), ymin = RadMin_um, ymax = RadMax_um), alpha = 0.3) +
+#   facet_grid(rows = vars(Seawater_M), cols = vars(CellConc_M)) +
+#   scale_y_continuous(sec.axis = sec_axis(~ . , name = "Seawater_M", breaks = NULL, labels = NULL)) +
+#   scale_x_continuous(sec.axis = sec_axis(~ . , name = "CellConc_M", breaks = NULL, labels = NULL)) +
+#   #coord_fixed(ratio = 1) +
+#   theme_bw()
+# 
+# H2O2MatrixThresh %>%
+#   ggplot() +
+#   geom_ribbon(aes(x = log10(CellCount_m3), ymin = RadMin_um, ymax = RadMax_um), alpha = 0.3) +
+#   facet_grid(rows = vars(InOutRatio)) +
+#   scale_y_continuous(sec.axis = sec_axis(~ . , name = "InOutRatio", breaks = NULL, labels = NULL)) +
+#   theme_bw()
+
+H2O2SizeSpace_plot <-  ggplot() +
+  geom_line(aes(x = log10(H2O2MatrixThresh$CellCount_m3), y = H2O2MatrixThresh$RadMin_um, linetype = as.factor(H2O2MatrixThresh$InOutRatio))) +
+    geom_point(aes(x = log10(CellSpace$CellCount_m3), y = CellSpace$Rad_um, colour = CellSpace$Habitat)) +
+    scale_colour_manual(values = HabitatColours) +
+  theme_bw()
+
+# H2O2SizeSpace_plot
+
+H2O2SizeSpaceAxes_plot <-  ggplot() +
+  geom_line(aes(x = log10(H2O2MatrixThresh$CellCount_m3), y = H2O2MatrixThresh$RadMin_um, linetype = as.factor(H2O2MatrixThresh$InOutRatio))) +
+    geom_point(aes(x = log10(CellSpace$CellCount_m3), y = CellSpace$Rad_um, colour = CellSpace$Habitat)) +
+    scale_colour_manual(values = HabitatColours) +
+    labs(x = ~log[10] ~ "Cells" ~m^-3,
+         y = "Cell Radius (µm)", 
+         linetype = expression("["~H[2]~O[2]~"] Intra- : Extracellular"), 
+         colour = "Habitat") +
+    theme_bw()
+
+H2O2SizeSpaceAxes_plot
+
+
+ggsave(H2O2SizeSpaceAxes_plot, file = file.path(Figures, "Figure5.png"), height= 6, width= 8, units = "in")
+
+  
+
+#ggsave(H2O2SizeSpace_plot, file = file.path(Figures, "H2O2SizeSpace_plot.png"))
+```
+
+Figure \@ref(fig:H2O2PhytoplanktonInteractionPlot) plots combinations of cell suspension density (X axis, governing cell-to-cell distance), and the radii of the cell specific sphere of influence upon [H~2~O~2~] exceeding seawater [H~2~O~2~] (Y axis), for homogeneous populations. The threshold lines mark the transition for cell-to-cell interactions, for four different ratios of cellular [H~2~O~2~] to seawater [H~2~O~2~].  The areas above the threshold lines show the regions of cell radius and cell suspension density where the cell-specific spheres of influence upon [H~2~O~2~] exceed the average cell-to-cell spacing, for a given ratio of cellular [H~2~O~2~] to seawater [H~2~O~2~]. For the purpose of presentation, we collapsed cellular [H~2~O~2~] and seawater [H~2~O~2~] to the ratio of cellular [H~2~O~2~] to  seawater [H~2~O~2~] since that ratio determines the position of the threshold line, rather than the absolute values for cellular [H~2~O~2~] and seawater [H~2~O~2~].  We see that a homogeneous population of large cells of 40 µm radius would maintain over-lapping cell-specific spheres of influence down to cell suspension densities of `r ScientificTen(H2O2MatrixThresh %>% filter(Rad_um == 40) %>% select(CellCount_m3) %>% min(), 2)` cells m^3^ (Figure \@ref(fig:H2O2PhytoplanktonInteractionPlot)).  In contrast, a homogeneous population of cells of 0.5 µm radius would only achieve directly interacting cell-specific spheres of influence at a hypothetical `r ScientificTen(H2O2MatrixThresh %>% filter(Rad_um == 0.5) %>% select(CellCount_m3) %>% min(), 2)` cells m^3^, far above cell suspension densities for most marine habitats (Table \@ref(tab:CellSpaceMeta)).  For comparison, in (Figure \@ref(fig:H2O2PhytoplanktonInteractionPlot)) we overlay symbols for representative taxa from different habitats (Table \@ref(tab:CellSpaceMeta)) showing that for hypothetical homogeneous populations the cell specific spheres of influence are generally far below the expected cell-to-cell spacing.
+
+```{r BacterioH2O2SizeSpaceAxesplot, fig.cap = H2O2BacterioplanktonInteractionPlot_cap, echo=FALSE}
+H2O2BacterioplanktonInteractionPlot_cap <- glue("Thresholds for direct bacterioplankton cell-to-cell interaction through [H~2~O~2~] above seawater background.  The X axis shows a range of cell m^-3^ (which in turn governs cell-to-cell distances), while the Y axis shows radii for cell specific spheres of influence upon [H~2~O~2~] (a function of cell size, intracellular [H~2~O~2~] and seawater [H~2~O~2~]).  The areas below the threshold lines show combinations where bacterioplankton cell-to-cell distance exceeds the cell specific [H~2~O~2~] distance, so direct cell-to-cell interactions mediated by [H~2~O~2~] are unlikely.  The area above the threshold lines show combinations where bacterioplankton cell-to-cell distance is less than the cell specific [H~2~O~2~] distance, so direct cell-to-cell interactions mediated by [H~2~O~2~] are feasible.  The four threshold lines refer to a range of ratios of bacterioplankton intracellular to extracellular [H~2~O~2~].  Data points from different habitats show that direct bacterioplankton cell-to-cell interactions are likely, over a range of reasonable ratios of intracellular to extracellular [H~2~O~2~], at >10^10^ cells m^-3^.", sep = " ")
+
+#Generate Combinations for Simulation
+CellCount_m3 <- tibble(CellCount_m3 = logseq(x1 = 1e7, x2 = 1e16, n = 38))
+Rad_um <- tibble(Rad_um = seq(from = 0.1, to = 2, by = 0.01))
+Seawater_M <- tibble(Seawater_M = c(1e-9, 1e-8, 1e-7, 1e-6))
+CellConc_M <- tibble(CellConc_M = c(1e-10, 1e-9, 1e-8, 1e-7,1e-6))
+
+BacterioH2O2Matrix <- left_join(x = CellCount_m3, y = Rad_um, by = character())
+BacterioH2O2Matrix <- left_join(x = BacterioH2O2Matrix, y = Seawater_M, by = character())
+BacterioH2O2Matrix <- left_join(x = BacterioH2O2Matrix, y = CellConc_M, by = character())
+
+BacterioH2O2Matrix <- BacterioH2O2Matrix %>%
+  mutate(`DiffCoef_um^2^us` = as.numeric(ROSDiffusion %>% filter(ROS == "Hydrogen Peroxide") %>% select(`DiffCoef_um^2^us`)),
+         LifetimeLow_s = as.numeric(ROSDiffusion %>% filter(ROS == "Hydrogen Peroxide") %>% select(LifetimeLow_s)),
+         LifetimeHigh_s = as.numeric(ROSDiffusion %>% filter(ROS == "Hydrogen Peroxide") %>% select(LifetimeHigh_s)),
+         muSlow_us1 = 1/(LifetimeHigh_s*1000000),
+         muFast_us1 =  1/(LifetimeLow_s*1000000),
+         Rad_mm = Rad_um/1000,
+         CellCount_uL = CellCount_m3/1000000000,
+         CellSpace_mm = (((1/(CellCount_uL))^(1/3)) * 0.55),
+         CellSpace_um = CellSpace_mm * 1000,
+         InOutRatio = CellConc_M/Seawater_M) %>%
+    mutate(um_thresh = (((Seawater_M/CellConc_M)^1/3  * Rad_um) - Rad_um)) %>%
+  mutate(SpaceThresh = CellSpace_um/um_thresh)
+
+
+
+BacterioH2O2MatrixThresh <-  BacterioH2O2Matrix %>%
+  filter(um_thresh >= CellSpace_um) %>%
+  # filter(CellConc_M >= Seawater_M) %>%
+  group_by(Rad_um, CellConc_M, Seawater_M) %>%
+  #filter(CellCount_m3 == min(CellCount_m3, na.rm = TRUE)) %>%
+  ungroup() %>%
+  group_by(CellCount_m3, CellConc_M, Seawater_M) %>%
+  mutate(RadMin_um = min(Rad_um, na.rm = TRUE),
+         RadMax_um = max(Rad_um, na.rm = TRUE)) %>%
+  ungroup()
+
+# H2O2MatrixThresh %>%
+#   # filter(CellConc_M == 1e-6,
+#   #         Seawater_M == 1e-9) %>%
+#   ggplot() +
+#   geom_ribbon(aes(x = log10(CellCount_m3), ymin = RadMin_um, ymax = RadMax_um), alpha = 0.3) +
+#   facet_grid(rows = vars(Seawater_M), cols = vars(CellConc_M)) +
+#   scale_y_continuous(sec.axis = sec_axis(~ . , name = "Seawater_M", breaks = NULL, labels = NULL)) +
+#   scale_x_continuous(sec.axis = sec_axis(~ . , name = "CellConc_M", breaks = NULL, labels = NULL)) +
+#   #coord_fixed(ratio = 1) +
+#   theme_bw()
+# 
+# H2O2MatrixThresh %>%
+#   ggplot() +
+#   geom_ribbon(aes(x = log10(CellCount_m3), ymin = RadMin_um, ymax = RadMax_um), alpha = 0.3) +
+#   facet_grid(rows = vars(InOutRatio)) +
+#   scale_y_continuous(sec.axis = sec_axis(~ . , name = "InOutRatio", breaks = NULL, labels = NULL)) +
+#   theme_bw()
+
+BacterioH2O2SizeSpace_plot <-  ggplot() +
+  geom_line(aes(x = log10(BacterioH2O2MatrixThresh$CellCount_m3), y = BacterioH2O2MatrixThresh$RadMin_um, linetype = as.factor(BacterioH2O2MatrixThresh$InOutRatio))) +
+    geom_point(aes(x = log10(CellSpace$CellCount_m3), y = CellSpace$Rad_um, colour = CellSpace$Habitat)) +
+    scale_colour_manual(values = HabitatColours) +
+  theme_bw()
+
+# H2O2SizeSpace_plot
+
+# BacterioH2O2SizeSpaceAxes_plot <-  
+#   CellSpace %>%
+#   filter(Taxa == "Bacterioplankton") %>%
+
+BacterioCellSpace <- CellSpace %>%
+  filter(Taxa == "Bacterioplankton")
+
+BacterioH2O2SizeSpaceAxesplot <- ggplot() +
+  geom_line(aes(x = log10(BacterioH2O2MatrixThresh$CellCount_m3), y = BacterioH2O2MatrixThresh$RadMin_um, linetype = as.factor(BacterioH2O2MatrixThresh$InOutRatio))) +
+  geom_point(aes(x = log10(BacterioCellSpace$CellCount_m3), y = BacterioCellSpace$Rad_um, colour = BacterioCellSpace$Habitat)) +
+  scale_colour_manual(values = HabitatColours) +
+  scale_linetype_manual(values = c("1e-04" = "solid", "0.001" = "longdash", "0.01" = "dashed", "0.1" = "dotted"), labels = c("0.0001", "0.001", "0.01", "0.1")) +
+  labs(x = ~log[10] ~ "Cells" ~m^-3, 
+         y = "Cell Radius (µm)", 
+         linetype = expression("["~H[2]~O[2]~"] Intra- : Extracellular"), 
+         colour = "Habitat") +
+  theme_bw()
+
+BacterioH2O2SizeSpaceAxesplot
+
+
+ggsave(BacterioH2O2SizeSpaceAxesplot, file = file.path(Figures, "Figure6.png"), height= 6, width= 8, units = "in")
+
+  
+
+#ggsave(H2O2SizeSpace_plot, file = file.path(Figures, "H2O2SizeSpace_plot.png"))
+```
+
+Figure \@ref(fig:BacterioH2O2SizeSpaceAxesplot) shows that for natural population densities of bacterioplankton (Figure \@ref(fig:BacterioH2O2SizeSpaceAxesplot); Points), the spheres of lowered local [H~2~O~2~] would overlap when [H~2~O~2~] intracellular:extracellular is less than or equal to 0.01 (Figure \@ref(fig:BacterioH2O2SizeSpaceAxesplot), Short dashed line). However, the limited available information [@seaverHydrogenPeroxideFluxes2001] suggests that heterotrophic bacteria maintain an [H~2~O~2~] intracellular:extracellular of about 0.1 (Figure \@ref(fig:BacterioH2O2SizeSpaceAxesplot); Dotted line). It is possible that cells may not be able to maintain an intracellular:extracellular [H~2~O~2~] of 0.1 at the lowest seawater [H~2~O~2~] given the likely roles of H~2~O~2~ in cell signaling [@mittlerROSSignalingNew2011], and the need to maintain a basal [H~2~O~2~] [@mittlerROSAreGood2017]. @seaverHydrogenPeroxideFluxes2001 predicts an intracellular steady-state [H~2~O~2~] of 20 nM in the absence of extracellular H~2~O~2~, which would suggest that at low extracellular [H~2~O~2~], the intracellular:extracellular [H~2~O~2~] would be >0.1, and the spheres of lowered local [H~2~O~2~] would not overlap (Figure \@ref(fig:BacterioH2O2SizeSpaceAxesplot)). Thus, the cell specific effects of bacterioplankton upon local [H~2~O~2~] are unlikely to overlap at reasonable cell suspension densities. 
+
+# Conclusions {.unnumbered} 
+
+Our approximations of cell-to-cell spacing are applied to each taxa x habitat combination separately, based upon published measures of cell suspension densities in marine systems.  We then overlaid the taxa-specific simulations from a given habitat to give a visualization of community level cell-to-cell spacings, across taxa within a habitat (Figure \@ref(fig:CellSpaceCircleAxisplot)). As a next step we aim to implement probability distributions of cell-to-cell spacings across all cells from a mixed community in the habitat, to more accurately capture the likelihood of cell-to-cell interactions. Our work used available cell suspension density data exclusively from marine habitats. In general, we would assume that if cell densities and [H~2~O~2~] in freshwater systems are similar to that of marine systems, the diffusional patterns described for marine habitats would be comparable to freshwater systems, but future studies would need to confirm this.
+
+Our simple approximations of diffusion gradients out from cells are limited by a dearth of published information on the intracellular concentrations of H~2~O~2~, and other ROS,  in phytoplankton or bacterioplankton cells. There are published estimates of intracellular and extracellular H~2~O~2~ production and decay rates in seawater, which could support more sophisticated reaction/diffusion simulation approaches. 
+
+The threshold lines for interacting cell specific spheres of influence as functions of cell radii and cell suspension densities are generated for individual 'taxa' from marine environments with uniform intracellular [H~2~O~2~] (Figure \@ref(fig:H2O2PhytoplanktonInteractionPlot)), rather than for a mixed community of different cell sizes and physiologies. These fixed threshold lines also apply to a fixed ratio of internal to external [H~2~O~2~], whereas this ratio could vary rapidly with changes in cell physiology and external conditions, causing the threshold for direct cell-to-cell interactions to shift. Our models suggest that it is unlikely that H~2~O~2~ diffusing out of a phytoplankton cell directly interacts with another phytoplankton cell at natural seawater cell densities (Figure \@ref(fig:H2O2PhytoplanktonInteractionPlot)), with the exception of *Phaeocystis*, whereby H~2~O~2~ diffusing out of a cell would directly interact with other cells if the intracellular:extracellular [H~2~O~2~] is greater than 100. A future approach aims to generate probability distributions for direct cell-to-cell interactions, since even populations with widely spaced cells occasionally generate close cell-to-cell distances. Analyses show higher rates of cell normalized H~2~O~2~ production in bloom-forming phytoplankton taxa, providing support for the selective influence of cell suspension density upon ROS dynamics [@diazProductionExtracellularReactive2018]. 
+
+It is likely that extracellular ROS play a role in the growth and development of phytoplankton, given that [@odaCatalaseSuperoxideDismutaseinduced1995] found that the addition of superoxide dismutase and catalase inhibited the growth of *Chattonella marina*. Our models suggest that H~2~O~2~ diffusing out of phytoplankton cells reaches external [H~2~O~2~] before interacting with other cells (Figure \@ref(fig:CellSpaceH2O2LowPlot) & \@ref(fig:H2O2PhytoplanktonInteractionPlot)), and are primarily driven by the influence of diffusion, and with negligible contribution from the decay of H~2~O~2~ (Figure \@ref(fig:ROSRadplot)), indirect interaction of H~2~O~2~ diffusing out of cells is also possible as H~2~O~2~ can affect biogeochemical cycles and bioavailability of nutrients [@morrisReactiveOxygenSpecies2022]. 
+
+The simple estimates presented herein using H~2~O~2~ as a case study are generalizable to other, less stable ROS where decay will be a more immediate influence. For example, O~2~^•−^ itself is not cell membrane permeable and so forms separate intra- and extra-cellular pools. But  O~2~^•−^ is metabolized to H~2~O~2~, both inside and outside cells, and so could indirectly influence [H~2~O~2~], and thereby alter cell-to-cell interactions beyond the simple diffusion dominated simulations we present. For example, extracellular production of O~2~^•−^ by heterotrophic bacteria can significantly alter O~2~^•−^ concentrations in the dark ocean [@diazWidespreadProductionExtracellular2013]. Heterotrophs might also produce enough O~2~^•−^ to indirectly influence concentrations of O~2~^•−^ in the photic zone of the ocean. The phytoplankter *T. weissflogii* [@roseMeasurementImplicationsNonphotochemically2008, @kustkaExtracellularProductionSuperoxide2005] generates ranges of ~ 8 × 10^-16^ mol O~2~^•−^ cell^−1^ hr^−1^, while four raphidophytes show production ranges of 0.45 to 4 × 10^-12^ mol O~2~^•−^ cell^−1^ hr^−1^ [@odaGenerationReactiveOxygen1997] illustrating the wide range of extracellular production which can differentially influence extracellular [ROS] across communities or conditions.
+
+The approaches presented here are a step towards visualizing and constraining estimates of cell-to-cell interactions in plankton communities. We next need to validate these approaches with quantitative estimates of intracellular [H~2~O~2~], and other [ROS], within phytoplankton and bacterioplankton cells.
+
+# Methods, Simplifying Assumptions, and Limitations {.unnumbered}
+
+## Estimation of Cell to Cell Spacing  {.unnumbered} 
+
+A simplistic estimator of cell-to-cell spacing is the reciprocal of the
+cube root of the cell suspension density. For example, if cell suspension density is expressed as cells µL^-1^ (equivalent to cells
+mm^-3^), the reciprocal of the cube root gives a cell-to-cell spacing estimate
+in mm. This cube root estimate assumes equally spaced cells, which
+somewhat overestimates average cell-to-cell spacing, since equally spaced
+cells give a maximum spacing, not the average spacing of randomly
+located cells. An arithmetic correction based upon the gamma function
+of 4/3 generates a numeric correction to multiply the reciprocal of the
+cube root of the cell suspension density by 0.55 to approximate average spacing of cells [@AverageSeparationObjects2009] (Equation \@ref(eq:CellSpacing)).
+
+\begin{equation}
+  CellSpace\, mm = \sqrt[3]{\frac{1}{Cell\, Count\, µL^{-1}}}  * 0.55
+  (\#eq:CellSpacing)
+\end{equation}
+
+We generated simulated cell suspension densities for each taxa and habitat by generating points separated by the average cell spacing between cells, along each of the X, Y, Z spatial axes. We then added random variation to the values of the evenly spaced spaced points (R jitter, factor = 2), to generate a XYZ coordinate cloud. In parallel approach (data not presented) we directly generated normally distributed random distributions around the average cell spacings, but that approach was computationally slow for denser cell suspension densities. Overlaying the results from co-occurring taxa then gives a visualization of the community in a habitat (Figure \@ref(fig:CellSpaceCircleAxisplot)).  Although overlaying data from separately simulated taxa is adequate for visualization, a more sophisticated model would be required to explicitly generate and retrieve the distributions of cell-to-cell distances within, or across, taxa. Furthermore, even in oligotrophic habitats with low average cell suspension densities the few cells present may be clustered non-randomly, an ecological nuance not captured in our approach.
+
+## Simulating Concentration Gradients  {.unnumbered}  
+
+To simulate H~2~O~2~ concentration gradients generated around a given cell, we consider the cell as a fixed spherical volume which maintains a steady, homeostatic intra-cellular [H~2~O~2~]. For simulation of phytoplankton cells, we set a homeostatic intracellular [H~2~O~2~] of 10^-6^ M, based upon limited literature from other eukaryotes [@formanWhatConcentrationHydrogen2016], and as a level below the cytotoxic threshold of 10^-5^ M. For simulation of bacterioplankton cells, we set a homeostatic intracellular [H~2~O~2~] of 1/10 the external seawater [H~2~O~2~] [@seaverHydrogenPeroxideFluxes2001; @liImprovedMeasurementsScant2018]. 
+
+Using the H~2~O~2~ diffusion co-efficient in water, and time increments from 0 µs with a log~10~ series upwards to `r MaxTime` µs, we calculate the progressive net diffusional displacement of H~2~O~2~ outward from the cell surface. We then estimate dilution of [H~2~O~2~] with diffusion outwards from a source 'Phytoplankton' cell or diffusion inwards towards a sink 'Heterotrophic' cell. In addition to the simple volumetric dilution as ROS diffuses outwards from 'Phytoplankton' cells, we add a time-dependent decay term based upon measured lifetimes of H~2~O~2~ in seawater, which also vary widely. We use nominal time increments to generate the diffusion distances of H~2~O~2~ outward from the cell and to simulate the concurrent effect of pseudo-first order decay as H~2~O~2~ moves outward from the cell with time, but this simple simulation assumes a steady state, without considering local mixing or fluctuations in cellular or environmental H~2~O~2~.
+
+## Simulating Threshold Radii for [H~2~O~2~] above or below Seawater [H~2~O~2~] {.unnumbered}  
+
+On a visual plot the intersect of the [H~2~O~2~] outwards from a 'Phytoplankton' source cell, with the lowest seawater [H~2~O~2~] is obvious, but it proved challenging to estimate this threshold distance when outwardly diffusing [H~2~O~2~] declines to the lowest seawater [H~2~O~2~]. The time for [H~2~O~2~] to decline to seawater [H~2~O~2~] depends upon the ratio of intracellular:extracellular [H~2~O~2~]; the diffusion coefficient for ROS, which determines how far [H~2~O~2~] moves out from the cell radius in a given time interval; and thus the [H~2~O~2~] volumetric dilution factor over a given time interval. For [H~2~O~2~] concomitant decay was only a negligible factor, but to retain capacity for generalizations to other, less stable [ROS] we nevertheless included an extracellular decay rate constant in the estimations.  After algebraic transforms we found that a LambertW function was appropriate [@LambertFunction2022] to estimate the threshold radius at which [H~2~O~2~] around a cell falls to the lowest seawater [H~2~O~2~] (Equation \@ref(eq:PhytoplanktonAlgebra)).
+
+In equation \@ref(eq:PhytoplanktonAlgebra), [H~2~O~2~]~seawater~ is the seawater [H~2~O~2~] in the simulated habitat in mol L^-1^; [H~2~O~2~]~cell~ is the intracellular homeostatic [H~2~O~2~] in mol L^-1^; DiffusionRad~threshold~ in µm is the radius of the diffusion sphere when [H~2~O~2~] drops to [H~2~O~2~]~seawater~; CellRadius is the radius of the cell in µm; µ is the pseudo-first order decay constant for H~2~O~2~ in seawater; us~threshold~ is the time in µs at which [H~2~O~2~] drops to [H~2~O~2~]~seawater~; Diffusion Coefficient (D) is expressed in µm^2^ µs^-1^; W~0~ is the Lambert W function, also known as the Omega function, used to solve for f(x) = xe^x^.
+
+\begin{equation}
+  \begin{multline}
+    [H_2O_2]_{seawater} = [H_2O_2]_{cell} * \frac{\frac{4}{3} * \pi * (CellRadius)^3}{\frac{4}{3} * \pi * DiffusionRad_{threshold}^3} * e^{-\mu * us_{threshold}} \\
+    [H_2O_2]_{seawater} = [H_2O_2]_{cell} * \frac{(CellRadius)^3}{DiffusionRad_{threshold}^3} * e^{-\mu * us_{threshold}} \\
+    [H_2O_2]_{seawater} = [H_2O_2]_{cell} * \frac{(CellRadius)^3}{(CellRadius + \sqrt[2]{D * us_{threshold}})^3} * e^{-\mu * us_{threshold}} \\
+    \frac{[H_2O_2]_{seawater}}{[H_2O_2]_{cell} * (CellRadius)^3} =  \frac{1}{(CellRadius + \sqrt[2]{D * us_{threshold}})^3} * e^{-\mu * us_{threshold}} \\
+    \frac{[H_2O_2]_{seawater}}{[H_2O_2]_{cell} * (CellRadius)^3} = k \\
+    \sqrt[3]{k} = \frac{1}{(CellRadius + \sqrt[2]{D * us_{threshold}})} * e^{\frac{-\mu * us_{threshold}}{3}}\\
+    CellRadius + \sqrt[2]{D * us_{threshold}} = \frac{e^{\frac{-\mu * us_{threshold}}{3}}}{\sqrt[3]{k}} \\
+    \sqrt[2]{D * us_{threshold}} = \frac{e^{\frac{-\mu * us_{threshold}}{3}}}{\sqrt[3]{k}} - CellRadius \\
+    \frac{\sqrt[2]{D * us_{threshold}}}{e^{\frac{-\mu * us_{threshold}}{3}}} = \frac{1}{\sqrt[3]{k}} - CellRadius \\
+    \frac{D * us_{threshold}}{e^{\frac{-\mu * us_{threshold} * 2}{3}}} = (\frac{1}{\sqrt[3]{k}} - CellRadius)^2 \\
+    D * us_{threshold} * e^{\frac{\mu * us_{threshold} * 2}{3}} = (\frac{1}{\sqrt[3]{k}} - CellRadius)^2 \\
+    us_{threshold} * e^{\frac{\mu * us_{threshold} * 2}{3}} = \frac{(\frac{1}{\sqrt[3]{k}} - CellRadius)^2}{D} \\
+    \frac{\mu * us_{threshold} * 2}{3} = Y \\
+    \frac{Y}{\mu * \frac{2}{3}} * e^Y = \frac{(\frac{1}{\sqrt[3]{k}} - CellRadius)^2}{D} \\
+    Y * e^Y = \frac{(\frac{1}{\sqrt[3]{k}} - CellRadius)^2}{D} * \mu * \frac{2}{3} \\
+    Y = W_0(\frac{(\frac{1}{\sqrt[3]{\frac{[H_2O_2]_{seawater}}{[H_2O_2]_{cell} * (CellRadius)^3}}} - CellRadius)^2}{D} * \mu * \frac{2}{3}) \\
+    us_{threshold} = \frac{W_0(\frac{(\frac{1}{\sqrt[3]{\frac{[H_2O_2]_{seawater}}{[H_2O_2]_{cell} * (CellRadius)^3}}} - CellRadius)^2}{D} * \mu * \frac{2}{3})}{\mu * \frac{2}{3})} \\
+    (\#eq:PhytoplanktonAlgebra)
+  \end{multline}
+\end{equation}
+
+
+
+For 'Heterotrophic' sink cells we simulated the sphere of [H~2~O~2~] below seawater [H~2~O~2~] accounting only for diffusion around the cell without including a rate constant for time dependent bulk decay because the cell is acting, on top of any decay term, to further lower [H~2~O~2~] below seawater  [H~2~O~2~]  (Reaction \@ref(eq:HeterotrophAlgebra)). 
+
+\begin{equation}
+  [H_2O_2]_{seawater} = [H_2O_2]_{cell} * (DiffusionSphere_{threshold})/((4/3) * π * CellRadius)
+\end{equation}
+
+Where [H~2~O~2~]~seawater~ is again the seawater [H~2~O~2~] in the simulated habitat in mol L^-1^; [H~2~O~2~]~cell~ is the intracellular homeostatic [H~2~O~2~] in mol L^-1^; and DiffusionRad~threshold~ in µm is the radius of the diffusion sphere when [H~2~O~2~] drops to [H~2~O~2~]~seawater~; CellRadius is the radius of the cell in µm.
+
+Alter substitutions and re-arrangements: 
+
+Where µs_thresh is the elapsed time in µs to reach the threshold [H~2~O~2~]; Diffusion Coefficient (D) is expressed in µm^2^ µs^-1^; µs[1] is the first simulated time step.  We then recover the threshold distance as:
+
+\begin{equation}
+  \begin{multline}
+    [H_2O_2]_{seawater} = [H_2O_2]_{cell} * \frac{(4/3) * \pi* DiffusionRad_{threshold}^3}{(4/3) * \pi * CellRadius^3} \\
+    [H_2O_2]_{seawater} = [H_2O_2]_{cell} * \frac{DiffuseRad_{threshold}^3}{CellRadius^3} \\
+    \frac{[H_2O_2]_{seawater}}{[H_2O_2]_{cell}} = (\frac{DiffuseRad_{threshold}}{CellRadius})^3 \\
+    DiffuseRad_{threshold} = \sqrt[3]{\frac{[H_2O_2]_{seawater}}{[H_2O_2]_{cell}}} * CellRadius \\
+    (\#eq:HeterotrophAlgebra)
+  \end{multline}
+\end{equation}
+
+
+## Simulations and Plotting  {.unnumbered}
+
+We used R
+[@rcoreteamLanguageEnvironmentStatistical2019] running under RStudio
+[@rstudioteamRStudioIntegratedDevelopment2015], using packages 'tidyverse'
+[@wickhamTidyverseEasilyInstall2017], 'pracma'
+[@borchersPracmaPracticalNumerical2021], 'ggplot2'
+[@wickhamGgplot2ElegantGraphics2016], 'cowplot'
+[@wilkeCowplotStreamlinedPlot2019], 'ggpubr'
+[@kassambaraGgpubrGgplot2Based2018], 'glue'
+[@hesterGlueInterpretedString2018],'kableExtra'
+[@zhuKableExtraConstructComplex2019], 'LambertW' [@goergLambertWProbabilisticModels2020], 'ggforce' [@pedersenGgforceAcceleratingGgplot22021] , 'googledrive'
+[@dagostinomcgowanGoogledriveInterfaceGoogle2020], and 'googlesheets4'
+[@bryanGooglesheets4AccessGoogle2021]. Citations were managed
+using the Zotero (www.zotero.org, [@ZoteroYourPersonal]) open access
+reference manager connected to RStudio using the 'citr'
+[@austCitrRStudioAddin2018] package, with output generated using the
+'knitr' [@xieKnitrComprehensiveTool2014; @xieDynamicDocumentsKnitr2015;
+@xieKnitrGeneralPurposePackage2018] and 'bookdown'
+[@xieBookdownAuthoringBooks2019] packages.
+
+
+# Open Data Statement {.unnumbered}
+The RStudio workbook used to generate this document is hosted at https://github.com/NaamanOmar/ROS_bioinfo.git
+ROSDiffusion2021Manuscript.Rmd
+
+Raw data can be found on the following links: https://docs.google.com/spreadsheets/d/1DclsGlEb9R_qrduluYjWQ_OziLSrRzwLfgW9tzW_kNg/edit#gid=425624204; 
+https://docs.google.com/spreadsheets/d/1ds8brzxLzTitaVCv3Evf2extGqJfrKjQynyAVx5m7hg/edit#gid=663628435;
+https://docs.google.com/spreadsheets/d/1bxTIKTNfv-n3Y-JMJCOlt14Ec3e4tSdBQZg-HiuypOY/edit#gid=0.
+
+# Acknowledgements {.unnumbered}
+
+The authors thank Max Berthold for his comments. 
+
+# Author Contributions {.unnumbered}
+
+NMO assembled the relevant literature, helped generate the mathematical formulations and figures and contributed to writing and completing the manuscript draft.
+OP contributed to the generation of the initial ideas and contributed to the manuscript draft.
+JSPM contributed ideas, literature and in particular formulated the concept for Figure 5.
+DAC contributed to the generation of initial ideas, wrote the manuscript draft and helped complete the manuscript.
+All authors contributed extensive revisions and edits to the manuscript.
+
+# Conflicts of Interests {.unnumbered}
+
+The authors declare no conflict of interest.
+
+# Funding {.unnumbered}
+
+NMO was supported by the Mount Allison University Rice Memorial Graduate Fellowship and a New Brunswick Innovation Foundation STEM Graduate Award.
+DAC was supported by the Canada Research Chair in Phytoplankton Ecophysiology and by the Microbiology Institute of the Czech Academy of Science through project CZ.02.2.69/0.0/0.0/16_027/0007990 of the European Union Researcher Mobility program.
+
+# References {.unnumbered}
+
+<div id="refs"></div>
+
+
