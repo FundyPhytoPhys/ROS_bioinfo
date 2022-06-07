@@ -3,7 +3,7 @@ title: "README"
 output: html_document
 ---
 
-This is a README for Reactive Oxygen Species Production and Scavenging; Genomic Patterns Across Marine Phytoplankton. 
+This is a README for Diffusional Interactions Across Marine Phytoplankton; Modelling H2O2 as a case study.
 
 `ROSDiffusionManuscript.Rmd` imports data from three GoogleSheets (duplicated as .csv in this repository), generates models, plots the outputs and creates the manuscript.
 
