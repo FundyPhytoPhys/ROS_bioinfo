@@ -1,0 +1,120 @@
+Genus,species,strain,taxa,ome
+Guillardia,theta,CCMP2712,Cryptophyte,genome
+Guillardia,theta,CCMP2712,Cryptophyte,transcriptome
+Fragilariopsis,cylindrus,CCMP 1102,Diatom,genome
+Fragilariopsis,cylindrus,CCMP 1102,Diatom,transcriptome
+Pseudo-nitzschia,multistriata,B856,Diatom,genome
+Phaeodactylum,tricornutum,CCAP 1055/1,Diatom,genome
+Phaeodactylum,tricornutum,CCAP 1055/1,Diatom,transcriptome
+Pseudo-nitzschia,multiseries,CLN-47,Diatom,genome
+Pseudo-nitzschia,multiseries,CLN-47,Diatom,transcriptome
+Fistulifera,solaris,JPCC DA0580,Diatom,genome
+Fistulifera,solaris,JPCC DA0580,Diatom,transcriptome
+Thalassiosira,pseudonana,CCMP1335,Diatom,genome
+Thalassiosira,pseudonana,CCMP1335,Diatom,transcriptome
+Thalassiosira,oceanica,CCMP1005,Diatom,genome
+Thalassiosira,oceanica,CCMP1005,Diatom,transcriptome
+Coscinodiscus,wailesii,CCMP2513,Diatom,transcriptome
+Nitzschia,palea,-,Diatom,transcriptome
+Leptocylindrus,danicus,-,Diatom,transcriptome
+Thalassiosira,antarctica,CCMP982,Diatom,transcriptome
+Chaetoceros,debilis,MM31A_1,Diatom,transcriptome
+Thalassiosira,rotula,CCMP3096,Diatom,transcriptome
+Chaetoceros,neogracile,CCMP1317,Diatom,transcriptome
+(Thalassiosira) Conticribra,weissflogii,CCMP1010,Diatom,transcriptome
+Thalassiosira,minuscula,CCMP1093,Diatom,transcriptome
+Ditylum,brightwellii,GSO103,Diatom,transcriptome
+Chaetoceros,curvisetus,-,Diatom,transcriptome
+Cyclotella,cryptica,CCMP332,Diatom,genome
+Polarella,glacialis,CCMP1383,Dinoflagellate,genome
+Polarella,glacialis,CCMP2088,Dinoflagellate,genome
+Nannochloropsis,oceanica,CCMP1779,Eustigmatophyte,genome
+Nannochloropsis,oceanica,CCMP1779,Eustigmatophyte,transcriptome
+Nannochloropsis,gaditana,CCMP526,Eustigmatophyte,genome
+Nannochloropsis,gaditana,CCMP526,Eustigmatophyte,transcriptome
+(Nannochloropsis) Microchloropsis,salina,CCMP1776,Eustigmatophyte,genome
+Ostreococcus,tauri,RCC 1115,Green,genome
+Ostreococcus,tauri,RCC 1115,Green,transcriptome
+Ostreococcus,tauri,RCC4221,Green,genome
+Ostreococcus,lucimarinus,CCE9901,Green,genome
+Ostreococcus,lucimarinus,CCE9901,Green,transcriptome
+Ostreococcus,sp.,RCC 809,Green,genome
+Ostreococcus,sp.,RCC 809,Green,transcriptome
+Bathycoccus,prasinos,RCC 1105,Green,genome
+Micromonas,pusilla,CCMP1545,Green,genome
+Micromonas,pusilla,CCMP1545,Green,transcriptome
+Micromonas,commoda,RCC299,Green,genome
+Micromonas,commoda,RCC299,Green,transcriptome
+Coccomyxa,sp.,C-169,Green,genome
+Coccomyxa,sp.,C-169,Green,transcriptome
+Auxenochlorella,protothecoides,710,Green,genome
+Auxenochlorella,protothecoides,710,Green,transcriptome
+Dunaliella, salina,CCAP 19/18,Green,genome
+Dunaliella, salina,CCAP 19/18,Green,transcriptome
+Picocystis,salinarium,CCMP1897,Green,transcriptome
+Chrysochromulina,tobin,CCMP291,Haptophyte,genome
+Chrysochromulina,tobin,CCMP291,Haptophyte,transcriptome
+Emiliania,huxleyi,CCMP1516,Haptophyte,genome
+Pavlovales,sp.,CCMP2436,Haptophyte,genome
+Pavlovales,sp.,CCMP2436,Haptophyte,transcriptome
+Tisochrysis ,lutea,-,Haptophyte,transcriptome
+Ochromonadaceae,sp.,CCMP2298,Ochromonadaceae,genome
+Ochromonadaceae,sp.,CCMP2298,Ochromonadaceae,transcriptome
+Aureococcus ,anophagefferens,CCMP1984,Pelagophyte,genome
+Aureococcus ,anophagefferens,CCMP1984,Pelagophyte,transcriptome
+Pelagophyceae,sp.,CCMP2097,Pelagophyte,genome
+Pelagophyceae,sp.,CCMP2097,Pelagophyte,transcriptome
+Pelagococcus,subviridis,CCMP1429,Pelagophyte,transcriptome
+Pelagomonas,calceolata,CCMP1756,Pelagophyte,transcriptome
+Porphyridium,purpureum,CCMP1328,Red,genome
+Phaeocystis,antarctica,CCMP1374,Haptophyte,genome
+Phaeocystis,antarctica,CCMP1374,Haptophyte,transcriptome
+Phaeocystis,globosa,Pg-G,Haptophyte,genome
+Phaeocystis,globosa,Pg-G,Haptophyte,transcriptome
+Minidiscus,variabilis,CCMP495,Diatom,genome
+Minidiscus,variabilis,CCMP495,Diatom,transcriptome
+Prochlorococcus,marinus,AS9601,Prokaryote,genome
+Prochlorococcus,marinus marinus,CCMP1375,Prokaryote,genome
+Prochlorococcus,marinus,MIT9313,Prokaryote,genome
+Prochlorococcus,marinus,NATL2A,Prokaryote,genome
+Prochlorococcus,marinus pastoris,CCMP1986,Prokaryote,genome
+Synechococcus,elongatus,PCC6301,Prokaryote,genome
+Synechococcus,elongatus,PCC7942,Prokaryote,genome
+Synechococcus,elongatus,PCC11802,Prokaryote,genome
+Alexandrium,fundyense,CCMP1719,Dinoflagellate,transcriptome
+Alexandrium,temarense,CCMP1771,Dinoflagellate,transcriptome
+Amphidinium,carterae,CCMP1314,Dinoflagellate,transcriptome
+Amphora,coffeaeformis,CCMP127,Diatom,transcriptome
+Asterionellopsis,glacialis,CCMP134,Diatom,transcriptome
+Aureoumbra,lagunensis,CCMP1510,Pelagophyte,transcriptome
+Chaetoceros,affinis,CCMP159,Diatom,transcriptome
+Chattonella,subsalsa,CCMP2191,Raphidophyte,transcriptome
+Chrysochromulina,polylepis,CCMP1757,Haptophyte,transcriptome
+Dunaliella,tertiolecta,CCMP1320,Green,transcriptome
+Extubocellulus,spinifer,CCMP396,Diatom,transcriptome
+Goniomonas,pacifica,CCMP1869,Cryptophyte,transcriptome
+Heterosigma,akawisho,CCMP2393,Raphidophyte,transcriptome
+Heterosigma,akawisho,CCMP452,Raphidophyte,transcriptome
+Isochrysis,galbana,CCMP1323,Haptophyte,transcriptome
+Isochrysis,sp.,CCMP1244,Haptophyte,transcriptome
+Karenia,brevis,CCMP2229,Dinoflagellate,transcriptome
+Karlodinium,micrum,CCMP2283,Dinoflagellate,transcriptome
+Lingulidinium,polyedra,CCMP1738,Dinoflagellate,transcriptome
+Micromonas,polaris,CCMP2099,Green,transcriptome
+Nitzschia,punctata,CCMP561,Diatom,transcriptome
+Ochromonas,sp.,CCMP1393,Chrysophyte,transcriptome
+Pavlova,sp.,CCMP459,Haptophyte,transcriptome
+Pleurochrysis,carterae,CCMP645,Haptophyte,transcriptome
+Prorocentrum,minimum,CCMP1329,Dinoflagellate,transcriptome
+Prorocentrum,minimum,CCMP2233,Dinoflagellate,transcriptome
+Rhodella,maculata,CCMP736,Red,transcriptome
+Rhodomonas,sp.,CCMP768,Cryptophyte,transcriptome
+Scrippsiella,trochoidea,CCMP3099,Dinoflagellate,transcriptome
+Skeletonema,menzelii,CCMP793,Diatom,transcriptome
+Paraphysomonas,imperforata,CCMP1604,Chrysophyte,genome
+Paraphysomonas,imperforata,CCMP1604,Chrysophyte,transcriptome
+Chattonella,antiqua,-,Raphidophyte,transcriptome
+Heterocapsa,circularisquama,-,Dinoflagellate,transcriptome
+Cyanobium,sp.,PCC7001,Prokaryote,genome
+Cryptophyceae,sp.,CCMP2293,Cryptophyte,genome
+Cryptophyceae,sp.,CCMP2293,Cryptophyte,transcriptome
