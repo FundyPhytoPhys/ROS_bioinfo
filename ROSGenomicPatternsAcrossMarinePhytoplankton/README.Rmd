@@ -5,15 +5,15 @@ output: html_document
 
 This is a README for Reactive Oxygen Species Production and Scavenging; Genomic Patterns Across Marine Phytoplankton. 
 
-`ROSDataImport.Rmd` imports data from the Snakemake pipeline
+`R/ROSDataImport.Rmd` imports data from the Snakemake pipeline
 
-`ROSModels.Rmd` generates the Poisson and Quasi-Poisson models used in the manuscript.
+`R/ROSModels.Rmd` generates the Poisson and Quasi-Poisson models used in the manuscript.
 
-`ROSGenomicPatternsBySubsrate.Rmd` generates the manuscript.
+`R/ROSGenomicPatternsBySubsrate.Rmd` generates the manuscript.
 
 The metadata catalog containing information about each organism can be found at https://docs.google.com/spreadsheets/d/1kXm0GvMdTRbF12cG5Bps-2e_4MTjgUX7iUOjqiu-_c0/edit#gid=0
 
 Data Dictionary for the metadata catalog can be found here https://docs.google.com/spreadsheets/d/1Gmg7jbvv8S4MuQ04CrH6Z0Nd2L-1_m38djRzW3W1k84/edit#gid=0.
 
-Data dictionary for data used `ROSGenomicPatternsBySubstate.Rmd` (`../MergedData.csv`) can be found at https://docs.google.com/spreadsheets/d/1lECellT86qCIs4bOzpCBZZPsijzV0MQFv7IQS7TS2HY/edit#gid=0.
+Data dictionary for data used `R/ROSGenomicPatternsBySubstate.Rmd` (`DataProcessed/MergedData.csv`) can be found at https://docs.google.com/spreadsheets/d/1lECellT86qCIs4bOzpCBZZPsijzV0MQFv7IQS7TS2HY/edit#gid=0.
 
