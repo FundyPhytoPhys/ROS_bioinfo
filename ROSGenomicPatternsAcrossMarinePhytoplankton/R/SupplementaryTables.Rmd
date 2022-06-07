@@ -1,0 +1,73 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message =  FALSE, warning = FALSE, fig.path = "Figs/")
+```
+
+```{r, include = FALSE}
+library(tidyverse)
+library(kableExtra)
+googlesheets4::gs4_deauth() 
+library(glue)
+```
+
+```{r assign filepaths, include = FALSE}
+Figures <- file.path("..", "..", "Figures", "GenomicPatterns")
+DataIn <- file.path("..", "..", "DataIn")
+FigureMaterial <- file.path("..", "..", "FigureMaterial")
+DataProcessed <- file.path("..", "..", "DataProcessed")
+DataProcessedModels <- file.path("..", "..", "DataProcessed")
+
+
+```
+
+## Supplementary Tables {.unnumbered}
+
+```{r DataDictionary, echo = FALSE}
+options(knitr.kable.NA = '')
+DataDictionary <- read_csv(file.path(DataIn, "DataDictionary.csv"))
+
+DataDictionary %>% 
+  select(Variable, Units, Definition, CodeLocation) %>%
+  kable(caption = "Table S1: Variable names, definitions, units, and first location of occurence in code, used for our data.") %>%
+  kable_classic()
+```
+
+```{r ROSEnzymeList, echo = FALSE}
+options(knitr.kable.NA = '')
+ROSEnzymeList <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1haHVI5bFVjBGPNW8YTCvCBecWKdrvOeocT5WfIYWnk0/edit#gid=903519796")  
+
+ROSEnzymeList %>%
+  select(ECNumber, KO, EnzymeName, SupOx, HyPe, NitOx) %>%
+  kable(caption = "Table S2: Enzyme Commission Number, Kegg Orthology Number, Enzyme Name and ROS Substrate Metabolised") %>%
+  kable_classic()
+```
+
+```{r MetaData, echo = FALSE}
+options(knitr.kable.NA = '')
+MetaData <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1kXm0GvMdTRbF12cG5Bps-2e_4MTjgUX7iUOjqiu-_c0/edit#gid=0") %>%
+  # dplyr::select(c(Genus, species, Strain, FileName, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, PennateCentric, ColonySpecies)) %>% 
+  mutate(Strain = as.character(Strain)) %>%
+  select(-c(Rad_ref, LogLat_ref, ColonyCitation_other))
+
+MetaData %>%
+  kable(caption = glue("Table S3: Metadata for each organism")) %>%
+  kable_classic()
+```
+
+```{r ManualAutoCompareData, echo = FALSE}
+options(knitr.kable.NA = '')
+ManualAutoCompareData <- read_csv(file.path(DataIn, "SnakeManualAutomatedCountCompare.csv")) %>%
+  drop_na()
+ManualAutoCompareData %>%
+  select(-Automated_count) %>%
+  rename(Automated_count = AutomatedECKO_count) %>%
+  kable(caption = glue("Table S4: Comparison of Manual and Automated Gene Counts")) %>%
+  kable_classic()
+```
+
