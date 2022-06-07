@@ -1,0 +1,754 @@
+---
+title: Enzymatic Capacities for Reactive Oxygen Species Production and Scavenging Across Marine Phytoplankton
+author:
+- Naaman M. Omar:
+    institute: mta
+- Katherine Fleury:
+    institute: [mta, ualberta]
+- Brian Beardsall:
+    institute: [mta, dalhousie]
+- Ondřej Prášil:
+    institute: algatech
+- Douglas A. Campbell:
+    institute: mta
+    email: dcampbel@mta.ca
+    correspondence: TRUE
+institute:
+  - mta: 'Department of Biology, Mount Allison University, Sackville NB, Canada, E4L1G7'
+  - ualberta: 'Veterinary Medicine, University of Calgary, 11877 85 St NW Calgary, Alberta T3R 1J3, Canada'
+  - dalhousie: 'Faculty of Computer Science, Dalhousie University, 6050 University Ave, Halifax, NS, B3H 1W5.'
+  - algatech: 'Center Algatech, Laboratory of Photosynthesis, Novohradska 237, CZ 37981, Trebon, Czech Republic'
+date: "`r format(Sys.Date())`"
+output:
+  bookdown::word_document2:
+    code_folding: show
+    keep_md: yes
+    fig_caption: yes
+    pandoc_args:
+      - '--lua-filter=scholarly-metadata.lua'
+      - '--lua-filter=author-info-blocks.lua'
+  bookdown::html_document2:
+    code_folding: show
+    keep_md: yes
+    fig_caption: yes
+    toc: TRUE
+    toc_float: TRUE
+    toc_depth: 6
+    pandoc_args:
+      - '--lua-filter=scholarly-metadata.lua'
+      - '--lua-filter=author-info-blocks.lua'
+bibliography: ROS_Phytoplankton.bib
+csl: plos-one.csl
+always_allow_html: true
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+XXX Nitric Oxide - could differences in microbiome of pennate and centric diatoms explain their varying allocation to nitric oxide? [@johanssonFriendsBenefitsExploring2019]
+
+Talk about Nitric oxide in this paper, only two enzymes are involved in production and scavenging of NO. NOS in NO production and NOD for scavenging. 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message =  FALSE, warning = FALSE)
+```
+
+```{r packages and paths, include = FALSE}
+library(tidyverse)
+library(cowplot)
+library(broom)
+library(ggpubr)
+library(glue)
+library(smatr)
+#https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html#installation
+library(bookdown)
+library(kableExtra)
+options(kableExtra.auto_format = FALSE)
+library(rcompanion)
+library(corrplot)
+library(knitr)
+# library(PanVizGenerator)
+library(ggiraphExtra)
+library(AER)
+library(boot)
+googlesheets4::gs4_deauth() 
+```
+
+```{r assign filepaths, include = FALSE}
+Figures <- file.path("..", "Figures")
+DataIn <- file.path("..", "DataIn")
+FigureMaterial <- file.path("..", "FigureMaterial")
+DataProcessed <- file.path("..", "DataProcessed")
+SnakemakeOutput <- file.path("..", "..", "ROSGenomicPatternsAcrossMarinePhytoplankton", "ROSGeneCounts", "output")
+```
+
+```{r read in data, include = FALSE}
+# MergedData <- readRDS(file.path(DataProcessed, "MergedData.Rds"))
+TaxaColors <- readRDS(file.path(DataProcessed, "TaxaColours.Rds"))
+# WideData <- readRDS(file.path(DataProcessed, "WideData.Rds"))
+```
+
+```{r}
+# Import combinedHits, which is the output from snakemake
+CombinedHits <- read_csv(file.path(SnakemakeOutput, "combinedHits.csv"))
+ROSEnzymes <- read_csv(file.path(DataIn, "ROSEnzymeList.csv"))
+```
+
+```{r define functions, include = FALSE}
+`%notin%` <- Negate(`%in%`) #https://www.r-bloggers.com/2018/07/the-notin-operator/
+# ScientificTen is a function that converts a numeric value to scienific format. x is the numeric value whereas sf is the number of significant figures. Default is 2. 
+ScientificTen <- function(x, sf = 2){
+  y <- format(signif(x, sf), scientific = TRUE) %>% as.character()
+  z <- str_split(y, pattern = "e")[[1]]
+  if(z[2]<0){
+    return(glue(z[1],"×10","^",str_replace_all(z[2], "[[+]]", ""),"^"))
+  }
+  else{
+    return(glue(z[1],"×10","^",z[2],"^"))
+  }
+}
+```
+
+XXX Cite this page for logit2prob https://sebastiansauer.github.io/convert_logit2prob/
+```{r logit2prob, include = FALSE}
+source("https://sebastiansauer.github.io/Rcode/logit2prob.R")
+```
+
+
+```{r}
+# ROSGene_count the number of genes for each enzyme within each genome.
+# MetaData <- read_csv(file.path(DataIn, "CellGenomeMetrics.csv")) %>%
+  # dplyr::select(c(Genus, species, Strain, FileName, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, PennateCentric))
+MetaData <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1kXm0GvMdTRbF12cG5Bps-2e_4MTjgUX7iUOjqiu-_c0/edit#gid=0") %>%
+  dplyr::select(c(Genus, species, Strain, FileName, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, PennateCentric, ColonySpecies)) %>% 
+  mutate(Strain = as.character(Strain))
+KOROSEnzymes <- ROSEnzymes %>% 
+  select(ECNumber, KO) %>%
+  separate_rows(KO, sep = ";")
+KOCombinedHits <- CombinedHits %>%
+  separate_rows(KEGG_ko, sep = ",") %>%
+  mutate_at("KEGG_ko", str_replace, "ko:", "") %>%
+  filter(is.na(EC),
+         !is.na(KEGG_ko),
+         KEGG_ko != "-") %>%
+  left_join(., 
+            ROSEnzymes %>%
+              select(ECNumber, KO) %>%
+              separate_rows(KO, sep = ";"), 
+            by = c("KEGG_ko" = "KO")) %>%
+  filter(!is.na(ECNumber)) %>%
+  select(-EC) %>%
+  rename(EC = ECNumber) %>%
+  distinct(genome, query_name, EC, .keep_all = FALSE)
+CombinedHits %<>%
+  distinct(genome, query_name, .keep_all = TRUE) %>%
+  left_join(., KOCombinedHits, by = c("query_name", "genome")) %>%
+  mutate(EC = if_else(is.na(EC.x), EC.y, EC.x)) %>%
+  select(-c(EC.x, EC.y)) %>%
+  group_by(EC, genome) %>%
+  mutate(ROSGene_count = n()) %>%
+  ungroup() %>%
+  group_by(genome) %>%
+  mutate(TotalDetectedEnzymes = n()) %>%
+  ungroup()  %>%
+  distinct(genome, EC, .keep_all = TRUE)
+MergedData <- full_join(x = MetaData, y = ROSEnzymes, by = character()) %>%
+  left_join(., CombinedHits, by = c("FileName" = "genome", "ECNumber" = "EC")) %>%
+  filter(!is.na(FileName)) %>% 
+  filter(!(ECNumber == "1.4.3.3" & HyPe == "Scavenging"),
+         !(ECNumber == "1.10.3.17" & SupOx == "Production")) %>%
+  # group_by(EnzymeName, FileName, ECNumber) %>%
+  # mutate(ROSGene_count = n()) %>%
+  # ungroup() %>%
+  # fill in missing sets with a count of 0 XXX figure out how to do this using the complete function
+  complete(., nesting(FileName, EnzymeName, ECNumber, HyPe, SupOx, NitOx), fill = list(ROSGene_count = 0))# %>%
+  # filter(ECNumber %notin% "1.10.3.17" & SupOx %notin% "Production")
+  # filter(ECNumber == "1.10.3.17" & SupOx == "Production")
+  # distinct(FileName, ECNumber, EnzymeName, .keep_all = TRUE)
+```
+
+```{r tidying data, include=FALSE}
+MergedData %<>%
+  mutate(Rad1_um = as.numeric(Rad1_um),
+         Rad2_um = as.numeric(Rad2_um),
+         Rad3_um = as.numeric(Rad3_um),
+         SA_um2 = 4*pi*(((((Rad1_um*Rad2_um)^1.6)+((Rad1_um*Rad3_um)^1.6)+((Rad2_um*Rad3_um)^1.6))/3)^0.625),
+         Volume_um3 = (4/3)*pi*Rad1_um*Rad2_um*Rad3_um,
+         SAVol_um = SA_um2/Volume_um3,
+         ROSGene_count = as.numeric(ROSGene_count),
+         #Diameter = as.numeric(Rad1_um*2),
+         # Radius_um = dplyr::rowwise(as.numeric(Rad1_um)) %>% min(.$Rad1_um, .$Rad2_um, .$Rad3_um),
+         Radius_um = as.numeric(Rad1_um),
+         log_Radius_um = log10(as.numeric(Rad1_um)),
+         log_GenomeSize_mbp = log10(as.numeric(GenomeSize_mbp)),
+         log_GeneModels_count = log10(as.numeric(GeneModels_count)),
+         log_Gene_count = log10(as.numeric(ROSGene_count)+1),
+         Latitude = as.numeric(as.character(Latitude)),
+         abs_Latitude = abs(Latitude),
+         log_Volume_um3 = log10(as.numeric(Volume_um3)),
+         log_SA_um2 = log10(as.numeric(SA_um2)),
+         GeneModels_count = as.numeric(GeneModels_count),
+         log_SAVol_um = log10(as.numeric(SAVol_um)), 
+         Name = interaction(Genus, species, Strain, sep = " ")) %>%
+  filter(Taxa != "Symbiodinium", 
+         Marine == "yes",
+         FileName != "Nitzschia_palea-dna-trans") 
+WideData <- MergedData[,c("Genus", "species", "Strain", "Taxa", "Ome", "EnzymeName", "ROSGene_count")] %>%
+  distinct(.keep_all = TRUE) %>%
+  pivot_wider(., names_from = EnzymeName, values_from = ROSGene_count )
+WideData_cap <- "Supplemental Table 2: ROS Enzyme Count per Organism"
+```
+
+```{r O to N/A for dotplot, include = FALSE}
+#create a new data frame for the dot plot, this one will take all 0's and make them N/As so that they are not plotted (in other plots, 0 is still a data point)
+MergedData_na <- MergedData 
+MergedData_na[MergedData==0]=NA
+ROSEnzymeLevels <- WideData %>% 
+  select(-c(Genus, species, Strain, Taxa, Ome)) %>% 
+  colSums() %>% 
+  enframe() %>% 
+  arrange(desc(value))
+MergedData_na <- MergedData_na %>%
+  left_join(., ROSEnzymeLevels, by = c("EnzymeName" = "name")) %>%
+  rename(ROSEnzyme_TotalCount = value) %>%
+  mutate(EnzymeName = factor(.$EnzymeName, levels = ROSEnzymeLevels$name))
+# MergedData_na$Enzyme_parent_ASA <-  factor(MergedData_na$EnzymeParent, levels= c("Superoxide_dismutase","Glutathione_reductase","Ascorbate_cycle" ,"Peroxidase","Peroxiredoxin","Catalase", "NO_sythesis", "Oxidase"))
+MergedData_na$taxon_facet <- factor(MergedData_na$Taxa, levels= c("Cryptophyte","Diatom","Dinoflagellate" ,"Eustigmatophyte","Green","Haptophyte", "Pelagophyte", "Phaeista", "Red", "Prokaryote"))
+```
+
+# Abstract {.unnumbered}
+
+Marine phytoplankton are an evolutionarily diverse functional group. The metabolism of phytoplankton generates reactive oxygen species, which, if left un-scavenged, can have detrimental cascading effects. The Black Queen Hypothesis [@morrisBlackQueenHypothesis2012] postulates that some functions can be outsourced from genomes to the community. We therefore explored gene families encoding reactive oxygen detoxification enzymes across eukaryotic marine phytoplankton taxa spanning a wide size range. Superoxide has a very short diffusional path from site of generation, and no taxon has outsourced all isoforms of superoxide dismutase. The smallest phytoplankters do show complete absences of genes encoding catalase peroxidase and catalase enzymes, responsible for the detoxification of hydrogen peroxide, which has a much longer diffusional path. A cell diameter of ~2.8 μm is a potential upper size threshold for the loss of catalase, which we hypothesize reflects diffusional limitations on larger cells that preclude their participation in community level detoxification of hydrogen peroxide, forcing them to rely upon their own detoxification. Indeed, we found a positive correlation between cell size and the total number of genes within the cell genome encoding reactive oxygen detoxification enzymes. Nevertheless cells with larger genomes allocate a smaller fraction of their total genomic resource to reactive oxygen detoxification. 
+
+# Introduction {.unnumbered}
+
+#### Phytoplankton Size & Reactive Oxygen Species Diffusion {.unnumbered}
+
+Phytoplankton mediate marine productivity, elemental cycling, and atmospheric composition. Major groups of marine phytoplankton include taxa of cyanobacteria, dinoflagellates, pelagophytes, green algae, and diatoms. The picocyanobacteria *Prochlorococcus* and *Synechococcus* are numerically more abundant than other strains of phytoplankton, with small genomes amenable to analyses [@derelleGenomeAnalysisSmallest2006; @billerGenomesDiverseIsolates2014; @jaiswalGenomeFeaturesBiochemical2018; @matsuzakiGenomeSequenceUltrasmall2004]. The diverse eukaryotic phytoplankton are nonetheless vital to the flux of organic matter throughout trophic levels [@falkowskiEvolutionModernEukaryotic2004].  
+Among marine green algae the Prasinophytes are the earliest diverging lineage(s) and include the smallest free-living eukaryote, *Ostreococcus tauri* [@lemieuxSixNewlySequenced2014]. The Prasinophytes are thus of particular interest with representatives with small genomes and cell sizes approaching those of the picocyanobacteria. Prasinophyte green algae were once the most abundant eukaryotic phytoplankton lineages in the ocean, but have since been overtaken by the members of lineages with 'red' chloroplasts derived from secondary endosymbioses, particularly diatoms [@falkowskiEvolutionModernEukaryotic2004].  
+Diatoms have a characteristic frustule, a cell wall composed of silica, that varies in nanostructure among species [@armbrustGenomeDiatomThalassiosira2004; @leliaertPhylogenyMolecularEvolution2012]. Diatoms currently generate ~40% of the organic carbon produced in the earth’s oceans [@nelsonProductionDissolutionBiogenic1995]. The varying sizes and morphologies across diatoms [@medlinEvolutionDiatomsMajor2016] can provide insight into patterns across cell sizes for presence or absence of genes encoding particular enzymatic families, in particular those which detoxify reactive oxygen species (ROS).  
+
+All phytoplankton lineages are photosynthetic and produce multiple ROS as by-products of their metabolism [@vassRoleChargeRecombination2011]. ROS is produced largely in the chloroplast, mitochondria, and peroxisomes, but can also be generated in the plasma membrane, apoplast, endoplasmic reticulum, and cell wall [@apelREACTIVEOXYGENSPECIES2004; @sharmaReactiveOxygenSpecies2012] (Figure 1). Outside the cell multiple reactions generate ROS in seawater, or indeed in seawater-based media [@jeffreymorrisContinuousHydrogenPeroxide2013]. Rainfall on the ocean can temporarily increase extracellular H~2~O~2~ concentrations to greater than 10 times the baseline concentration of surface seawater, which ranges from 114-820 x 10^-7^ mol L^-1^ in the Gulf of Mexico, or  84-206 x 10^-7^ mol L^-1^ in the Atlantic Ocean [@cooperContributionRainwaterVariability1987].
+
+The lifetimes, and therefore the effective diffusion path lengths of ROS before destruction, are variable. Ground state oxygen (O=O) can be converted to excited singlet oxygen (^1^O~2~) via excitation energy transfer from pigments. ^1^O~2~ has a short lifetime and is not enzymatically scavenged,  but rather excitonically quenched by carotenoids or other molecules [@ramelChemicalQuenchingSinglet2012] very near the sites of generation[@ramelChemicalQuenchingSinglet2012; @vassRoleSingletOxygen2019]. If not quenched O~2~ can also undergo stepwise reductions to produce in turn superoxide anions (O~2~^-^), hydrogen peroxide (H~2~O~2~), and the hydroxyl radical (•OH)  [@apelREACTIVEOXYGENSPECIES2004].  O~2~^-^ is highly reactive, with diffusion path lengths before destruction estimated at only 8.6E-02 μm in water or 1.71E-01 μm in phospholipid membrane [@maischRoleSingletOxygen2007], with thus little movement from the site of initial generation to the site of reaction, whether inside or outside the cell. H~2~O~2~ is in contrast relatively stable and so diffusion path lengths as long as 2.44 mm have been found in oligotrophic seawater [@petasneHydrogenPeroxideLifetimes1997]. H~2~O~2~ can thus survive long enough to potentially diffuse across cell membranes and traverse cells, so intracellularly produced ROS can contribute to the oceanic communal pool [@seaverHydrogenPeroxideFluxes2001] and *vice versa*.   
+
+Different ROS species lead to destructive cascading reactions in lipids, proteins, and DNA. Possible damage includes lipid chain breakage, increased membrane fluidity, amino-acid modifications, changes in electric charges, removal of nucleotides, DNA-protein crosslinks and protein-protein cross links [@sharmaReactiveOxygenSpecies2012]. ROS also have regulatory and signalling roles [@bhattacharjeeLanguageReactiveOxygen2012; @bhattacharyaReactiveOxygenSpecies2015;@choudhuryReactiveOxygenSpecies2013]. Due to the possibility of damage, species need mechanisms to maintain ROS homeostasis their cells. Non-enzymatic scavenging by antioxidants including ascorbate, glutathione, carotenoids and phenolic compounds aid in the direct removal of some ROS, but detoxification is completed by a suite of enzymes mediating controlled breakdown of ROS [@sharmaReactiveOxygenSpecies2012]. Critically, the diffusion radii of each ROS species influences their likelihood of leaving cells before destruction, or entering cells from external sources. To this end, we analyzed the genomic contents of genes encoding enzymes which detoxify ROS, looking at their  absence, presence, and frequency within genomes from taxa both smaller and larger than the diffusive path lengths of superoxide and H~2~O~2~ (summarized in Figure \@ref(fig:ROSscavenge) and Table \@ref(tab:enzymeinfo).  
+
+```{r ROSscavenge, fig.cap = ROS_cap, fig.align = 'centre', out.width='70%', out.height='75%', echo = FALSE}
+ROS_cap <- c("**Key ROS generation pathways, detoxification enzymes, and ROS diffusion radii.**  
+             Blue circles represent approximate diffusion path lengths of key ROS species. O~2~^-^ has diffusion path lengths estimated at 8.57E-02 μm (in water) and 1.71E-01 μm (in phospholipid membrane) [@maischRoleSingletOxygen2007]. Recorded H~2~O~2~ diffusion path lengths range widely from 2.44 mm in oligotrophic seawater [@petasneHydrogenPeroxideLifetimes1997] down to 1.2 μm intracellularly [@ying-huachungDiffusionResidenceTime2007]. •OH has a diffusion path length ~3.4x longer than O~2~^-^. Yellow circles enclose detoxification enzymes analyzed in this study.  O~2~ to H~2~O reduction stoichiometry correct with respect to O~2~, not H~2~O. Dotted red circle represents ~2.8 µm threshold for changes in content of genes encoding ROS detoxification enzymes. Adapted from [@aoyamaInhibitionGTRAP318May2012; @dasOxidativeEnvironmentRedox2015; @inupakutikaEvolutionReactiveOxygen2016; and @schmittReactiveOxygenSpecies2014].")
+knitr::include_graphics(file.path(FigureMaterial,"ROSscavenge.png"))
+```
+
+#### ROS Scavenging Enzymes {.unnumbered}
+
+O~2~^-^ is generated when electrons are donated to oxygen, which can occur through multiple intracellular reactions [@bowlerSuperoxideDismutaseStress1992]. Superoxide dismutase (SOD) is a primary ROS detoxification enzyme, with three main SOD families defined by the protein fold and metal co-factor: Mn-SOD, Fe-SOD, and Cu/Zn-SOD. Ni-SOD has also been reported in marine cyanobacteria, though is most commonly associated with the bacterial genus *Streptomyces* [@liNickelHomeostasisNickel2009; @millerSuperoxideDismutasesAncient2012]. These isoenzymes are encoded by different genes [@rosenMutationsCuZn1993], but all work to dismutate O~2~^-^.  As the resulting product of SOD is another ROS, H~2~O~2~, further enzymes including peroxidases and catalases then complete the ROS clearance initiated by SOD. These enzymes are found in various intracellular locations.  
+Ascorbate peroxidase (APX) catalyses the first step of the glutathione-ascorbate (GSH-ASA) cycle, which results in the oxidation of ascorbate while reducing H~2~O~2~ to water [@teixeiraMultigeneFamiliesEncode2005]. APX oxidizes es two molecules of ascorbate for this reduction, while in turn generating two molecules of monodehydroascorbate [@sharmaReactiveOxygenSpecies2012]. Two monodehydroascorbate can spontaneously dismutate to dehydroascorbate and ascorbate, or monodehydroascorbate can be reduced via monodehydroascorbate reductase (MDHAR) to dehydroascorbate. Whether from spontaneous dismutation or enzymatic reduction, dehydroascorbate and ascorbate are generated in the second step of the GSH-ASA cycle. Dehydroascorbate is then further reduced by dehydroascorbate reductase DHAR, using glutathione as an electron donor substrate and thereby producing glutathione disulphide. Glutathione reductase (GR) then reduces glutathione disulphide back to glutathione using NADPH as an electron donor [@iwayamaLowConcentrationsClarithromycin2018; @teixeiraMultigeneFamiliesEncode2005]. Glutathione has been found in all cellular compartments, making it one of the most abundant reducing thiols [@sharmaChapterCatalaseVersatile2014; @coutoRoleGlutathioneReductase2016]. In its reduced form (GSH), it can work to directly control ROS. The reduction of GSH can occur through electron donation by ROS species; this makes the H a better leaving group, making GSH more reactive to thiols and inducing -S-S- dimer formation [@coutoRoleGlutathioneReductase2016].  
+Catalase peroxidase (KatG) is thought to be the primary defence enzyme against external H~2~O~2~ in cyanobacteria [@perelmanOxidativeStressSynechococcus2003; @tichyVivoRoleCatalasePeroxidase1999]. KatG is a bi-functional enzyme that has both catalase and peroxidase activities [@bertrandCrystalStructureMycobacterium2004]. The catalase reaction may have been refashioned to a peroxidase active site, as the catalytic turnover of the fastest KatG characterized, 15,900 s^-1^, is only ¼ the rate of the slowest catalase (CAT)(XXX do we need a citation here?). This being said, the catalase reaction still dominates the peroxidase reaction in this bifunctional enzyme. Reaction rates of the peroxidase function of KatG have been found to vary between 8-25 s^-1^ [@singhComparativeStudyCatalaseperoxidases2008], compared to other peroxidase reactions, such as those for *Coprinus cinereus*, where rates have been found to vary by orders of magnitude between 10^5^−10^6^ [@aitkenTurnoverCapacityCoprinus1998].  
+Glutathione peroxidase (GPx) also scavenges H~2~O~2~. This enzyme dismutates H~2~O~2~ and thereby pre-empts lipid peroxidation in the mitochondria [@ighodaroFirstLineDefence2018; @yanGlycationinducedInactivationLoss1997]. GPx has a higher affinity for H~2~O~2~ than does CAT, and thus serves as a protectant against even low levels of ROS, while CATs protect against higher levels  [@kinnulaAntioxidantDefenseMechanisms1992]. GPx is also involved in the GSH/GSSG cycle resulting in the oxidation of GSH to GSSG working in opposition to GR (discussed above).  
+Cytochrome C Peroxidase (CcP) is a heme enzyme discovered in the intermembrane space of yeast mitochondria [@martinsCytochromePeroxidaseMitochondrial2013; @volkovComplexCytochromeCytochrome2011]. In gram-negative bacterial species, CcP has been found in the periplasm where it works to reduce H~2~O~2~; the electron donor is soluble cytochrome c [@pettigrewStructureMechanismBacterial2006; @zapataCytochromePeroxidaseCcP2017; @volkovComplexCytochromeCytochrome2011 ]. The deactivation of CcP in the bacteria *Shewanella oneidensis* resulted in overall lower levels of H~2~O~2~ scavenging, suggesting it has a significant role in intracellular responses to ROS [@schutzInvestigationElectronTransport2011; @zapataCytochromePeroxidaseCcP2017]. Along with general peroxidase activity, CcP has also been reported to work as both a sensing and signalling protein of mitochondrial H~2~O~2~ in yeast (Saccharomyces cerevisiae) [@martinsCytochromePeroxidaseMitochondrial2013].  
+Unlike other ROS antioxidant enzymes, peroxiredoxin (PRx) contains no metal, heme, flavin, nor selenocysteine redox centres. PRx mediates a complete catalytic cycle to reduce down H~2~O~2~ to two H~2~O, through transient oxidation and re-reduction of the peroxiredoxin using thioredoxin as the electron donor [@rheePeroxiredoxinFunctionsPeroxidase2012; @hallStructurebasedInsightsCatalytic2011]. PRxs are classified into four categories, based on the number and location of cystine residues: 2-Cys, atypical 2-Cys, and 1-Cys. The fourth category is known as PRX Q, which is a thioredoxin-dependent hydroperoxidase [@jeongThioredoxindependentHydroperoxidePeroxidase2000].
+Finally, the only ROS antioxidant enzyme with no known intracellular role outside ROS detoxification is Catalase (CAT). CAT scavenges H~2~O~2~ in the peroxisome, a major site of ROS production in some eukaryotic cells [@sharmaReactiveOxygenSpecies2012]. CAT is important as the accumulation of H~2~O~2~ is both directly toxic to the cell and also inhibits SOD due to negative feedback [@yanGlycationinducedInactivationLoss1997]. CAT isoforms have also been found in the cytosol, chloroplast, and mitochondria, but their activities are lower than the peroxisomal isoforms [@sharmaReactiveOxygenSpecies2012]. CAT enzyme is capable of breaking down millions of H~2~O~2~ molecules s^-1^ [@ighodaroFirstLineDefence2018] at rates limited by the diffusional arrival of substrate at the active site.
+
+Both internally generated and externally produced ROS can harm cells, and so systems must be in place to lower ROS levels to pre-empt damage to macromolecules. The organismal networks to protect from the damaging properties of ROS, while maintaining ROS homeostasis, are complex. The elements of these ROS detoxification system, however, need not necessarily be completely encoded, nor expressed, within an organism itself. 
+
+#### Genome Reduction in Phytoplankton; The Black Queen Hypothesis {.unnumbered}
+
+Convergent evolution towards smaller cell size and streamlined genomes has occurred repeatedly in multiple lineages of both autotrophic and heterotrophic microbes in oligotrophic oceans [@pushkerComparativeGenomicsGenefamily2004; @braakmanMetabolicEvolutionSelforganization2017; @giovannoniGenomeStreamliningCosmopolitan2005; @grzymskiSignificanceNitrogenCost2012; @sebastianLipidRemodellingWidespread2016; @sundaInterrelatedInfluenceIron1997; as cited by @swanPrevalentGenomeStreamlining2013]. Smaller cells and genomes increase energy flux per elemental investment and lower nutrient quotients per cell.  Although primarily explored in picocyanobacteria, the idea that genome reduction allows a smaller cell size also translates to Archaea and eukaryotic phytoplankton. Some strains of heterotrophic Ammonia Oxidizing Archaea (AOA) lack catalase and grow better in the presence of H~2~O~2~ scavengers [@kimHydrogenPeroxideDetoxification2016]. Loss of protein families, such as those associated with chromatin, are possible adaptations that allow for *Ostreococcus* to be one of the smallest known eukaryotes, with a diameter less than 1 μm [@palenikTinyEukaryoteOstreococcus2007]. Moreover, adaptations suggesting a drop in Fe requirements have been found in *Ostreococcus* which, for example, lacks Fe-SOD [@derelleGenomeAnalysisSmallest2006].
+
+The Black Queen hypothesis is a theory of reductive evolution that suggests Loss of Function (LOF) mutations can be selected under some conditions [@morrisBlackQueenHypothesis2012]. While some functions must remain encoded within a cell, others can be outsourced to co-occurring members of the community. This genomic streamlining allows organisms to reallocate limited elemental resources. The Black Queen hypothesis predicts that LOF mutations will proceed via natural selection until the cost of the loss(es) outweighs the benefit. The theory is dependent upon complementary helpers in the community which retain the gene(s) encoding the “leaky” functions: ones which provide a public good if still encoded by some community members. 
+One such leaky function is  H~2~O~2~ detoxification. The smallest picocyanobacteria *Prochlorococcus* has lost the gene encoding the enzyme KatG, normally a primary cellular defence against external sources of H~2~O~2~. Sterile, filtered seawater exposed to sunlight can abiotically produce enough H~2~O~2~ in a few hours to kill axenic cultures of *Prochlorococcus* [@jeffreymorrisContinuousHydrogenPeroxide2013; @morrisDependenceCyanobacteriumProchlorococcus2011] but co-occurring heterotrophic bacteria retain genes encoding peroxidase activity to detoxify their own environment indirectly protecting *Prochlorococcus*. Because *Prochlorococcus* no longer needs to expend elemental resources or metabolic energy into this function,their now streamlined genome allows them to allocate elemental resources into other, vital functions. H~2~O~2~ detoxification is thus a function which can be lost by picocyanobacteria phytoplankton in a supportive community environment, and which therefore might also be lost by ecologically competing picoeukaryote phytoplankton. As the diameter of a *Prochlorococcus* cell is only ~0.6 µm, there may however be an upper size limit on the maximum cell diameter which allows for LOF mutations to be compensated by community activity in this manner.
+
+Genomic streamlining by LOF may only be feasible below a critical size limit that permits rapid diffusive exchange with the environment, as for example diffusional movement of ROS out of the cell. Furthermore, different ROS species show a wide range of effective diffusion path lengths, supporting hypothesis testing through comparative patterns of gene families for different ROS detoxification enzymes. Eukaryotic phytoplankton occur across orders of magnitude of cell diameter, and so an analysis of genomes from varying lineages and varying cell sizes could uncover the limits and constraints upon beneficial LOF mutations. Consistent with this idea, larger diatoms accumulate more protein products resulting from ROS toxicity than their smaller counter-parts under the same growth conditions [@liDiatomGrowthResponses2016].  
+
+We hypothesize that larger phytoplankton will have larger and more complete families of genes encoding ROS detoxification enzymes than smaller species, because longer diffusion paths out of larger cells will limit outsourcing ROS detoxification to the community. Conversely, smaller species could benefit from LOF mutations to streamline their genomes, while relying upon community level detoxification mediated by diffusion of ROS. We therefore hypothesize that LOF mutations for ROS detoxification may only be feasible below a critical threshold cell size, depending upon the effective diffusion path lengths for particular ROS. To explore the role of cell size on the loss of ROS antioxidant gene families, genomes of species of varying shapes and sizes were therefore analyzed.  
+
+##### Enzymatic Production of Superoxide {.unnumbered}
+
+NADPH oxidase (NOX) is the only **known** enzyme with the primary function of producing ROS.
+There are multiple types of NOX, including NOX1, NOX2, NOX3, and NOX5 which mainly produce O~2~^•−^ whereas NOX4 produces H~2~O~2~ [@vermotNADPHOxidasesNOX2021]. NOX reduces O~2~ to form O~2~^•−^, and has been detected in various phytoplankton species including the diatoms *Phaeodactylum tricornutum* and *Thalassiosira pseudonana* [@laohavisitEnhancingPlasmaMembrane2015], the dinoflagellates *Symbiodinium spp.* [@saragostiExtracellularProductionDegradation2010] and *Prorocentrum minimum* [@parkPhysiologicalBiochemicalResponses2009]. @diazNADPHdependentExtracellularSuperoxide2019 also found extracellular superoxide production in *Thalassiosira oceanica* by a NOX-like enzyme that shares sequence similarity to glutathione reductase. For further reading on extracellular O~2~^•−^ production, the reader is referred to the reviews [@hanselProductionExtracellularReactive2021; @diazProductionExtracellularReactive2018; @zinserMicrobialContributionReactive2018].
+
+H~2~O~2~ can be scavenged through two enzymatic pathways, the catalatic (Reaction \@ref(eq:Catalatic)) or the peroxidatic (Reaction \@ref(eq:Peroxidatic)) pathways [@passardiPhylogeneticDistributionCatalaseperoxidases2007]. The catalatic pathway functions at higher concentrations of H~2~O~2~, catalyzed by the enzyme catalase (EC: 1.11.1.6), and involves dismutating two H~2~O~2~ molecules to H~2~O and O~2~, without the need for a metabolic reductant. Through the catalatic pathway, one of two H~2~O~2~ is reduced to H~2~O, while the other is oxidized back to O~2~ [@passardiPhylogeneticDistributionCatalaseperoxidases2007]. The peroxidatic pathway on the other hand can function at lower concentrations of H~2~O~2~, but uses a metabolic reductant such as an alcohol or a phenol [@sepasitehraniCatalaseItsMysteries2018] as an electron source for complete reduction of H~2~O~2~ catalyzed by the enzyme peroxidase [@heverly-coulsonReductionHydrogenPeroxide2010]. The enzyme catalase peroxidase (*katG*, EC: 1.11.1.21) can catalyze both the catalatic and the peroxidatic pathways [@passardiPhylogeneticDistributionCatalaseperoxidases2007]. It is likely that other mechanisms of enzymatically mediated H~2~O~2~ decay exist but are unknown or poorly understood [@sutherlandRedoxFateHydrogen2021].
+
+\begin{equation}
+2H_2O_2 → 2H_2O + O_2
+ (\#eq:Catalatic)
+\end{equation}
+
+
+\begin{equation}
+H_2O_2 + RH_2 → 2 H_2O + R
+ (\#eq:Peroxidatic)
+\end{equation}
+
+# Methods {.unnumbered}
+
+```{r, include = FALSE}
+# BinomTest <- MergedData %>%
+#   mutate(BinomROSGene_count  = case_when(ROSGene_count == "0" ~ 0,
+#                                          ROSGene_count > 0 ~ 1)) %>%
+#   nest(data = -c(ECNumber, EnzymeName)) %>%
+#   mutate(fit = map(data, possibly(~glm(BinomROSGene_count ~ log_Radius_um + Taxa, family = binomial, data = .), otherwise = NULL)))
+```
+
+## Data Dictionary {.unnumbered}
+
+Table \@ref(tab:DataDictionary) contains a data dictionary of variable names used in our analysis, their definitions and locations in code and data objects.
+
+## Bioinformatic Pipeline {.unnumbered}
+
+We downloaded Genomes and/or Transcriptomes of  marine phytoplankton (Table \@ref(tab:MetaData)) from the National Center for Biotechnology Information (NCBI) [@DatabaseResourcesNational2016], Joint Genome Institute (JGI) [@grigorievGenomePortalDepartment2012; @nordbergGenomePortalDepartment2014], iMicrobe [@youens-clarkIMicrobeToolsDatadriven2019], European Nucleotide Archive (ENA) [@leinonenEuropeanNucleotideArchive2011], pico-PLAZA [@vandepoelePicoPLAZAGenomeDatabase2013],  1000 Plants (1KP) [@matasciDataAccess0002014] or the Reef Genomics Database [@liewReefgenomicsOrgRepository2016].
+
+We implemented an automated pipeline using Snakemake [@molderSustainableDataAnalysis2021] to pass gene sequences from downloaded Genomes or Transciptomes, in .fasta format, to the eggNOG 5.0 database [@huerta-cepasEggNOGHierarchicalFunctionally2019], and using eggNOG-Mapper 2.0.6 [@huerta-cepasFastGenomeWideFunctional2017; @cantalapiedraEggNOGmapperV2Functional2021] and the DIAMOND algorithm [@buchfinkFastSensitiveProtein2015], to annotate potential orthologs in each analyzed genome or transcriptome, using the following parameters: seed_ortholog_evalue = 0.001; seed_ortholog_score = 60; tax_scope = "auto"; go_evidence = "non-electronic"; query_cover = 20; subject_cover = 0.  
+  
+The annotation generated for each gene model included (when available): the name of the matching ortholog (coded by eggNOG as 'seed_eggNOG_ortholog');   E-value (coded by eggNOG as 'seed_ortholog_evalue'); Score (coded by eggNOG as 'seed_ortholog_score');  EC number (coded by eggNOG as 'EC');  Kegg Orthology (KO) number (coded by eggNOG as 'KEGG_ko');  Kegg Pathway (coded by eggNOG as 'KEGG_Pathway');  Kegg Module (coded by eggNOG as 'KEGG_Module');  Kegg Reaction (coded by eggNOG as 'KEGG_Reaction');  Kegg Reaction Class (coded by eggNOG as 'KEGG_rclass');  the predicted protein family (coded by eggNOG as 'PFAMs');  Gene Ontology (GO) annotation (coded by eggNOG as 'Gos');  as well as a description from eggNOG of the source organism of the matching ortholog (coded by eggNOG as 'best_og_desc').  
+
+Note that the output from sequences passed through the eggNOG 5.0 database are non-supervised orthology annotations, and may be subject to error if the underlying eggNOG annotation was inaccurate, or for divergent orthologous gene sequences.
+The output of automatically annotated orthologs, from each genome or transcriptomic, from the bioinformatic pipeline was compiled into one file `CombinedHits.csv` (to be submitted to the DRYAD database).
+
+## Overview of Data Analysis {.unnumbered}
+
+`CombinedHits.csv` of automatically annotated orthologs was imported into a data frame (coded as 'CombinedHits') for analysis using R [@rcoreteamLanguageEnvironmentStatistical2019] running under RStudio [@rstudioteamRStudioIntegratedDevelopment2015], using the 'tidyverse' [@wickhamTidyverseEasilyInstall2017], 'broom' [@robinsonBroomConvertStatistical2019], 'magrittr' [@bacheMagrittrForwardPipeOperator2014], 'dplyr' [@wickhamDplyrGrammarData2018], 'chngpt' [@fongChngptThresholdRegression2017], 'rcompanion' [@mangiaficoRcompanionFunctionsSupport2020], 'gmodels' [@warnesGmodelsVariousProgramming2018], 'stats' [@rcoreteamLanguageEnvironmentStatistical2019] and 'smatr' [@wartonSmatrPackageEstimation2012] packages.
+Graphics and tables were generated using the 'ggplot2' [@wickhamGgplot2ElegantGraphics2016], 'cowplot' [@wilkeCowplotStreamlinedPlot2019], 'glue' [@hesterGlueInterpretedString2018], 'kableExtra' [@zhuKableExtraConstructComplex2019], 'corrplot' [@weiPackageCorrplotVisualization2017], 'ggfortify' [@tangGgfortifyUnifiedInterface2016; @horikoshiGgfortifyDataVisualization2018], 'AER' [@kleiberAERAppliedEconometrics2020] and 'ggforce' [@pedersenGgforceAcceleratingGgplot22021] packages.
+Citations were managed using the Zotero (www.zotero.org) open access reference manager connected to RStudio using the 'citr' [@austCitrRStudioAddin2018] package.
+The Zotero library of citations is available at <https://www.zotero.org/groups/2333131/ros_phytoplankton>.
+Formatted outputs were generated from RMarkdown files using the 'knitr' [@xieKnitrComprehensiveTool2014; @xieDynamicDocumentsKnitr2015; @xieKnitrGeneralPurposePackage2018], 'bookdown' [@xieBookdownAuthoringBooks2019], and 'posterdown' [@thornePosterdownPackageBuilt2019] packages.
+
+In parallel we assembled metadata from the literature and culture collection databases for each genome or transcriptome source organism, including:
+the cell radii in µm (coded as 'Radius_um');  
+the latitude of isolation for the strain (coded as 'abs_Latitude');  
+colony formation (coded as 'ColonyOrganism');  
+cell shape for diatoms (coded as 'PennateCentric');  
+presence or absence of flagella as an index of potential motility coded as 'Flagella';  
+the genome size (coded as 'GenomeSize_mbp');
+and the total number of predicted gene models (coded as 'GeneModels_count') (Table \@ref(tab:MetaData)); all stored in `CellGenomeMetrics.csv`.
+For organisms for which only transcriptomes were available, we only included datasets for which the total number of detected different transcripts was available, as a proxy for 'GeneModels_count'.
+Brackish strains were included as marine status but we did not include true freshwater strains in our analyses.
+
+We compared the Enzyme Commission Number (coded as 'ECNumber', re-coded from the eggNOG annotation 'EC') to the BRENDA enzyme database [@changBRENDAELIXIRCore2021] to identify enzymes metabolizing H~2~O~2~, O~2~^•−^ or ^•^NO *in vivo* (annotated by BRENDA as 'natural product' or 'natural substrate') (Table \@ref(tab:ROSEnzymeList)).
+We then used 'ECNumber' to filter 'CombinedHits' to generate a subset containing only those orthologs encoding enzymes mediating metabolism of H~2~O~2~ (coded as 'HyPe'; 'Production' or 'Scavenging'), O~2~^•−^ (coded as 'SupOx'; 'Production' or 'Scavenging') and ^•^NO (coded as 'NitOx'; 'Production' or 'Scavenging').
+Genes that code for the production of non-enzymatic ROS scavengers were not included in subsequent analyses.
+
+From the subset of 'CombinedHits' containing information on ROS metabolizing enzymes, we grouped orthologs together by 'ECNumber' and determined the number of occurrences of individual orthologs encoding each 'ECNumber' in a given organism (coded as 'ROSGene_count').
+We merged this data subset with `CellGenomeMetrics.csv` to generate a dataset of 'EC_count'; Kegg Orthology Numbers (coded as 'KO'); and Gene Ontology annotations (coded as 'GO'); that code for the production of a ROS metabolizing enzyme, as defined by 'ECNumber', along with characters of the source organism (combined into 'MergedData').  
+
+H~2~O~2~, O~2~^•−^ and ^•^NO are vastly different in reactivity, stability, diffusion distance, effects on biomolecules and roles in cell signalling (Table \@ref(tab:ROSDiffusion)), so it would not be valid to pool counts of orthologs encoding production or scavenging of all these diverse ROS.
+We therefore generated the total gene counts coding for the production or scavenging of a given ROS in an given organism (coded as 'HyPe_count', 'NitOx_count', 'SupOx_count'), along with the total gene counts encoding enzymes metabolizing ROS in a given organism, (coded as 'TotalROSGene_count').
+
+For about 31 organisms we had both genomic and transcriptomic data; in these cases 'EC_count' and 'GeneModels_count' derived from genomic data were used for subsequent analyses.
+
+XXX
+O~2~^•−^ can dismutate to produce H~2~O~2~ and O~2~ (Reaction \@ref(eq:SOD)) [@zafiriouChemistrySuperoxideIonradical1990], a reaction mediated enzymatically by the ubiquitous enzyme superoxide dismutase (SOD), including different SOD forms containing an Fe, Mn, Cu/Zn or Ni co-factors (SOD; EC 1.15.1.1) [@millerSuperoxideDismutasesAncient2012]. SODs are an example of convergent evolution as there are three distinct families of SOD; members of the first family use either Fe or Mn SOD, but can also be cambialistic (an enzyme that can use either of the two co-factors) [@gracePhylogeneticDistributionSuperoxide1990]. The Fe/Mn SOD family evolved prior to the eukaryote and prokaryote split, as it is found across all domains. A Cu/Zn SOD family evolved separately in eukaryotes, where it is ubiquitous to most plants and animals, but can also be found in a few Gram-negative bacteria [@caseOriginSuperoxideDismutase2017]. The last SOD family is the NiSOD family which is primarily found in marine bacteria and algae [@caseOriginSuperoxideDismutase2017]. An alternate strategy for O~2~^•−^ scavenging is the Fe containing enzyme, superoxide reductase (SOR; EC 1.15.1.2), which has similar reduction potential to SOD and uses two protons and a metabolic reductant to provide an electron, releasing H~2~O~2~, and no dioxygen, making it particularly important for anaerobes (Reaction \@ref(eq:SOR)) [@shengSuperoxideDismutasesSuperoxide2014].
+
+
+\begin{equation}
+2 O_2^− + 2 H^+ → H_2O_2 + O_2 
+ (\#eq:SOD)
+\end{equation}
+
+\begin{equation}
+O_2^{•−} + 2H^+ + e^− → H_2O_2 
+ (\#eq:SOR)
+\end{equation} 
+XXX maybe move these to discussion
+
+### Validation of Bioinformatic Pipeline Results {.unnumbered}
+
+```{r ManualAutoCompareChi, include = FALSE}
+ManualAutoCompareData <- read_csv(file.path(DataIn, "SnakeManualAutomatedCountCompare.csv")) %>%
+  drop_na()
+# ManualAutoCompareChi <- chisq.test(ManualAutoCompareData$AutomatedECKO_count, ManualAutoCompareData$Manual_count, correct = TRUE) %>%
+#   tidy()
+ValidationCorTest <- cor.test(ManualAutoCompareData$AutomatedECKO_count, ManualAutoCompareData$Manual_count) %>% 
+  tidy()
+# Should I switch to a cor.test instead of a manual count?
+# ManualAutoCompareChi %>%
+#   kable(caption = "Chi-square test comparing manually and automatically annotated gene count data.") %>%
+#   kable_classic()
+```
+
+We validated the gene annotations generated by the snakemake bioinformatic pipeline, by comparing 'ROSGene_count' data from a subset of 'CombinedHits.csv' to 'ROSGene_count' data from a manually annotated dataset generated during previous projects [@fleuryReactiveOxygenDetoxification2019; @omarReactiveOxygenProduction2020] (refer to Supplemental Table \@ref(tab:ManualAutoCompareData)). XXX Think about how to cite the two projects. Data not shown? XXX
+Figure \@ref(fig:ManualAutoCompare) shows a significant relation (Correlation of `r signif(ValidationCorTest$estimate, 2)`, p = `r ScientificTen(ValidationCorTest$p.value, 2)`) between manually generated 'ROSGene_count' and the automated 'ROSGene_count' from the snakemake pipeline.
+
+From the 'CombinedHits' data frame, we filtered out some enzymes whose BRENDA annotation of 'natural product' and 'natural substrate' was questionable, in particular:
+
+- Superoxide oxidase (EC:1.10.3.17) carries a BRENDA annotation of 'natural product' for superoxide, despite the BRENDA citation stating that superoxide production from superoxide oxidase was only documented *in vitro* with an excess of ubiquinone [@lundgrenScavengingSuperoxideMembranebound2018].
+
+- D-amino-acid oxidase was removed from the H~2~O~2~ production calculations as the enzyme does not produce H~2~O~2~ *in vivo* [@matlashovHowMuchH2O22014].
+
+Some enzymes were listed for a given substrate under both *natural product* and *natural substrate* , as for example when a reaction is reversible.
+Bacterial non heme ferritin is listed under H~2~O~2~ production and scavenging as it produces H~2~O~2~ in the first of a two-step reaction and scavenges H~2~O~2~ in the second step [@bou-abdallahFunctionalityThreeSiteFerroxidase2014].
+
+Nitric Oxide Synthase (NOS) are enzymes that synthesize ^•^NO by oxidizing arginine to citrulline [@correa-aragundeStructureDiversityNitric2013; @andreakisEvolutionNitricOxide2011]. NOS homologs have been previously detected in various phytoplankton taxa [@correa-aragundeStructureDiversityNitric2013], including the cyanobacteria *Synechococcus sp.* PCC 733 [@correa-aragundeSingularNitricOxide2018], the green algae *Ostreococcus tauri* and *Ostreococcus lucimarinus* [@foresiCharacterizationNitricOxide2010], the diatoms *Pseudo-nitzschia arenysensis*, *Pseudo-nitzschia delicatissima* and *Pseudo-nitzschia multistriata* [@didatoTranscriptomeSequencingThree2015].
+
+Nitric Oxide Dioxygenase (NOD) catalyzes the reduction of ^•^NO into NO~3~^-^, has been isolated from multiple bacteria, has human homologs [@carabetMechanismNitricOxide2017], but has not yet (to our knowledge) been identified in phytoplankton. Nitric Oxide Reductases can catalyze the reduction of ^•NO to N~2~O in the presence of Cytochrome C [@fujiwaraCytochromeCbtypeNitric1996].
+
+NADPH oxidase (NOX) is the only known enzyme with a primary function of producing ROS.
+There are multiple types of NOX, including NOX1, NOX2, NOX3, and NOX5 mainly produce O~2~^•−^ whereas NOX4 produces H~2~O~2~ [@vermotNADPHOxidasesNOX2021]. NOX reduces O~2~ to form O~2~^•−^, and has been detected in various phytoplankton species including the diatoms *Phaeodactylum tricornutum* and *Thalassiosira pseudonana* [@laohavisitEnhancingPlasmaMembrane2015], the dinoflagellates *Symbiodinium spp.* [@saragostiExtracellularProductionDegradation2010] and *Prorocentrum minimum* [@parkPhysiologicalBiochemicalResponses2009]. @diazNADPHdependentExtracellularSuperoxide2019 also found extracellular superoxide production in *Thalassiosira oceanica* by a NOX-like exoenzyme that shares sequence similarity to glutathione reductase. For further reading on extracellular O~2~^•−^ production, the reader is referred to the reviews [@hanselProductionExtracellularReactive2021; @diazProductionExtracellularReactive2018].
+
+
+# Results and Discussion {.unnumbered}
+
+```{r , include = FALSE}
+EnzymeRad <- MergedData %>% 
+  filter(Taxa != "Prokaryote") %>%
+  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, ROSGene_count, ECNumber, EnzymeName) %>%
+  unique() %>%
+  mutate(ROSGene_countL = ROSGene_count %>% as.logical() %>% as.numeric()) %>%
+  # filter(GeneModels_count != 0) %>% #This is because of introducing exposure
+  nest(data = -c(ECNumber, EnzymeName)) %>%
+  mutate(fit_b_offset = map(data, possibly(~glm(.$ROSGene_countL ~ .$log_Radius_um, data = ., family = binomial(link = "logit")), otherwise = NULL)),
+                    param_b_offset = map(fit_b_offset, tidy),
+                    pred_b_offset = map(fit_b_offset, augment)) 
+         # fit_b_offset_taxa = map(data, possibly(~glm(.$ROSGene_countL ~ .$log_Radius_um + Taxa, data = ., family = binomial(link = "logit")), otherwise = NULL)),
+         #            param_b_offset_taxa = map(fit_b_offset_taxa, tidy),
+         #            pred_b_offset_taxa = map(fit_b_offset_taxa, augment))
+                    # qual_b_offset = map(fit_b_offset, glance))
+EnzymeRadTaxa <- MergedData %>%
+  filter(Taxa != "Prokaryote") %>%
+  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, ROSGene_count, ECNumber, EnzymeName) %>%
+  unique() %>%
+  mutate(ROSGene_countL = ROSGene_count %>% as.logical() %>% as.numeric()) %>%
+  # filter(GeneModels_count != 0) %>% #This is because of introducing exposure
+  nest(data = -c(ECNumber, EnzymeName)) %>%
+  mutate(fit_b_offset = map(data, possibly(~glm(.$ROSGene_countL ~ .$log_Radius_um + .$Taxa, data = ., family = binomial(link = "logit")), otherwise = NULL)),
+                    param_b_offset = map(fit_b_offset, tidy),
+                    pred_b_offset = map(fit_b_offset, augment),)
+                    # qual_b_offset = map(fit_b_offset, glance))
+EnzymeRadProk <- MergedData %>% 
+  filter(Taxa == "Prokaryote") %>%
+  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, ROSGene_count, ECNumber, EnzymeName) %>%
+  unique() %>%
+  mutate(ROSGene_countL = ROSGene_count %>% as.logical() %>% as.numeric()) %>%
+  # filter(GeneModels_count != 0) %>% #This is because of introducing exposure
+  nest(data = -c(ECNumber, EnzymeName)) %>%
+  mutate(fit_b_offset = map(data, possibly(~glm(.$ROSGene_countL ~ .$log_Radius_um, data = ., family = binomial(link = "logit")), otherwise = NULL)),
+                    param_b_offset = map(fit_b_offset, tidy),
+                    pred_b_offset = map(fit_b_offset, augment)) 
+```
+
+```{r}
+EnzymeColony <- MergedData %>% 
+  filter(Taxa != "Prokaryote") %>%
+  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, ROSGene_count, ECNumber, EnzymeName, ColonySpecies) %>%
+  unique() %>%
+  mutate(ROSGene_countL = ROSGene_count %>% as.logical() %>% as.numeric()) %>%
+  # filter(GeneModels_count != 0) %>% #This is because of introducing exposure
+  nest(data = -c(ECNumber, EnzymeName)) %>%
+  mutate(fit_b_offset = map(data, possibly(~glm(.$ROSGene_countL ~ .$ColonySpecies, data = ., family = binomial(link = "logit")), otherwise = NULL)),
+                    param_b_offset = map(fit_b_offset, tidy),
+                    pred_b_offset = map(fit_b_offset, augment))
+```
+
+```{r, fig.width = 10, fig.height = 50}
+EnzymeColonyFig <- EnzymeColony %>%
+  unnest(param_b_offset) %>%
+  filter(p.value < 0.05) %>%
+  unnest(c( pred_b_offset)) %>%
+  # unnest(pred_b_offset) %>%
+  ggplot() +
+  geom_point(aes(x = `.$ColonySpecies`, y = `.$ROSGene_countL`, size = count(`.$ROSGene_countL`))) +
+  geom_line(aes(x = `.$ColonySpecies`, y = logit2prob(.fitted))) +
+  facet_grid(rows = vars(EnzymeName)) 
+  
+EnzymeColonyFig
+```
+
+```{r}
+EnzymeFlagella <- MergedData %>% 
+  filter(Taxa != "Prokaryote") %>%
+  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, ROSGene_count, ECNumber, EnzymeName, ColonySpecies) %>%
+  unique() %>%
+  mutate(ROSGene_countL = ROSGene_count %>% as.logical() %>% as.numeric(),
+         FlagellaL = ifelse(Flagella == "yes", 1, 0)) %>%
+  # filter(GeneModels_count != 0) %>% #This is because of introducing exposure
+  nest(data = -c(ECNumber, EnzymeName)) %>%
+  mutate(fit_b_offset = map(data, possibly(~glm(.$ROSGene_countL ~ .$FlagellaL, data = ., family = binomial(link = "logit")), otherwise = NULL)),
+                    param_b_offset = map(fit_b_offset, tidy),
+                    pred_b_offset = map(fit_b_offset, augment))
+```
+
+```{r, fig.width = 10, fig.height = 50}
+EnzymeFlagellaFig <- EnzymeFlagella %>%
+  unnest(param_b_offset) %>%
+  filter(p.value < 0.05) %>%
+  unnest(c( pred_b_offset)) %>%
+  # unnest(pred_b_offset) %>%
+  ggplot() +
+  geom_point(aes(x = `.$FlagellaL`, y = `.$ROSGene_countL`)) +
+  geom_line(aes(x = `.$FlagellaL`, y = logit2prob(.fitted))) +
+  facet_grid(rows = vars(EnzymeName)) 
+  
+EnzymeFlagellaFig
+```
+
+
+```{r, fig.height = 20, fig.width = 10}
+# EnzymeRad$Includes <- "Eukaryotes"
+# EnzymeRadTaxa$Includes <- "Eukaryotes + Taxa"
+# in logit, y = e^(mx+b)/(1+e^(mx+b))
+EnzymeRadFig <- EnzymeRad %>%
+  unnest(param_b_offset) %>%
+  pivot_wider(names_from = term,
+              values_from =  c(estimate, std.error, statistic, p.value)) %>%
+  mutate(halfwaypointY = 0.5,
+         halfwaypointX = log((halfwaypointY/(exp(`estimate_(Intercept)`)-halfwaypointY*exp(`estimate_(Intercept)`)))^(1/`estimate_.$log_Radius_um`)),
+         ) %>%
+  filter(`p.value_.$log_Radius_um` < 0.05) %>%
+  unnest(data, pred_b_offset) %>%
+  # mutate(EnzymeName_facet = factor(EnzymeName, levels = desc(.$halfwaypointY))) %>%
+  ggplot() +
+  # geom_rect(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf, aes(fill = HyPe), alpha = 0.005) +
+  geom_point(aes(x = log_Radius_um, y = ROSGene_countL, color = Taxa)) +
+  geom_line(aes(x = log_Radius_um, y = logit2prob(.fitted))) +
+  geom_hline(yintercept = 0.5, linetype = "dashed", color = "black") +
+  geom_vline(aes(xintercept = halfwaypointX), linetype = "dashed") +
+  geom_line(aes(x = log_Radius_um, y = exp(`estimate_.$log_Radius_um`*log_Radius_um + `estimate_(Intercept)`)/(1+exp(`estimate_.$log_Radius_um`*log_Radius_um + `estimate_(Intercept)`))), color = "red") +
+  facet_grid(rows = vars(reorder(EnzymeName, halfwaypointX))) +
+  # geom_ribbon(aes(x = log_Radius_um, ymin = logit2prob(.fitted - `std.error_.$log_Radius_um`), ymax = logit2prob(.fitted + `std.error_.$log_Radius_um`)), alpha = 0.1) +
+  scale_colour_manual(name = "Taxa", values =TaxaColors) +
+  theme_bw()
+EnzymeRadFig
+```
+
+
+```{r, fig.height = 20, fig.width = 10}
+EnzymeRadTaxaFig <- EnzymeRadTaxa %>%
+  unnest(param_b_offset) %>%
+  filter(p.value < 0.05 & term == ".$log_Radius_um") %>%
+  # unnest(data) #%>%
+  unnest(c(pred_b_offset, data), names_sep = "_") %>%
+  ggplot() +
+  geom_point(aes(x = data_log_Radius_um, y = data_ROSGene_countL, color = data_Taxa)) +
+  geom_line(aes(x = data_log_Radius_um, y = logit2prob(pred_b_offset_.fitted), color = data_Taxa)) +
+  geom_hline(yintercept = 0.5, linetype = "dashed", color = "black") +
+  facet_grid(rows = vars(EnzymeName)) +
+  scale_colour_manual(name = "Taxa", values =TaxaColors) +
+  theme_bw()
+EnzymeRadTaxaFig
+```
+```{r, fig.height = 20, fig.width = 10}
+# EnzymeRadProkFig <- EnzymeRadProk %>%
+#   unnest(param_b_offset) %>%
+#   pivot_wider(names_from = term,
+#               values_from =  c(estimate, std.error, statistic, p.value)) %>%
+#   mutate(halfwaypointY = 0.5,
+#          halfwaypointX = log((halfwaypointY/(exp(`estimate_(Intercept)`)-halfwaypointY*exp(`estimate_(Intercept)`)))^(1/`estimate_.$log_Radius_um`)),
+#          ) %>%
+#   filter(`p.value_.$log_Radius_um` < 0.05) %>%
+#   unnest(data, pred_b_offset) %>%
+#   # mutate(EnzymeName_facet = factor(EnzymeName, levels = desc(.$halfwaypointY))) %>%
+# 
+# 
+#   ggplot() +
+#   # geom_rect(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf, aes(fill = HyPe), alpha = 0.005) +
+#   geom_point(aes(x = log_Radius_um, y = ROSGene_countL, color = Taxa)) +
+#   geom_line(aes(x = log_Radius_um, y = logit2prob(.fitted))) +
+#   geom_hline(yintercept = 0.5, linetype = "dashed", color = "black") +
+#   geom_vline(aes(xintercept = halfwaypointX), linetype = "dashed") +
+#   facet_grid(rows = vars(reorder(EnzymeName, halfwaypointX))) +
+#   geom_ribbon(aes(x = log_Radius_um, ymin = logit2prob(.fitted - `std.error_.$log_Radius_um`), ymax = logit2prob(.fitted + `std.error_.$log_Radius_um`)), alpha = 0.1) +
+#   geom_line(aes(x = log_Radius_um, y = exp(`estimate_.$log_Radius_um`*log_Radius_um + `estimate_(Intercept)`)/(1+exp(`estimate_.$log_Radius_um`*log_Radius_um + `estimate_(Intercept)`))), color = "red") +
+#   scale_colour_manual(name = "Taxa", values = TaxaColors) +
+#   theme_bw()
+# 
+# EnzymeRadProkFig
+```
+
+
+```{r , include = FALSE}
+EnzymeLat <- MergedData %>% 
+  filter(Taxa != "Prokaryote",
+         !is.na(HyPe)) %>%
+  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, ROSGene_count, ECNumber, EnzymeName) %>%
+  unique() %>%
+  mutate(ROSGene_countL = ROSGene_count %>% as.logical() %>% as.numeric()) %>%
+  # filter(GeneModels_count != 0) %>% #This is because of introducing exposure
+  nest(data = -c(ECNumber, EnzymeName)) %>%
+  mutate(fit_b_offset = map(data, possibly(~glm(.$ROSGene_countL ~ .$abs_Latitude, data = ., family = binomial(link = "logit")), otherwise = NULL)),
+                    param_b_offset = map(fit_b_offset, tidy),
+                    pred_b_offset = map(fit_b_offset, augment))
+         # fit_b_offset_taxa = map(data, possibly(~glm(.$ROSGene_countL ~ .$log_Radius_um + Taxa, data = ., family = binomial(link = "logit")), otherwise = NULL)),
+         #            param_b_offset_taxa = map(fit_b_offset_taxa, tidy),
+         #            pred_b_offset_taxa = map(fit_b_offset_taxa, augment))
+                    # qual_b_offset = map(fit_b_offset, glance))
+# EnzymeRadTaxa <- MergedData %>% 
+#   filter(Taxa != "Prokaryote",
+#          !is.na(HyPe)) %>%
+#   select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, ROSGene_count, ECNumber, EnzymeName) %>%
+#   unique() %>%
+#   mutate(ROSGene_countL = ROSGene_count %>% as.logical() %>% as.numeric()) %>%
+#   # filter(GeneModels_count != 0) %>% #This is because of introducing exposure
+#   nest(data = -c(ECNumber, EnzymeName)) %>%
+#   mutate(fit_b_offset = map(data, possibly(~glm(.$ROSGene_countL ~ .$log_Radius_um + Taxa, data = ., family = binomial(link = "logit")), otherwise = NULL)),
+#                     param_b_offset = map(fit_b_offset, tidy),
+#                     pred_b_offset = map(fit_b_offset, augment),)
+                    # qual_b_offset = map(fit_b_offset, glance))
+```
+
+```{r, fig.height = 20, fig.width = 10}
+EnzymeLatFig <- EnzymeLat %>%
+  unnest(param_b_offset) %>%
+  filter(p.value < 0.05 & term == ".$abs_Latitude") %>%
+  unnest(pred_b_offset) %>%
+  # unnest(data) %>%
+  ggplot() +
+  geom_point(aes(x = `.$abs_Latitude`, y = `.$ROSGene_countL`)) +
+  geom_line(aes(x = `.$abs_Latitude`, y = logit2prob(.fitted))) +
+  facet_grid(rows = vars(EnzymeName)) +
+  # scale_colour_manual(name = "Taxa", values =TaxaColors) +
+  theme_bw()
+EnzymeLatFig
+# logit2prob(coef(EnzymeRad$fit_b_offset[[1]]))
+```
+
+
+### Taxonomic Trends in Genes Encoding H~2~O~2~ Metabolism {}
+
+```{r EukHyPeDotPlot, fig.height = 20, fig.width = 10}
+EukHyPeDotPlot <- MergedData_na %>%
+  filter(HyPe == "Production" | HyPe == "Scavenging", 
+         Taxa != "Prokaryote",
+         ROSEnzyme_TotalCount != 0,
+         GeneModels_count != 0) %>%
+  ggplot() +
+  geom_point(aes(x = EnzymeName, y= reorder(Name, -Radius_um), size = ROSGene_count, color = TaxaPhylum, shape = Ome)) +
+  scale_x_discrete(position ="top") +
+  scale_color_manual(values = TaxaColors) +
+  scale_shape_manual(values = c(16,1))+
+  scale_radius(breaks=c(2,4,6,8,10,12,15,20,25)) +
+  ggtitle("HyPe") +
+  theme_bw() +
+  # theme(axis.text.x = element_text(angle = 90, size = 10),
+  #       axis.text.y = element_text(face="italic",size = 10, vjust = 0)) +
+  facet_grid(rows = vars(Taxa), cols = vars(HyPe), scales = "free", space = "free") +
+  ggpubr::rotate_x_text(hjust = 0)# +
+  # theme(axis.text.x = element_text(face = ifelse(levels(MergedData_na$EnzymeName %in% MergedData_na$HyPe_PriSec), "bold", "italic")))
+  # theme(axis.text.x = ifelse(MergedData_na$HyPe_PriSec == "Primary", element_text(face = "bold"), NULL))
+  # ifelse(MergedData_na$HyPe_PriSec == "Primary", theme(axis.text.x = element_text(face = "bold")), NULL)
+  # ifelse(MergedData_na$HyPe_PriSec == "Primary" ~ theme(axis.text.x = element_text(face = "bold")),
+            # NULL)
+# theme(axis.text.x = element_text(face = "bold"))
+    # axis.text.x = element_text(face = ifelse(ROSEnzymes$HyPe_Prisec == "Primary", "bold", NULL)))
+EukHyPeDotPlot
+saveRDS(EukHyPeDotPlot, file = file.path(Figures, "EukHyPeDotPlot.Rds"))
+```
+
+```{r ProkHyPeDotPlot, fig.height = 10, fig.width = 10}
+ProkHyPeDotPlot <- MergedData_na %>%
+  filter(HyPe == "Production" | HyPe == "Scavenging", 
+         Taxa == "Prokaryote",
+         ROSEnzyme_TotalCount != 0, 
+         GeneModels_count != 0) %>%
+  ggplot() +
+  geom_point(aes(x = EnzymeName, y= reorder(interaction(Genus, species, Strain), -Radius_um), size = ROSGene_count, color = Genus, shape = Ome)) +
+  scale_x_discrete(position ="top") +
+  # scale_color_manual(values = TaxaColors) +
+  scale_shape_manual(values = c(16,1))+
+  scale_radius(breaks=c(1,2,3,4,5)) +
+  ggtitle("HyPe") +
+  theme_bw() +
+  # theme(axis.text.x = element_text(angle = 90, size = 10),
+  #       axis.text.y = element_text(face="italic",size = 10, vjust = 0)) +
+  facet_grid(rows = vars(Taxa), cols = vars(HyPe), scales = "free", space = "free") +
+  ggpubr::rotate_x_text(hjust = 0) #+
+  # theme(panel.grid.major = element_blank(),
+  #       panel.grid.minor = element_blank())
+ProkHyPeDotPlot
+# saveRDS(ProkHyPeDotPlot, file = file.path(Figures, "ProkHyPeDotPlot.Rds"))
+```
+
+All prokaryotic (Figure \@ref(fig:ProkHyPeDotPlot)) and eukaryotic (Figure \@ref(fig:EukHyPeDotPlot)) phytoplankton (with the exception of a single transcriptome from the prasinophyte *Micromonas polaris*) have genes encoding H~2~O~2~ producing enzymes, as they all carry gene(s) encoding the ubiquitous enzyme Superoxide Dismutase. Three other oxidases are also very well conserved; Copropophyrinogen oxidase is found across all eukaryotic and prokaryotic phytoplankton, with the exception of one transcriptome. Thiol oxidase and acyl CoA oxidase are found in nearly all eukaryotic phytoplankton, with the exception of three transcriptomes. Other noticeable taxonomic differences include L-aspartate oxidase is found in nearly all prokaryotes, all green algae, but hardly any other 'Taxa'. Sarcosine oxidase is not present in small diatoms, and small green algae, but is present in nearly all diatoms and haptophytes. (S)-2-hydroxy-acid oxidase is only present in 3 of the 24 *Prochlorococcus* species analyzed, but is present in all other prokaryotes, with the exception of *Synechococcus sp.* MITS9220. 
+
+All eukaryotic (Figure \@ref(fig:EukHyPeDotPlot)) and prokaryotic phytoplankton excluding a few from the *Prochlorococcus* and *Synechococcus* picocyanobacterial genera (Figure \@ref(fig:ProkHyPeDotPlot)), have genes encoding H~2~O~2~ scavenging enzymes. Some strains of *Prochlorococcus* and *Synechococcus* have lost the genomic capacity to scavenge H~2~O~2~. Similar patterns are also seen in pico-eukaryotes such as the prasinophytes, whom while maintaining the genomic capacity to scavenge ROS, have lost certain enzymes such as catalase but maintain the genomic capacity to scavenge H~2~O~2~ using enzymes like ascorbate peroxidase, glutathione peroxidase and Cytochrome C peroxidase (Figure \@ref(fig:EukHyPeDotPlot)). 
+
+The absence from catalase from most cyanobacterial genomes is not surprising. @bernroitnerOccurrencePhylogenyStructure2009 analyzed 44 different cyanobacterial genomes and found that only *Nostoc punctiforme* PCC73102 conserved the full catalase encoding gene, whereas *Synechococcus elongatus* PCC7942 and *Cyanothece sp.* ATCC 51142 maintained a partial catalase encoding gene. In our analyses, only *Synechococcus elongatus* PCC11802 maintained a catalase encoding gene (Figure \@ref(fig:ProkHyPeDotPlot)). In the greens, catalase has been lost from the smaller greens but is maintained in the larger greens (Figure \@ref(fig:EukHyPeDotPlot)). The loss of catalase in smaller green algae is evidence of the Black Queen Hypothesis in action [@morrisBlackQueenHypothesis2012], in that H~2~O~2~ can passively diffuse out of the smaller green algae but cannot diffuse out of larger green algae. Loss of function mutations in catalase encoding genes in small algae are therefore less deleterious than they would be to large green algae. It is also worth questioning whether catalase is not very well conserved because the K~M~ of the peroxidase enzymes is in the low µM range, as opposed to a K~M~ of ~220mM for catalases [@bernroitnerOccurrencePhylogenyStructure2009]. 
+
+When looking at the prokaryotic phytoplankton, *Prochlorococcus* does not maintain the genomic capacity to scavenge H~2~O~2~, and as would have outsourced this task to other members of the community [@morrisBlackQueenHypothesis2012]. Among prokaryotic phytoplankton, our results support the earlier esuggestion that increased genomic capacity for H~2~O~2~ scavenging in *Synechococcus* compared to *Prochlorococcus* is a result of the larger size in *Synechococcus* compared to *Prochlorococcus* [@morrisDependenceCyanobacteriumProchlorococcus2011] (Figure \@ref(fig:ProkHyPeDotPlot)). It is however important to note the vast differences between prokaryotic and eukaryotic phytoplankton, with most eukaryotic phytoplankton, irrespective of lineage, maintaining the genomic capacity to produce ascorbate peroxidase, glutathione peroxidase and Cytochrome C peroxidase (Figure \@ref(fig:EukHyPeDotPlot)). Peroxidases are often involved in pathways beyond simple ROS scavenging, including the Halliwell-Asada cycle where ascorbate peroxidase is involved [@pandeyRedoxHomeostasisGene2015]. *Ostreococcus*, the smallest prasinophyte has a radius of 0.5 µm, similar to that of the prokaryote *Synechococcus* (Table \@ref(tab:GenomeTable)), and would therefore share a similar diffusion path length. Nevertheless *Ostreococcus*, in common with other eukaryotes, retains the genomic capacities to produce ascorbate peroxidase, glutathione peroxidase and Cytochrome C peroxidase, which may thus reflect the "cost of being eukaryotic" (Figure \@ref(fig:EukHyPeDotPlot)). 
+
+### Trends in Genes Encoding O~2~^•−^ Metabolism {}
+
+```{r EukSupOxDotPlot, fig.height = 20, fig.width = 10}
+EukSupOxDotPlot <- MergedData_na %>%
+  filter(SupOx == "Scavenging" | SupOx == "Production", 
+         Taxa != "Prokaryote",
+         ROSEnzyme_TotalCount != 0, 
+         GeneModels_count != 0) %>%
+  ggplot() +
+  geom_point(aes(x = EnzymeName, y= reorder(interaction(Genus, species, Strain), -Radius_um), size = ROSGene_count, color = Taxa, shape = Ome)) +
+  scale_x_discrete(position ="top") +
+  scale_color_manual(values = TaxaColors) +
+  scale_shape_manual(values = c(16,1))+
+  scale_radius(breaks=c(2,4,6,8,10,12,15,20,25)) +
+  ggtitle("SupOx") +
+  theme_bw() +
+  # theme(axis.text.x = element_text(angle = 90, size = 10),
+  #       axis.text.y = element_text(face="italic",size = 10, vjust = 0)) +
+  facet_grid(rows = vars(Taxa), cols = vars(SupOx), scales = "free", space = "free") +
+  ggpubr::rotate_x_text(hjust = 0) #+
+  # theme(panel.grid.major = element_blank(),
+  #       panel.grid.minor = element_blank())
+EukSupOxDotPlot
+saveRDS(EukSupOxDotPlot, file = file.path(Figures, "EukSupOxDotPlot.Rds"))
+```
+
+```{r ProkSupOxDotPlot, fig.height = 10, fig.width = 10}
+ProkSupOxDotPlot <- MergedData_na %>%
+  filter(SupOx == "Scavenging" | SupOx == "Production", 
+         Taxa == "Prokaryote",
+         ROSEnzyme_TotalCount != 0, 
+         GeneModels_count != 0) %>%
+  ggplot() +
+  geom_point(aes(x = EnzymeName, y= reorder(interaction(Genus, species, Strain), -Radius_um), size = ROSGene_count, color = Genus, shape = Ome)) +
+  scale_x_discrete(position ="top") +
+  # scale_color_manual(values = TaxaColors) +
+  scale_shape_manual(values = c(16,1))+
+  scale_radius(breaks=c(1,2,3,4,5)) +
+  ggtitle("SupOx") +
+  theme_bw() +
+  # theme(axis.text.x = element_text(angle = 90, size = 10),
+  #       axis.text.y = element_text(face="italic",size = 10, vjust = 0)) +
+  facet_grid(rows = vars(Taxa), cols = vars(SupOx), scales = "free", space = "free") +
+  ggpubr::rotate_x_text(hjust = 0) #+
+  # theme(panel.grid.major = element_blank(),
+  #       panel.grid.minor = element_blank())
+ProkSupOxDotPlot
+saveRDS(ProkSupOxDotPlot, file = file.path(Figures, "ProkSupOxDotPlot.Rds"))
+```
+
+Neither prokaryotic nor eukaryotic phytoplankton had any sequences annotated that matched with enzymes that specifically code for the production of superoxide. All prokaryotic (Figure \@ref(fig:EukSupOxDotPlot)) and eukaryotic (Figure \@ref(fig:ProkSupOxDotPlot)) phytoplankton (with the exception of a single transcriptome from *Micromonas polaris*) have genes encoding O~2~^•−^ Scavenging enzymes, as they all have genes encoding the ubiquitous enzyme SOD.
+
+Occurences of genes encoding the enzyme Superoxide Oxidase (SOO, EC:1.10.3.17) were rare, but present in a few diatom species (*Leptocylindrus danicus*, *Chaetoceros curvicetus* and *Thalassiosira minuscula CCMP1093.*) and prokaryotes (*Synechococcus elongatus PCC11802* and various *Crocosphaera spp.*).
+
+Occurences of genes encoding the enzyme Superoxide Reductase (SOR, EC:1.15.1.2) were also rare and only detected in the diatoms, *Pseudo-nitzschia fradulenta WWA7* and *Seminavis robusta D6*, and the haptophyte *Pleurochrysis carterae CCMP456*.
+
+Although records of enzymes producing O~2~^•−^ exist in the literature [@diazNADPHdependentExtracellularSuperoxide2019], in the marine phytoplankton genomes and transcriptomes that we analysed, we did not detect any genes that encode for enzymes (Table \@ref(tab:ROSEnzymes)) that specifically produce O~2~^•−^ based on the BRENDA allocation of O~2~^•−^ scavenging. It is however worth noting the presence of NADPH Oxidase (NOX) which can produce either H~2~O~2~ or O~2~^•−^ depending on the NOX isoform. NOX is included as a H~2~O~2~ producer in compliance with the BRENDA allocation of the enzyme (Table \@ref(tab:ROSEnzymes)). Further analyses may be able to search through the detected NOX isoforms to identify whether they are from the isoform that produces O~2~^•−^. Sequences that are also very similar to Glutathione Reductase (GR) have also been documented to produce enzymes that produce extracellular O~2~^•−^ in the diatom *Thalassiosira oceanica* [@diazNADPHdependentExtracellularSuperoxide2019]. GR sequences were annotated universally across phytoplankton genomes in previous analyses [@fleuryReactiveOxygenDetoxification2019; @omarReactiveOxygenProduction2020]. Given that @diazNADPHdependentExtracellularSuperoxide2019 found that these sequences were so similar to GR that they could not tell them apart, it is possible that O~2~^•−^ do exist within the genomes of these phytoplankton. In either case, we would not expect phytoplankton to differentially allocate a changing fraction of their total gene content to O~2~^•−^ production as superoxide is not membrane diffusible. The idea that phytoplankton need to maintain working extracellular concentrations of O~2~^•−^ has been speculated however, noting that decreasing the extracellular concentration of O~2~^•−^ can hinder cell growth [@sutherlandExtracellularSuperoxideProduction2019]. @sutherlandExtracellularSuperoxideProduction2019 further explains that the downregulation of Superoxide Dismutase (SOD, EC:1.15.1.1) genes at peak light levels by *Prochlorococcus* [@mella-floresProchlorococcusSynechococcusHave2012] would allow *Prochlorococcus* to maintain 'working levels' of extracellular O~2~^•−^. 
+
+The absence of transcripts encoding SOD from the *Micromonas polaris* transcriptome is likely due to low expression of SOD at the time that the mRNA was harvested for sequence analyses. Given that the O~2~^•−^ is not membrane diffusible, intracellularly produced O~2~^•−^ would have to be scavenged or would react with other parts of the cell, as a result, organisms that do not have the ability to scavenge O~2~^•−^ would have reduced fitness. It would therefore be costly for marine phytoplankton to lose the genomic capacity to scavenge O~2~^•−^.
+
+To our knowledge, our results though rare, are the first detection of the occurence of SOO and SOR in marine phytoplankton, and would need confirmation by Multiple Sequence Alignment. Multiple Sequence Alignment would answer whether our results are from errors in annotation from the non-supervised grouping of orthologs (genes) by eggNOG, or may indeed be sporadically present in the Genomes or Transcriptomes of some phytoplankton, perhaps as a result of Horizontal Gene Transfer.
+
+ Trends may yet appear in genomic allocations to O~2~^•−^ scavenging based on the metallo-types of SOD. For example, @fleuryReactiveOxygenDetoxification2019 found that pico-prasinophytes use Mn-SOD instead of Fe-SOD. One could analyze whether a similar trend is visible across a wider range of 'Taxa'.
+
+### Trends in Genes Encoding ^•^NO Metabolism {}
+
+In the genomes and transcriptomes that we analysed, Nitric Oxide Synthase (NOS, EC:1.14.13.39) was the most frequently occuring ^•^NO producing enzyme (Figure \@ref(fig:EukNitOxDotPlot)), but was not present or not annotated among prokaryotic phytoplankton (Figure \@ref(fig:ProkNitOxDotPlot)). 
+
+Nitric Oxide Dioxygenase (NOD, EC:1.14.12.17) was the most frequently occuring of the ^•^NO scavenging enzymes (Figure \@ref(fig:EukNitOxDotPlot)).
+NOD sequences were identified in both eukaryotes and prokaryotes, but were either not annotated, or not present in *Prochlorococcus*, most green algae and some diatoms.
+
+The detection of NOS genes in our data is not surprising (Figure \@ref(fig:EukNitOxDotPlot)), considering that NOS genes have previously been detected in the prasinophyte *Ostreococcus tauri* [@foresiCharacterizationNitricOxide2010], as well as in a few pennate diatoms [@didatoTranscriptomeSequencingThree2015]. Although, while we would not detect genes encoding ^•^NO producing enzymes, a NOS-like sequence has recently been identified in *Synechococcus*, that also has Nitric Oxide Dioxygenase-like function [@piccianoNitricOxideSynthase2019]. 
+
+NOD sequences have previously been identified in diatoms, dinoflagellates and haptophytes through metatranscriptomic analysis [@lampeStrategiesPhytoplanktonResponse2019].
+
+Alternatively, it is possible that some of the NOS may exhibit some NOD-like function as has been found in *Synechococcus* [@piccianoNitricOxideSynthase2019]. 
+
+As NOD sequences have only been identified once before in phytoplankton, through metatranscriptomic analyses [@piccianoNitricOxideSynthase2019], there is limited understanding as to what paths may contribute to the active removal of ^•^NO, and the lack of ^•^NO scavenging genes in genomes across multiple organisms. Perhaps the low reactivity of ^•^NO does not warrant the active removal of ^•^NO as long as the concentration does not exceed the toxic threshold. This explanation is plausible given that *Platymonas helgolandica*, *Platymonas subcordiformis*, *Skeletonema costatum*, *Gymnodinium sp.*, and *Prorocentrum donghaiense* showed optimum growth in the presence of ^•^NO concentrations between 10^-9^ and 10^-6^ mol L^−1^ [@peifengEffectsNitricOxide2021], which are higher than the concentrations found in the ocean (Table \@ref(tab:ROSDiffusion)).
+
+
+
+XXX Nitric Oxide dotplots - could differences in microbiome of pennate and centric diatoms explain their varying allocation to nitric oxide? [@johanssonFriendsBenefitsExploring2019]
