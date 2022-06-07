@@ -1,0 +1,58 @@
+# Snakefile for ROSGeneCounts
+# Brian Beardsall
+
+configfile: "config.yaml"
+
+IDS = glob_wildcards("DataIn/Genomes/{genomeName}.fasta")
+Isoforms = glob_wildcards("DataIn/Isoforms/IsoformSequences/{Isoform}.fasta")
+
+# default rule to generate final output
+rule all:
+    input:
+        "output/combinedHits.csv"
+
+rule eggNOG:
+    input:
+        genome="DataIn/Genomes/{genomeName}.fasta"
+    output:
+        "output/eggNOG/{genomeName}.emapper.annotations",
+        "output/eggNOG/{genomeName}.emapper.seed_orthologs"
+    params:
+        m=config["eggNOG"]["m"],
+        d=config["eggNOG"]["d"],
+        tax_scope=config["eggNOG"]["tax_scope"],
+        go_evidence=config["eggNOG"]["go_evidence"],
+        target_orthologs=config["eggNOG"]["target_orthologs"],
+        seed_ortholog_evalue=config["eggNOG"]["seed_ortholog_evalue"],
+        seed_ortholog_score=config["eggNOG"]["seed_ortholog_score"],
+        query_cover=config["eggNOG"]["query_cover"],
+        subject_cover=config["eggNOG"]["subject_cover"]
+        
+    log: "logs/eggNOG/{genomeName}.log"
+    threads:
+        config["eggNOG"]["threads"]
+    shell:
+        "bash scripts/eggNOG.bash {input.genome} {wildcards.genomeName} {threads} {params.m}"
+        " {params.d} {params.tax_scope} {params.go_evidence} {params.target_orthologs} {params.seed_ortholog_evalue}"
+        " {params.seed_ortholog_score} {params.query_cover} {params.subject_cover} &> {log}"
+
+rule JoinROSEggNOG:
+    input:
+        eggNOGannotations="output/eggNOG/{genomeName}.emapper.annotations",
+        ROSinfo="DataIn/RosEC.txt"
+    output:
+        JoinedHitAttributes="output/JoinedEggNOGROS/JoinedEggNOGROS_{genomeName}.csv"
+    log: JoinROSEggNOGLog="logs/JoinROSEggNOG/{genomeName}.log"
+    script:
+        "scripts/JoinROSEggNOG.R"
+
+
+rule CombineAllHits:
+    input:
+        JoinROSEggNOG=expand("output/JoinedEggNOGROS/JoinedEggNOGROS_{genomeName}.csv", genomeName = IDS.genomeName),
+    output:
+        combinedHits="output/combinedHits.csv"
+    log: CombineAllHitsLog="logs/CombineAllHits/CombineAllHits.log"
+    script:
+        "scripts/combineAllHits.R"
+

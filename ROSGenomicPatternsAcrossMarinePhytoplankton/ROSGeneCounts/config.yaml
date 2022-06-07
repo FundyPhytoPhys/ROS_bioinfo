@@ -1,0 +1,21 @@
+BlastProbesGenomes:
+    evalue: "0.5"
+    
+GetProbeHitSeqs:
+    BlastHeaders: [ "qseqid", "sseqid", "pident", "length", "mismatch", "gapopen", "qstart", "qend", "sstart", "send", "evalue", "bitscore", "sframe", "qframe" ]
+
+eggNOG:
+    threads: 8
+    m: diamond
+    d: none
+    tax_scope: auto
+    go_evidence: non-electronic
+    target_orthologs: all
+    seed_ortholog_evalue: 0.001
+    seed_ortholog_score: 60
+    query_cover: 20
+    subject_cover: 0
+    
+SpBlast:
+    evalue: "0.5"
+

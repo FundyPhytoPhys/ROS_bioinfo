@@ -1,0 +1,17 @@
+ROSEnzymeName	ROSEnzymeAbbrev	EC	ProdOrScav
+"Superoxide Dismutase (Fe, Mn, Cu/Zn, Ni)"	SOD	1.15.1.1	Scavenging
+Glutathione reductase	GR	1.8.1.7	Scavenging
+Monodehydroascorbate reductase	MDHAR	1.6.5.4	Scavenging
+Dehydroascorbate reductase	DHAR	1.8.5.1	Scavenging
+Ascorbate peroxidase	APX	1.11.1.11	Scavenging
+Catalase peroxidase	Katg	1.11.1.21	Scavenging
+Glutathione peroxidase	GPx	1.11.1.9	Scavenging
+Cytochrome C peroxidase	CCP	1.11.1.5	Scavenging
+Peroxiredoxin	Prxns	"1.11.1.15, 1.11.1.24, 1.11.1.25, 1.11.1.26, 1.11.1.27, 1.11.1.28, 1.11.1.29"	Scavenging
+Catalase	CAT	1.11.1.6	Scavenging
+"Alternative oxidase, Plastid terminal oxidase"	AOX	1.10.3.11	Production
+Nitric oxide synthase	NOS	1.14.13.39	Production
+Glycolate oxidase	GlyOx	1.1.3.15	Production
+Xanthine oxidase	XaOx	1.17.3.2	Production
+Aldehyde oxidase	AlOx	1.2.3.1	Production
+Sulfite oxidase	SulOx	1.8.3.1	Production

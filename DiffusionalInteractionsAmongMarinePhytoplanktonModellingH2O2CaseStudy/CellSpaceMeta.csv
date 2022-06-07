@@ -1,0 +1,9 @@
+Region,Taxa,Metabolism,CellCount_m3,Rad_um,Cite_key,XYZAxes_mm,Axes_factor
+Oligotrophic,Prochlorococcus,Phyto,46630028453.52433,0.5,[@agustiSolarRadiationinducedMortality2007],1,10
+Oligotrophic,Synechococcus,Phyto,2980957987.041728,1,[@agustiSolarRadiationinducedMortality2007],1,10
+Oligotrophic,PicoEukaryotes,Phyto,665141633.0443618,2,[@agustiSolarRadiationinducedMortality2007],1,10
+Oligotrophic,Bacterioplankton,Hetero,46630028453.52433,0.5,robartsBacterialAbundanceBiomass1996,1,10
+Eutrophic,Cyanobium,Phyto,1000000000000,1,[@bertholdPhytoplanktonCanBypass2018],1,10
+Eutrophic,Chlorophytes,Phyto,10000000,2.5,[@bertholdPhytoplanktonCanBypass2018],1,10
+Eutrophic,Diatoms,Phyto,1000000000,5,[@bertholdPhytoplanktonCanBypass2018],1,10
+Eutrophic,Bacterioplankton,Hetero,1000000000000,0.5,YYYY,1,10
