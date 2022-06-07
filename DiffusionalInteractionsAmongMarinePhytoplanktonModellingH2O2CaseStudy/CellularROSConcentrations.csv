@@ -1,0 +1,13 @@
+ROS,ROSSymbol,Taxa,Organelle,Low,Low_units,LowCitation,High,High_units,HighCitation,Notes
+Hydrogen Peroxide,H~2~O~2~,Escherichia_coli,,0.2,uM,[@gonzalez-flechaHomeostaticRegulationIntracellular1997],,,,
+Hydrogen Peroxide,H~2~O~2~,K562_human,Cytosol,0.0022,uM,[@lyublinskayaMeasuringIntracellularConcentration2019],0.0067,uM,[@lyublinskayaMeasuringIntracellularConcentration2019],
+Hydrogen Peroxide,H~2~O~2~,Mammal,,0.001,uM,[@stoneHydrogenPeroxideSignaling2006],0.7,uM,[@stoneHydrogenPeroxideSignaling2006],
+Hydrogen Peroxide,H~2~O~2~,Mammal,,0.01,uM,[@siesHydrogenPeroxideCentral2017],1,uM,[@siesHydrogenPeroxideCentral2017],
+Hydrogen Peroxide,H~2~O~2~,Escherichia_coli,,0.1,uM,[@seaverHydrogenPeroxideFluxes2001],0.1,ExternalConcentration,[@seaverHydrogenPeroxideFluxes2001],
+Hydrogen Peroxide,H~2~O~2~,HELA_human,,0.001522070015,extracellular [H2O2],[@huangQuantifyingIntracellularHydrogen2014],,,,
+Hydrogen Peroxide,H~2~O~2~,HELA_human,,0.0075,uM,[@huangQuantifyingIntracellularHydrogen2014],,,,
+Superoxide,O~2~^•−^,,,,,,,,,
+Nitric Oxide,NO^•^,,,,,,,,,
+Hydroxyl Radical,HO^•^,,,,,,,,,
+Singlet Oxygen,^1^O~2~,,,,,,,,,
+Peroxynitrite,ONOO^−^,,,,,,,,,
