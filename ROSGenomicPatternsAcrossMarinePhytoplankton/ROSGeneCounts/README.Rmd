@@ -1,0 +1,19 @@
+---
+title: "ROS Gene Count Workflow - Overview"
+author: "Brian Beardsall"
+date: '`r format(Sys.Date())`'
+output:
+  html_document:
+    number_sections: true
+    df_print: paged
+    toc: true
+---
+
+# eggNOG Functional annotation (R/eggNOG.bash)
+Script to run eggNOG with the parameters listed in the manuscript.
+
+# Join eggNOG annotations/ROS info (scripts/JoinEggnogAnnotations.Rmd)
+Convert all eggNOG annotation files to a .csv file.
+
+# Combine all eggNOG hits into a file (scripts/combineAllHits.R)
+ Combine all eggNOG hits into a .csv (combinedHits.csv)
