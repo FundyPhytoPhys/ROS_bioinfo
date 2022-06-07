@@ -7,7 +7,6 @@ ROSGenomicPatternsAcrossMarinePhytoplankton/ROSGeneCounts/output/*
 *.docx
 Work/*
 ROSGenomicPatternsAcrossMarinePhytoplankton/ROSGeneCounts/.snakemake/*
-FigureMaterial/*
 DiffusionalInteractionsAmongMarinePhytoplanktonModellingH2O2CaseStudy/Comments/*
 *.Rproj
 *.Rhistory
