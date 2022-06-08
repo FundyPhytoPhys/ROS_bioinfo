@@ -1,5 +1,5 @@
 ---
-title: Enzymatic Capacities for Reactive Oxygen Species Production and Scavenging Across Marine Phytoplankton
+title: Enzymes for Reactive Oxygen Species Production and Scavenging Across Marine Phytoplankton
 author:
 - Naaman M. Omar:
     institute: mta
@@ -80,9 +80,9 @@ googlesheets4::gs4_deauth()
 
 ```{r assign filepaths, include = FALSE}
 Figures <- file.path("..", "Figures")
-DataIn <- file.path("..", "DataIn")
+ROSGenomicPatternsDataIn <- file.path("..", "..", "ROSGenomicPatternsAcrossMarinePhytoplankton", "DataIn")
 FigureMaterial <- file.path("..", "FigureMaterial")
-DataProcessed <- file.path("..", "DataProcessed")
+DataProcessed <- file.path("..", "..", "ROSGenomicPatternsAcrossMarinePhytoplankton", "DataProcessed")
 SnakemakeOutput <- file.path("..", "..", "ROSGenomicPatternsAcrossMarinePhytoplankton", "ROSGeneCounts", "output")
 ```
 
@@ -95,7 +95,7 @@ TaxaColors <- readRDS(file.path(DataProcessed, "TaxaColours.Rds"))
 ```{r}
 # Import combinedHits, which is the output from snakemake
 CombinedHits <- read_csv(file.path(SnakemakeOutput, "combinedHits.csv"))
-ROSEnzymes <- read_csv(file.path(DataIn, "ROSEnzymeList.csv"))
+ROSEnzymes <- read_csv(file.path(ROSGenomicPatternsDataIn, "ROSEnzymeList.csv"))
 ```
 
 ```{r define functions, include = FALSE}
@@ -359,12 +359,12 @@ XXX maybe move these to discussion
 ### Validation of Bioinformatic Pipeline Results {.unnumbered}
 
 ```{r ManualAutoCompareChi, include = FALSE}
-ManualAutoCompareData <- read_csv(file.path(DataIn, "SnakeManualAutomatedCountCompare.csv")) %>%
-  drop_na()
-# ManualAutoCompareChi <- chisq.test(ManualAutoCompareData$AutomatedECKO_count, ManualAutoCompareData$Manual_count, correct = TRUE) %>%
+# ManualAutoCompareData <- read_csv(file.path(DataIn, "SnakeManualAutomatedCountCompare.csv")) %>%
+#   drop_na()
+# # ManualAutoCompareChi <- chisq.test(ManualAutoCompareData$AutomatedECKO_count, ManualAutoCompareData$Manual_count, correct = TRUE) %>%
+# #   tidy()
+# ValidationCorTest <- cor.test(ManualAutoCompareData$AutomatedECKO_count, ManualAutoCompareData$Manual_count) %>% 
 #   tidy()
-ValidationCorTest <- cor.test(ManualAutoCompareData$AutomatedECKO_count, ManualAutoCompareData$Manual_count) %>% 
-  tidy()
 # Should I switch to a cor.test instead of a manual count?
 # ManualAutoCompareChi %>%
 #   kable(caption = "Chi-square test comparing manually and automatically annotated gene count data.") %>%
@@ -455,7 +455,7 @@ EnzymeColonyFig <- EnzymeColony %>%
   geom_line(aes(x = `.$ColonySpecies`, y = logit2prob(.fitted))) +
   facet_grid(rows = vars(EnzymeName)) 
   
-EnzymeColonyFig
+# EnzymeColonyFig
 ```
 
 ```{r}
@@ -483,7 +483,7 @@ EnzymeFlagellaFig <- EnzymeFlagella %>%
   geom_line(aes(x = `.$FlagellaL`, y = logit2prob(.fitted))) +
   facet_grid(rows = vars(EnzymeName)) 
   
-EnzymeFlagellaFig
+# EnzymeFlagellaFig
 ```
 
 
@@ -616,7 +616,7 @@ EukHyPeDotPlot <- MergedData_na %>%
          ROSEnzyme_TotalCount != 0,
          GeneModels_count != 0) %>%
   ggplot() +
-  geom_point(aes(x = EnzymeName, y= reorder(Name, -Radius_um), size = ROSGene_count, color = TaxaPhylum, shape = Ome)) +
+  geom_point(aes(x = EnzymeName, y= reorder(Name, -Radius_um), size = ROSGene_count, color = Taxa, shape = Ome)) +
   scale_x_discrete(position ="top") +
   scale_color_manual(values = TaxaColors) +
   scale_shape_manual(values = c(16,1))+
