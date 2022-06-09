@@ -11,6 +11,6 @@ This is a README for the www.github.com/NaamanOmar/ROS_bioinfo repository.
 
 `EnzymaticCapacitiesROSMetabolismAcrossMarinePhytoplankton` includes data and code used to generate the "Enzymes for Reactive Oxygen Species Production and Scavenging Across Marine Phytoplankton" manuscript; currently in preparation.
 
-`FigureMaterial` contains figures used in either manuscript that were not generated in R.
+`FigureMaterial` contains figures used in manuscripts that were not generated in R.
 
-`ROS_Phytoplankton.bib` is a .bibtex file containing citations from each of the three manuscripts.
+`ROS_Phytoplankton.bib` is a .bibtex file containing citations for the three manuscripts.
