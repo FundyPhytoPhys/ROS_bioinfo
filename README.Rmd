@@ -1,0 +1,16 @@
+---
+title: "README"
+output: html_document
+---
+
+This is a README for the www.github.com/NaamanOmar/ROS_bioinfo repository. 
+
+`DiffusionalInteractionsAmongMarinePhytoplanktonModellingH2O2CaseStudy` includes data and code used to generate the "Diffusional Interactions Across Marine Phytoplankton; Modelling H2O2 as a case study" manuscript https://www.mdpi.com/2076-2607/10/4/821/htm. 
+
+`ROSGenomicPatternsAcrossMarinePhytoplankton` includes data and code to generate the Reactive Oxygen Species Production and Scavenging; Genomic Patterns Across Marine Phytoplankton; currently under review.
+
+`EnzymaticCapacitiesROSMetabolismAcrossMarinePhytoplankton` includes data and code used to generate the "Enzymes for Reactive Oxygen Species Production and Scavenging Across Marine Phytoplankton" manuscript; currently in preparation.
+
+`FigureMaterial` contains figures used in either manuscript that were not generated in R.
+
+`ROS_Phytoplankton.bib` is a .bibtex file containing citations from each of the three manuscripts.
