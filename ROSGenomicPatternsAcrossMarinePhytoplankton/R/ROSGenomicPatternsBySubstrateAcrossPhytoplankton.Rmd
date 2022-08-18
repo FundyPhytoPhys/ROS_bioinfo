@@ -273,7 +273,7 @@ Formatted outputs were generated from RMarkdown files using the 'knitr' [@xieKni
 
 In parallel we assembled metadata from the literature and culture collection databases for each genome or transcriptome source organism, including the cell radii in µm from 100% of organisms; colony formation for 84% of organisms; cell shape from diatoms from 100% of diatoms; presence or absence of flagella as an index of potential motility coded as 'Flagella' from 100% of organisms, the genome size from all genomes and the total number of predicted gene models from 80% of organisms (Table \@ref(tab:MetaData)); all stored in `CellGenomeMetrics.csv` (Figure \@ref(fig:BioinformaticSummary)).
 For organisms for which only transcriptomes were available, we only included datasets for which the total number of detected different transcripts was available, as a proxy for the total number of predicted genes.
-Strains of brackish origin were included  but we did not include true freshwater strains in our analyses.
+Strains of brackish origin were included but we did not include true freshwater strains in our analyses.
 
 We compared the Enzyme Commission Number (EC number) to the BRENDA enzyme database [@changBRENDAELIXIRCore2021] to identify enzymes metabolizing H~2~O~2~, O~2~^•−^ or ^•^NO *in vivo* (annotated by BRENDA as 'natural product' or 'natural substrate') (Table \@ref(tab:ROSEnzymeList); Figure \@ref(fig:BioinformaticSummary)).
 We then used the EC Number to filter 'CombinedHits' to generate a subset containing only those orthologs encoding enzymes mediating metabolism of H~2~O~2~ (Production or Scavenging), O~2~^•−^ (Production or Scavenging) and ^•^NO (Production or Scavenging).
@@ -364,8 +364,8 @@ PoissonDistStats <- MergedData %>%
   rstatix::shapiro_test(ROS_count) 
 ```
 
-Figure \@ref(fig:PoissonDist) shows that the total number of genes encoding the metabolism of O~2~^•−^, H~2~O~2~ or ^•^NO are not normally distributed (Shapiro-Wilk Test [@shapiroAnalysisVarianceTest1965] with a p value of `r ScientificTen(PoissonDistStats$p[5])` for O~2~^•−^ scavenging, `r ScientificTen(PoissonDistStats$p[1])` for H~2~O~2~ production, `r ScientificTen(PoissonDistStats$p[2])` for H~2~O~2~ scavenging, `r ScientificTen(PoissonDistStats$p[3])` for ^•^NO production and  `r ScientificTen(PoissonDistStats$p[4])` for ^•^NO scavenging), and follows a Poisson distribution. Therefore, for subsequent analyses we used Poisson or Quasi-Poisson regressions to compare the total number of genes that encode the production or scavenging of O~2~^•−^, H~2~O~2~ or ^•^NO, with an offset of the total number of genes in the organism, to log~10~ of the median cell radius in µm.
-Quasi-Poisson regressions were used when the Poisson regression was over-dispersed (dispersion > 1, p < 0.05) as determined by the 'AER' package [@kleiberAERAppliedEconometrics2020]. Because our data followed a Poisson distribution (Figure \@ref(fig:PoissonDist)), a Poisson regression followed by a chi-squared test or a Quasi-Poisson regression followed by an F test, is statistically when obtaining the p-value [@AnovaGlmFunction]. An alpha value of ≤0.05 was used as the threshold for statistical significance of regressions.
+Figure \@ref(fig:PoissonDist) shows that the total number of genes encoding the metabolism of O~2~^•−^, H~2~O~2~ or ^•^NO are not normally distributed (Shapiro-Wilk Test [@shapiroAnalysisVarianceTest1965] with a p value of `r ScientificTen(PoissonDistStats$p[5])` for O~2~^•−^ scavenging, `r ScientificTen(PoissonDistStats$p[1])` for H~2~O~2~ production, `r ScientificTen(PoissonDistStats$p[2])` for H~2~O~2~ scavenging, `r ScientificTen(PoissonDistStats$p[3])` for ^•^NO production and  `r ScientificTen(PoissonDistStats$p[4])` for ^•^NO scavenging), and follows a Poisson distribution. Therefore, for subsequent analyses we used Poisson or Quasi-Poisson regressions to compare the total number of genes that encode the production or scavenging of O~2~^•−^, H~2~O~2~ or ^•^NO, with an offset of the total number of genes in the organism, to log~10~ of the median cell radius in µm. Poisson or Quasi-Poisson regressions were run with or without the influence of 'Colony' and 'Flagella'. 
+Quasi-Poisson regressions were used when the Poisson regression was over-dispersed (dispersion > 1, p < 0.05) as determined by the 'AER' package [@kleiberAERAppliedEconometrics2020]. Because our data followed a Poisson distribution (Figure \@ref(fig:PoissonDist)), a Poisson regression followed by a chi-squared test or a Quasi-Poisson regression followed by an F test, is statistically when obtaining the p-value [@AnovaGlmFunction]. An alpha value of ≤0.05 was used as the threshold for statistical significance of regressions. Code used to produce the Poisson and Quasi-Poisson models can be found on https://github.com/NaamanOmar/ROS_bioinfo/tree/master/ROSGenomicPatternsAcrossMarinePhytoplankton. 
 
 The total number of genes in each organism, increased with the median cell radius, and also varied among the taxonomic lineages (coded as Phylum) (Figure \@ref(fig:GeneModelsRadPlot)). Taxonomic lineage, in turn, interacts strongly with the median cell radius. For our analyses, we sought to detect effects of cell radius upon the fraction of total genes encoding ROS metabolism. We therefore normalized the total number of genes encoding the production or scavenging of H~2~O~2~, O~2~^•−^ or ^•^NO to 'GeneModel_count' to account for the general increase in 'GeneModel_count' with increasing the median cell radius. Because of the strong interaction between the median cell radius and taxonomic lineage (Figure \@ref(fig:RadTaxaviolin)), we did not include Phylum as a co-variate in our subsequent regressions of normalized gene counts vs. median cell radius. Thus, we did not analyze specific influences of Phylum. 
 
@@ -394,11 +394,7 @@ Although records of enzymes producing O~2~^•−^ exist in the literature [@dia
 
 XXX fix statement on GR like sequence producing H~2~O~2~.
 
-The absence of transcripts encoding SOD from the *Micromonas polaris* transcriptome is likely due to low expression of SOD at the time that the mRNA was harvested for sequence analyses. Given that the O~2~^•−^ is not membrane diffusible, intracellularly produced O~2~^•−^ would have to be scavenged or would react with other parts of the cell, as a result, organisms that do not have the ability to scavenge O~2~^•−^ would have reduced fitness. It would therefore be costly for marine phytoplankton to lose the genomic capacity to scavenge O~2~^•−^.
-
-To our knowledge, our results though rare, are the first detection of the occurence of SOO and SOR in marine phytoplankton, and would need confirmation by Multiple Sequence Alignment. Multiple Sequence Alignment would answer whether our results are from errors in annotation from the non-supervised grouping of orthologs (genes) by eggNOG, or may indeed be sporadically present in the Genomes or Transcriptomes of some phytoplankton, perhaps as a result of Horizontal Gene Transfer.
-
-Trends may yet appear in genomic allocations to O~2~^•−^ scavenging based on the metallo-types of SOD. For example, @fleuryReactiveOxygenDetoxification2019 found that pico-prasinophytes use Mn-SOD instead of Fe-SOD. One could analyze whether a similar trend is visible across a wider range of 'Taxa'.
+The absence of transcripts encoding SOD from the *Micromonas polaris* transcriptome is likely due to low expression of SOD at the time that the mRNA was harvested for sequence analyses. Given that the O~2~^•−^ is not membrane diffusible, intracellularly produced O~2~^•−^ would have to be scavenged or would react with other parts of the cell, as a result, organisms that do not have the ability to scavenge O~2~^•−^ would have reduced fitness. It would therefore be costly for marine phytoplankton to lose the genomic capacity to scavenge O~2~^•−^. To our knowledge, our results though rare, are the first detection of the occurence of SOO and SOR in marine phytoplankton, and would need confirmation by Multiple Sequence Alignment. Multiple Sequence Alignment would answer whether our results are from errors in annotation from the non-supervised grouping of orthologs (genes) by eggNOG, or may indeed be sporadically present in the Genomes or Transcriptomes of some phytoplankton, perhaps as a result of Horizontal Gene Transfer. Trends may yet appear in genomic allocations to O~2~^•−^ scavenging based on the metallo-types of SOD. For example, in previous pilot runs we found that pico-prasinophytes use Mn-SOD instead of Fe-SOD (Data not presented). 
 
 
 ### Influence of Cell Size on Gene Counts for Enzymes Metabolizing O~2~^•−^ {.unnumbered}
@@ -661,7 +657,7 @@ SupOxPennateCentricPlot_cap <- glue("**Comparison of total number of genes encod
 ```
 
 Pennate and centric diatoms O~2~^•−^ have similar fractions of their genomes encoding O~2~^•−^ scavenging (p = `r ScientificTen(SupOxScavPennateCentricPlot_pval$p)`) (Data not presented).
-Our results support our hypothesis that differential diffusional exchange across diatoms of different shape does not influence the fraction of total gene content that encodes O~2~^•−^ scavenging enzymes, because O~2~^•−^ diffusion is blocked by the cell membrane irrespective of cell shape. XXX supporting Hypothesis \@ref(hyp:SupOx) 
+Our results support our hypothesis that differential diffusional exchange across diatoms of different shape does not influence the fraction of total gene content that encodes O~2~^•−^ scavenging enzymes, because O~2~^•−^ diffusion is blocked by the cell membrane irrespective of cell shape (Hypothesis \@ref(hyp:SupOx)).
 Given that the O~2~^•−^ is poorly diffusible across membranes, intracellularly produced O~2~^•−^ has to be scavenged to limit detrimental reactions of O~2~^•−^ [@bergaminiOxygenReactiveOxygen2004]. As a result, cells universally maintain the genomic capacity to scavenge O~2~^•−^. Differences between genomic patterns of pennate and centric diatoms may arise when comparing metallo-forms of SOD, noting that @groussmanDiversityEvolutionaryHistory2015 found that pennate diatoms transcribe Cu/Zn-SOD but not Fe-SOD, whereas centric diatoms transcribe Fe-SOD more frequently than they transcribe Cu/Zn-SOD.
 
 ## Hydrogen Peroxide {.unnumbered}
@@ -1808,7 +1804,7 @@ OchrophyteRadPlot_cap <- glue("**Comparison of log~10~ (Total number of genes en
 OchrophyteRadPlot
 ```
 
-```{r EukHyPeDotPlot, fig.height = 20, fig.width = 10}
+```{r EukHyPeDotPlot, fig.height = 20, fig.width = 10, echo = FALSE}
 EukHyPeDotPlot <- MergedData_na %>%
   filter(HyPe == "Production" | HyPe == "Scavenging", 
          Taxa != "Prokaryote",
@@ -1837,7 +1833,7 @@ EukHyPeDotPlot
 # saveRDS(EukHyPeDotPlot, file = file.path(Figures, "EukHyPeDotPlot.Rds"))
 ```
 
-```{r ProkHyPeDotPlot, fig.height = 10, fig.width = 10}
+```{r ProkHyPeDotPlot, fig.height = 10, fig.width = 10, echo = FALSE}
 ProkHyPeDotPlot <- MergedData_na %>%
   filter(HyPe == "Production" | HyPe == "Scavenging", 
          Taxa == "Prokaryote",
@@ -1861,7 +1857,7 @@ ProkHyPeDotPlot
 # saveRDS(ProkHyPeDotPlot, file = file.path(Figures, "ProkHyPeDotPlot.Rds"))
 ```
 
-```{r EukSupOxDotPlot, fig.height = 20, fig.width = 10}
+```{r EukSupOxDotPlot, fig.height = 20, fig.width = 10, echo = FALSE}
 EukSupOxDotPlot <- MergedData_na %>%
   filter(SupOx == "Scavenging" | SupOx == "Production", 
          Taxa != "Prokaryote",
@@ -1885,7 +1881,7 @@ EukSupOxDotPlot
 # saveRDS(EukSupOxDotPlot, file = file.path(Figures, "EukSupOxDotPlot.Rds"))
 ```
 
-```{r ProkSupOxDotPlot, fig.height = 10, fig.width = 10}
+```{r ProkSupOxDotPlot, fig.height = 10, fig.width = 10, echo = FALSE}
 ProkSupOxDotPlot <- MergedData_na %>%
   filter(SupOx == "Scavenging" | SupOx == "Production", 
          Taxa == "Prokaryote",
@@ -1909,7 +1905,7 @@ ProkSupOxDotPlot <- MergedData_na %>%
 # saveRDS(ProkSupOxDotPlot, file = file.path(Figures, "ProkSupOxDotPlot.Rds"))
 ```
 
-```{r EukNitOxDotPlot, fig.height = 20, fig.width = 10}
+```{r EukNitOxDotPlot, fig.height = 20, fig.width = 10, echo = FALSE}
 EukNitOxDotPlot <- MergedData_na %>%
   filter(NitOx == "Scavenging" | NitOx == "Production", 
          Taxa != "Prokaryote",
@@ -1933,7 +1929,7 @@ EukNitOxDotPlot
 # saveRDS(EukSupOxDotPlot, file = file.path(Figures, "EukSupOxDotPlot.Rds"))
 ```
 
-```{r ProkNitOxDotPlot, fig.height = 10, fig.width = 10}
+```{r ProkNitOxDotPlot, fig.height = 10, fig.width = 10, echo = FALSE}
 ProkNitOxDotPlot <- MergedData_na %>%
   filter(NitOx == "Scavenging" | NitOx == "Production", 
          Taxa == "Prokaryote",
