@@ -1804,6 +1804,54 @@ OchrophyteRadPlot_cap <- glue("**Comparison of log~10~ (Total number of genes en
 OchrophyteRadPlot
 ```
 
+```{r EukSupOxDotPlot, fig.height = 20, fig.width = 10, echo = FALSE}
+EukSupOxDotPlot <- MergedData_na %>%
+  filter(SupOx == "Scavenging" | SupOx == "Production", 
+         Taxa != "Prokaryote",
+         ROSEnzyme_TotalCount != 0, 
+         GeneModels_count != 0) %>%
+  ggplot() +
+  geom_point(aes(x = EnzymeName, y= reorder(interaction(Genus, species, Strain), -Radius_um), size = ROSGene_count, color = Taxa, shape = Ome)) +
+  scale_x_discrete(position ="top") +
+  scale_color_manual(values = TaxaColors) +
+  scale_shape_manual(values = c(16,1))+
+  scale_radius(breaks=c(2,4,6,8,10,12,15,20,25)) +
+  ggtitle("SupOx") +
+  theme_bw() +
+  # theme(axis.text.x = element_text(angle = 90, size = 10),
+  #       axis.text.y = element_text(face="italic",size = 10, vjust = 0)) +
+  facet_grid(rows = vars(Taxa), cols = vars(SupOx), scales = "free", space = "free") +
+  ggpubr::rotate_x_text(hjust = 0) #+
+  # theme(panel.grid.major = element_blank(),
+  #       panel.grid.minor = element_blank())
+EukSupOxDotPlot
+# saveRDS(EukSupOxDotPlot, file = file.path(Figures, "EukSupOxDotPlot.Rds"))
+```
+
+```{r ProkSupOxDotPlot, fig.height = 10, fig.width = 10, echo = FALSE}
+ProkSupOxDotPlot <- MergedData_na %>%
+  filter(SupOx == "Scavenging" | SupOx == "Production", 
+         Taxa == "Prokaryote",
+         ROSEnzyme_TotalCount != 0, 
+         GeneModels_count != 0) %>%
+  ggplot() +
+  geom_point(aes(x = EnzymeName, y= reorder(interaction(Genus, species, Strain), -Radius_um), size = ROSGene_count, color = Genus, shape = Ome)) +
+  scale_x_discrete(position ="top") +
+  # scale_color_manual(values = TaxaColors) +
+  scale_shape_manual(values = c(16,1))+
+  scale_radius(breaks=c(1,2,3,4,5)) +
+  ggtitle("SupOx") +
+  theme_bw() +
+  # theme(axis.text.x = element_text(angle = 90, size = 10),
+  #       axis.text.y = element_text(face="italic",size = 10, vjust = 0)) +
+  facet_grid(rows = vars(Taxa), cols = vars(SupOx), scales = "free", space = "free") +
+  ggpubr::rotate_x_text(hjust = 0) #+
+  # theme(panel.grid.major = element_blank(),
+  #       panel.grid.minor = element_blank())
+# ProkSupOxDotPlot
+# saveRDS(ProkSupOxDotPlot, file = file.path(Figures, "ProkSupOxDotPlot.Rds"))
+```
+
 ```{r EukHyPeDotPlot, fig.height = 20, fig.width = 10, echo = FALSE}
 EukHyPeDotPlot <- MergedData_na %>%
   filter(HyPe == "Production" | HyPe == "Scavenging", 
@@ -1857,54 +1905,6 @@ ProkHyPeDotPlot
 # saveRDS(ProkHyPeDotPlot, file = file.path(Figures, "ProkHyPeDotPlot.Rds"))
 ```
 
-```{r EukSupOxDotPlot, fig.height = 20, fig.width = 10, echo = FALSE}
-EukSupOxDotPlot <- MergedData_na %>%
-  filter(SupOx == "Scavenging" | SupOx == "Production", 
-         Taxa != "Prokaryote",
-         ROSEnzyme_TotalCount != 0, 
-         GeneModels_count != 0) %>%
-  ggplot() +
-  geom_point(aes(x = EnzymeName, y= reorder(interaction(Genus, species, Strain), -Radius_um), size = ROSGene_count, color = Taxa, shape = Ome)) +
-  scale_x_discrete(position ="top") +
-  scale_color_manual(values = TaxaColors) +
-  scale_shape_manual(values = c(16,1))+
-  scale_radius(breaks=c(2,4,6,8,10,12,15,20,25)) +
-  ggtitle("SupOx") +
-  theme_bw() +
-  # theme(axis.text.x = element_text(angle = 90, size = 10),
-  #       axis.text.y = element_text(face="italic",size = 10, vjust = 0)) +
-  facet_grid(rows = vars(Taxa), cols = vars(SupOx), scales = "free", space = "free") +
-  ggpubr::rotate_x_text(hjust = 0) #+
-  # theme(panel.grid.major = element_blank(),
-  #       panel.grid.minor = element_blank())
-EukSupOxDotPlot
-# saveRDS(EukSupOxDotPlot, file = file.path(Figures, "EukSupOxDotPlot.Rds"))
-```
-
-```{r ProkSupOxDotPlot, fig.height = 10, fig.width = 10, echo = FALSE}
-ProkSupOxDotPlot <- MergedData_na %>%
-  filter(SupOx == "Scavenging" | SupOx == "Production", 
-         Taxa == "Prokaryote",
-         ROSEnzyme_TotalCount != 0, 
-         GeneModels_count != 0) %>%
-  ggplot() +
-  geom_point(aes(x = EnzymeName, y= reorder(interaction(Genus, species, Strain), -Radius_um), size = ROSGene_count, color = Genus, shape = Ome)) +
-  scale_x_discrete(position ="top") +
-  # scale_color_manual(values = TaxaColors) +
-  scale_shape_manual(values = c(16,1))+
-  scale_radius(breaks=c(1,2,3,4,5)) +
-  ggtitle("SupOx") +
-  theme_bw() +
-  # theme(axis.text.x = element_text(angle = 90, size = 10),
-  #       axis.text.y = element_text(face="italic",size = 10, vjust = 0)) +
-  facet_grid(rows = vars(Taxa), cols = vars(SupOx), scales = "free", space = "free") +
-  ggpubr::rotate_x_text(hjust = 0) #+
-  # theme(panel.grid.major = element_blank(),
-  #       panel.grid.minor = element_blank())
-# ProkSupOxDotPlot
-# saveRDS(ProkSupOxDotPlot, file = file.path(Figures, "ProkSupOxDotPlot.Rds"))
-```
-
 ```{r EukNitOxDotPlot, fig.height = 20, fig.width = 10, echo = FALSE}
 EukNitOxDotPlot <- MergedData_na %>%
   filter(NitOx == "Scavenging" | NitOx == "Production", 
@@ -1952,8 +1952,6 @@ ProkNitOxDotPlot <- MergedData_na %>%
 # ProkNitOxDotPlot
 # saveRDS(ProkSupOxDotPlot, file = file.path(Figures, "ProkSupOxDotPlot.Rds"))
 ```
-
-XXX likely worth omitting
 
 ## Supplementary Tables {.unnumbered}
 
