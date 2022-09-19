@@ -220,6 +220,11 @@ MergedData_na <- MergedData_na %>%
 MergedData_na$taxon_facet <- factor(MergedData_na$Taxa, levels= c("Cryptophyte","Diatom","Dinoflagellate" ,"Eustigmatophyte","Green","Haptophyte", "Pelagophyte", "Phaeista", "Red", "Prokaryote"))
 ```
 
+```{r}
+HAMergedData <- MergedData %>%
+  filter(ECNumber %in% c("1.11.1.11", "1.6.5.4", "1.8.5.1", "1.8.1.7"))
+```
+
 # Abstract {.unnumbered}
 
 Marine phytoplankton are an evolutionarily diverse functional group. The metabolism of phytoplankton generates reactive oxygen species, which, if left un-scavenged, can have detrimental cascading effects. The Black Queen Hypothesis [@morrisBlackQueenHypothesis2012] postulates that some functions can be outsourced from genomes to the community. We therefore explored gene families encoding reactive oxygen detoxification enzymes across eukaryotic marine phytoplankton taxa spanning a wide size range. Superoxide has a very short diffusional path from site of generation, and no taxon has outsourced all isoforms of superoxide dismutase. The smallest phytoplankters do show complete absences of genes encoding catalase peroxidase and catalase enzymes, responsible for the detoxification of hydrogen peroxide, which has a much longer diffusional path. A cell diameter of ~2.8 μm is a potential upper size threshold for the loss of catalase, which we hypothesize reflects diffusional limitations on larger cells that preclude their participation in community level detoxification of hydrogen peroxide, forcing them to rely upon their own detoxification. Indeed, we found a positive correlation between cell size and the total number of genes within the cell genome encoding reactive oxygen detoxification enzymes. Nevertheless cells with larger genomes allocate a smaller fraction of their total genomic resource to reactive oxygen detoxification. 
@@ -232,7 +237,7 @@ Phytoplankton mediate marine productivity, elemental cycling, and atmospheric co
 Among marine green algae the Prasinophytes are the earliest diverging lineage(s) and include the smallest free-living eukaryote, *Ostreococcus tauri* [@lemieuxSixNewlySequenced2014]. The Prasinophytes are thus of particular interest with representatives with small genomes and cell sizes approaching those of the picocyanobacteria. Prasinophyte green algae were once the most abundant eukaryotic phytoplankton lineages in the ocean, but have since been overtaken by the members of lineages with 'red' chloroplasts derived from secondary endosymbioses, particularly diatoms [@falkowskiEvolutionModernEukaryotic2004].  
 Diatoms have a characteristic frustule, a cell wall composed of silica, that varies in nanostructure among species [@armbrustGenomeDiatomThalassiosira2004; @leliaertPhylogenyMolecularEvolution2012]. Diatoms currently generate ~40% of the organic carbon produced in the earth’s oceans [@nelsonProductionDissolutionBiogenic1995]. The varying sizes and morphologies across diatoms [@medlinEvolutionDiatomsMajor2016] can provide insight into patterns across cell sizes for presence or absence of genes encoding particular enzymatic families, in particular those which detoxify reactive oxygen species (ROS).  
 
-All phytoplankton lineages are photosynthetic and produce multiple ROS as by-products of their metabolism [@vassRoleChargeRecombination2011]. ROS is produced largely in the chloroplast, mitochondria, and peroxisomes, but can also be generated in the plasma membrane, apoplast, endoplasmic reticulum, and cell wall [@apelREACTIVEOXYGENSPECIES2004; @sharmaReactiveOxygenSpecies2012] (Figure 1). Outside the cell multiple reactions generate ROS in seawater, or indeed in seawater-based media [@jeffreymorrisContinuousHydrogenPeroxide2013]. Rainfall on the ocean can temporarily increase extracellular H~2~O~2~ concentrations to greater than 10 times the baseline concentration of surface seawater, which ranges from 114-820 x 10^-7^ mol L^-1^ in the Gulf of Mexico, or  84-206 x 10^-7^ mol L^-1^ in the Atlantic Ocean [@cooperContributionRainwaterVariability1987].
+All phytoplankton lineages are photosynthetic and produce multiple ROS as by-products of their metabolism [@vassRoleChargeRecombination2011]. ROS is produced largely in the chloroplast, mitochondria, and peroxisomes, but can also be generated in the plasma membrane, apoplast, endoplasmic reticulum, and cell wall [@apelREACTIVEOXYGENSPECIES2004; @sharmaReactiveOxygenSpecies2012]. Outside the cell multiple reactions generate ROS in seawater, or indeed in seawater-based media [@jeffreymorrisContinuousHydrogenPeroxide2013]. 
 
 The lifetimes, and therefore the effective diffusion path lengths of ROS before destruction, are variable. Ground state oxygen (O=O) can be converted to excited singlet oxygen (^1^O~2~) via excitation energy transfer from pigments. ^1^O~2~ has a short lifetime and is not enzymatically scavenged,  but rather excitonically quenched by carotenoids or other molecules [@ramelChemicalQuenchingSinglet2012] very near the sites of generation[@ramelChemicalQuenchingSinglet2012; @vassRoleSingletOxygen2019]. If not quenched O~2~ can also undergo stepwise reductions to produce in turn superoxide anions (O~2~^-^), hydrogen peroxide (H~2~O~2~), and the hydroxyl radical (•OH)  [@apelREACTIVEOXYGENSPECIES2004].  O~2~^-^ is highly reactive, with diffusion path lengths before destruction estimated at only 8.6E-02 μm in water or 1.71E-01 μm in phospholipid membrane [@maischRoleSingletOxygen2007], with thus little movement from the site of initial generation to the site of reaction, whether inside or outside the cell. H~2~O~2~ is in contrast relatively stable and so diffusion path lengths as long as 2.44 mm have been found in oligotrophic seawater [@petasneHydrogenPeroxideLifetimes1997]. H~2~O~2~ can thus survive long enough to potentially diffuse across cell membranes and traverse cells, so intracellularly produced ROS can contribute to the oceanic communal pool [@seaverHydrogenPeroxideFluxes2001] and *vice versa*.   
 
@@ -396,7 +401,7 @@ There are multiple types of NOX, including NOX1, NOX2, NOX3, and NOX5 mainly pro
 ```{r , include = FALSE}
 EnzymeRad <- MergedData %>% 
   filter(Taxa != "Prokaryote") %>%
-  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, ROSGene_count, ECNumber, EnzymeName) %>%
+  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, SupOx, NitOx, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, ROSGene_count, ECNumber, EnzymeName) %>%
   unique() %>%
   mutate(ROSGene_countL = ROSGene_count %>% as.logical() %>% as.numeric()) %>%
   # filter(GeneModels_count != 0) %>% #This is because of introducing exposure
@@ -487,12 +492,13 @@ EnzymeFlagellaFig <- EnzymeFlagella %>%
 ```
 
 
-```{r, fig.height = 20, fig.width = 10}
+```{r, fig.height = 30, fig.width = 20}
 # EnzymeRad$Includes <- "Eukaryotes"
 # EnzymeRadTaxa$Includes <- "Eukaryotes + Taxa"
 # in logit, y = e^(mx+b)/(1+e^(mx+b))
-EnzymeRadFig <- EnzymeRad %>%
+HyPeEnzymeRadFig <- EnzymeRad %>%
   unnest(param_b_offset) %>%
+  
   pivot_wider(names_from = term,
               values_from =  c(estimate, std.error, statistic, p.value)) %>%
   mutate(halfwaypointY = 0.5,
@@ -500,6 +506,7 @@ EnzymeRadFig <- EnzymeRad %>%
          ) %>%
   filter(`p.value_.$log_Radius_um` < 0.05) %>%
   unnest(data, pred_b_offset) %>%
+  filter(!is.na(HyPe)) %>%
   # mutate(EnzymeName_facet = factor(EnzymeName, levels = desc(.$halfwaypointY))) %>%
   ggplot() +
   # geom_rect(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf, aes(fill = HyPe), alpha = 0.005) +
@@ -508,13 +515,42 @@ EnzymeRadFig <- EnzymeRad %>%
   geom_hline(yintercept = 0.5, linetype = "dashed", color = "black") +
   geom_vline(aes(xintercept = halfwaypointX), linetype = "dashed") +
   geom_line(aes(x = log_Radius_um, y = exp(`estimate_.$log_Radius_um`*log_Radius_um + `estimate_(Intercept)`)/(1+exp(`estimate_.$log_Radius_um`*log_Radius_um + `estimate_(Intercept)`))), color = "red") +
-  facet_grid(rows = vars(reorder(EnzymeName, halfwaypointX))) +
+  facet_grid(rows = vars(reorder(EnzymeName, halfwaypointX)), cols = vars(HyPe)) +
   # geom_ribbon(aes(x = log_Radius_um, ymin = logit2prob(.fitted - `std.error_.$log_Radius_um`), ymax = logit2prob(.fitted + `std.error_.$log_Radius_um`)), alpha = 0.1) +
   scale_colour_manual(name = "Taxa", values =TaxaColors) +
   theme_bw()
-EnzymeRadFig
+HyPeEnzymeRadFig
 ```
 
+```{r, fig.height = 4, fig.width = 10}
+# EnzymeRad$Includes <- "Eukaryotes"
+# EnzymeRadTaxa$Includes <- "Eukaryotes + Taxa"
+# in logit, y = e^(mx+b)/(1+e^(mx+b))
+NitOxEnzymeRadFig <- EnzymeRad %>%
+  unnest(param_b_offset) %>%
+  
+  pivot_wider(names_from = term,
+              values_from =  c(estimate, std.error, statistic, p.value)) %>%
+  mutate(halfwaypointY = 0.5,
+         halfwaypointX = log((halfwaypointY/(exp(`estimate_(Intercept)`)-halfwaypointY*exp(`estimate_(Intercept)`)))^(1/`estimate_.$log_Radius_um`)),
+         ) %>%
+  filter(`p.value_.$log_Radius_um` < 0.05) %>%
+  unnest(data, pred_b_offset) %>%
+  filter(!is.na(NitOx)) %>%
+  # mutate(EnzymeName_facet = factor(EnzymeName, levels = desc(.$halfwaypointY))) %>%
+  ggplot() +
+  # geom_rect(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf, aes(fill = HyPe), alpha = 0.005) +
+  geom_point(aes(x = log_Radius_um, y = ROSGene_countL, color = Taxa)) +
+  geom_line(aes(x = log_Radius_um, y = logit2prob(.fitted))) +
+  geom_hline(yintercept = 0.5, linetype = "dashed", color = "black") +
+  geom_vline(aes(xintercept = halfwaypointX), linetype = "dashed") +
+  geom_line(aes(x = log_Radius_um, y = exp(`estimate_.$log_Radius_um`*log_Radius_um + `estimate_(Intercept)`)/(1+exp(`estimate_.$log_Radius_um`*log_Radius_um + `estimate_(Intercept)`))), color = "red") +
+  facet_grid(rows = vars(reorder(EnzymeName, halfwaypointX)), cols = vars(NitOx)) +
+  # geom_ribbon(aes(x = log_Radius_um, ymin = logit2prob(.fitted - `std.error_.$log_Radius_um`), ymax = logit2prob(.fitted + `std.error_.$log_Radius_um`)), alpha = 0.1) +
+  scale_colour_manual(name = "Taxa", values =TaxaColors) +
+  theme_bw()
+NitOxEnzymeRadFig
+```
 
 ```{r, fig.height = 20, fig.width = 10}
 EnzymeRadTaxaFig <- EnzymeRadTaxa %>%
@@ -635,7 +671,104 @@ EukHyPeDotPlot <- MergedData_na %>%
 # theme(axis.text.x = element_text(face = "bold"))
     # axis.text.x = element_text(face = ifelse(ROSEnzymes$HyPe_Prisec == "Primary", "bold", NULL)))
 EukHyPeDotPlot
-saveRDS(EukHyPeDotPlot, file = file.path(Figures, "EukHyPeDotPlot.Rds"))
+# saveRDS(EukHyPeDotPlot, file = file.path(Figures, "EukHyPeDotPlot.Rds"))
+```
+
+```{r HalliwellAsadaEukHyPeDotPlot, fig.height = 20, fig.width = 10}
+HalliwellAsadaEukHyPeDotPlot <- MergedData_na %>%
+  filter(HyPe == "Production" | HyPe == "Scavenging", 
+         Taxa != "Prokaryote",
+         ROSEnzyme_TotalCount != 0,
+         GeneModels_count != 0, 
+         ECNumber %in% c("1.11.1.11", "1.6.5.4", "1.8.5.1", "1.8.1.7")) %>%
+  ggplot() +
+  geom_point(aes(x = EnzymeName, y= reorder(Name, -Radius_um), size = ROSGene_count, color = Taxa, shape = Ome)) +
+  scale_x_discrete(position ="top") +
+  scale_color_manual(values = TaxaColors) +
+  scale_shape_manual(values = c(16,1))+
+  scale_radius(breaks=c(2,4,6,8,10,12,15,20,25)) +
+  ggtitle("HyPe") +
+  theme_bw() +
+  # theme(axis.text.x = element_text(angle = 90, size = 10),
+  #       axis.text.y = element_text(face="italic",size = 10, vjust = 0)) +
+  facet_grid(rows = vars(Taxa), cols = vars(HyPe), scales = "free", space = "free") +
+  ggpubr::rotate_x_text(hjust = 0)# +
+  # theme(axis.text.x = element_text(face = ifelse(levels(MergedData_na$EnzymeName %in% MergedData_na$HyPe_PriSec), "bold", "italic")))
+  # theme(axis.text.x = ifelse(MergedData_na$HyPe_PriSec == "Primary", element_text(face = "bold"), NULL))
+  # ifelse(MergedData_na$HyPe_PriSec == "Primary", theme(axis.text.x = element_text(face = "bold")), NULL)
+  # ifelse(MergedData_na$HyPe_PriSec == "Primary" ~ theme(axis.text.x = element_text(face = "bold")),
+            # NULL)
+# theme(axis.text.x = element_text(face = "bold"))
+    # axis.text.x = element_text(face = ifelse(ROSEnzymes$HyPe_Prisec == "Primary", "bold", NULL)))
+HalliwellAsadaEukHyPeDotPlot
+# saveRDS(EukHyPeDotPlot, file = file.path(Figures, "EukHyPeDotPlot.Rds"))
+```
+
+```{r HalliwellAsadaEukGenHyPeDotPlot, fig.height = 15, fig.width = 10}
+HalliwellAsadaEukGenHyPeDotPlot <- MergedData_na %>%
+  filter(HyPe == "Production" | HyPe == "Scavenging", 
+         Taxa != "Prokaryote",
+         Ome == "Genome",
+         ROSEnzyme_TotalCount != 0,
+         GeneModels_count != 0, 
+         ECNumber %in% c("1.11.1.11", "1.6.5.4", "1.8.5.1", "1.8.1.7")) %>%
+  ggplot() +
+  geom_point(aes(x = EnzymeName, y= reorder(Name, -Radius_um), size = ROSGene_count, color = Taxa, shape = Ome)) +
+  scale_x_discrete(position ="top") +
+  scale_color_manual(values = TaxaColors) +
+  scale_shape_manual(values = c(16,1))+
+  scale_radius(breaks=c(2,4,6,8,10,12,15,20,25)) +
+  ggtitle("HyPe") +
+  theme_bw() +
+  # theme(axis.text.x = element_text(angle = 90, size = 10),
+  #       axis.text.y = element_text(face="italic",size = 10, vjust = 0)) +
+  facet_grid(rows = vars(Taxa), cols = vars(HyPe), scales = "free", space = "free") +
+  ggpubr::rotate_x_text(hjust = 0)# +
+  # theme(axis.text.x = element_text(face = ifelse(levels(MergedData_na$EnzymeName %in% MergedData_na$HyPe_PriSec), "bold", "italic")))
+  # theme(axis.text.x = ifelse(MergedData_na$HyPe_PriSec == "Primary", element_text(face = "bold"), NULL))
+  # ifelse(MergedData_na$HyPe_PriSec == "Primary", theme(axis.text.x = element_text(face = "bold")), NULL)
+  # ifelse(MergedData_na$HyPe_PriSec == "Primary" ~ theme(axis.text.x = element_text(face = "bold")),
+            # NULL)
+# theme(axis.text.x = element_text(face = "bold"))
+    # axis.text.x = element_text(face = ifelse(ROSEnzymes$HyPe_Prisec == "Primary", "bold", NULL)))
+HalliwellAsadaEukGenHyPeDotPlot
+# saveRDS(EukHyPeDotPlot, file = file.path(Figures, "EukHyPeDotPlot.Rds"))
+```
+
+- Ascorbate peroxidase universally rpesent
+- GR almost universally present
+- DHAR - Absent in diatoms and prasinophytes
+- MDHAR - Absent in diatoms, eustimatophytes and haptophytes. 
+
+
+```{r HalliwellAsadaProkHyPeDotPlot, fig.height = 20, fig.width = 10}
+HalliwellAsadaProkHyPeDotPlot <- MergedData_na %>%
+  filter(HyPe == "Production" | HyPe == "Scavenging", 
+         Taxa == "Prokaryote",
+         ROSEnzyme_TotalCount != 0,
+         GeneModels_count != 0, 
+         ECNumber %in% c("1.11.1.11", "1.6.5.4", "1.8.5.1", "1.8.1.7")) %>%
+  ggplot() +
+  geom_point(aes(x = EnzymeName, y= reorder(Name, -Radius_um), size = ROSGene_count, color = Taxa, shape = Ome)) +
+  scale_x_discrete(position ="top") +
+  scale_color_manual(values = TaxaColors) +
+  scale_shape_manual(values = c(16,1))+
+  scale_radius(breaks=c(2,4,6,8,10,12,15,20,25)) +
+  ggtitle("HyPe") +
+  theme_bw() +
+  # theme(axis.text.x = element_text(angle = 90, size = 10),
+  #       axis.text.y = element_text(face="italic",size = 10, vjust = 0)) +
+  facet_grid(rows = vars(Taxa), cols = vars(HyPe), scales = "free", space = "free") +
+  ggpubr::rotate_x_text(hjust = 0)# +
+  # theme(axis.text.x = element_text(face = ifelse(levels(MergedData_na$EnzymeName %in% MergedData_na$HyPe_PriSec), "bold", "italic")))
+  # theme(axis.text.x = ifelse(MergedData_na$HyPe_PriSec == "Primary", element_text(face = "bold"), NULL))
+  # ifelse(MergedData_na$HyPe_PriSec == "Primary", theme(axis.text.x = element_text(face = "bold")), NULL)
+  # ifelse(MergedData_na$HyPe_PriSec == "Primary" ~ theme(axis.text.x = element_text(face = "bold")),
+            # NULL)
+# theme(axis.text.x = element_text(face = "bold"))
+    # axis.text.x = element_text(face = ifelse(ROSEnzymes$HyPe_Prisec == "Primary", "bold", NULL)))
+HalliwellAsadaProkHyPeDotPlot
+# saveRDS(EukHyPeDotPlot, file = file.path(Figures, "EukHyPeDotPlot.Rds"))
 ```
 
 ```{r ProkHyPeDotPlot, fig.height = 10, fig.width = 10}
@@ -693,7 +826,11 @@ EukSupOxDotPlot <- MergedData_na %>%
   # theme(panel.grid.major = element_blank(),
   #       panel.grid.minor = element_blank())
 EukSupOxDotPlot
-saveRDS(EukSupOxDotPlot, file = file.path(Figures, "EukSupOxDotPlot.Rds"))
+# saveRDS(EukSupOxDotPlot, file = file.path(Figures, "EukSupOxDotPlot.Rds"))
+EukSupOxDotPlot_cap <- glue("**Summary of O2•− scavenging enzymes encoded within genomes and transcriptomes of eukaryotic phytoplankton analyzedTaxa are ordered from top to bottom along the left according to increasing median cell diameter within each taxonomic lineage.**", 
+                        "Symbol colour corresponds to taxonomic lineages (‘Taxa’).Filled data points indicate that the data obtained from that organism was sourced from a genome, and unfilled data points were sourced from a transcriptome.", 
+                        "The size of the symbol increases with the number of members of each enzyme found within each genome or transcriptome.",
+                        "Symbol absence means no sequences known to encode the enzyme family of interest were found in the target genome or transcriptome.", .sep = " ")
 ```
 
 ```{r ProkSupOxDotPlot, fig.height = 10, fig.width = 10}
@@ -717,7 +854,11 @@ ProkSupOxDotPlot <- MergedData_na %>%
   # theme(panel.grid.major = element_blank(),
   #       panel.grid.minor = element_blank())
 ProkSupOxDotPlot
-saveRDS(ProkSupOxDotPlot, file = file.path(Figures, "ProkSupOxDotPlot.Rds"))
+# saveRDS(ProkSupOxDotPlot, file = file.path(Figures, "ProkSupOxDotPlot.Rds"))
+
+ProkSupOxDotPlot_cap <- glue("**Summary of O2•− scavenging enzymes encoded within genomes of prokaryotic phytoplankton analyzedTaxa are ordered from top to bottom along the left according to increasing median cell diameter within each taxonomic lineage.**", 
+                         "Symbol colour corresponds to the genus of the prokaryote.Filled data points indicate that the data obtained from that organism was sourced from a genome, and unfilled data points were sourced from a transcriptome.", 
+                         "The size of the symbol increases with the number of members of each enzyme found within each genome or transcriptome.Symbol absence means no sequences known to encode the enzyme family of interest were found in the target genome or transcriptome.", .sep = " ")
 ```
 
 Neither prokaryotic nor eukaryotic phytoplankton had any sequences annotated that matched with enzymes that specifically code for the production of superoxide. All prokaryotic (Figure \@ref(fig:EukSupOxDotPlot)) and eukaryotic (Figure \@ref(fig:ProkSupOxDotPlot)) phytoplankton (with the exception of a single transcriptome from *Micromonas polaris*) have genes encoding O~2~^•−^ Scavenging enzymes, as they all have genes encoding the ubiquitous enzyme SOD.
@@ -749,6 +890,65 @@ Alternatively, it is possible that some of the NOS may exhibit some NOD-like fun
 
 As NOD sequences have only been identified once before in phytoplankton, through metatranscriptomic analyses [@piccianoNitricOxideSynthase2019], there is limited understanding as to what paths may contribute to the active removal of ^•^NO, and the lack of ^•^NO scavenging genes in genomes across multiple organisms. Perhaps the low reactivity of ^•^NO does not warrant the active removal of ^•^NO as long as the concentration does not exceed the toxic threshold. This explanation is plausible given that *Platymonas helgolandica*, *Platymonas subcordiformis*, *Skeletonema costatum*, *Gymnodinium sp.*, and *Prorocentrum donghaiense* showed optimum growth in the presence of ^•^NO concentrations between 10^-9^ and 10^-6^ mol L^−1^ [@peifengEffectsNitricOxide2021], which are higher than the concentrations found in the ocean (Table \@ref(tab:ROSDiffusion)).
 
+```{r EukNitOxDotPlot, fig.height = 20, fig.width = 10}
+EukNitOxDotPlot <- MergedData_na %>%
+  filter(NitOx == "Scavenging" | NitOx == "Production", 
+         Taxa != "Prokaryote",
+         ROSEnzyme_TotalCount != 0, 
+         GeneModels_count != 0) %>%
+  ggplot() +
+  geom_point(aes(x = EnzymeName, y= reorder(interaction(Genus, species, Strain), -Radius_um), size = ROSGene_count, color = Taxa, shape = Ome)) +
+  scale_x_discrete(position ="top") +
+  scale_color_manual(values = TaxaColors) +
+  scale_shape_manual(values = c(16,1))+
+  scale_radius(breaks=c(2,4,6,8,10,12,15,20,25)) +
+  ggtitle("NitOx") +
+  theme_bw() +
+  # theme(axis.text.x = element_text(angle = 90, size = 10),
+  #       axis.text.y = element_text(face="italic",size = 10, vjust = 0)) +
+  facet_grid(rows = vars(Taxa), cols = vars(NitOx), scales = "free", space = "free") +
+  ggpubr::rotate_x_text(hjust = 0) #+
+  # theme(panel.grid.major = element_blank(),
+  #       panel.grid.minor = element_blank())
+EukNitOxDotPlot
+# saveRDS(EukSupOxDotPlot, file = file.path(Figures, "EukSupOxDotPlot.Rds"))
+```
 
+```{r ProkNitOxDotPlot, fig.height = 10, fig.width = 10}
+ProkNitOxDotPlot <- MergedData_na %>%
+  filter(NitOx == "Scavenging" | NitOx == "Production", 
+         Taxa == "Prokaryote",
+         ROSEnzyme_TotalCount != 0, 
+         GeneModels_count != 0) %>%
+  ggplot() +
+  geom_point(aes(x = EnzymeName, y= reorder(interaction(Genus, species, Strain), -Radius_um), size = ROSGene_count, color = Genus, shape = Ome)) +
+  scale_x_discrete(position ="top") +
+  # scale_color_manual(values = TaxaColors) +
+  scale_shape_manual(values = c(16,1))+
+  scale_radius(breaks=c(1,2,3,4,5)) +
+  ggtitle("SupOx") +
+  theme_bw() +
+  # theme(axis.text.x = element_text(angle = 90, size = 10),
+  #       axis.text.y = element_text(face="italic",size = 10, vjust = 0)) +
+  facet_grid(rows = vars(Taxa), cols = vars(NitOx), scales = "free", space = "free") +
+  ggpubr::rotate_x_text(hjust = 0) #+
+  # theme(panel.grid.major = element_blank(),
+  #       panel.grid.minor = element_blank())
+ProkNitOxDotPlot
+# saveRDS(ProkSupOxDotPlot, file = file.path(Figures, "ProkSupOxDotPlot.Rds"))
+```
+
+```{r, , fig.height = 8, fig.width = 10}
+MergedData %>%
+  filter(ECNumber %in% c("1.14.13.39", "1.14.12.17"),
+         !is.na(NitOx)) %>%
+  select(FileName, EnzymeName, NitOx, ROSGene_count, Taxa) %>%
+  pivot_wider(., names_from = c(EnzymeName, NitOx), values_from = ROSGene_count) %>%
+  ggplot() +
+  geom_count(aes(x = `nitric oxide dioxygenase_Scavenging`, y = `nitric-oxide synthase (NADPH)_Production`)) +
+  facet_wrap(vars(Taxa)) +
+  coord_fixed() + 
+  theme_bw()
+```
 
 XXX Nitric Oxide dotplots - could differences in microbiome of pennate and centric diatoms explain their varying allocation to nitric oxide? [@johanssonFriendsBenefitsExploring2019]
