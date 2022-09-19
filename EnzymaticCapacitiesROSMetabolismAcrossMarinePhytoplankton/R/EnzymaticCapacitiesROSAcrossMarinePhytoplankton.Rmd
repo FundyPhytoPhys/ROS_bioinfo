@@ -282,16 +282,6 @@ We hypothesize that larger phytoplankton will have larger and more complete fami
 
 Table \@ref(tab:DataDictionary) contains a data dictionary of variable names used in our analysis, their definitions and locations in code and data objects.
 
-## Bioinformatic Pipeline {.unnumbered}
-
-We downloaded Genomes and/or Transcriptomes of  marine phytoplankton (Table \@ref(tab:MetaData)) from the National Center for Biotechnology Information (NCBI) [@DatabaseResourcesNational2016], Joint Genome Institute (JGI) [@grigorievGenomePortalDepartment2012; @nordbergGenomePortalDepartment2014], iMicrobe [@youens-clarkIMicrobeToolsDatadriven2019], European Nucleotide Archive (ENA) [@leinonenEuropeanNucleotideArchive2011], pico-PLAZA [@vandepoelePicoPLAZAGenomeDatabase2013],  1000 Plants (1KP) [@matasciDataAccess0002014] or the Reef Genomics Database [@liewReefgenomicsOrgRepository2016].
-
-We implemented an automated pipeline using Snakemake [@molderSustainableDataAnalysis2021] to pass gene sequences from downloaded Genomes or Transciptomes, in .fasta format, to the eggNOG 5.0 database [@huerta-cepasEggNOGHierarchicalFunctionally2019], and using eggNOG-Mapper 2.0.6 [@huerta-cepasFastGenomeWideFunctional2017; @cantalapiedraEggNOGmapperV2Functional2021] and the DIAMOND algorithm [@buchfinkFastSensitiveProtein2015], to annotate potential orthologs in each analyzed genome or transcriptome, using the following parameters: seed_ortholog_evalue = 0.001; seed_ortholog_score = 60; tax_scope = "auto"; go_evidence = "non-electronic"; query_cover = 20; subject_cover = 0.  
-  
-The annotation generated for each gene model included (when available): the name of the matching ortholog (coded by eggNOG as 'seed_eggNOG_ortholog');   E-value (coded by eggNOG as 'seed_ortholog_evalue'); Score (coded by eggNOG as 'seed_ortholog_score');  EC number (coded by eggNOG as 'EC');  Kegg Orthology (KO) number (coded by eggNOG as 'KEGG_ko');  Kegg Pathway (coded by eggNOG as 'KEGG_Pathway');  Kegg Module (coded by eggNOG as 'KEGG_Module');  Kegg Reaction (coded by eggNOG as 'KEGG_Reaction');  Kegg Reaction Class (coded by eggNOG as 'KEGG_rclass');  the predicted protein family (coded by eggNOG as 'PFAMs');  Gene Ontology (GO) annotation (coded by eggNOG as 'Gos');  as well as a description from eggNOG of the source organism of the matching ortholog (coded by eggNOG as 'best_og_desc').  
-
-Note that the output from sequences passed through the eggNOG 5.0 database are non-supervised orthology annotations, and may be subject to error if the underlying eggNOG annotation was inaccurate, or for divergent orthologous gene sequences.
-The output of automatically annotated orthologs, from each genome or transcriptomic, from the bioinformatic pipeline was compiled into one file `CombinedHits.csv` (to be submitted to the DRYAD database).
 
 ## Overview of Data Analysis {.unnumbered}
 
@@ -301,28 +291,10 @@ Citations were managed using the Zotero (www.zotero.org) open access reference m
 The Zotero library of citations is available at <https://www.zotero.org/groups/2333131/ros_phytoplankton>.
 Formatted outputs were generated from RMarkdown files using the 'knitr' [@xieKnitrComprehensiveTool2014; @xieDynamicDocumentsKnitr2015; @xieKnitrGeneralPurposePackage2018], 'bookdown' [@xieBookdownAuthoringBooks2019], and 'posterdown' [@thornePosterdownPackageBuilt2019] packages.
 
-In parallel we assembled metadata from the literature and culture collection databases for each genome or transcriptome source organism, including:
-the cell radii in µm (coded as 'Radius_um');  
-the latitude of isolation for the strain (coded as 'abs_Latitude');  
-colony formation (coded as 'ColonyOrganism');  
-cell shape for diatoms (coded as 'PennateCentric');  
-presence or absence of flagella as an index of potential motility coded as 'Flagella';  
-the genome size (coded as 'GenomeSize_mbp');
-and the total number of predicted gene models (coded as 'GeneModels_count') (Table \@ref(tab:MetaData)); all stored in `CellGenomeMetrics.csv`.
-For organisms for which only transcriptomes were available, we only included datasets for which the total number of detected different transcripts was available, as a proxy for 'GeneModels_count'.
-Brackish strains were included as marine status but we did not include true freshwater strains in our analyses.
-
-We compared the Enzyme Commission Number (coded as 'ECNumber', re-coded from the eggNOG annotation 'EC') to the BRENDA enzyme database [@changBRENDAELIXIRCore2021] to identify enzymes metabolizing H~2~O~2~, O~2~^•−^ or ^•^NO *in vivo* (annotated by BRENDA as 'natural product' or 'natural substrate') (Table \@ref(tab:ROSEnzymeList)).
-We then used 'ECNumber' to filter 'CombinedHits' to generate a subset containing only those orthologs encoding enzymes mediating metabolism of H~2~O~2~ (coded as 'HyPe'; 'Production' or 'Scavenging'), O~2~^•−^ (coded as 'SupOx'; 'Production' or 'Scavenging') and ^•^NO (coded as 'NitOx'; 'Production' or 'Scavenging').
-Genes that code for the production of non-enzymatic ROS scavengers were not included in subsequent analyses.
-
-From the subset of 'CombinedHits' containing information on ROS metabolizing enzymes, we grouped orthologs together by 'ECNumber' and determined the number of occurrences of individual orthologs encoding each 'ECNumber' in a given organism (coded as 'ROSGene_count').
-We merged this data subset with `CellGenomeMetrics.csv` to generate a dataset of 'EC_count'; Kegg Orthology Numbers (coded as 'KO'); and Gene Ontology annotations (coded as 'GO'); that code for the production of a ROS metabolizing enzyme, as defined by 'ECNumber', along with characters of the source organism (combined into 'MergedData').  
 
 H~2~O~2~, O~2~^•−^ and ^•^NO are vastly different in reactivity, stability, diffusion distance, effects on biomolecules and roles in cell signalling (Table \@ref(tab:ROSDiffusion)), so it would not be valid to pool counts of orthologs encoding production or scavenging of all these diverse ROS.
 We therefore generated the total gene counts coding for the production or scavenging of a given ROS in an given organism (coded as 'HyPe_count', 'NitOx_count', 'SupOx_count'), along with the total gene counts encoding enzymes metabolizing ROS in a given organism, (coded as 'TotalROSGene_count').
 
-For about 31 organisms we had both genomic and transcriptomic data; in these cases 'EC_count' and 'GeneModels_count' derived from genomic data were used for subsequent analyses.
 
 
 # Results and Discussion {.unnumbered}
@@ -700,172 +672,8 @@ HalliwellAsadaProkHyPeDotPlot
 # saveRDS(EukHyPeDotPlot, file = file.path(Figures, "EukHyPeDotPlot.Rds"))
 ```
 
-```{r ProkHyPeDotPlot, fig.height = 10, fig.width = 10}
-ProkHyPeDotPlot <- MergedData_na %>%
-  filter(HyPe == "Production" | HyPe == "Scavenging", 
-         Taxa == "Prokaryote",
-         ROSEnzyme_TotalCount != 0, 
-         GeneModels_count != 0) %>%
-  ggplot() +
-  geom_point(aes(x = EnzymeName, y= reorder(interaction(Genus, species, Strain), -Radius_um), size = ROSGene_count, color = Genus, shape = Ome)) +
-  scale_x_discrete(position ="top") +
-  # scale_color_manual(values = TaxaColors) +
-  scale_shape_manual(values = c(16,1))+
-  scale_radius(breaks=c(1,2,3,4,5)) +
-  ggtitle("HyPe") +
-  theme_bw() +
-  # theme(axis.text.x = element_text(angle = 90, size = 10),
-  #       axis.text.y = element_text(face="italic",size = 10, vjust = 0)) +
-  facet_grid(rows = vars(Taxa), cols = vars(HyPe), scales = "free", space = "free") +
-  ggpubr::rotate_x_text(hjust = 0) #+
-  # theme(panel.grid.major = element_blank(),
-  #       panel.grid.minor = element_blank())
-ProkHyPeDotPlot
-# saveRDS(ProkHyPeDotPlot, file = file.path(Figures, "ProkHyPeDotPlot.Rds"))
-```
 
-All prokaryotic (Figure \@ref(fig:ProkHyPeDotPlot)) and eukaryotic (Figure \@ref(fig:EukHyPeDotPlot)) phytoplankton (with the exception of a single transcriptome from the prasinophyte *Micromonas polaris*) have genes encoding H~2~O~2~ producing enzymes, as they all carry gene(s) encoding the ubiquitous enzyme Superoxide Dismutase. Three other oxidases are also very well conserved; Copropophyrinogen oxidase is found across all eukaryotic and prokaryotic phytoplankton, with the exception of one transcriptome. Thiol oxidase and acyl CoA oxidase are found in nearly all eukaryotic phytoplankton, with the exception of three transcriptomes. Other noticeable taxonomic differences include L-aspartate oxidase is found in nearly all prokaryotes, all green algae, but hardly any other 'Taxa'. Sarcosine oxidase is not present in small diatoms, and small green algae, but is present in nearly all diatoms and haptophytes. (S)-2-hydroxy-acid oxidase is only present in 3 of the 24 *Prochlorococcus* species analyzed, but is present in all other prokaryotes, with the exception of *Synechococcus sp.* MITS9220. 
 
-All eukaryotic (Figure \@ref(fig:EukHyPeDotPlot)) and prokaryotic phytoplankton excluding a few from the *Prochlorococcus* and *Synechococcus* picocyanobacterial genera (Figure \@ref(fig:ProkHyPeDotPlot)), have genes encoding H~2~O~2~ scavenging enzymes. Some strains of *Prochlorococcus* and *Synechococcus* have lost the genomic capacity to scavenge H~2~O~2~. Similar patterns are also seen in pico-eukaryotes such as the prasinophytes, whom while maintaining the genomic capacity to scavenge ROS, have lost certain enzymes such as catalase but maintain the genomic capacity to scavenge H~2~O~2~ using enzymes like ascorbate peroxidase, glutathione peroxidase and Cytochrome C peroxidase (Figure \@ref(fig:EukHyPeDotPlot)). 
-
-The absence from catalase from most cyanobacterial genomes is not surprising. @bernroitnerOccurrencePhylogenyStructure2009 analyzed 44 different cyanobacterial genomes and found that only *Nostoc punctiforme* PCC73102 conserved the full catalase encoding gene, whereas *Synechococcus elongatus* PCC7942 and *Cyanothece sp.* ATCC 51142 maintained a partial catalase encoding gene. In our analyses, only *Synechococcus elongatus* PCC11802 maintained a catalase encoding gene (Figure \@ref(fig:ProkHyPeDotPlot)). In the greens, catalase has been lost from the smaller greens but is maintained in the larger greens (Figure \@ref(fig:EukHyPeDotPlot)). The loss of catalase in smaller green algae is evidence of the Black Queen Hypothesis in action [@morrisBlackQueenHypothesis2012], in that H~2~O~2~ can passively diffuse out of the smaller green algae but cannot diffuse out of larger green algae. Loss of function mutations in catalase encoding genes in small algae are therefore less deleterious than they would be to large green algae. It is also worth questioning whether catalase is not very well conserved because the K~M~ of the peroxidase enzymes is in the low µM range, as opposed to a K~M~ of ~220mM for catalases [@bernroitnerOccurrencePhylogenyStructure2009]. 
-
-When looking at the prokaryotic phytoplankton, *Prochlorococcus* does not maintain the genomic capacity to scavenge H~2~O~2~, and as would have outsourced this task to other members of the community [@morrisBlackQueenHypothesis2012]. Among prokaryotic phytoplankton, our results support the earlier esuggestion that increased genomic capacity for H~2~O~2~ scavenging in *Synechococcus* compared to *Prochlorococcus* is a result of the larger size in *Synechococcus* compared to *Prochlorococcus* [@morrisDependenceCyanobacteriumProchlorococcus2011] (Figure \@ref(fig:ProkHyPeDotPlot)). It is however important to note the vast differences between prokaryotic and eukaryotic phytoplankton, with most eukaryotic phytoplankton, irrespective of lineage, maintaining the genomic capacity to produce ascorbate peroxidase, glutathione peroxidase and Cytochrome C peroxidase (Figure \@ref(fig:EukHyPeDotPlot)). Peroxidases are often involved in pathways beyond simple ROS scavenging, including the Halliwell-Asada cycle where ascorbate peroxidase is involved [@pandeyRedoxHomeostasisGene2015]. *Ostreococcus*, the smallest prasinophyte has a radius of 0.5 µm, similar to that of the prokaryote *Synechococcus* (Table \@ref(tab:GenomeTable)), and would therefore share a similar diffusion path length. Nevertheless *Ostreococcus*, in common with other eukaryotes, retains the genomic capacities to produce ascorbate peroxidase, glutathione peroxidase and Cytochrome C peroxidase, which may thus reflect the "cost of being eukaryotic" (Figure \@ref(fig:EukHyPeDotPlot)). 
-
-### Trends in Genes Encoding O~2~^•−^ Metabolism {}
-
-```{r EukSupOxDotPlot, fig.height = 20, fig.width = 10}
-EukSupOxDotPlot <- MergedData_na %>%
-  filter(SupOx == "Scavenging" | SupOx == "Production", 
-         Taxa != "Prokaryote",
-         ROSEnzyme_TotalCount != 0, 
-         GeneModels_count != 0) %>%
-  ggplot() +
-  geom_point(aes(x = EnzymeName, y= reorder(interaction(Genus, species, Strain), -Radius_um), size = ROSGene_count, color = Taxa, shape = Ome)) +
-  scale_x_discrete(position ="top") +
-  scale_color_manual(values = TaxaColors) +
-  scale_shape_manual(values = c(16,1))+
-  scale_radius(breaks=c(2,4,6,8,10,12,15,20,25)) +
-  ggtitle("SupOx") +
-  theme_bw() +
-  # theme(axis.text.x = element_text(angle = 90, size = 10),
-  #       axis.text.y = element_text(face="italic",size = 10, vjust = 0)) +
-  facet_grid(rows = vars(Taxa), cols = vars(SupOx), scales = "free", space = "free") +
-  ggpubr::rotate_x_text(hjust = 0) #+
-  # theme(panel.grid.major = element_blank(),
-  #       panel.grid.minor = element_blank())
-EukSupOxDotPlot
-# saveRDS(EukSupOxDotPlot, file = file.path(Figures, "EukSupOxDotPlot.Rds"))
-EukSupOxDotPlot_cap <- glue("**Summary of O2•− scavenging enzymes encoded within genomes and transcriptomes of eukaryotic phytoplankton analyzedTaxa are ordered from top to bottom along the left according to increasing median cell diameter within each taxonomic lineage.**", 
-                        "Symbol colour corresponds to taxonomic lineages (‘Taxa’).Filled data points indicate that the data obtained from that organism was sourced from a genome, and unfilled data points were sourced from a transcriptome.", 
-                        "The size of the symbol increases with the number of members of each enzyme found within each genome or transcriptome.",
-                        "Symbol absence means no sequences known to encode the enzyme family of interest were found in the target genome or transcriptome.", .sep = " ")
-```
-
-```{r ProkSupOxDotPlot, fig.height = 10, fig.width = 10}
-ProkSupOxDotPlot <- MergedData_na %>%
-  filter(SupOx == "Scavenging" | SupOx == "Production", 
-         Taxa == "Prokaryote",
-         ROSEnzyme_TotalCount != 0, 
-         GeneModels_count != 0) %>%
-  ggplot() +
-  geom_point(aes(x = EnzymeName, y= reorder(interaction(Genus, species, Strain), -Radius_um), size = ROSGene_count, color = Genus, shape = Ome)) +
-  scale_x_discrete(position ="top") +
-  # scale_color_manual(values = TaxaColors) +
-  scale_shape_manual(values = c(16,1))+
-  scale_radius(breaks=c(1,2,3,4,5)) +
-  ggtitle("SupOx") +
-  theme_bw() +
-  # theme(axis.text.x = element_text(angle = 90, size = 10),
-  #       axis.text.y = element_text(face="italic",size = 10, vjust = 0)) +
-  facet_grid(rows = vars(Taxa), cols = vars(SupOx), scales = "free", space = "free") +
-  ggpubr::rotate_x_text(hjust = 0) #+
-  # theme(panel.grid.major = element_blank(),
-  #       panel.grid.minor = element_blank())
-ProkSupOxDotPlot
-# saveRDS(ProkSupOxDotPlot, file = file.path(Figures, "ProkSupOxDotPlot.Rds"))
-
-ProkSupOxDotPlot_cap <- glue("**Summary of O2•− scavenging enzymes encoded within genomes of prokaryotic phytoplankton analyzedTaxa are ordered from top to bottom along the left according to increasing median cell diameter within each taxonomic lineage.**", 
-                         "Symbol colour corresponds to the genus of the prokaryote.Filled data points indicate that the data obtained from that organism was sourced from a genome, and unfilled data points were sourced from a transcriptome.", 
-                         "The size of the symbol increases with the number of members of each enzyme found within each genome or transcriptome.Symbol absence means no sequences known to encode the enzyme family of interest were found in the target genome or transcriptome.", .sep = " ")
-```
-
-Neither prokaryotic nor eukaryotic phytoplankton had any sequences annotated that matched with enzymes that specifically code for the production of superoxide. All prokaryotic (Figure \@ref(fig:EukSupOxDotPlot)) and eukaryotic (Figure \@ref(fig:ProkSupOxDotPlot)) phytoplankton (with the exception of a single transcriptome from *Micromonas polaris*) have genes encoding O~2~^•−^ Scavenging enzymes, as they all have genes encoding the ubiquitous enzyme SOD.
-
-Occurences of genes encoding the enzyme Superoxide Oxidase (SOO, EC:1.10.3.17) were rare, but present in a few diatom species (*Leptocylindrus danicus*, *Chaetoceros curvicetus* and *Thalassiosira minuscula CCMP1093.*) and prokaryotes (*Synechococcus elongatus PCC11802* and various *Crocosphaera spp.*).
-
-Occurences of genes encoding the enzyme Superoxide Reductase (SOR, EC:1.15.1.2) were also rare and only detected in the diatoms, *Pseudo-nitzschia fradulenta WWA7* and *Seminavis robusta D6*, and the haptophyte *Pleurochrysis carterae CCMP456*.
-
-Although records of enzymes producing O~2~^•−^ exist in the literature [@diazNADPHdependentExtracellularSuperoxide2019], in the marine phytoplankton genomes and transcriptomes that we analysed, we did not detect any genes that encode for enzymes (Table \@ref(tab:ROSEnzymes)) that specifically produce O~2~^•−^ based on the BRENDA allocation of O~2~^•−^ scavenging. It is however worth noting the presence of NADPH Oxidase (NOX) which can produce either H~2~O~2~ or O~2~^•−^ depending on the NOX isoform. NOX is included as a H~2~O~2~ producer in compliance with the BRENDA allocation of the enzyme (Table \@ref(tab:ROSEnzymes)). Further analyses may be able to search through the detected NOX isoforms to identify whether they are from the isoform that produces O~2~^•−^. Sequences that are also very similar to Glutathione Reductase (GR) have also been documented to produce enzymes that produce extracellular O~2~^•−^ in the diatom *Thalassiosira oceanica* [@diazNADPHdependentExtracellularSuperoxide2019]. GR sequences were annotated universally across phytoplankton genomes in previous analyses [@fleuryReactiveOxygenDetoxification2019; @omarReactiveOxygenProduction2020]. Given that @diazNADPHdependentExtracellularSuperoxide2019 found that these sequences were so similar to GR that they could not tell them apart, it is possible that O~2~^•−^ do exist within the genomes of these phytoplankton. In either case, we would not expect phytoplankton to differentially allocate a changing fraction of their total gene content to O~2~^•−^ production as superoxide is not membrane diffusible. The idea that phytoplankton need to maintain working extracellular concentrations of O~2~^•−^ has been speculated however, noting that decreasing the extracellular concentration of O~2~^•−^ can hinder cell growth [@sutherlandExtracellularSuperoxideProduction2019]. @sutherlandExtracellularSuperoxideProduction2019 further explains that the downregulation of Superoxide Dismutase (SOD, EC:1.15.1.1) genes at peak light levels by *Prochlorococcus* [@mella-floresProchlorococcusSynechococcusHave2012] would allow *Prochlorococcus* to maintain 'working levels' of extracellular O~2~^•−^. 
-
-The absence of transcripts encoding SOD from the *Micromonas polaris* transcriptome is likely due to low expression of SOD at the time that the mRNA was harvested for sequence analyses. Given that the O~2~^•−^ is not membrane diffusible, intracellularly produced O~2~^•−^ would have to be scavenged or would react with other parts of the cell, as a result, organisms that do not have the ability to scavenge O~2~^•−^ would have reduced fitness. It would therefore be costly for marine phytoplankton to lose the genomic capacity to scavenge O~2~^•−^.
-
-To our knowledge, our results though rare, are the first detection of the occurence of SOO and SOR in marine phytoplankton, and would need confirmation by Multiple Sequence Alignment. Multiple Sequence Alignment would answer whether our results are from errors in annotation from the non-supervised grouping of orthologs (genes) by eggNOG, or may indeed be sporadically present in the Genomes or Transcriptomes of some phytoplankton, perhaps as a result of Horizontal Gene Transfer.
-
- Trends may yet appear in genomic allocations to O~2~^•−^ scavenging based on the metallo-types of SOD. For example, @fleuryReactiveOxygenDetoxification2019 found that pico-prasinophytes use Mn-SOD instead of Fe-SOD. One could analyze whether a similar trend is visible across a wider range of 'Taxa'.
-
-### Trends in Genes Encoding ^•^NO Metabolism {}
-
-In the genomes and transcriptomes that we analysed, Nitric Oxide Synthase (NOS, EC:1.14.13.39) was the most frequently occuring ^•^NO producing enzyme (Figure \@ref(fig:EukNitOxDotPlot)), but was not present or not annotated among prokaryotic phytoplankton (Figure \@ref(fig:ProkNitOxDotPlot)). 
-
-Nitric Oxide Dioxygenase (NOD, EC:1.14.12.17) was the most frequently occuring of the ^•^NO scavenging enzymes (Figure \@ref(fig:EukNitOxDotPlot)).
-NOD sequences were identified in both eukaryotes and prokaryotes, but were either not annotated, or not present in *Prochlorococcus*, most green algae and some diatoms.
-
-The detection of NOS genes in our data is not surprising (Figure \@ref(fig:EukNitOxDotPlot)), considering that NOS genes have previously been detected in the prasinophyte *Ostreococcus tauri* [@foresiCharacterizationNitricOxide2010], as well as in a few pennate diatoms [@didatoTranscriptomeSequencingThree2015]. Although, while we would not detect genes encoding ^•^NO producing enzymes, a NOS-like sequence has recently been identified in *Synechococcus*, that also has Nitric Oxide Dioxygenase-like function [@piccianoNitricOxideSynthase2019]. 
-
-NOD sequences have previously been identified in diatoms, dinoflagellates and haptophytes through metatranscriptomic analysis [@lampeStrategiesPhytoplanktonResponse2019].
-
-Alternatively, it is possible that some of the NOS may exhibit some NOD-like function as has been found in *Synechococcus* [@piccianoNitricOxideSynthase2019]. 
-
-As NOD sequences have only been identified once before in phytoplankton, through metatranscriptomic analyses [@piccianoNitricOxideSynthase2019], there is limited understanding as to what paths may contribute to the active removal of ^•^NO, and the lack of ^•^NO scavenging genes in genomes across multiple organisms. Perhaps the low reactivity of ^•^NO does not warrant the active removal of ^•^NO as long as the concentration does not exceed the toxic threshold. This explanation is plausible given that *Platymonas helgolandica*, *Platymonas subcordiformis*, *Skeletonema costatum*, *Gymnodinium sp.*, and *Prorocentrum donghaiense* showed optimum growth in the presence of ^•^NO concentrations between 10^-9^ and 10^-6^ mol L^−1^ [@peifengEffectsNitricOxide2021], which are higher than the concentrations found in the ocean (Table \@ref(tab:ROSDiffusion)).
-
-```{r EukNitOxDotPlot, fig.height = 20, fig.width = 10}
-EukNitOxDotPlot <- MergedData_na %>%
-  filter(NitOx == "Scavenging" | NitOx == "Production", 
-         Taxa != "Prokaryote",
-         ROSEnzyme_TotalCount != 0, 
-         GeneModels_count != 0) %>%
-  ggplot() +
-  geom_point(aes(x = EnzymeName, y= reorder(interaction(Genus, species, Strain), -Radius_um), size = ROSGene_count, color = Taxa, shape = Ome)) +
-  scale_x_discrete(position ="top") +
-  scale_color_manual(values = TaxaColors) +
-  scale_shape_manual(values = c(16,1))+
-  scale_radius(breaks=c(2,4,6,8,10,12,15,20,25)) +
-  ggtitle("NitOx") +
-  theme_bw() +
-  # theme(axis.text.x = element_text(angle = 90, size = 10),
-  #       axis.text.y = element_text(face="italic",size = 10, vjust = 0)) +
-  facet_grid(rows = vars(Taxa), cols = vars(NitOx), scales = "free", space = "free") +
-  ggpubr::rotate_x_text(hjust = 0) #+
-  # theme(panel.grid.major = element_blank(),
-  #       panel.grid.minor = element_blank())
-EukNitOxDotPlot
-# saveRDS(EukSupOxDotPlot, file = file.path(Figures, "EukSupOxDotPlot.Rds"))
-```
-
-```{r ProkNitOxDotPlot, fig.height = 10, fig.width = 10}
-ProkNitOxDotPlot <- MergedData_na %>%
-  filter(NitOx == "Scavenging" | NitOx == "Production", 
-         Taxa == "Prokaryote",
-         ROSEnzyme_TotalCount != 0, 
-         GeneModels_count != 0) %>%
-  ggplot() +
-  geom_point(aes(x = EnzymeName, y= reorder(interaction(Genus, species, Strain), -Radius_um), size = ROSGene_count, color = Genus, shape = Ome)) +
-  scale_x_discrete(position ="top") +
-  # scale_color_manual(values = TaxaColors) +
-  scale_shape_manual(values = c(16,1))+
-  scale_radius(breaks=c(1,2,3,4,5)) +
-  ggtitle("SupOx") +
-  theme_bw() +
-  # theme(axis.text.x = element_text(angle = 90, size = 10),
-  #       axis.text.y = element_text(face="italic",size = 10, vjust = 0)) +
-  facet_grid(rows = vars(Taxa), cols = vars(NitOx), scales = "free", space = "free") +
-  ggpubr::rotate_x_text(hjust = 0) #+
-  # theme(panel.grid.major = element_blank(),
-  #       panel.grid.minor = element_blank())
-ProkNitOxDotPlot
-# saveRDS(ProkSupOxDotPlot, file = file.path(Figures, "ProkSupOxDotPlot.Rds"))
-```
 
 ```{r, , fig.height = 8, fig.width = 10}
 MergedData %>%
