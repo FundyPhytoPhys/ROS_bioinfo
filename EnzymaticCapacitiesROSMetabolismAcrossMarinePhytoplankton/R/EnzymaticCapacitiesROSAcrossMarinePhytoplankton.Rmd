@@ -75,6 +75,8 @@ library(knitr)
 library(ggiraphExtra)
 library(AER)
 library(boot)
+library(DiagrammeR)
+
 googlesheets4::gs4_deauth() 
 ```
 
@@ -267,21 +269,13 @@ Genomic streamlining by LOF may only be feasible below a critical size limit tha
 
 We hypothesize that larger phytoplankton will have larger and more complete families of genes encoding ROS detoxification enzymes than smaller species, because longer diffusion paths out of larger cells will limit outsourcing ROS detoxification to the community. Conversely, smaller species could benefit from LOF mutations to streamline their genomes, while relying upon community level detoxification mediated by diffusion of ROS. We therefore hypothesize that LOF mutations for ROS detoxification may only be feasible below a critical threshold cell size, depending upon the effective diffusion path lengths for particular ROS. To explore the role of cell size on the loss of ROS antioxidant gene families, genomes of species of varying shapes and sizes were therefore analyzed.  
 
-
 # Methods {.unnumbered}
 
-```{r, include = FALSE}
-# BinomTest <- MergedData %>%
-#   mutate(BinomROSGene_count  = case_when(ROSGene_count == "0" ~ 0,
-#                                          ROSGene_count > 0 ~ 1)) %>%
-#   nest(data = -c(ECNumber, EnzymeName)) %>%
-#   mutate(fit = map(data, possibly(~glm(BinomROSGene_count ~ log_Radius_um + Taxa, family = binomial, data = .), otherwise = NULL)))
-```
+
 
 ## Data Dictionary {.unnumbered}
 
 Table \@ref(tab:DataDictionary) contains a data dictionary of variable names used in our analysis, their definitions and locations in code and data objects.
-
 
 ## Overview of Data Analysis {.unnumbered}
 
@@ -290,12 +284,6 @@ Graphics and tables were generated using the 'ggplot2' [@wickhamGgplot2ElegantGr
 Citations were managed using the Zotero (www.zotero.org) open access reference manager connected to RStudio using the 'citr' [@austCitrRStudioAddin2018] package.
 The Zotero library of citations is available at <https://www.zotero.org/groups/2333131/ros_phytoplankton>.
 Formatted outputs were generated from RMarkdown files using the 'knitr' [@xieKnitrComprehensiveTool2014; @xieDynamicDocumentsKnitr2015; @xieKnitrGeneralPurposePackage2018], 'bookdown' [@xieBookdownAuthoringBooks2019], and 'posterdown' [@thornePosterdownPackageBuilt2019] packages.
-
-
-H~2~O~2~, O~2~^•−^ and ^•^NO are vastly different in reactivity, stability, diffusion distance, effects on biomolecules and roles in cell signalling (Table \@ref(tab:ROSDiffusion)), so it would not be valid to pool counts of orthologs encoding production or scavenging of all these diverse ROS.
-We therefore generated the total gene counts coding for the production or scavenging of a given ROS in an given organism (coded as 'HyPe_count', 'NitOx_count', 'SupOx_count'), along with the total gene counts encoding enzymes metabolizing ROS in a given organism, (coded as 'TotalROSGene_count').
-
-
 
 # Results and Discussion {.unnumbered}
 
@@ -360,7 +348,7 @@ HalliwellAsadaEukHyPeDotPlot
 # saveRDS(EukHyPeDotPlot, file = file.path(Figures, "EukHyPeDotPlot.Rds"))
 ```
 
-```{r HalliwellAsadaEukGenHyPeDotPlot, fig.height = 15, fig.width = 10}
+```{r HalliwellAsadaEukGenHyPeDotPlot, fig.height = 12, fig.width = 10}
 HalliwellAsadaEukGenHyPeDotPlot <- MergedData_na %>%
   filter(HyPe == "Production" | HyPe == "Scavenging", 
          Taxa != "Prokaryote",
@@ -391,10 +379,12 @@ HalliwellAsadaEukGenHyPeDotPlot
 # saveRDS(EukHyPeDotPlot, file = file.path(Figures, "EukHyPeDotPlot.Rds"))
 ```
 
-- Ascorbate peroxidase universally rpesent
-- GR almost universally present
-- DHAR - Absent in diatoms and prasinophytes
+- Ascorbate peroxidase universally present (in eukaryotes, but not prokaryotes) - other roles, ascorbate peroxidase is also sensitive to a concentration of substrates (small km) and is likely well conserved for the roles in h2o2 metabolism.
+- GR almost universally present (both prokaryotes and eukaryotes) - signaling roles 
+- DHAR - Absent in diatoms and prasinophytes.
 - MDHAR - Absent in diatoms, eustimatophytes and haptophytes. 
+
+Note that both MDHAR and DHAR are absent in diatoms. How do diatoms regenerate Ascorbate? How do diatoms get rid of DHA? Is the water-water cycle not used in diatoms?
 
 
 ```{r HalliwellAsadaProkHyPeDotPlot, fig.height = 20, fig.width = 10}
@@ -427,20 +417,78 @@ HalliwellAsadaProkHyPeDotPlot
 # saveRDS(EukHyPeDotPlot, file = file.path(Figures, "EukHyPeDotPlot.Rds"))
 ```
 
+```{r, fig.height=15, fig.width =5}
+HACycleFlowchart <- grViz("digraph flowchart {
+      # node definitions with substituted label text
+      graph [overlap = FALSE, layout = dot] #layout can be set to dot, neato or twopi.
+      node [fontname = Helvetica, shape = rectangle, style = 'filled', fontsize = 20]        
+      tab1 [label = '@@1', fillcolor = 'chartreuse2']
+      tab2 [label = '@@2', shape = 'oval', color = 'cadetblue3']
+      tab3 [label = '@@3', fillcolor = 'darkgoldenrod1']
+      tab4 [label = '@@4', fillcolor = 'chartreuse2']
+      tab5 [label = '@@5', shape = 'oval', color = 'cadetblue3']
+      tab6 [label = '@@6', fillcolor = 'darkgoldenrod1']
+      tab7 [label = '@@7', fillcolor = 'darkgoldenrod1']
+      tab8 [label = '@@8', shape = 'oval', color = 'cadetblue3']
+      tab9 [label = '@@9', fillcolor = 'darkgoldenrod1']
+      tab10 [label = '@@10', fillcolor = 'chartreuse2']
+      tab11 [label = '@@11', shape = 'oval', color = 'cadetblue3']
+      tab12 [label = '@@12', fillcolor = 'chartreuse2']
+      tab13 [label = '@@13', fillcolor = 'darkgoldenrod1']
+      
+      rankdir=TB
+      { rank = same; tab2; tab5; tab8; tab11 }
+      { rank = min; tab4; tab1; tab10; tab12; color ='blue' }
+      { rank = max; tab3; tab6; tab7; tab9; tab13 }
 
+      # edge definitions with the node IDs
+      tab4 -> tab2 -> tab3;
+      tab1 -> tab2 -> tab6 -> tab7; 
+      tab7 -> tab8 -> tab1 [style=dashed];
+      tab6 -> tab5 -> tab1 [style=dotted];
+      tab10 -> tab8 -> tab9 -> tab11 -> tab10;
+      tab12 -> tab11 -> tab13
+      }
+      
+      
+      
+      [1]: 'Ascorbate'
+      [2]: 'Ascorbate Peroxidase'
+      [3]: 'H2O'
+      [4]: 'H2O2'
+      [5]: 'Monodehydroascorbate Reductase'
+      [6]: 'Monodehydroascorbate'
+      [7]: 'Dehydroascorbate'
+      [8]: 'Dehydroascorbate Reductase'
+      [9]: 'Glutathione disulfide'
+      [10]: 'Glutathione'
+      [11]: 'Glutathione Reductase'
+      [12]: 'NADPH'
+      [13]: 'NAD'
+      ")
 
+HACycleFlowchart
+```
+ 
+
+ 
+ XXX Naaman make a legend. 
+ Enzymes are in a blue circle
+ All substrates and products are in a gret box
+ Dotted line refers to MDHAR - Absent in diatoms, eustimatophytes and haptophytes. 
+ Dashed line refers to DHAR - Absent in diatoms and prasinophytes.
+
+"Fe limitation provoked a 12-fold increase in the glycolytic derivative dehydroascorbate" - [@allenWholecellResponsePennate2008]
 
 ```{r, , fig.height = 8, fig.width = 10}
-MergedData %>%
-  filter(ECNumber %in% c("1.14.13.39", "1.14.12.17"),
-         !is.na(NitOx)) %>%
-  select(FileName, EnzymeName, NitOx, ROSGene_count, Taxa) %>%
-  pivot_wider(., names_from = c(EnzymeName, NitOx), values_from = ROSGene_count) %>%
-  ggplot() +
-  geom_count(aes(x = `nitric oxide dioxygenase_Scavenging`, y = `nitric-oxide synthase (NADPH)_Production`)) +
-  facet_wrap(vars(Taxa)) +
-  coord_fixed() + 
-  theme_bw()
+# MergedData %>%
+#   filter(ECNumber %in% c("1.14.13.39", "1.14.12.17"),
+#          !is.na(NitOx)) %>%
+#   select(FileName, EnzymeName, NitOx, ROSGene_count, Taxa) %>%
+#   pivot_wider(., names_from = c(EnzymeName, NitOx), values_from = ROSGene_count) %>%
+#   ggplot() +
+#   geom_count(aes(x = `nitric oxide dioxygenase_Scavenging`, y = `nitric-oxide synthase (NADPH)_Production`)) +
+#   facet_wrap(vars(Taxa)) +
+#   coord_fixed() + 
+#   theme_bw()
 ```
-
-XXX Nitric Oxide dotplots - could differences in microbiome of pennate and centric diatoms explain their varying allocation to nitric oxide? [@johanssonFriendsBenefitsExploring2019]
