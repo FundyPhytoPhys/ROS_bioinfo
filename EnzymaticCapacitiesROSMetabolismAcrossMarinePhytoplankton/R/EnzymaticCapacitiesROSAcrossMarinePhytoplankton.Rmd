@@ -379,12 +379,13 @@ HalliwellAsadaEukGenHyPeDotPlot
 # saveRDS(EukHyPeDotPlot, file = file.path(Figures, "EukHyPeDotPlot.Rds"))
 ```
 
-- Ascorbate peroxidase universally present (in eukaryotes, but not prokaryotes) - other roles, ascorbate peroxidase is also sensitive to a concentration of substrates (small km) and is likely well conserved for the roles in h2o2 metabolism.
-- GR almost universally present (both prokaryotes and eukaryotes) - signaling roles 
-- DHAR - Absent in diatoms and prasinophytes.
-- MDHAR - Absent in diatoms, eustimatophytes and haptophytes. 
+- Ascorbate peroxidase universally present (in eukaryotes, but not prokaryotes) - other roles, ascorbate peroxidase is also sensitive to a smaller concentration of H2O2 (small km) and is likely well conserved for the roles in h2o2 metabolism.
+- GR almost universally present (both prokaryotes and eukaryotes) - signaling roles and electron donor XXX other roles
+- DHAR - Absent, or not annotated, in diatoms and prasinophytes.
+- MDHAR - Absent, or not annotated, in diatoms, eustimatophytes and haptophytes. XXX cite paper that says activity of MDHAR not detected in diatom. 
 
 Note that both MDHAR and DHAR are absent in diatoms. How do diatoms regenerate Ascorbate? How do diatoms get rid of DHA? Is the water-water cycle not used in diatoms?
+Ascorbate transporters (Arabidopsis)? vitamin C transporters in phytoplankton?
 
 
 ```{r HalliwellAsadaProkHyPeDotPlot, fig.height = 20, fig.width = 10}
@@ -417,11 +418,11 @@ HalliwellAsadaProkHyPeDotPlot
 # saveRDS(EukHyPeDotPlot, file = file.path(Figures, "EukHyPeDotPlot.Rds"))
 ```
 
-```{r, fig.height=15, fig.width =5}
+```{r Generate HACycleFlowchart}
 HACycleFlowchart <- grViz("digraph flowchart {
       # node definitions with substituted label text
       graph [overlap = FALSE, layout = dot] #layout can be set to dot, neato or twopi.
-      node [fontname = Helvetica, shape = rectangle, style = 'filled', fontsize = 20]        
+      node [fontname = Helvetica, shape = rectangle, style = 'filled', fontsize = 30]        
       tab1 [label = '@@1', fillcolor = 'chartreuse2']
       tab2 [label = '@@2', shape = 'oval', color = 'cadetblue3']
       tab3 [label = '@@3', fillcolor = 'darkgoldenrod1']
@@ -466,15 +467,17 @@ HACycleFlowchart <- grViz("digraph flowchart {
       [12]: 'NADPH'
       [13]: 'NAD'
       ")
-
-HACycleFlowchart
 ```
  
+```{r HACycleFlowchart}
+HACycleFlowchart
+```
 
  
  XXX Naaman make a legend. 
  Enzymes are in a blue circle
- All substrates and products are in a gret box
+ All substrates are in a green box
+ All products are in an orange box
  Dotted line refers to MDHAR - Absent in diatoms, eustimatophytes and haptophytes. 
  Dashed line refers to DHAR - Absent in diatoms and prasinophytes.
 
