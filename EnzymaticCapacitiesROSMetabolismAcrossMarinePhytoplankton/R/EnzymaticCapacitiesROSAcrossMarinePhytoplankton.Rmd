@@ -473,6 +473,114 @@ HACycleFlowchart <- grViz("digraph flowchart {
 HACycleFlowchart
 ```
 
+```{r Generate HACycleFlowchartA}
+HACycleFlowchartA <- grViz("digraph flowchart {
+      # node definitions with substituted label text
+      graph [overlap = FALSE, layout = dot] #layout can be set to dot, neato or twopi.
+      node [fontname = Helvetica, shape = rectangle, style = 'filled', fontsize = 30]        
+      tab1 [label = '@@1', fillcolor = 'chartreuse2']
+      tab2 [label = '@@2', shape = 'oval', color = 'cadetblue3']
+      tab3 [label = '@@3', fillcolor = 'darkgoldenrod1']
+      tab4 [label = '@@4', fillcolor = 'chartreuse2']
+      tab5 [label = '@@5', shape = 'oval', color = 'cadetblue3']
+      tab6 [label = '@@6', fillcolor = 'darkgoldenrod1']
+      tab7 [label = '@@7', fillcolor = 'darkgoldenrod1']
+      tab8 [label = '@@8', shape = 'oval', color = 'cadetblue3']
+      tab9 [label = '@@9', fillcolor = 'darkgoldenrod1']
+      tab10 [label = '@@10', fillcolor = 'chartreuse2']
+      tab11 [label = '@@11', shape = 'oval', color = 'cadetblue3']
+      tab12 [label = '@@12', fillcolor = 'chartreuse2']
+      tab13 [label = '@@13', fillcolor = 'darkgoldenrod1']
+      
+      rankdir=TB
+      { rank = same; tab2; tab5; tab8; tab11 }
+      { rank = min; tab4; tab1; tab10; tab12; color ='blue' }
+      { rank = max; tab3; tab6; tab7; tab9; tab13 }
+
+      # edge definitions with the node IDs
+      tab4 -> tab2 -> tab3;
+      tab1 -> tab2 -> tab6 -> tab7; 
+      # tab7 -> tab8 -> tab1 [style=dashed];
+      tab6 -> tab5 -> tab1 [style=dotted];
+      tab10 -> tab8 -> tab9 -> tab11 -> tab10;
+      tab12 -> tab11 -> tab13
+      }
+      
+      
+      
+      [1]: 'Ascorbate'
+      [2]: 'Ascorbate Peroxidase'
+      [3]: 'H2O'
+      [4]: 'H2O2'
+      [5]: 'Monodehydroascorbate Reductase'
+      [6]: 'Monodehydroascorbate'
+      [7]: 'Dehydroascorbate'
+      [8]: 'Dehydroascorbate Reductase'
+      [9]: 'Glutathione disulfide'
+      [10]: 'Glutathione'
+      [11]: 'Glutathione Reductase'
+      [12]: 'NADPH'
+      [13]: 'NAD'
+      ")
+```
+ 
+```{r HACycleFlowchartA}
+HACycleFlowchartA
+```
+
+```{r Generate HACycleFlowchartB}
+HACycleFlowchartB <- grViz("digraph flowchart {
+      # node definitions with substituted label text
+      graph [overlap = FALSE, layout = dot] #layout can be set to dot, neato or twopi.
+      node [fontname = Helvetica, shape = rectangle, style = 'filled', fontsize = 30]        
+      tab1 [label = '@@1', fillcolor = 'chartreuse2']
+      tab2 [label = '@@2', shape = 'oval', color = 'cadetblue3']
+      tab3 [label = '@@3', fillcolor = 'darkgoldenrod1']
+      tab4 [label = '@@4', fillcolor = 'chartreuse2']
+      tab6 [label = '@@6', fillcolor = 'darkgoldenrod1']
+      tab7 [label = '@@7', fillcolor = 'darkgoldenrod1']
+      tab8 [label = '@@8', shape = 'oval', color = 'cadetblue3']
+      tab9 [label = '@@9', fillcolor = 'darkgoldenrod1']
+      tab10 [label = '@@10', fillcolor = 'chartreuse2']
+      tab11 [label = '@@11', shape = 'oval', color = 'cadetblue3']
+      tab12 [label = '@@12', fillcolor = 'chartreuse2']
+      tab13 [label = '@@13', fillcolor = 'darkgoldenrod1']
+      
+      rankdir=TB
+      { rank = same; tab2; tab5; tab8; tab11 }
+      { rank = min; tab4; tab1; tab10; tab12; color ='blue' }
+      { rank = max; tab3; tab6; tab7; tab9; tab13 }
+
+      # edge definitions with the node IDs
+      tab4 -> tab2 -> tab3;
+      tab1 -> tab2 -> tab6 -> tab7; 
+      tab7 -> tab8 -> tab1 [style=dashed];
+      # tab6 -> tab5 -> tab1 [style=dotted];
+      tab10 -> tab8 -> tab9 -> tab11 -> tab10;
+      tab12 -> tab11 -> tab13
+      }
+      
+      
+      
+      [1]: 'Ascorbate'
+      [2]: 'Ascorbate Peroxidase'
+      [3]: 'H2O'
+      [4]: 'H2O2'
+      # [5]: 'Monodehydroascorbate Reductase'
+      [6]: 'Monodehydroascorbate'
+      [7]: 'Dehydroascorbate'
+      [8]: 'Dehydroascorbate Reductase'
+      [9]: 'Glutathione disulfide'
+      [10]: 'Glutathione'
+      [11]: 'Glutathione Reductase'
+      [12]: 'NADPH'
+      [13]: 'NAD'
+      ")
+```
+ 
+```{r HACycleFlowchartB}
+HACycleFlowchartB
+```
  
  XXX Naaman make a legend. 
  Enzymes are in a blue circle
