@@ -331,7 +331,7 @@ HalliwellAsadaEukHyPeDotPlot <- MergedData_na %>%
   scale_color_manual(values = TaxaColors) +
   scale_shape_manual(values = c(16,1))+
   scale_radius(breaks=c(2,4,6,8,10,12,15,20,25)) +
-  ggtitle("HyPe") +
+  # ggtitle("HyPe") +
   theme_bw() +
   # theme(axis.text.x = element_text(angle = 90, size = 10),
   #       axis.text.y = element_text(face="italic",size = 10, vjust = 0)) +
@@ -362,7 +362,7 @@ HalliwellAsadaEukGenHyPeDotPlot <- MergedData_na %>%
   scale_color_manual(values = TaxaColors) +
   scale_shape_manual(values = c(16,1))+
   scale_radius(breaks=c(2,4,6,8,10,12,15,20,25)) +
-  ggtitle("HyPe") +
+  # ggtitle("HyPe") +
   theme_bw() +
   # theme(axis.text.x = element_text(angle = 90, size = 10),
   #       axis.text.y = element_text(face="italic",size = 10, vjust = 0)) +
