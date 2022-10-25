@@ -117,7 +117,7 @@ ScientificTen <- function(x, sf = 2){
 
 XXX Cite this page for logit2prob https://sebastiansauer.github.io/convert_logit2prob/
 ```{r logit2prob, include = FALSE}
-source("https://sebastiansauer.github.io/Rcode/logit2prob.R")
+# source("https://sebastiansauer.github.io/Rcode/logit2prob.R")
 ```
 
 
@@ -357,15 +357,15 @@ HalliwellAsadaEukGenHyPeDotPlot <- MergedData_na %>%
          GeneModels_count != 0, 
          ECNumber %in% c("1.11.1.11", "1.6.5.4", "1.8.5.1", "1.8.1.7")) %>%
   ggplot() +
-  geom_point(aes(x = EnzymeName, y= reorder(Name, -Radius_um), size = ROSGene_count, color = Taxa, shape = Ome)) +
+  geom_point(aes(x = EnzymeAbbrev, y= reorder(Name, -Radius_um), size = ROSGene_count, color = Taxa, shape = Ome)) +
   scale_x_discrete(position ="top") +
   scale_color_manual(values = TaxaColors) +
   scale_shape_manual(values = c(16,1))+
   scale_radius(breaks=c(2,4,6,8,10,12,15,20,25)) +
   # ggtitle("HyPe") +
   theme_bw() +
-  # theme(axis.text.x = element_text(angle = 90, size = 10),
-  #       axis.text.y = element_text(face="italic",size = 10, vjust = 0)) +
+  theme(axis.text.x = element_text(angle = 90, size = 10),
+        axis.text.y = element_text(face="italic",size = 10, vjust = 0)) +
   facet_grid(rows = vars(Taxa), cols = vars(HyPe), scales = "free", space = "free") +
   ggpubr::rotate_x_text(hjust = 0)# +
   # theme(axis.text.x = element_text(face = ifelse(levels(MergedData_na$EnzymeName %in% MergedData_na$HyPe_PriSec), "bold", "italic")))
@@ -377,6 +377,44 @@ HalliwellAsadaEukGenHyPeDotPlot <- MergedData_na %>%
     # axis.text.x = element_text(face = ifelse(ROSEnzymes$HyPe_Prisec == "Primary", "bold", NULL)))
 HalliwellAsadaEukGenHyPeDotPlot
 # saveRDS(EukHyPeDotPlot, file = file.path(Figures, "EukHyPeDotPlot.Rds"))
+ggsave(paste("HalliwellAsadaEukGenHyPeDotPlot",".png",sep = ""), plot = HalliwellAsadaEukGenHyPeDotPlot, device = NULL, path = Figures, scale = 1, height=15, width= 10, units = c("in"),dpi = 300, limitsize = TRUE)
+```
+
+```{r}
+HalliwellAsadaEukGenHyPeDotPlotFiltered <- MergedData_na %>%
+  filter(HyPe == "Production" | HyPe == "Scavenging", 
+         Taxa != "Prokaryote",
+         Ome == "Genome",
+         ROSEnzyme_TotalCount != 0,
+         GeneModels_count != 0, 
+         ECNumber %in% c("1.11.1.11", "1.6.5.4", "1.8.5.1", "1.8.1.7")) %>%
+  filter(Taxa %in% c("Diatom", "Green")) %>%
+  mutate(EnzymeAbbrev = fct_relevel(EnzymeAbbrev, "GR", "DHAR", "MDHAR", "APX")) %>%
+  ggplot() +
+  geom_point(aes(y = EnzymeAbbrev, x = reorder(Name, Radius_um), size = ROSGene_count, color = Taxa, shape = Ome)) +
+  # scale_y_discrete(position ="top") +
+  scale_x_discrete(position ="top") +
+  scale_color_manual(values = c("Green" = "darkgreen", 
+                                "Diatom" = "brown4")) +
+  scale_shape_manual(values = c(16,1))+
+  scale_radius(breaks=c(2,4,6,8,10,12,15,20,25)) +
+  # ggtitle("HyPe") +
+  theme_bw() +
+  # coord_flip() +
+  theme(axis.text.y = element_text(size = 10),
+        axis.text.x = element_text(face="italic",size = 10, vjust = 0),
+        axis.title = element_blank(),
+        # legend.position = "bottom", 
+        legend.background = element_rect(linetype = "solid", color = "black")) +
+  facet_grid(cols = vars(Taxa), scales = "free", space = "free", switch = "x") +
+  ggpubr::rotate_x_text(hjust = 0, angle = 60) +
+  guides(color = "none",
+         shape = "none",
+         size = guide_legend(title.position = "top", title.hjust = 0.5, title = "Gene count"))
+
+HalliwellAsadaEukGenHyPeDotPlotFiltered
+
+ggsave(paste("HalliwellAsadaEukGenHyPeDotPlotFiltered",".png",sep = ""), plot = HalliwellAsadaEukGenHyPeDotPlotFiltered, device = NULL, path = Figures, scale = 1, height = 5, width = 10, units = c("in"),dpi = 300, limitsize = TRUE)
 ```
 
 - Ascorbate peroxidase universally present (in eukaryotes, but not prokaryotes) - other roles, ascorbate peroxidase is also sensitive to a smaller concentration of H2O2 (small km) and is likely well conserved for the roles in h2o2 metabolism.
@@ -437,7 +475,7 @@ HACycleFlowchart <- grViz("digraph flowchart {
       tab12 [label = '@@12', fillcolor = 'chartreuse2']
       tab13 [label = '@@13', fillcolor = 'darkgoldenrod1']
       
-      rankdir=TB
+      rankdir=RL
       { rank = same; tab2; tab5; tab8; tab11 }
       { rank = min; tab4; tab1; tab10; tab12; color ='blue' }
       { rank = max; tab3; tab6; tab7; tab9; tab13 }
@@ -445,8 +483,8 @@ HACycleFlowchart <- grViz("digraph flowchart {
       # edge definitions with the node IDs
       tab4 -> tab2 -> tab3;
       tab1 -> tab2 -> tab6 -> tab7; 
-      tab7 -> tab8 -> tab1 [style=dashed];
-      tab6 -> tab5 -> tab1 [style=dotted];
+      tab7 -> tab8 -> tab1 ;
+      tab6 -> tab5 -> tab1 ;
       tab10 -> tab8 -> tab9 -> tab11 -> tab10;
       tab12 -> tab11 -> tab13
       }
@@ -471,10 +509,108 @@ HACycleFlowchart <- grViz("digraph flowchart {
  
 ```{r HACycleFlowchart}
 HACycleFlowchart
+vtree::grVizToPNG(HACycleFlowchart, width = 1000, height = 300, folder = Figures)
 ```
 
-```{r Generate HACycleFlowchartA}
-HACycleFlowchartA <- grViz("digraph flowchart {
+```{r Generate HACycleFlowchartPrasino}
+HACycleFlowchartPrasino <- grViz("digraph flowchart {
+      # node definitions with substituted label text
+      graph [overlap = FALSE, layout = dot] #layout can be set to dot, neato or twopi.
+      node [fontname = Helvetica, shape = rectangle, style = 'filled', fontsize = 30]        
+      tab1 [label = '@@1', fillcolor = 'chartreuse2']
+      tab2 [label = '@@2', shape = 'oval', color = 'cadetblue3']
+      tab3 [label = '@@3', fillcolor = 'darkgoldenrod1']
+      tab4 [label = '@@4', fillcolor = 'chartreuse2']
+      tab5 [label = '@@5', shape = 'oval', color = 'cadetblue3']
+      tab6 [label = '@@6', fillcolor = 'darkgoldenrod1']
+      tab7 [label = '@@7', fillcolor = 'darkgoldenrod1']
+    
+      
+      rankdir=RL
+      { rank = same; tab2; tab5 }
+      { rank = min; tab4; tab1; color ='blue' }
+      { rank = max; tab3; tab6; tab7 }
+
+      # edge definitions with the node IDs
+      tab4 -> tab2 -> tab3;
+      tab1 -> tab2 -> tab6 -> tab7; 
+      tab6 -> tab5 -> tab1 ;
+      
+      }
+      
+      
+      
+      [1]: 'Ascorbate'
+      [2]: 'Ascorbate Peroxidase'
+      [3]: 'H2O'
+      [4]: 'H2O2'
+      [5]: 'Monodehydroascorbate Reductase'
+      [6]: 'Monodehydroascorbate'
+      [7]: 'Dehydroascorbate'
+      ")
+```
+ 
+```{r HACycleFlowchartPrasino}
+HACycleFlowchartPrasino
+vtree::grVizToPNG(HACycleFlowchartPrasino, width = 800, height = 200, folder = Figures)
+```
+
+```{r Generate HACycleFlowchartB}
+HACycleFlowchartB <- grViz("digraph flowchart {
+      # node definitions with substituted label text
+      graph [overlap = FALSE, layout = dot] #layout can be set to dot, neato or twopi.
+      node [fontname = Helvetica, shape = rectangle, style = 'filled', fontsize = 30]        
+      tab1 [label = '@@1', fillcolor = 'chartreuse2']
+      tab2 [label = '@@2', shape = 'oval', color = 'cadetblue3']
+      tab3 [label = '@@3', fillcolor = 'darkgoldenrod1']
+      tab4 [label = '@@4', fillcolor = 'chartreuse2']
+      tab6 [label = '@@6', fillcolor = 'darkgoldenrod1']
+      tab7 [label = '@@7', fillcolor = 'darkgoldenrod1']
+      tab8 [label = '@@8', shape = 'oval', color = 'cadetblue3']
+      tab9 [label = '@@9', fillcolor = 'darkgoldenrod1']
+      tab10 [label = '@@10', fillcolor = 'chartreuse2']
+      tab11 [label = '@@11', shape = 'oval', color = 'cadetblue3']
+      tab12 [label = '@@12', fillcolor = 'chartreuse2']
+      tab13 [label = '@@13', fillcolor = 'darkgoldenrod1']
+      
+      rankdir=TB
+      { rank = same; tab2; tab8; tab11 }
+      { rank = min; tab4; tab1; tab10; tab12; color ='blue' }
+      { rank = max; tab3; tab6; tab7; tab9; tab13 }
+
+      # edge definitions with the node IDs
+      tab4 -> tab2 -> tab3;
+      tab1 -> tab2 -> tab6 -> tab7; 
+      tab7 -> tab8 -> tab1 [style=dashed];
+      tab10 -> tab8 -> tab9 -> tab11 -> tab10;
+      tab12 -> tab11 -> tab13
+      }
+      
+      
+      
+      [1]: 'Ascorbate'
+      [2]: 'Ascorbate Peroxidase'
+      [3]: 'H2O'
+      [4]: 'H2O2'
+      [6]: 'Monodehydroascorbate'
+      [7]: 'Dehydroascorbate'
+      [8]: 'Dehydroascorbate Reductase'
+      [9]: 'Glutathione disulfide'
+      [10]: 'Glutathione'
+      [11]: 'Glutathione Reductase'
+      [12]: 'NADPH'
+      [13]: 'NAD'
+      ")
+```
+ 
+```{r HACycleFlowchartB}
+HACycleFlowchartB
+```
+ 
+ 
+```{r Generate HACycleFlowchart}
+ 
+HACycleFlowchart2 <- grViz("digraph flowchart {
       # node definitions with substituted label text
       graph [overlap = FALSE, layout = dot] #layout can be set to dot, neato or twopi.
       node [fontname = Helvetica, shape = rectangle, style = 'filled', fontsize = 30]        
@@ -500,8 +636,7 @@ HACycleFlowchartA <- grViz("digraph flowchart {
       # edge definitions with the node IDs
       tab4 -> tab2 -> tab3;
       tab1 -> tab2 -> tab6 -> tab7; 
-      # tab7 -> tab8 -> tab1 [style=dashed];
-      tab6 -> tab5 -> tab1 [style=dotted];
+      tab7 -> tab8 -> tab1 [style=dashed];
       tab10 -> tab8 -> tab9 -> tab11 -> tab10;
       tab12 -> tab11 -> tab13
       }
@@ -522,14 +657,12 @@ HACycleFlowchartA <- grViz("digraph flowchart {
       [12]: 'NADPH'
       [13]: 'NAD'
       ")
-```
- 
-```{r HACycleFlowchartA}
-HACycleFlowchartA
+
+HACycleFlowchart2
 ```
 
-```{r Generate HACycleFlowchartB}
-HACycleFlowchartB <- grViz("digraph flowchart {
+```{r}
+HACycleFlowchartDiatom <- grViz("digraph flowchart {
       # node definitions with substituted label text
       graph [overlap = FALSE, layout = dot] #layout can be set to dot, neato or twopi.
       node [fontname = Helvetica, shape = rectangle, style = 'filled', fontsize = 30]        
@@ -537,27 +670,21 @@ HACycleFlowchartB <- grViz("digraph flowchart {
       tab2 [label = '@@2', shape = 'oval', color = 'cadetblue3']
       tab3 [label = '@@3', fillcolor = 'darkgoldenrod1']
       tab4 [label = '@@4', fillcolor = 'chartreuse2']
+      tab5 [label = '@@5', shape = 'oval', color = 'cadetblue3']
       tab6 [label = '@@6', fillcolor = 'darkgoldenrod1']
       tab7 [label = '@@7', fillcolor = 'darkgoldenrod1']
-      tab8 [label = '@@8', shape = 'oval', color = 'cadetblue3']
-      tab9 [label = '@@9', fillcolor = 'darkgoldenrod1']
-      tab10 [label = '@@10', fillcolor = 'chartreuse2']
-      tab11 [label = '@@11', shape = 'oval', color = 'cadetblue3']
-      tab12 [label = '@@12', fillcolor = 'chartreuse2']
-      tab13 [label = '@@13', fillcolor = 'darkgoldenrod1']
+
       
       rankdir=TB
-      { rank = same; tab2; tab5; tab8; tab11 }
-      { rank = min; tab4; tab1; tab10; tab12; color ='blue' }
-      { rank = max; tab3; tab6; tab7; tab9; tab13 }
+      { rank = same; tab2; tab5}
+      { rank = min; tab4; tab1; color ='blue' }
+      { rank = max; tab3; tab6; tab7 }
 
       # edge definitions with the node IDs
       tab4 -> tab2 -> tab3;
       tab1 -> tab2 -> tab6 -> tab7; 
-      tab7 -> tab8 -> tab1 [style=dashed];
-      # tab6 -> tab5 -> tab1 [style=dotted];
-      tab10 -> tab8 -> tab9 -> tab11 -> tab10;
-      tab12 -> tab11 -> tab13
+      tab6 -> tab1;
+      tab7 -> tab1;
       }
       
       
@@ -566,22 +693,16 @@ HACycleFlowchartB <- grViz("digraph flowchart {
       [2]: 'Ascorbate Peroxidase'
       [3]: 'H2O'
       [4]: 'H2O2'
-      # [5]: 'Monodehydroascorbate Reductase'
+      [5]: 'Monodehydroascorbate Reductase'
       [6]: 'Monodehydroascorbate'
       [7]: 'Dehydroascorbate'
-      [8]: 'Dehydroascorbate Reductase'
-      [9]: 'Glutathione disulfide'
-      [10]: 'Glutathione'
-      [11]: 'Glutathione Reductase'
-      [12]: 'NADPH'
-      [13]: 'NAD'
       ")
+
+HACycleFlowchartDiatom
+vtree::grVizToPNG(HACycleFlowchartPrasino, width = 800, height = 200, folder = Figures)
+
 ```
- 
-```{r HACycleFlowchartB}
-HACycleFlowchartB
-```
- 
+
  XXX Naaman make a legend. 
  Enzymes are in a blue circle
  All substrates are in a green box
