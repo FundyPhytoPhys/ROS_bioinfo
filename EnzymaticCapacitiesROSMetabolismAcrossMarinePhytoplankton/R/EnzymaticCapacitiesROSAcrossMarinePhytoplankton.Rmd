@@ -474,6 +474,7 @@ HACycleFlowchart <- grViz("digraph flowchart {
       tab11 [label = '@@11', shape = 'oval', color = 'cadetblue3']
       tab12 [label = '@@12', fillcolor = 'chartreuse2']
       tab13 [label = '@@13', fillcolor = 'darkgoldenrod1']
+
       
       rankdir=RL
       { rank = same; tab2; tab5; tab8; tab11 }
@@ -483,6 +484,7 @@ HACycleFlowchart <- grViz("digraph flowchart {
       # edge definitions with the node IDs
       tab4 -> tab2 -> tab3;
       tab1 -> tab2 -> tab6 -> tab7; 
+      tab6 -> tab7;
       tab7 -> tab8 -> tab1 ;
       tab6 -> tab5 -> tab1 ;
       tab10 -> tab8 -> tab9 -> tab11 -> tab10;
@@ -503,13 +505,13 @@ HACycleFlowchart <- grViz("digraph flowchart {
       [10]: 'Glutathione'
       [11]: 'Glutathione Reductase'
       [12]: 'NADPH'
-      [13]: 'NAD'
+      [13]: 'NADP'
       ")
 ```
  
 ```{r HACycleFlowchart}
 HACycleFlowchart
-vtree::grVizToPNG(HACycleFlowchart, width = 1000, height = 300, folder = Figures)
+vtree::grVizToPNG(HACycleFlowchart, width = 1000, height = 400, folder = Figures)
 ```
 
 ```{r Generate HACycleFlowchartPrasino}
@@ -552,7 +554,7 @@ HACycleFlowchartPrasino <- grViz("digraph flowchart {
  
 ```{r HACycleFlowchartPrasino}
 HACycleFlowchartPrasino
-vtree::grVizToPNG(HACycleFlowchartPrasino, width = 800, height = 200, folder = Figures)
+vtree::grVizToPNG(HACycleFlowchartPrasino, width = 700, height = 200, folder = Figures)
 ```
 
 ```{r Generate HACycleFlowchartB}
@@ -670,21 +672,21 @@ HACycleFlowchartDiatom <- grViz("digraph flowchart {
       tab2 [label = '@@2', shape = 'oval', color = 'cadetblue3']
       tab3 [label = '@@3', fillcolor = 'darkgoldenrod1']
       tab4 [label = '@@4', fillcolor = 'chartreuse2']
-      tab5 [label = '@@5', shape = 'oval', color = 'cadetblue3']
+
+      tab5 [label = '@@5', fillcolor = 'darkgoldenrod1']
       tab6 [label = '@@6', fillcolor = 'darkgoldenrod1']
-      tab7 [label = '@@7', fillcolor = 'darkgoldenrod1']
 
       
-      rankdir=TB
-      { rank = same; tab2; tab5}
+      rankdir=RL
+      { rank = same; tab2}
       { rank = min; tab4; tab1; color ='blue' }
-      { rank = max; tab3; tab6; tab7 }
+      { rank = max; tab3; tab6; tab5 }
 
       # edge definitions with the node IDs
       tab4 -> tab2 -> tab3;
-      tab1 -> tab2 -> tab6 -> tab7; 
-      tab6 -> tab1;
-      tab7 -> tab1;
+      tab1 -> tab2 -> tab5 -> tab6; 
+      tab5 -> tab1 [style = 'dotted', label = '?', color = 'darkgrey'];
+      tab6 -> tab1 [style = 'dotted', label = '?', color = 'darkgrey'];
       }
       
       
@@ -693,13 +695,41 @@ HACycleFlowchartDiatom <- grViz("digraph flowchart {
       [2]: 'Ascorbate Peroxidase'
       [3]: 'H2O'
       [4]: 'H2O2'
-      [5]: 'Monodehydroascorbate Reductase'
-      [6]: 'Monodehydroascorbate'
-      [7]: 'Dehydroascorbate'
+      [5]: 'Monodehydroascorbate'
+      [6]: 'Dehydroascorbate'
       ")
 
 HACycleFlowchartDiatom
-vtree::grVizToPNG(HACycleFlowchartPrasino, width = 800, height = 200, folder = Figures)
+vtree::grVizToPNG(HACycleFlowchartDiatom, width = 600, height = 200, folder = Figures)
+
+```
+
+```{r}
+HACycleFlowchartKey <- grViz("digraph flowchart {
+      # node definitions with substituted label text
+      graph [overlap = FALSE, layout = dot] #layout can be set to dot, neato or twopi.
+      node [fontname = Helvetica, shape = rectangle, style = 'filled', fontsize = 30]        
+      tab1 [label = '@@1', fillcolor = 'chartreuse2']
+      tab2 [label = '@@2', shape = 'oval', color = 'cadetblue3']
+      tab3 [label = '@@3', fillcolor = 'darkgoldenrod1']
+
+      
+      rankdir=RL
+      { rank = same; tab2; tab1; tab3}
+
+      # edge definitions with the node IDs
+
+      }
+      
+      
+      
+      [1]: 'Ascorbate'
+      [2]: 'Ascorbate Peroxidase'
+      [3]: 'H2O'
+      ")
+
+HACycleFlowchartKey
+vtree::grVizToPNG(HACycleFlowchartKey, width = 600, height = 200, folder = Figures)
 
 ```
 
