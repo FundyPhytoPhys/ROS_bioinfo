@@ -376,7 +376,7 @@ To further investigate possible influences of colony formation, the presence of 
 ```{r read in SupOx Models, include = FALSE}
 SupOxRad <- readRDS(file.path(DataProcessedModels, "SupOxRad.Rds"))
 OchrophyteSupOxRad <- readRDS(file.path(DataProcessedModels, "OchrophyteSupOxRad.Rds"))
-SupOxRadProk <- readRDS(file.path(DataProcessedModels, "SupOxRadProk.Rds"))
+# SupOxRadProk <- readRDS(file.path(DataProcessedModels, "SupOxRadProk.Rds"))
 # SupOxLat <- readRDS(file.path(DataProcessedModels, "SupOxLat.Rds"))
 # SupOxLatProk <- readRDS(file.path(DataProcessedModels, "SupOxLatProk.Rds"))
 SupOxMerged <- readRDS(file.path(DataProcessed, "SupOxMerged.Rds"))
