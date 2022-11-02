@@ -224,7 +224,7 @@ MergedData_na$taxon_facet <- factor(MergedData_na$Taxa, levels= c("Cryptophyte",
 
 ```{r}
 HAMergedData <- MergedData %>%
-  filter(ECNumber %in% c("1.11.1.11", "1.6.5.4", "1.8.5.1", "1.8.1.7"))
+  filter(ECNumber %in% c("1.11.1.11", "1.6.5.4", "1.8.5.1", "1.8.1.7", "2.5.1.18"))
 ```
 
 # Abstract {.unnumbered}
@@ -320,11 +320,11 @@ EukHyPeDotPlot
 
 ```{r HalliwellAsadaEukHyPeDotPlot, fig.height = 20, fig.width = 10}
 HalliwellAsadaEukHyPeDotPlot <- MergedData_na %>%
-  filter(HyPe == "Production" | HyPe == "Scavenging", 
+  filter(#HyPe == "Production" | HyPe == "Scavenging", 
          Taxa != "Prokaryote",
          ROSEnzyme_TotalCount != 0,
          GeneModels_count != 0, 
-         ECNumber %in% c("1.11.1.11", "1.6.5.4", "1.8.5.1", "1.8.1.7")) %>%
+         ECNumber %in% c("1.11.1.11", "1.6.5.4", "1.8.5.1", "1.8.1.7", "2.5.1.18")) %>%
   ggplot() +
   geom_point(aes(x = EnzymeName, y= reorder(Name, -Radius_um), size = ROSGene_count, color = Taxa, shape = Ome)) +
   scale_x_discrete(position ="top") +
