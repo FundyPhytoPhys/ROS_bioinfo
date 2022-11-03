@@ -387,9 +387,9 @@ HalliwellAsadaEukGenHyPeDotPlotFiltered <- MergedData_na %>%
          Ome == "Genome",
          ROSEnzyme_TotalCount != 0,
          GeneModels_count != 0, 
-         ECNumber %in% c("1.11.1.11", "1.6.5.4", "1.8.5.1", "1.8.1.7")) %>%
+         ECNumber %in% c("1.11.1.11", "1.6.5.4", "1.8.5.1", "1.8.1.7", "2.5.1.18")) %>%
   filter(Taxa %in% c("Diatom", "Green")) %>%
-  mutate(EnzymeAbbrev = fct_relevel(EnzymeAbbrev, "GR", "DHAR", "MDHAR", "APX")) %>%
+  mutate(EnzymeAbbrev = fct_relevel(EnzymeAbbrev, "GR", "DHAR", "MDHAR", "APX", "GST")) %>%
   ggplot() +
   geom_point(aes(y = EnzymeAbbrev, x = reorder(Name, Radius_um), size = ROSGene_count, color = Taxa, shape = Ome)) +
   # scale_y_discrete(position ="top") +
