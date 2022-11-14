@@ -1,5 +1,5 @@
 ---
-title: "Reactive Oxygen Species Production and Scavenging; Genomic Patterns Across Marine Phytoplankton"
+title: "Genomic Capacities for Reactive Oxygen Species Metabolism Across Marine Phytoplankton"
 author:
 - Naaman M. Omar:
     institute: mta
@@ -18,7 +18,7 @@ institute:
   - ualberta: 'Faculty of Veterinary Medicine, University of Calgary, 3280 Hospital Dr NW, Calgary, AB, T2N 4Z6.'
   - dalhousie: 'Faculty of Computer Science, Dalhousie University, 6050 University Ave, Halifax, NS, B3H 1W5.'
   - algatech: 'Center Algatech, Laboratory of Photosynthesis, Novohradska 237, Trebon, CZ 37981, Czech Republic.'
-date: "2022-06-06"
+date: "2022-08-29"
 output:
   bookdown::html_document2:
     code_folding: show
@@ -65,19 +65,19 @@ editor_options:
 
 # Abstract {.unnumbered}
 
-Marine phytoplankton both produce and scavenge Reactive Oxygen Species (ROS), to support cellular processes, while limiting damaging reactions. Some prokaryotic picophytoplankton have lost all genes encoding capacity to scavenge hydrogen peroxide and rely upon co-occurring cells to scavenge hydrogen peroxide. Such losses of metabolic function can only apply to those ROS, including hydrogen peroxide, which potentially traverse the cell membrane, before provoking excessive damaging intracellular reactions.
-We therefore hypothesized that cell radius influences which elements of ROS metabolism can potentially be out-sourced to co-occurring cells. We investigated genomes and transcriptomes from diverse eukaryotic phytoplankton, ranging from 0.4 to 44 µm radius, to analyze the genomic allocations to produce enzymes metabolizing three distinct ROS.
-Superoxide has high reactivity, short intracellular and extracellular lifetimes and limited membrane permeability. Genes encoding superoxide scavenging were ubiquitous, but the fractional gene allocation decreased with increasing cell radius, consistent with superoxide metabolism served by a nearly fixed set of core genes, scavenging intracellular and extracellular superoxide pools, separated by the cell membrane.
-Hydrogen peroxide has lower reactivity, longer intracellular and extracellular lifetimes and readily crosses cell membranes. Eukaryotic phytoplankton genomic allocations to hydrogen peroxide production decrease with increasing cell radius, more than do genomic allocations to scavenging of hydrogen peroxide, consistent with maintenance of ROS homeostasis in the face of slower diffusional losses of hydrogen peroxide from larger cells. Gene allocations to hydrogen peroxide metabolism are influenced by capacity for colony formation, suggesting more active hydrogen peroxide metabolism among the closely spaced cells of colonies compared to single cells; and by presence of flagella suggesting a role in maintenance of ROS homeostasis.
-Nitric Oxide has low reactivity, long intracellular and extracellular lifetimes and readily crosses cell membranes. Neither nitric oxide production nor scavenging genomic capacities changed with increasing cell radius.  Centric vs. pennate diatoms, however, show contrasting gene allocations to nitric oxide metabolism, consistent with diverse regulatory roles of nitric oxide across taxa.
+Marine phytoplankton produce and scavenge Reactive Oxygen Species, to support cellular processes, while limiting damaging reactions. Some prokaryotic picophytoplankton have, however, lost all genes encoding scavenging of hydrogen peroxide. Such losses of metabolic function can only apply to Reactive Oxygen Species which potentially traverse the cell membrane, before provoking damaging intracellular reactions.
+We therefore hypothesized that cell radius influences which elements of Reactive Oxygen Species metabolism are potentially dispensable from a cell. We investigated genomes and transcriptomes from diverse marine eukaryotic phytoplankton, ranging from 0.4 to 44 µm radius, to analyze the genomic allocations encoding enzymes metabolizing Reactive Oxygen Species.
+Superoxide has high reactivity, short lifetimes and limited membrane permeability. Genes encoding superoxide scavenging were ubiquitous, but the fractional gene allocation decreased with increasing cell radius, consistent with a nearly fixed set of core genes for scavenging superoxide pools.
+Hydrogen peroxide has lower reactivity, longer intracellular and extracellular lifetimes and readily crosses cell membranes. Genomic allocations to hydrogen peroxide production decrease with increasing cell radius, more than do genomic allocations to scavenging of hydrogen peroxide, consistent with maintenance of ROS homeostasis in the face of slower diffusional losses of hydrogen peroxide from larger cells. Gene allocations to hydrogen peroxide metabolism are positively influenced by capacity for colony formation, suggesting more active hydrogen peroxide metabolism among the closely spaced cells of colonies, compared to single cells; and by the presence of flagella, suggesting an interaction between flagella and maintenance of Reactive Oxygen Species homeostasis.
+Nitric Oxide has low reactivity, long intracellular and extracellular lifetimes and readily crosses cell membranes. Neither Nitric Oxide production nor scavenging genomic capacities changed with increasing cell radius. Centric vs. pennate diatoms, however, show contrasting gene allocations to nitric oxide metabolism, consistent with diverse roles of nitric oxide across taxa.
 
 # Introduction {.unnumbered}
 
-Phytoplankton cells span a large size range, from picoplankton (<2µm), nanoplankton (2 to 20µm), microplankton (20 to 200µm) to macroplankton (200 to <2000µm) [@finkelPhytoplanktonChangingWorld2010]. Cell size interacts with multiple selective pressures, including cellular metabolic rate, light absorption, nutrient uptake, cell nutrient quotas, trophic interactions and diffusional exchanges with the environment  [@finkelPhytoplanktonChangingWorld2010; @andersenModellingEmergentTrophic2015; @finkelLightAbsorptionSize2001]. For example smaller cells absorb more light per pigment content because they suffer less from internal self-shading [@geiderSizeDependenceGrowth1986], but small cells can be more prone to grazing by some microzooplankton [@stromMicrozooplanktonGrazingCoastal2007]. Beyond simple size, cells of different shapes differ in surface area to volume ratio. For example, more elongated cells, such as pennate diatoms, have a larger surface area to volume ratio compared to more rounded cells, such as centric diatoms, of equivalent biovolume [@litchmanLinkingTraitsSpecies2010], which can in turn influence diffusional exchanges between cells and their environment. 
+Phytoplankton cells span a large size range, from picoplankton (<2µm), nanoplankton (2 to 20µm), microplankton (20 to 200µm) to macroplankton (200 to <2000µm) [@finkelPhytoplanktonChangingWorld2010]. Cell size interacts with multiple selective pressures, including cellular metabolic rate, light absorption, nutrient uptake, cell nutrient quotas, trophic interactions and diffusional exchanges with the environment  [@finkelPhytoplanktonChangingWorld2010; @andersenModellingEmergentTrophic2015; @finkelLightAbsorptionSize2001; @geiderSizeDependenceGrowth1986; @stromMicrozooplanktonGrazingCoastal2007]. Beyond simple size, cells of different shapes differ in surface area to volume ratio. For example, more elongated cells, such as pennate diatoms, have a larger surface area to volume ratio compared to more rounded cells, such as centric diatoms, of equivalent biovolume [@litchmanLinkingTraitsSpecies2010], which can in turn influence diffusional exchanges between cells and their environment. 
 
 ## Characteristics of Reactive Oxygen Species {.unnumbered}
 
-Phytoplankton both produce and scavenge Reactive Oxygen Species (ROS), both within and outside the cell membrane. Some ROS readily cross the cell membrane, connecting intra- and extra-cellular pools. Other ROS rarely cross cell membranes and therefore intra- and extra-cellular pools are not directly connected (Table \@ref(tab:ROSDiffusion)).
+Phytoplankton both produce and scavenge Reactive Oxygen Species (ROS), both within and outside the cell membrane, enzymatically and non-enzymatically. Some ROS readily cross the cell membrane, connecting intra- and extra-cellular pools. Other ROS rarely cross cell membranes and therefore intra- and extra-cellular pools are at least partially segregated (Table \@ref(tab:ROSDiffusion)).
 
 <table class=" lightable-classic" style='font-family: "Arial Narrow", "Source Sans Pro", sans-serif; margin-left: auto; margin-right: auto;'>
 <caption>(\#tab:ROSDiffusion)Diffusion and Stability of Different ROS</caption>
@@ -108,12 +108,12 @@ Phytoplankton both produce and scavenge Reactive Oxygen Species (ROS), both with
    <td style="text-align:left;"> H~2~O~2~ </td>
    <td style="text-align:right;"> 1e-09 </td>
    <td style="text-align:right;"> 1e-06 </td>
-   <td style="text-align:left;"> [@diazProductionExtracellularReactive2018; @schneiderKINETICSBIOLOGICALHYDROGEN2015] </td>
+   <td style="text-align:left;"> [@diazProductionExtracellularReactive2018; @schneiderKineticsBiologicalHydrogen2015] </td>
    <td style="text-align:left;"> NA </td>
    <td style="text-align:left;"> NA </td>
    <td style="text-align:right;"> 3.6e+03 </td>
    <td style="text-align:right;"> 1.2e+05 </td>
-   <td style="text-align:left;"> [@lesserOXIDATIVESTRESSMARINE2006; @diazProductionExtracellularReactive2018; @schneiderKINETICSBIOLOGICALHYDROGEN2015] </td>
+   <td style="text-align:left;"> [@lesserOxidativeStressMarine2006; @diazProductionExtracellularReactive2018; @schneiderKineticsBiologicalHydrogen2015] </td>
    <td style="text-align:left;"> Yes </td>
    <td style="text-align:left;"> [@bienertAquaporinfacilitatedTransmembraneDiffusion2014; @almasalmehStructuralDeterminantsHydrogen2014; @wangCharacterizationAquaporindrivenHydrogen2020; @millerAquaporin3MediatesHydrogen2010] </td>
    <td style="text-align:left;"> 1e-13 </td>
@@ -129,7 +129,7 @@ Phytoplankton both produce and scavenge Reactive Oxygen Species (ROS), both with
    <td style="text-align:right;"> 1e-09 </td>
    <td style="text-align:left;"> [@diazProductionExtracellularReactive2018; @adesinaPhotochemicallyGeneratedNitric2021] </td>
    <td style="text-align:left;"> 320 </td>
-   <td style="text-align:left;"> [@lesserOXIDATIVESTRESSMARINE2006] </td>
+   <td style="text-align:left;"> [@lesserOxidativeStressMarine2006] </td>
    <td style="text-align:right;"> 1.0e-03 </td>
    <td style="text-align:right;"> 6.0e+01 </td>
    <td style="text-align:left;"> [@diazProductionExtracellularReactive2018; @adesinaPhotochemicallyGeneratedNitric2021] </td>
@@ -167,7 +167,7 @@ Phytoplankton both produce and scavenge Reactive Oxygen Species (ROS), both with
    <td style="text-align:right;"> 1e-15 </td>
    <td style="text-align:left;"> [@diazProductionExtracellularReactive2018] </td>
    <td style="text-align:left;"> 4.5 </td>
-   <td style="text-align:left;"> [@lesserOXIDATIVESTRESSMARINE2006] </td>
+   <td style="text-align:left;"> [@lesserOxidativeStressMarine2006] </td>
    <td style="text-align:right;"> 1.0e-06 </td>
    <td style="text-align:right;"> 1.0e-06 </td>
    <td style="text-align:left;"> [@diazProductionExtracellularReactive2018] </td>
@@ -186,10 +186,10 @@ Phytoplankton both produce and scavenge Reactive Oxygen Species (ROS), both with
    <td style="text-align:right;"> 1e-14 </td>
    <td style="text-align:left;"> [@sundaySingletOxygenPhotogeneration2020] </td>
    <td style="text-align:left;"> 82 </td>
-   <td style="text-align:left;"> [@lesserOXIDATIVESTRESSMARINE2006] </td>
+   <td style="text-align:left;"> [@lesserOxidativeStressMarine2006] </td>
    <td style="text-align:right;"> 1.0e-06 </td>
    <td style="text-align:right;"> 1.0e-06 </td>
-   <td style="text-align:left;"> [@lesserOXIDATIVESTRESSMARINE2006] </td>
+   <td style="text-align:left;"> [@lesserOxidativeStressMarine2006] </td>
    <td style="text-align:left;"> NA </td>
    <td style="text-align:left;"> NA </td>
    <td style="text-align:left;"> NA </td>
@@ -220,65 +220,47 @@ Phytoplankton both produce and scavenge Reactive Oxygen Species (ROS), both with
 </tbody>
 </table>
 
-Superoxide (O~2~^•−^) is a radical anion generated through the monovalent reduction of O~2~ to O~2~^•−^ [@hayyanSuperoxideIonGeneration2016], present in the oceans at concentrations of 10^-12^ to 10^-9^ [@diazProductionExtracellularReactive2018; @adesinaPhotochemicallyGeneratedNitric2021]. O~2~^•−^ is highly reactive [@fridovichOxygenToxicityRadical1998] with organic compounds including thiols [@winterbournThiolChemistrySpecificity2008] and metals [@roeUptakeMechanismsInorganic2014; @roseInfluenceExtracellularSuperoxide2012] and is indeed believed to be responsible for over half of Fe(III) reduction in the ocean [@kustkaExtracellularProductionSuperoxide2005]. As the first of ROS species in a sequential series of reductions of O~2~, superoxide is a 'gateway' to production of other species of ROS. O~2~^•−^ is produced as a by-product of enzymatic reactions, and also produced non-enzymatically, both inside and outside a cell, but shows limited diffusion across the hydrophobic cell membrane [@korshunovPotentialRolePeriplasmic2002]. 
+Superoxide (O~2~^•−^), a radical anion generated through the monovalent reduction of O~2~ to O~2~^•−^ [@hayyanSuperoxideIonGeneration2016], is present in the oceans at concentrations of 10^-12^ to 10^-9^ [@diazProductionExtracellularReactive2018; @adesinaPhotochemicallyGeneratedNitric2021]. O~2~^•−^ is highly reactive [@fridovichOxygenToxicityRadical1998] with organic compounds including thiols [@winterbournThiolChemistrySpecificity2008] and with metals [@roeUptakeMechanismsInorganic2014; @roseInfluenceExtracellularSuperoxide2012]. As the first ROS in a sequential series of reductions of O~2~, O~2~^•−^ is a 'gateway' to production of other ROS. O~2~^•−^ is produced both inside and outside a cell, but shows limited diffusion across the hydrophobic cell membrane [@korshunovPotentialRolePeriplasmic2002]. Electron transfers to O~2~ from the photosynthetic and mitochondrial electron transport chains generate intracellular O~2~^•−^ as a by-product [@kozulevaMinimizingElectronFlow2020; @blokhinaReactiveOxygenSpecies2010; @asadaUnivalentReductionMolecular1974; @kozulevaEvaluationParticipationFerredoxin2010;@pospisilProductionReactiveOxygen2009; @pospisilRoleMetalsProduction2014]. Multiple oxidases (Table \@ref(tab:ROSEnzymeList)) reduce O~2~ and generate either H~2~O [@solomonO2ReductionH2O2008], or alternately O~2~^•−^ and/or Hydrogen Peroxide (H~2~O~2~) [@messnerMechanismSuperoxideHydrogen2002; @mittlerOxidativeStressAntioxidants2002]. Biogenic production of extracellular ROS mediated by taxa ranging from heterotrophic bacteria to diatoms is significant in marine environments [@zhangExtensiveDarkBiological2016; @diazWidespreadProductionExtracellular2013; @diazProductionExtracellularReactive2018; @diazProductionExtracellularSuperoxide2018; @roseMeasurementImplicationsNonphotochemically2008; @schneiderSpeciesLevelVariabilityExtracellular2016; @sutherlandExtracellularSuperoxideProduction2019; @kustkaExtracellularProductionSuperoxide2005; @hanselDynamicsExtracellularSuperoxide2016]. Increasing cell suspension density leads to decreased O~2~^•−^ production per cell [@sutherlandExtracellularSuperoxideProduction2019; @hanselTightRegulationExtracellular2019; @marshallSuperoxideProductionMarine2005]. Some extracellular O~2~^•−^ production likely contributes to cell growth, in that the removal of extracellular ROS from cultures of the heterotrophic bacteria *Roseobacter* inhibits its growth [@hanselTightRegulationExtracellular2019]. O~2~^•−^ in coastal waters is primarily attributable to extracellular production mediated by eukaryotic phytoplankton [@sutherlandSpatialHeterogeneityParticleAssociated2020]. In contrast, *Prochlorococcus* MED4 shows the least extracellular production of O~2~^•−^ among microbes analyzed to date [@sutherlandExtracellularSuperoxideProduction2019]. O~2~^•−^ production patterns can vary even within a genus [@schneiderSpeciesLevelVariabilityExtracellular2016].
 
-Electron transfers to O~2~ from multiple sites of the photosynthetic and mitochondrial electron transport chains generate intracellular O~2~^•−^ as a by-product[@kozulevaMinimizingElectronFlow2020; @blokhinaReactiveOxygenSpecies2010; @asadaUnivalentReductionMolecular1974; @kozulevaEvaluationParticipationFerredoxin2010;@pospisilProductionReactiveOxygen2009; @pospisilRoleMetalsProduction2014]. Multiple oxidases encoded by genes included in this study (Table \@ref(tab:MetaData)) reduce O~2~ and generate either H~2~O [@solomonO2ReductionH2O2008], or alternately O~2~^•−^ and/or H~2~O~2~ [@messnerMechanismSuperoxideHydrogen2002; @mittlerOxidativeStressAntioxidants2002]. Biogenic production of extracellular ROS mediated by taxa ranging from heterotrophic bacteria to diatoms is significant in marine environments [@zhangExtensiveDarkBiological2016; @diazWidespreadProductionExtracellular2013; @diazProductionExtracellularReactive2018; @diazProductionExtracellularSuperoxide2018; @roseMeasurementImplicationsNonphotochemically2008; @schneiderSpeciesLevelVariabilityExtracellular2016; @sutherlandExtracellularSuperoxideProduction2019; @kustkaExtracellularProductionSuperoxide2005; @hanselDynamicsExtracellularSuperoxide2016]. Increasing cell density leads to decreased superoxide production per cell [@sutherlandExtracellularSuperoxideProduction2019; @hanselTightRegulationExtracellular2019; @marshallSuperoxideProductionMarine2005]. Extracellular superoxide production likely contributes to cell growth, in that the removal of extracellular ROS from cultures of the heterotrophic bacteria *Roseobacter* inhibits its growth [@hanselTightRegulationExtracellular2019]. Superoxide in coastal waters is primarily attributable to extracellular production by eukaryotic phytoplankton [@sutherlandSpatialHeterogeneityParticleAssociated2020], while *Prochlorococcus* MED4 shows the least extracellular production of O~2~^•−^ among microbes analyzed to date [@sutherlandExtracellularSuperoxideProduction2019]. Superoxide production patterns vary even within a genus. @schneiderSpeciesLevelVariabilityExtracellular2016 found three species of *Thalassiosira* produced more extracellular O~2~^•−^ in the presence of light (dead or alive), showing that within *Thalassiosira* superoxide is formed through passive light driven reactions. *T. pseudonana* and *T. oceanica*  produced more O~2~^•−^ when alive, indicating additional active O~2~^•−^ production, whereas in *T. weissflogii* extracellular O~2~^•−^ production did not change between living and dead cells [@schneiderSpeciesLevelVariabilityExtracellular2016].
+Two known enzymes mediate conversion of O~2~^•−^ to H~2~O~2~; the ubiquitous dismutation of O~2~^•−^ catalyzed by diverse Superoxide Dismutases (SOD) or the less prevalent reduction of O~2~^•−^, catalyzed by Superoxide Reductase (SOR) at the expense of metabolic reductant. O~2~^•−^ also dismutates spontaneously to produce H~2~O~2~ and O~2~ [@zafiriouChemistrySuperoxideIonradical1990], although @sutherlandDarkBiologicalSuperoxide2020 found that ~52% of dark O~2~^•−^ production instead likely undergoes oxidation back to O~2~.  Extracellular production of O~2~^•−^ thus indirectly contributes to extracellular H~2~O~2~ pools [@wuttigPathwaysSuperoxideDecay2013; @sutherlandExtracellularSuperoxideProduction2019; @scanlanEcologicalGenomicsMarine2009; @schneiderSpeciesLevelVariabilityExtracellular2016].
 
-Two known enzymes mediate conversion of O~2~^•−^ to H~2~O~2~; the ubiquitous dismutation of O~2~^•−^ catalyzed by diverse Superoxide Dismutases (SOD) or the less prevalent reduction of O~2~^•−^, catalyzed by Superoxide Reductase at the expense of metabolic reductant. O~2~^•−^ also dismutates spontaneously to produce H~2~O~2~ and O~2~ [@zafiriouChemistrySuperoxideIonradical1990], although @sutherlandDarkBiologicalSuperoxide2020 found that ~52% of dark O~2~^•−^ production instead likely undergoes oxidation back to O~2~. About 1% of O~2~^•−^ decay in seawater results from O~2~^•−^ reacting with its protonated conjugate (HOO) [@roseMeasurementImplicationsNonphotochemically2008], but O~2~^•−^ interactions with species of Cu  and Fe are a larger total sink for O~2~^•−^[@zafiriouChemistrySuperoxideRadical1998; @hellerSuperoxideDecayKinetics2010].  Extracellular production of O~2~^•−^ thus indirectly contributes to extracellular H~2~O~2~ [@wuttigPathwaysSuperoxideDecay2013; @sutherlandExtracellularSuperoxideProduction2019; @scanlanEcologicalGenomicsMarine2009; @schneiderSpeciesLevelVariabilityExtracellular2016].
+H~2~O~2~ is an uncharged compound, present in the ocean at concentrations of 10^-9^ to 10^-6^ mol L^-1^ [@diazProductionExtracellularReactive2018], depending upon location and conditions including temperature, light level, depth of the mixed layer and the concentration of total dissolved organic carbon [@yuanDistributionHydrogenPeroxide2001]. In aquatic systems, H~2~O~2~ has lifetimes of hours to days (Table \@ref(tab:ROSDiffusion)) [@lesserOxidativeStressMarine2006; @diazProductionExtracellularReactive2018]. H~2~O~2~ passively traverses cell membranes [@halliwellFreeRadicalsBiology1999], primarily through aquaporins [@bienertAquaporinfacilitatedTransmembraneDiffusion2014; @almasalmehStructuralDeterminantsHydrogen2014; @wangCharacterizationAquaporindrivenHydrogen2020; @millerAquaporin3MediatesHydrogen2010], allowing exchange of intracellular and extracellular pools of H~2~O~2~, although cells can maintain a concentration gradient between internal and external H~2~O~2~ [@seaverHydrogenPeroxideFluxes2001].
 
-Hydrogen peroxide (H~2~O~2~) is an uncharged compound, present in the ocean at concentrations of 10^-9^ to 10^-6^ mol L^-1^ [@diazProductionExtracellularReactive2018], depending upon location and conditions including temperature, light level, depth of the mixed layer and the concentration of total dissolved organic carbon [@yuanDistributionHydrogenPeroxide2001]. In aquatic systems, H~2~O~2~ has lifetimes of hours to days (Table \@ref(tab:ROSDiffusion)) [@lesserOXIDATIVESTRESSMARINE2006; @diazProductionExtracellularReactive2018]. H~2~O~2~ passively traverses cell membranes [@halliwellFreeRadicalsBiology1999], primarily through aquaporins [@bienertAquaporinfacilitatedTransmembraneDiffusion2014; @almasalmehStructuralDeterminantsHydrogen2014; @wangCharacterizationAquaporindrivenHydrogen2020; @millerAquaporin3MediatesHydrogen2010], allowing exchange of intracellular and extracellular pools of H~2~O~2~, although cells can maintain a concentration gradient between internal and external H~2~O~2~ [@seaverHydrogenPeroxideFluxes2001].
+H~2~O~2~ is acutely toxic to most cells in the range of 10^-5^ to 10^-4^ mol L^-1^ [@halliwellFreeRadicalsBiology1999] (Table \@ref(tab:ROSDiffusion)). H~2~O~2~ can react with thiols and methionine [@winterbournThiolChemistrySpecificity2008] and can interfere with gene expression [@fedurayevHydrogenPeroxideParticipates2018]. Cytotoxic effects of H~2~O~2~, including lipid damage, are however, primarily caused by H~2~O~2~ dismutating into the hydroxyl radical, which is strongly oxidative [@lesserOxidativeStressMarine2006].
 
-H~2~O~2~ is acutely toxic to most cells in the range of 10^-5^ to 10^-4^ mol L^-1^ [@halliwellFreeRadicalsBiology1999] (Table \@ref(tab:ROSDiffusion)). Although only weakly directly reactive, H~2~O~2~ can react with thiols and methionine [@winterbournThiolChemistrySpecificity2008] and can interfere with gene expression [@fedurayevHydrogenPeroxideParticipates2018]. Cytotoxic effects of H~2~O~2~, including lipid damage, are primarily caused by H~2~O~2~ dismutating into the hydroxyl radical, which is strongly oxidative [@lesserOXIDATIVESTRESSMARINE2006]. H~2~O~2~ concentrations in seawater follow a diurnal cycle with a peak at mid-day [@morrisDielRegulationHydrogen2016; @averyHydrogenPeroxideBermuda2005; @yuanDistributionHydrogenPeroxide2001], which suggests significant direct or indirect photochemical or photobiological generation of H~2~O~2~. Some marine H~2~O~2~ production is indeed linked directly to biological processes, although it is not the dominant source of H~2~O~2~ [@averyHydrogenPeroxideBermuda2005] in seawater.H~2~O~2~ spontaneously, though slowly, decomposes into water and oxygen [@senguptaControllingNonCatalyticDecomposition2004]. Photochemically driven H~2~O~2~ decomposition may account for ~5% of H~2~O~2~ decomposition in seawater [@moffettInvestigationHydrogenPeroxide1990]. Abiotic decomposition of H~2~O~2~ can be mediated by interactions with metals. In seawater, H~2~O~2~ is indeed found in high enough concentrations to significantly contribute to the redox cycling of copper and iron [@milleroRateReductionCopper1991; @moffettReactionKineticsHydrogen1987]. 
+Multiple different oxidases are important in producing H~2~O~2~ including glycolate oxidase, NADPH oxidase, oxalate oxidase, amine oxidase [@mittlerOxidativeStressAntioxidants2002] and many others (Table \@ref(tab:ROSEnzymeList)), but abiotic processes, including rainfall, may be dominant sources of extracellular H~2~O~2~ in seawater [@averyHydrogenPeroxideBermuda2005; @kellyMeasurementsPeroxidesCloudwater1985; @willeyCoastalRainwaterHydrogen1996]. H~2~O~2~ concentrations in seawater follow a diurnal cycle with a peak at mid-day [@morrisDielRegulationHydrogen2016; @averyHydrogenPeroxideBermuda2005; @yuanDistributionHydrogenPeroxide2001], suggesting significant direct or indirect photochemical or photobiological generation of H~2~O~2~. Heterotrophs do not contribute much of the H~2~O~2~ production but significantly mediate H~2~O~2~ detoxification [@bondHeterotrophicBacteriaExhibit2020].  H~2~O~2~ also decomposes spontaneously, though slowly, into water and oxygen [@senguptaControllingNonCatalyticDecomposition2004], and contributes significantly to the redox cycling of copper and iron in seawater [@milleroRateReductionCopper1991; @moffettReactionKineticsHydrogen1987].
 
-A significant amount of biotic H~2~O~2~ detoxification in aqueous systems may be attributed to heterotroph mediated activity, although heterotrophs do not contribute much of the H~2~O~2~ production [@bondHeterotrophicBacteriaExhibit2020].   
-*Prochlorococcus* and some strains of *Synechococcus* lack genes encoding catalase and are therefore difficult to grow in axenic cultures, particularly at high cell densities. Growth and survival of these strains improves when co-cultured with other 'helper' bacteria which carry genes for catalase [@zinserCrossprotectionHydrogenPeroxide2018; @morrisDependenceCyanobacteriumProchlorococcus2011; @morrisFacilitationRobustGrowth2008; @coeSurvivalProchlorococcusExtended2016]. Helper bacteria can be substituted by direct addition of catalase or ROS scavengers to the media to keep H~2~O~2~ levels below their toxic threshold. These were found at 5 × 10^5^ to 1 × 10^6^ *Prochlorococcus* cells mL^-1^ * in culture, somewhat higher than typical ocean cell densities of 1 × 10^5^ to 3 × 10^5^ *Prochlorococcus* cells ml^−1^ [@partenskyProchlorococcusMarinePhotosynthetic1999], where auto-intoxication from metabolism of the *Prochlorococcus* cell population might be less prevalent [@omarDiffusionalInteractionsMarine2022]. In the open ocean, H~2~O~2~ levels generally remain below the cytotoxic threshold of ~1 x 10^-5^ M, perhaps partly through activity of co-occuring helper microorganisms that retain capacity to produce catalase [@zinserCrossprotectionHydrogenPeroxide2018; @morrisDielRegulationHydrogen2016].
+*Prochlorococcus* and some strains of *Synechococcus* lack all genes encoding enzymes for scavenging of H~2~O~2~, and are therefore difficult to grow in axenic cultures, particularly at higher cell densities. Growth and survival of these strains improves when co-cultured with other 'helper' bacteria which carry genes for catalase [@zinserCrossprotectionHydrogenPeroxide2018; @morrisDependenceCyanobacteriumProchlorococcus2011; @morrisFacilitationRobustGrowth2008; @coeSurvivalProchlorococcusExtended2016]. These culture results were found at *Prochlorococcus* cell densities somewhat higher than typical ocean levels of 1 × 10^5^ to 3 × 10^5^ *Prochlorococcus* cells ml^−1^ [@partenskyProchlorococcusMarinePhotosynthetic1999], where auto-intoxication from metabolism of the *Prochlorococcus* cell population might be less prevalent [@omarDiffusionalInteractionsMarine2022]. In the open ocean, extracellular H~2~O~2~ levels generally remain below the acutely cytotoxic threshold of ~1 x 10^-5^ M, perhaps partly through activity of co-occuring helper microorganisms that retain capacity to produce catalase [@zinserCrossprotectionHydrogenPeroxide2018; @morrisDielRegulationHydrogen2016].
 
-Despite its radical nature and ability to react with biomolecules, ^•^NO is more commonly described as a signaling molecule rather than a ROS/RNS. 
-The induced overexpression of ^•^NO producing genes in diatoms results in reduced growth, photosynthetic activity and ability to adhere to surfaces, and would therefore lead to a decrease in biofilm formation [@vardiDiatomGeneRegulating2008]. @vardiDiatomGeneRegulating2008 further suggest that ^•^NO controls cell motility in that diatoms increase ^•^NO production under stressful conditions thereby decreasing cellular adhesion, freeing the cell to find a more suitable habitat to which to adhere. ^•^NO may also react with reduced glutathione (GSH) to form S-nitrosoglutathione (GSNO) [@delrioReactiveOxygenSpecies2009; @jahnovaSNitrosoglutathioneReductaseMaster2019]. In *Chlamydomonas reinhardtii*, intracellular GSNO levels and GSNO reductase activity are essential for adapting to salt stress [@chenRoleNitricOxide2016]. 
+Despite its radical nature and ability to react with biomolecules, ^•^NO functions widely as a signaling molecule [@vardiStressSurveillanceSystem2006; @thomsonEcophysiologyBrineDinoflagellate2000]. Optimal *in vivo* concentrations of ^•^NO for phytoplankton growth vary significantly across taxa, from 10^−8^ to 10^−9^ mol extracellular ^•^NO L^-1^ [@zhangStudyPatternsChemical2005]. ^•^NO is produced both biogenically through arginine dependent Nitric Oxide Synthases (NOS) or Nitric Oxide Associated Proteins (NOA) [@vardiCellSignalingMarine2008], as well as through abiotic processes including nitrite photolysis [@zafiriouNitricOxideSeawater1980]. Overexpression of ^•^NO producing genes in the diatom *Phaeodactylum tricornutum* results in reduced growth, photosynthetic activity and ability to adhere to surfaces, and thus likely a decrease in biofilm formation [@vardiDiatomGeneRegulating2008]. @vardiDiatomGeneRegulating2008 further suggest that ^•^NO influences cell motility in that diatoms increase ^•^NO production under stressful conditions thereby decreasing cellular adhesion, freeing the cell to find a more suitable habitat to which to adhere. ^•^NO can be enzymatically scavenged through Nitric Oxide Dioxygenase (NOD) or Nitric Oxide Reductases (NOR) [@fujiwaraCytochromeCbtypeNitric1996] (Table \@ref(tab:ROSEnzymeList)), and may also react non-enzymatically with reduced glutathione (GSH) to form S-nitrosoglutathione (GSNO) [@delrioReactiveOxygenSpecies2009; @jahnovaSNitrosoglutathioneReductaseMaster2019].
+Most cellular damage mediated by ^•^NO is attributed to the reaction of ^•^NO with O~2~^−^ to produce Peroxinitrite (ONOO^−^). The reaction of ^•^NO with O~2~^•−^ to produce ONOO^-^ is limited by the extracellular concentration of ^•^NO and is not a major ^•^NO sink in seawater [@adesinaPhotochemicallyGeneratedNitric2021]. 
 
-Most cellular damage mediated by ^•^NO is attributed to the reaction of ^•^NO with O~2~^−^ to produce Peroxinitrite (ONOO^−^). The reaction of ^•^NO with O~2~^•−^ to produce ONOO^-^ is limited by the concentration of ^•^NO and is not a major ^•^NO sink in seawater [@adesinaPhotochemicallyGeneratedNitric2021]. The efflux of photochemically produced ^•^NO from the sea to the air is a daytime source of atmospheric NO~x~ and is a loss term for ^•^NO from seawater [@adesinaPhotochemicallyGeneratedNitric2021].
-
-In diatoms, intracellular ^•^NO is localized to the nucleus and chloroplasts [@vardiStressSurveillanceSystem2006; @thomsonEcophysiologyBrineDinoflagellate2000].
-Optimal *in vivo* concentrations of ^•^NO for phytoplankton growth vary significantly whereby the raphidophyte *Heterosigma akawisho* has an optimum extracellular concentration of 10^−8^ mol ^•^NO L^-1^ for growth.
-The diatom *Chaetoceros curvisetus* also shows optimum growth at 10^−8^ mol extracellular ^•^NO L^-1^ while the optimum for the diatom *Skeletonema costatum* is 10^−9^ mol extracellular ^•^NO L^-1^ [@zhangStudyPatternsChemical2005].
-
-Other important ROS, Singlet Oxygen (^1^O~2~), Peroxynitrite (ONOO^-^) and Hydroxyl Radical (HO^•^) are not known to be directly produced nor scavenged by enzymatic processes, but the hydroxyl radical can be formed through the Haber-Weiss reaction, which involves O~2~^•-^ and H~2~O~2~ [@kehrerHaberWeissReaction2000]. HO^•^ is the most reactive ROS [@collinChemicalBasisReactive2019], is highly electrophilic and highly reactive with most organic compounds including nucleic acids, sugars, proteins and lipids [@marusawaHydroxylRadicalStrong2002; @gutteridgeReactivityHydroxylHydroxyllike1984; @mcgillChapterOxidantStress2013; @daviesProteinsDamagedOxygen1987; @halliwellFreeRadicalsBiology1999]. In seawater, HO^•^ is present in concentrations of 10^−18^ to 10^−15^ mol L^-1^, has a diffusion distance of only ~4.5 nm before destruction with a lifetime of µs [@diazProductionExtracellularReactive2018; @lesserOXIDATIVESTRESSMARINE2006]. Because to the high reactivity of HO^•^, it is unlikely that there are any scavengers dedicated to scavenge HO^•^ specifically [@halliwellFreeRadicalsBiology1999], although reactions with Dissolved Organic Matter non-specifically scavenge extracellular HO^•^ [@brezonikNitrateInducedPhotolysisNatural1998].
+Other important ROS, Singlet Oxygen (^1^O~2~), Peroxynitrite (ONOO^-^) and Hydroxyl Radical (HO^•^) are not known to be directly produced nor scavenged by enzymatic processes [@collinChemicalBasisReactive2019; [@marusawaHydroxylRadicalStrong2002; @gutteridgeReactivityHydroxylHydroxyllike1984; @mcgillChapterOxidantStress2013; @daviesProteinsDamagedOxygen1987; @halliwellFreeRadicalsBiology1999]. In seawater, HO^•^ is present in concentrations of 10^−18^ to 10^−15^ mol L^-1^, and has a diffusion distance of only ~4.5 nm before destruction with a lifetime of µs [@diazProductionExtracellularReactive2018; @lesserOxidativeStressMarine2006]. Because of the high reactivity of HO^•^, it is unlikely that there are any scavengers dedicated to HO^•^ specifically [@halliwellFreeRadicalsBiology1999], although reactions with dissolved organic matter non-specifically scavenge extracellular HO^•^ [@brezonikNitrateInducedPhotolysisNatural1998].
 
 ## The Black Queen Hypothesis {.unnumbered}
-The Black Queen Hypothesis states that loss of function mutations may proceed so long as some interacting community members retain the function, and the function can occur outside a given cell [@morrisBlackQueenHypothesis2012]. The Black Queen Hypothesis was formulated on the basis of *Prochlorococcus* and H~2~O~2~. *Prochlorococcus* (the beneficiary) lost the gene encoding the enzyme *katG* which scavenges H~2~O~2~ . Instead *Prochlorococcus* appears to allow H~2~O~2~ to move outwards across the cell membrane to be dealt with by community members retainig the capacity to scavenge H~2~O~2~, thus saving *Prochlorococcus* the cost of maintaining the genes and metabolism for scavenging H~2~O~2~ [@morrisDependenceCyanobacteriumProchlorococcus2011; @morrisBlackQueenHypothesis2012].
-In this study, the Black Queen Hypothesis will be tested with respect to Reactive Oxygen Species interacting with many taxa of phytoplankton spanning a wide range of sizes and latitudes of origin.
+The Black Queen Hypothesis states that loss of function mutations may proceed so long as some interacting community members retain the function, and the function can occur outside a given cell [@morrisBlackQueenHypothesis2012]. The Black Queen Hypothesis was formulated on the basis of *Prochlorococcus* and H~2~O~2~. *Prochlorococcus* (the beneficiary) lost the gene *katG* encoding an enzyme which scavenges H~2~O~2~. Instead *Prochlorococcus* allows H~2~O~2~ outwards across the cell membrane to be dealt with by community members retaining the capacity to scavenge H~2~O~2~, thus saving *Prochlorococcus* the cost of maintaining the genes and metabolism for scavenging H~2~O~2~ [@morrisDependenceCyanobacteriumProchlorococcus2011; @morrisBlackQueenHypothesis2012].
 
 ## Hypotheses and Significance {.unnumbered}
 
-Given that ROS show differential abilities to cross cell membranes, and have widely different diffusion distances before destruction, we sought to study whether cell radius, or diatom cell shape influence genomic allocations to ROS production and scavenging.
+Given that ROS show differential abilities to cross cell membranes, and have widely different diffusion distances before destruction, we sought to study whether cell radius, colony formation, flagella or diatom cell shape influence genomic allocations to ROS production and scavenging across diverse marine phytoplankters.
 
 ::: {.hypothesis #SupOx}
-**Phytoplankton do not differentially allocate a changing fraction of their total gene content to O~2~^•−^ production nor scavenging. **
-Noting that O~2~^•−^ is not readily able to cross biological membranes [@korshunovPotentialRolePeriplasmic2002], there are separate pools of intracellular and extracellular O~2~^•−^, separated by a cell membrane. O~2~^•−^ is also a mild oxidant and can release Fe(II) from iron complexes and iron sulfur proteins, which leads to production of highly reactive HO^•^ through the Haber-Weiss reaction [@bergaminiOxygenReactiveOxygen2004].
-As O~2~^•−^ is not membrane permeable, diffusional losses of O~2~^•−^ from cells are limited and will be little influenced by cell size.
-Therefore, we hypothesize that phytoplankton of different sizes do not differentially allocate a changing fraction of their total gene content to O~2~^•−^ production nor scavenging.
+**Cell radius across phytoplankton taxa does not influence the fraction of total gene content encoding O~2~^•−^ production, nor scavenging. **
+O~2~^•−^ is highly toxic, and not readily able to cross biological membranes [@korshunovPotentialRolePeriplasmic2002], so diffusional losses of O~2~^•−^ from cells are limited and will be little influenced by cell size.
 :::
 
-::: {.hypothesis #HyPeNitOxRadProduction}
-**Large phytoplankton allocate a smaller fraction of their total gene content to H~2~O~2~ and ^•^NO production. **
-H~2~O~2~ and ^•^NO are used in cellular processes including iron uptake [@roeUptakeMechanismsInorganic2014] and intracellular cell signalling [@delrioReactiveOxygenSpecies2009].
-H~2~O~2~ and ^•^NO have relatively low reactivity, with long intracellular and extracellular lifetimes leading to long potential diffusion paths before destruction.   Although polar, both H~2~O~2~ and ^•^NO are uncharged and readily cross cell membranes (Table \@ref(tab:ROSDiffusion)).
+::: {.hypothesis #HyPeNitOxRad}
+**Large phytoplankton allocate a smaller fraction of their total gene content to H~2~O~2~ and ^•^NO production and a larger fraction of their total gene content to H~2~O~2~ and ^•^NO scavenging.**
+  
+H~2~O~2~ and ^•^NO have relatively low reactivity, with long intracellular and extracellular lifetimes leading to long potential diffusion paths before destruction. Both H~2~O~2~ and ^•^NO are uncharged and readily cross cell membranes (Table \@ref(tab:ROSDiffusion)).
 Large cells have longer intracellular diffusional paths and a lower surface to volume ratios than do smaller cells [@finkelPhytoplanktonChangingWorld2010]. Large cells are thus less prone to diffusional losses of intracellular H~2~O~2~ and ^•^NO.
-We therefore hypothesize that large phytoplankton taxa will allocate a smaller fraction of their gene contents to H~2~O~2~ and to ^•^NO production, to maintain H~2~O~2~ and ^•^NO homeostasis in the face of slower diffusional losses of H~2~O~2~ or ^•^NO out of the cells to the environment.
-:::
-
-::: {.hypothesis #HyPeNitOxRadScavenging}
-**Large phytoplankton allocate a larger fraction of their total gene content to H~2~O~2~ and ^•^NO scavenging. **
-Since H~2~O~2~ and ^•^NO diffuse out of cells, and such diffusional losses are expected to be lower in larger than in smaller phytoplankton, loss of function mutations on enzymes that scavenge H~2~O~2~ and ^•^NO would be more deleterious in large cells than in smaller cells, as indeed found for differential losses of *katG* in  picoprokaryotes [@morrisBlackQueenHypothesis2012; @morrisDependenceCyanobacteriumProchlorococcus2011] of different sizes.
-Losses of genes encoding H~2~O~2~ or ^•^NO scavenging are predicted particularly in cases where the radius of the cell is smaller than the expected diffusion distance of the H~2~O~2~ or ^•^NO before destruction or reaction, since H~2~O~2~ or ^•^NO are able to cross the cell membrane, thereby connecting intracellular and extracellular pools.
-Therefore, we hypothesize that larger phytoplankton allocate a larger fraction of their gene content to H~2~O~2~ or ^•^NO scavenging compared to smaller phytoplankton which have better diffusional connectivity between intracellular and extracellular pools of H~2~O~2~ or ^•^NO and therefore higher potential to outsource detoxification of H~2~O~2~ and ^•^NO.
+To maintain H~2~O~2~ and ^•^NO homeostasis in the face of slower diffusional losses of H~2~O~2~ or ^•^NO out of the cells to the environment, large phytoplankton may have a smaller fraction of their gene contents for H~2~O~2~ and ^•^NO production. In contrast, loss of function mutations on enzymes that scavenge H~2~O~2~ and ^•^NO would be more deleterious in large cells than in smaller cells [@morrisBlackQueenHypothesis2012; @morrisDependenceCyanobacteriumProchlorococcus2011].
 :::
 
 ::: {.hypothesis #HyPeNitOxDiatom}
 **Pennate Diatoms allocate a larger fraction of their total gene content to H~2~O~2~ and ^•^NO production, and a smaller fraction of their total gene content to H~2~O~2~ and ^•^NO scavenging than do Centric Diatoms.**
-Pennate Diatoms maintain a small minimum radii even at large biovolumes due to their elongated shape [@mitchellRoleDiatomNanostructures2013].
-As a result, the cell shape of pennate diatoms allows for more diffusion of H~2~O~2~ and ^•^NO across the cell membrane due to the short mean diffusion paths to the cell surface and high surface area to volume ratio. Noting that H~2~O~2~ and ^•^NO are permeable across biological membranes (Table \@ref(tab:ROSDiffusion)), we hypothesize that pennate diatoms will allocate a larger fraction of their total gene content to H~2~O~2~ and ^•^NO production compared to centric diatoms.
-At the same time, we hypothesize that pennate diatoms will allocate a smaller fraction of their gene content to H~2~O~2~ and ^•^NO scavenging, compared to centric diatoms.
+
+Pennate Diatoms have a small minimum radii even at large biovolumes due to their elongated shape [@mitchellRoleDiatomNanostructures2013]. This cell shape of pennate diatoms allows for more diffusion of H~2~O~2~ and ^•^NO across the cell membrane due to the short mean diffusion paths to the cell surface and high surface area to volume ratio. Noting that H~2~O~2~ and ^•^NO are permeable across biological membranes (Table \@ref(tab:ROSDiffusion)). Pennate diatoms may have a larger fraction of their total gene content for H~2~O~2~ and ^•^NO production compared to centric diatoms. In contrast, pennate diatoms may have a smaller fraction of their gene content for H~2~O~2~ and ^•^NO scavenging, compared to centric diatoms.
 :::
 
 ::: {.hypothesis #Colony}
@@ -287,9 +269,12 @@ Cell spacing in colony forming phytoplankton is so small that the diffusional sp
 :::
 
 ::: {.hypothesis #Flagella}
-**Flagellated phytoplankton have a larger fraction of their total gene content encoding  H~2~O~2~ and ^•^NO production, and a smaller fraction of their total gene content encoding  H~2~O~2~ and ^•^NO scavenging.** 
-Increased motility in flagellated cells, allows movement away from cytotoxic levels of  H~2~O~2~ and ^•^NO. 
+**Flagellated phytoplankton have a larger fraction of their total gene content encoding  H~2~O~2~ and ^•^NO production, and a smaller fraction of their total gene content encoding H~2~O~2~ and ^•^NO scavenging.** 
+Increased motility in flagellated cells allows movement away from cytotoxic levels of  H~2~O~2~ and ^•^NO, possibly complementing scavenging. 
 :::
+
+
+Our work analyzed the fraction of the total genes in a genome or transcriptome associated with the metabolism of a particular ROS. The presence or absence of genes encoding specific ROS metabolizing enzymes may be caused by genetic drift, or may relate to a selective advantage linked to other metabolites of the same enzyme, rather than an enzymatic role in ROS metabolism, *per se*.  Furthermore, the presence of a gene in a genome does not necessarily mean the encoded enzyme will be active, and closely related enzymes may mediate different activities in different organisms. The influence of non-enzymatic pathways such as carotenoids or tocopherols  [@mittlerOxidativeStressAntioxidants2002; @dellapennaVITAMINSYNTHESISPLANTS2006; @sharmaReactiveOxygenSpecies2012] may affect the hypotheses listed above, but were beyond the frame of this study.
 
 # Methods {.unnumbered}
 
@@ -299,57 +284,51 @@ Table \@ref(tab:DataDictionary) contains a data dictionary of variable names use
 
 ## Bioinformatic Pipeline {.unnumbered}
 
-We downloaded Genomes and/or Transcriptomes of 146 diverse marine phytoplankton (Table \@ref(tab:MetaData)) from the National Center for Biotechnology Information (NCBI) [@DatabaseResourcesNational2016]; Joint Genome Institute (JGI) [@grigorievGenomePortalDepartment2012; @nordbergGenomePortalDepartment2014]; iMicrobe [@youens-clarkIMicrobeToolsDatadriven2019], European Nucleotide Archive (ENA) [@leinonenEuropeanNucleotideArchive2011]; pico-PLAZA [@vandepoelePicoPLAZAGenomeDatabase2013], 1000 Plants (1KP) [@matasciDataAccess0002014]; or the Reef Genomics Database [@liewReefgenomicsOrgRepository2016] (Figure \@ref(fig:BioinformaticSummary)).
+We downloaded Genomes and/or Transcriptomes of 146 diverse marine phytoplankton (Table \@ref(tab:MetaData)) from the National Center for Biotechnology Information (NCBI) [@DatabaseResourcesNational2016]; Joint Genome Institute (JGI) [@grigorievGenomePortalDepartment2012; @nordbergGenomePortalDepartment2014]; iMicrobe [@youens-clarkIMicrobeToolsDatadriven2019], European Nucleotide Archive (ENA) [@leinonenEuropeanNucleotideArchive2011]; pico-PLAZA [@vandepoelePicoPLAZAGenomeDatabase2013], 1000 Plants (1KP) [@matasciDataAccess0002014]; and the Reef Genomics Database [@liewReefgenomicsOrgRepository2016] (Figure \@ref(fig:BioinformaticSummary)). 
 
-We implemented an automated pipeline using Snakemake [@molderSustainableDataAnalysis2021] to pass gene sequences from downloaded genomes or transciptomes, in .fasta format, to the eggNOG 5.0 database [@huerta-cepasEggNOGHierarchicalFunctionally2019], and then used eggNOG-Mapper 2.0.6 [@huerta-cepasFastGenomeWideFunctional2017; @cantalapiedraEggNOGmapperV2Functional2021] and the DIAMOND algorithm [@buchfinkFastSensitiveProtein2015], to annotate potential orthologs in each analyzed genome or transcriptome, using the following parameters: seed_ortholog_evalue = 0.001, seed_ortholog_score = 60, tax_scope = "auto", go_evidence = "non-electronic", query_cover = 20 and subject_cover = 0.
+We implemented an automated pipeline using Snakemake [@molderSustainableDataAnalysis2021] to pass gene sequences from downloaded genomes or transciptomes, in .fasta format, to eggNOG-Mapper 2.0.6 [@huerta-cepasFastGenomeWideFunctional2017; @cantalapiedraEggNOGmapperV2Functional2021] and then used the DIAMOND algorithm [@buchfinkFastSensitiveProtein2015] and the eggNOG 5.0 database [@huerta-cepasEggNOGHierarchicalFunctionally2019], to annotate potential orthologs in each analyzed genome or transcriptome, using the following parameters: seed_ortholog_evalue = 0.001, seed_ortholog_score = 60, tax_scope = "auto", go_evidence = "non-electronic", query_cover = 20 and subject_cover = 0.
 The annotation generated for each gene model included (when available): the name of the matching ortholog (coded by eggNOG as 'seed_eggNOG_ortholog'); E-value (coded by eggNOG as 'seed_ortholog_evalue'); Score (coded by eggNOG as 'seed_ortholog_score'); EC number (coded by eggNOG as 'EC'); Kegg Orthology (KO) number (coded by eggNOG as 'KEGG_ko'); Kegg Pathway (coded by eggNOG as 'KEGG_Pathway'); Kegg Module (coded by eggNOG as 'KEGG_Module'); Kegg Reaction (coded by eggNOG as 'KEGG_Reaction'); Kegg Reaction Class (coded by eggNOG as 'KEGG_rclass'); the predicted protein family (coded by eggNOG as 'PFAMs'); Gene Ontology (GO) annotation (coded by eggNOG as 'Gos'); as well as a description from eggNOG of the source organism of the matching ortholog (coded by eggNOG as 'best_og_desc').
-Note that the output from sequences passed through the eggNOG 5.0 database are non-supervised orthology annotations, and may be subject to error if the underlying eggNOG annotation was inaccurate, or for functionally divergent orthologous gene sequences.
-The output of automatically annotated orthologs, from each genome or transcriptome, from the bioinformatic pipeline was compiled into one file `CombinedHits.csv` (to be submitted to the DRYAD database) (Figure \@ref(fig:BioinformaticSummary)).
+Note that comparison of sequences to the eggNOG 5.0 database generates non-supervised orthology annotations, and is subject to error if the underlying eggNOG annotation was inaccurate, or for functionally divergent orthologous gene sequences.
+The output of automatically annotated orthologs, from each genome or transcriptome, from the bioinformatic pipeline was compiled into one file `CombinedHits.csv` (to be submitted to the DRYAD database to support alternate analyses) (Figure \@ref(fig:BioinformaticSummary)).
 
 <div class="figure" style="text-align: centre">
 <img src="../../FigureMaterial/NaamanMethods.jpg" alt="**Summary Flowchart of Methods.**" width="200%" height="200%" />
 <p class="caption">(\#fig:BioinformaticSummary)**Summary Flowchart of Methods.**</p>
 </div>
 
-## Overview of Data Analysis {.unnumbered}
+## Overview of Analysis of Annotated Genes {.unnumbered}
 
-`CombinedHits.csv` was imported into a data frame (coded as 'CombinedHits') for analysis using R [@rcoreteamLanguageEnvironmentStatistical2019] running under RStudio [@rstudioteamRStudioIntegratedDevelopment2015], using the 'tidyverse' [@wickhamTidyverseEasilyInstall2017], 'broom' [@robinsonBroomConvertStatistical2019], 'magrittr' [@bacheMagrittrForwardPipeOperator2014], 'dplyr' [@wickhamDplyrGrammarData2018], 'chngpt' [@fongChngptThresholdRegression2017], 'rcompanion' [@mangiaficoRcompanionFunctionsSupport2020], 'gmodels' [@warnesGmodelsVariousProgramming2018], 'stats' [@rcoreteamLanguageEnvironmentStatistical2019] and 'smatr' [@wartonSmatrPackageEstimation2012] packages.
-Graphics and tables were generated using the 'ggplot2' [@wickhamGgplot2ElegantGraphics2016], 'cowplot' [@wilkeCowplotStreamlinedPlot2019], 'glue' [@hesterGlueInterpretedString2018], 'kableExtra' [@zhuKableExtraConstructComplex2019], 'corrplot' [@weiPackageCorrplotVisualization2017], 'ggfortify' [@tangGgfortifyUnifiedInterface2016; @horikoshiGgfortifyDataVisualization2018], 'AER' [@kleiberAERAppliedEconometrics2020] and 'ggforce' [@pedersenGgforceAcceleratingGgplot22021] packages (Figure \@ref(fig:BioinformaticSummary)).
-Citations were managed using the Zotero (www.zotero.org) open access reference manager connected to RStudio using the 'citr' [@austCitrRStudioAddin2018] package.
-The Zotero library of citations is available at (https://www.zotero.org/groups/2333131/ros_phytoplankton).
+`CombinedHits.csv` was imported into a data frame (coded as 'CombinedHits') for analysis using R [@rcoreteamLanguageEnvironmentStatistical2019] running under RStudio [@rstudioteamRStudioIntegratedDevelopment2015], using the 'tidyverse' [@wickhamTidyverseEasilyInstall2017], 'broom' [@robinsonBroomConvertStatistical2019], 'magrittr' [@bacheMagrittrForwardPipeOperator2014], 'dplyr' [@wickhamDplyrGrammarData2018], 'rcompanion' [@mangiaficoRcompanionFunctionsSupport2020], 'gmodels' [@warnesGmodelsVariousProgramming2018], 'stats' [@rcoreteamLanguageEnvironmentStatistical2019], 'AER' [@kleiberAERAppliedEconometrics2020] and 'smatr' [@wartonSmatrPackageEstimation2012] packages.
+Graphics and tables were generated using the 'ggplot2' [@wickhamGgplot2ElegantGraphics2016], 'cowplot' [@wilkeCowplotStreamlinedPlot2019], 'glue' [@hesterGlueInterpretedString2018], 'kableExtra' [@zhuKableExtraConstructComplex2019], 'corrplot' [@weiPackageCorrplotVisualization2017], 'ggfortify' [@tangGgfortifyUnifiedInterface2016; @horikoshiGgfortifyDataVisualization2018], and 'ggforce' [@pedersenGgforceAcceleratingGgplot22021] packages (Figure \@ref(fig:BioinformaticSummary)).
 Formatted outputs were generated from RMarkdown files using the 'knitr' [@xieKnitrComprehensiveTool2014a; @xieDynamicDocumentsKnitr2015; @xieKnitrGeneralPurposePackage2018] and 'bookdown' [@xieBookdownAuthoringBooks2019] packages. 
 
-In parallel we assembled metadata from the literature and culture collection databases for each genome or transcriptome source organism, including the cell radii in µm from 100% of organisms; colony formation for 84% of organisms; cell shape from diatoms from 100% of diatoms; presence or absence of flagella as an index of potential motility coded as 'Flagella' from 100% of organisms, the genome size from all genomes and the total number of predicted gene models from 80% of organisms (Table \@ref(tab:MetaData)); all stored in `CellGenomeMetrics.csv` (Figure \@ref(fig:BioinformaticSummary)).
+In parallel we assembled metadata from the literature and culture collection databases for each phytoplankter for which we obtained a genome or transcriptome, including the cell radii in µm from 100% of organisms; colony formation for 84% of organisms; cell shape from diatoms from 100% of diatoms; presence or absence of flagella as an index of potential motility from 100% of organisms, the genome size from all genomes and the total number of predicted gene models from 80% of organisms (Table \@ref(tab:MetaData)); all stored in `CellGenomeMetrics.csv` (to be submitted to the DRYAD database for alternate analyses) (Figure \@ref(fig:BioinformaticSummary)).
 For organisms for which only transcriptomes were available, we only included datasets for which the total number of detected different transcripts was available, as a proxy for the total number of predicted genes.
-Strains of brackish origin were included  but we did not include true freshwater strains in our analyses.
+Strains of brackish origin were included but we did not include obligate freshwater strains in our analyses.
 
-We compared the Enzyme Commission Number (EC number) to the BRENDA enzyme database [@changBRENDAELIXIRCore2021] to identify enzymes metabolizing H~2~O~2~, O~2~^•−^ or ^•^NO *in vivo* (annotated by BRENDA as 'natural product' or 'natural substrate') (Table \@ref(tab:ROSEnzymeList); Figure \@ref(fig:BioinformaticSummary)).
-We then used the EC Number to filter 'CombinedHits' to generate a subset containing only those orthologs encoding enzymes mediating metabolism of H~2~O~2~ (Production or Scavenging), O~2~^•−^ (Production or Scavenging) and ^•^NO (Production or Scavenging).
-Genes that code for the production of non-enzymatic ROS scavengers such as carotenoids and tocopherols were not included in subsequent analyses.
+Citations were managed using the Zotero (www.zotero.org) open access reference manager connected to RStudio using the 'citr' [@austCitrRStudioAddin2018] package.
+The Zotero library of citations for this paper is available at (https://www.zotero.org/groups/2333131/ros_phytoplankton).
 
-From the subset of 'CombinedHits' containing information on ROS metabolizing enzymes, we grouped orthologs together by EC number and their Kegg Orthology number (KO number) and determined the number of occurrences of individual orthologs encoding each EC number (or KO number when EC number was not available) in a given organism.
-We merged this data subset with `CellGenomeMetrics.csv` to generate a dataset of the total number of genes encoding a ROS; EC numbers; KO Numbers; and Gene Ontology annotations; that code for the production of a ROS metabolizing enzyme, as defined by the EC or KO number, along with characters of the source organism (combined into 'MergedData').
+We compared the Enzyme Commission Number (EC number) from CombinedHits to the BRENDA enzyme database [@changBRENDAELIXIRCore2021] to identify enzymes annotated by BRENDA as 'natural product' or 'natural substrate' for H~2~O~2~, O~2~^•−^ or ^•^NO *in vivo* (Table \@ref(tab:ROSEnzymeList); Figure \@ref(fig:BioinformaticSummary)).
+We then used the EC Number to filter 'CombinedHits' to generate a subset containing only those orthologs encoding enzymes directly mediating metabolism, Production or Scavenging, of H~2~O~2~ , O~2~^•−^ and ^•^NO.
 
-H~2~O~2~, O~2~^•−^ and ^•^NO are vastly different in reactivity, stability, diffusion distance, effects on biomolecules and roles in cell signaling (Table \@ref(tab:ROSDiffusion)), so it would not be a valid to pool counts of orthologs encoding production or scavenging of all these diverse ROS.
-We therefore generated the total gene counts coding for the production or scavenging of a given ROS in a given organism, which were used to generate Poisson or Quasi-Poisson regressions (Figure \@ref(fig:BioinformaticSummary)).
+From the 'CombinedHits' data frame, we filtered out some enzymes where the BRENDA annotations of 'natural product' or 'natural substrate' was questionable, in particular:
+- Superoxide oxidase (EC:1.10.3.17) carries a BRENDA annotation of 'natural product' for O~2~^•−^, despite the BRENDA citation stating that O~2~^•−^ production from superoxide oxidase was only documented *in vitro* with an excess of ubiquinone [@lundgrenScavengingSuperoxideMembranebound2018].
+- D-amino-acid oxidase was removed from counts of genes encoding H~2~O~2~ production, as the enzyme does not produce H~2~O~2~ *in vivo* [@matlashovHowMuchH2O22014].
+- Bacterial non heme ferritin is listed under H~2~O~2~ production and scavenging as it produces H~2~O~2~ in the first of a two-step reaction and scavenges H~2~O~2~ in the second step [@bou-abdallahFunctionalityThreeSiteFerroxidase2014].
+
+From the subset of 'CombinedHits' of enzymes annotated for ROS metabolism, we grouped orthologs together by EC number and their Kegg Orthology number (KO number) and determined the occurrences of individual orthologs encoding each EC number, or KO number when EC number was not available, in a given organism.
+We merged this data subset with `CellGenomeMetrics.csv` to generate a dataset of genes encoding ROS metabolizing enzymes, as defined by the EC or KO number, along with characteristics of the source organism, combined into 'MergedData'.
+
+H~2~O~2~, O~2~^•−^ and ^•^NO differ in reactivity, stability, diffusion distance, effects on biomolecules and roles in cell signaling (Table \@ref(tab:ROSDiffusion)). We therefore generated the total gene counts coding for the production or scavenging of each different ROS in a given organism, which were used to generate Poisson or Quasi-Poisson regressions (Figure \@ref(fig:BioinformaticSummary)).
 
 ## Data Validation & Justification of Statistical Analyses {.unnumbered}
 
-Data from both genomes and transcriptomes were used in this analysis to gain wider representation from more taxa (Figure \@ref(fig:RadTaxaviolin)). Data from the taxa with the largest radii was derived wholly from transcriptomes. Aside from the prokaryote genomes sourced solely from within the 45° north south latitude band, the sampled phytoplankton did not exhibit taxonomic biases in source latitude of isolation, but were primarily coastal (Figure \@ref(fig:LongLatMap)). Otherwise where possible the total number of genes encoding ROS and the total number of genes in the organism derived from genomic data were used for subsequent analyses. For about 31 organisms we had both genomic and transcriptomic data, which we used to test assumptions on data distributions (Figure \@ref(fig:RadTaxaviolin) & \@ref(fig:LongLatMap)). We validated the gene annotations generated by the snakemake bioinformatic pipeline, by comparing the total number of genes encoding ROS metabolism data from a subset of 'CombinedHits.csv' to the total number of genes encoding ROS metabolism data from a manually annotated dataset generated during a pilot project [@fleuryReactiveOxygenDetoxification2019; @omarReactiveOxygenProduction2020]. 
+Data from both genomes and transcriptomes were used in this analysis to gain wider representation from more taxa (Figure \@ref(fig:RadTaxaviolin)). Data from the taxa with the largest radii were derived wholly from transcriptomes. Aside from the prokaryote genomes, sourced solely from within the 45° north south latitude band, the sampled phytoplankton did not exhibit taxonomic biases in source latitude of isolation, but were primarily coastal (Figure \@ref(fig:LongLatMap)). For 40 organisms we had both genomic and transcriptomic data, which we used to test assumptions on data distributions (Figure \@ref(fig:OmesPlot)). As expected, data coverage from paired genomes and transcriptomes correlated well. Therefore, when both genomic and transcriptomic data were available from the same organism, we used genomic data in subsequent analyses (Table \@ref(tab:MetaData)), but we used data from transcriptomes when genomes were not available. We validated the gene annotations generated by the snakemake bioinformatic pipeline by comparing the total number of genes encoding ROS metabolism data from a subset of 'CombinedHits.csv' to the total number of genes encoding ROS metabolism data from a manually annotated dataset generated during a pilot project (Figure \@ref(fig:ManualAutoCompare)) [@fleuryReactiveOxygenDetoxification2019; @omarReactiveOxygenProduction2020]. 
 
 
 
-
-Figure \@ref(fig:ManualAutoCompare) shows a significant correlation (Correlation of 0.87, p = 1.6×10^-49^) between manually generated 'ROSGene_count' and the automated 'ROSGene_count' from the snakemake pipeline.
-
-From the 'CombinedHits' data frame, we filtered out some enzymes whose BRENDA annotation of 'natural product' and 'natural substrate' was questionable, in particular:
-
-- Superoxide oxidase (EC:1.10.3.17) carries a BRENDA annotation of 'natural product' for superoxide, despite the BRENDA citation stating that superoxide production from superoxide oxidase was only documented *in vitro* with an excess of ubiquinone [@lundgrenScavengingSuperoxideMembranebound2018].
-
-- D-amino-acid oxidase was removed from the H~2~O~2~ production calculations as the enzyme does not produce H~2~O~2~ *in vivo* [@matlashovHowMuchH2O22014].
-
-Some enzymes were listed for a given substrate under both *natural product* and *natural substrate*, as for example when a reaction is reversible.
-Bacterial non heme ferritin is listed under H~2~O~2~ production and scavenging as it produces H~2~O~2~ in the first of a two-step reaction and scavenges H~2~O~2~ in the second step [@bou-abdallahFunctionalityThreeSiteFerroxidase2014].
+As expected Figure \@ref(fig:ManualAutoCompare) shows a significant correlation (Correlation of 0.87, p = 1.6×10^-49^) between manually generated 'ROSGene_count' and the automated 'ROSGene_count' from the snakemake pipeline.
 
 <div class="figure">
 <img src="../Figures/GeneModelsRadPlot-1.png" alt="**Comparison of log~10~ of the total number of genes in an organism ('log_GeneModels_count') to log~10~ of the median cell radius in µm ('log_Radius_um').** Colour corresponds to the taxonomic lineage ('Phylum'), whereas symbol shape corresponds to the source of the data, whether Genome or Transcriptome ('Ome'). Citations for data sources are in Supplementary Table S3."  />
@@ -358,17 +337,25 @@ Bacterial non heme ferritin is listed under H~2~O~2~ production and scavenging a
 
 
 
-Figure \@ref(fig:PoissonDist) shows that the total number of genes encoding the metabolism of O~2~^•−^, H~2~O~2~ or ^•^NO are not normally distributed (Shapiro-Wilk Test [@shapiroAnalysisVarianceTest1965] with a p value of 6.4×10^-30^ for O~2~^•−^ scavenging, 9.4×10^-24^ for H~2~O~2~ production, 5×10^-25^ for H~2~O~2~ scavenging, 1.2×10^-18^ for ^•^NO production and  1.5×10^-30^ for ^•^NO scavenging), and follows a Poisson distribution. Therefore, for subsequent analyses we used Poisson or Quasi-Poisson regressions to compare the total number of genes that encode the production or scavenging of O~2~^•−^, H~2~O~2~ or ^•^NO, with an offset of the total number of genes in the organism, to log~10~ of the median cell radius in µm.
-Quasi-Poisson regressions were used when the Poisson regression was over-dispersed (dispersion > 1, p < 0.05) as determined by the 'AER' package [@kleiberAERAppliedEconometrics2020]. Because our data followed a Poisson distribution (Figure \@ref(fig:PoissonDist)), a Poisson regression followed by a chi-squared test or a Quasi-Poisson regression followed by an F test, is statistically when obtaining the p-value [@AnovaGlmFunction]. An alpha value of ≤0.05 was used as the threshold for statistical significance of regressions.
+Figure \@ref(fig:PoissonDist) shows that the frequencies of counts of genes encoding the metabolism of O~2~^•−^, H~2~O~2~ or ^•^NO within an organism are not normally distributed (Shapiro-Wilk Test [@shapiroAnalysisVarianceTest1965] with a p value of 6.4×10^-30^ for O~2~^•−^ scavenging, 9.4×10^-24^ for H~2~O~2~ production, 5×10^-25^ for H~2~O~2~ scavenging, 1.2×10^-18^ for ^•^NO production and  1.5×10^-30^ for ^•^NO scavenging). The frequencies of gene counts instead follow a Poisson distribution. Therefore, for subsequent analyses we used Poisson or Quasi-Poisson regressions to compare the counts of genes that encode the production or scavenging of O~2~^•−^, H~2~O~2~ or ^•^NO within an organism to log~10~ of the median cell radius in µm. Code used to produce the Poisson and Quasi-Poisson models is on https://github.com/NaamanOmar/ROS_bioinfo/tree/master/ROSGenomicPatternsAcrossMarinePhytoplankton.
 
-The total number of genes in each organism, increased with the median cell radius, and also varied among the taxonomic lineages (coded as Phylum) (Figure \@ref(fig:GeneModelsRadPlot)). Taxonomic lineage, in turn, interacts strongly with the median cell radius. For our analyses, we sought to detect effects of cell radius upon the fraction of total genes encoding ROS metabolism. We therefore normalized the total number of genes encoding the production or scavenging of H~2~O~2~, O~2~^•−^ or ^•^NO to 'GeneModel_count' to account for the general increase in 'GeneModel_count' with increasing the median cell radius. Because of the strong interaction between the median cell radius and taxonomic lineage (Figure \@ref(fig:RadTaxaviolin)), we did not include Phylum as a co-variate in our subsequent regressions of normalized gene counts vs. median cell radius. Thus, we did not analyze specific influences of Phylum. 
+Quasi-Poisson regressions were used when the Poisson regression was over-dispersed (dispersion > 1, p < 0.05) as determined by the 'AER' package [@kleiberAERAppliedEconometrics2020]. A Poisson regression followed by a chi-squared test, or a Quasi-Poisson regression followed by an F test, was used to obtain p-values [@AnovaGlmFunction], with an alpha value of ≤0.05 as the threshold for statistical significance of regressions. 
 
-To investigate the influence of colony formation, the presence of flagella or diatom cell shape (pennate or centric), upon the total number of genes that encode the metabolism of H~2~O~2~, O~2~^•−^ or ^•^NO, with an offset of the total number of genes, we used a Wilcoxon test from the 'ggpubr' to compare organisms from which we had data. 
+The total number of genes in each organism increased with the median cell radius, and also varied among the taxonomic lineages (coded as 'Phylum') (Figure \@ref(fig:GeneModelsRadPlot)). Taxonomic lineage, in turn, interacts strongly with the median cell radius. For our analyses, we sought to detect effects of cell radius upon the fraction of total genes encoding ROS metabolism. We therefore included an offset of the total number of genes in the organism in the Poisson or Quasi-Poisson regressions, which is equivalent to normalizing the number of genes encoding the production or scavenging of H~2~O~2~, O~2~^•−^ or ^•^NO, to the total number of genes in the organism ('GeneModel_count'). We thereby offset the general increase in 'GeneModel_count' with increasing the median cell radius. Because of the strong interaction between the median cell radius and taxonomic lineage (Figure \@ref(fig:RadTaxaviolin)), we did not include Phylum as a co-variate in our subsequent regressions of normalized gene counts vs. median cell radius. Thus, we did not analyze specific influences of Phylum upon gene counts for ROS metabolism. Poisson or Quasi-Poisson regressions were run both with or without 'Colony' and 'Flagella' as co-variates. 
+
+To further investigate possible influences of colony formation, the presence of flagella or diatom cell shape (pennate or centric), upon the fraction of genes that encode the metabolism of H~2~O~2~, O~2~^•−^ or ^•^NO, we used a Wilcoxon test [@kassambaraGgpubrGgplot2Based2018]. 
 
 # Results and Discussion {.unnumbered}
 
 ## Superoxide {.unnumbered}
 
+
+
+Although there are enzymes producing O~2~^•−^ [@diazNADPHdependentExtracellularSuperoxide2019], in the marine phytoplankton genomes and transcriptomes that we analysed, we did not detect any genes that encode for enzymes (Table \@ref(tab:ROSEnzymeList)) specifically producing O~2~^•−^, based on the BRENDA annotation of O~2~^•−^ scavenging. It is however worth noting the presence of genes annotated as encoding NADPH Oxidase (NOX) in some phytoplankton genomes. NOX can produce either H~2~O~2~ or O~2~^•−^ depending on the NOX isoform. NOX is included in our analyses as a H~2~O~2~ producer, in accordance with the BRENDA annotation of the enzyme (Table \@ref(tab:ROSEnzymeList)). Further analyses of the detected NOX isoforms might identify whether they are isoforms that produce O~2~^•−^. Sequences that are similar to Glutathione Reductase (GR) have been documented to produce enzymes that produce extracellular O~2~^•−^ in the diatom *Thalassiosira oceanica* [@diazNADPHdependentExtracellularSuperoxide2019]. We found sequences annotated as GR across all phytoplankton genomes (Data not presented), which likely include genes encoding enzymes producing O~2~^•−^. In any case, we do not expect phytoplankton to differentially allocate a changing fraction of their total gene content to O~2~^•−^ production with increasing cell size, as O~2~^•−^ is weakly membrane diffusible. Phytoplankton may need to maintain working extracellular concentrations of O~2~^•−^, since decreasing the extracellular concentration of O~2~^•−^ can hinder cell growth [@sutherlandExtracellularSuperoxideProduction2019]. @sutherlandExtracellularSuperoxideProduction2019 further explains that the downregulation of Superoxide Dismutase (SOD, EC:1.15.1.1) genes at peak light levels by *Prochlorococcus* [@mella-floresProchlorococcusSynechococcusHave2012] would allow *Prochlorococcus* to maintain 'working levels' of extracellular O~2~^•−^.  Beyond putative enzymatically mediated production of O~2~^•−^, non-enzymatic processes associated with cells can also produce O~2~^•−^.  Notably, O~2~^•−^ is released to variable extents from side-reactions of electron transport [@pospisilProductionReactiveOxygen2009; @pospisilMolecularMechanismsProduction2012; @pospisilProductionReactiveOxygen2016] particularly under stress conditions.
+
+Given that the O~2~^•−^ is poorly diffusible across membranes, intracellularly produced O~2~^•−^ has to be scavenged to limit detrimental reactions of O~2~^•−^ [@bergaminiOxygenReactiveOxygen2004]. As a result, cells universally maintain the genomic capacity to scavenge O~2~^•−^.  All prokaryotic (Data not shown) and eukaryotic (Figure \@ref(fig:EukSupOxDotPlot)) phytoplankton analyzed, with the exception of a single transcriptome from *Micromonas polaris*, have genes annotated as encoding the ubiquitous O~2~^•−^ scavenging enzyme SOD. Genes annotated as encoding the enzyme Superoxide Oxidase (SOO, EC:1.10.3.17) were present in a few diatom species (*Leptocylindrus danicus*, *Chaetoceros curvicetus* and *Thalassiosira minuscula CCMP1093.*) and prokaryotes (*Crocosphaera spp.*). Genes encoding the enzyme Superoxide Reductase (SOR, EC:1.15.1.2) were not detected in prokaryotes, but were detected in some diatoms (*Pseudo-nitzschia fradulenta WWA7* and *Seminavis robusta D6*), and in the haptophyte *Pleurochrysis carterae CCMP456*.
+
+The absence of transcripts encoding SOD from the *Micromonas polaris* transcriptome is likely due to low expression of SOD at the time that the mRNA was harvested for sequence analyses. Given that the O~2~^•−^ is not membrane diffusible, intracellularly produced O~2~^•−^ would have to be scavenged or would react with other cell components. As a result, organisms that do not have the ability to scavenge O~2~^•−^ would have reduced fitness and so marine phytoplankton have not lost the genomic capacity to scavenge O~2~^•−^. To our knowledge, our results are the first detections of the occurences of genes encoding SOO and SOR in marine phytoplankton, and need confirmation by Multiple Sequence Alignment and enzyme assays, to determine whether our results stem from errors in annotation from the non-supervised grouping of orthologs (genes) by eggNOG, or indeed represent the sporadic presence of genes for SOO and SOR in the genomes of some phytoplankters. Further trends in genomic allocations to O~2~^•−^ scavenging may emerge from the metallo-forms of SOD [@millerSuperoxideDismutasesAncient2012]. For example, in pilot runs with higher discrimination among metallo-forms we found that pico-prasinophytes encode Mn-SOD instead of the Fe-SOD encoded in genomes from larger green algal phytoplankters (Data not presented). 
 
 
 ### Influence of Cell Size on Gene Counts for Enzymes Metabolizing O~2~^•−^ {.unnumbered}
@@ -380,8 +367,8 @@ To investigate the influence of colony formation, the presence of flagella or di
 <p class="caption">(\#fig:SupOxRadPlots)**Comparison of log~10~ (Total number of genes encoding O~2~^•−^ metabolizing enzymes ('SupOx_count') normalized to the total number of genes present in each organism ('GeneModels_count')) vs. the log~10~ (median cell radius in µm ('log_Radius_um')).** Poisson (solid line) or Quasi-Poisson (dashed line) regressions fitted to data ± Standard Error (dotted line). Regressions were run with (black line) or without (blue line) 'Colony' and 'Flagella' as co-variates. Selected prokaryote genomes are presented for comparison, but excluded from the presented regressions. Symbol color corresponds to taxon lineage ('Phylum').</p>
 </div>
 
-With increasing cell radius, eukaryotic phytoplankton have a smaller fraction of their total genes that scavenge O~2~^•−^, as shown by the negative slope of the quasipoisson regression (Figure \@ref(fig:SupOxRadPlots), Blue line, Slope = -2.1×10^-1^ ± 7.1×10^-2^, p = 4.2×10^-3^). The negative slope does not support our Hypothesis \@ref(hyp:SupOx) that phytoplankton do not differentially allocate a changing fraction of their total gene content to O~2~^•−^ production nor scavenging. 
-Including 'Flagella' and 'Colony' as co-variates in the regression results, however, in a slope that is not statistically different from zero (Figure \@ref(fig:SupOxRadPlots), Black line, Slope = -6.7×10^-2^ ± 6.8×10^-2^, p = 3.3×10^-1^), driven by the influence of 'Flagella' (p-value = 3.7×10^-2^) but not 'Colony' (p-value = 8.6×10^-1^). Including data from selected prokaryotic phytoplankton did not qualitatively alter these results. O~2~^•−^ metabolism in phytoplankton appears to be mediated by a nearly fixed set of core genes that do not change with increasing gene count, thus the fractional gene allocation to O~2~^•−^ decreases as cell radius (and the co-varying total gene count) increases.
+With increasing cell radius, eukaryotic phytoplankton have a smaller fraction of their total genes encoding scavenging of O~2~^•−^, quasipoisson regression (Figure \@ref(fig:SupOxRadPlots), Blue line, Slope = -2.1×10^-1^ ± 7.1×10^-2^, p = 4.2×10^-3^). The negative slope does not support our Hypothesis \@ref(hyp:SupOx) that phytoplankton do not differentially allocate a changing fraction of their total gene content to O~2~^•−^ production nor scavenging with increasing cell size. 
+Including 'Flagella' and 'Colony' as co-variates in the regression results, however, in a slope that is not statistically different from zero (Figure \@ref(fig:SupOxRadPlots), Black line, Slope = -6.7×10^-2^ ± 6.8×10^-2^, p = 3.3×10^-1^), driven by the influence of 'Flagella' (p-value = 3.7×10^-2^) but not 'Colony' (p-value = 8.6×10^-1^). Including data from selected prokaryotic phytoplankton did not qualitatively alter these results (Data not shown). O~2~^•−^ metabolism in phytoplankton appears to be mediated by a nearly fixed set of core genes that do not change with increasing gene count, thus the fractional gene allocation to O~2~^•−^ decreases as cell radius, and the co-varying total gene count increases. Gene dosage does not emerge as a factor in phytoplankton O~2~^•−^ metabolism.
 
 ### Influences of Flagella, Colony Formation and Cell Shape on Gene Counts for Enzymes Metabolizing O~2~^•−^ {.unnumbered}
 
@@ -394,7 +381,7 @@ Including 'Flagella' and 'Colony' as co-variates in the regression results, howe
 <p class="caption">(\#fig:SupOxFlagPlot)**Comparison of total number of genes encoding O~2~^•−^ scavenging enzymes ('SupOx_count') normalized to the total number of genes present in each organism ('GeneModels_count')) vs. the presence or absence of flagella in the organism.** Symbol color corresponds to taxon lineage ('Phylum'). Notch spans ± standard error of the median. Box spans median ± 1 quartile of the data. Whiskers span the range excluding outliers in the data. Citations for data sources can be found in Supplementary Table S3.</p>
 </div>
 
-Consistent with the significant influence of flagella on the regressions vs median cell radius (Figure \@ref(fig:SupOxRadPlots)), flagellated phytoplankton have a smaller proportion of their total gene content encoding O~2~^•−^ scavenging (Figure \@ref(fig:SupOxFlagPlot), p = 4.3×10^-3^), than do non-flagellated phytoplankton. This suggests that cellular motility contributes to phytoplankton homeostasis of O~2~^•−^.
+Consistent with the significant influence of flagella on the regressions vs median cell radius (Figure \@ref(fig:SupOxRadPlots)), flagellated phytoplankton, irrespective of size, have a smaller proportion of their total gene content encoding O~2~^•−^ scavenging (Figure \@ref(fig:SupOxFlagPlot), p = 4.3×10^-3^), than do non-flagellated phytoplankton. This suggests that cellular motility contributes to phytoplankton homeostasis of O~2~^•−^, possibly by supporting escape from localized pockets of O~2~^•−^.
 
 
 
@@ -402,9 +389,7 @@ Consistent with the significant influence of flagella on the regressions vs medi
 
 
 
-Setting aside any influence of cell size, colony and non-colony forming phytoplankton do not significantly differ in the fraction of their total gene content encoding O~2~^•−^ scavenging (p = 8.1×10^-1^) (Data not presented).
-
- 
+Setting aside any influence of cell size, colony and non-colony forming phytoplankton do not significantly differ in the fraction of their total gene content encoding O~2~^•−^ scavenging (p = 8.1×10^-1^) (Data not presented), consistent with limited membrane permeability for O~2~^•−^ and thus limited colony level interactions in O~2~^•−^ metabolism.
 
 
 
@@ -413,14 +398,21 @@ Setting aside any influence of cell size, colony and non-colony forming phytopla
 
 
 
-
-Pennate and centric diatoms O~2~^•−^ have similar fractions of their genomes encoding O~2~^•−^ scavenging (p = 9.7×10^-1^) (Data not presented).
-Our results support our hypothesis that differential diffusional exchange across diatoms of different shape does not influence the fraction of total gene content that encodes O~2~^•−^ scavenging enzymes, because O~2~^•−^ diffusion is blocked by the cell membrane irrespective of cell shape.
-Given that the O~2~^•−^ is poorly diffusible across membranes, intracellularly produced O~2~^•−^ has to be scavenged to limit detrimental reactions of O~2~^•−^ [@bergaminiOxygenReactiveOxygen2004]. As a result, cells universally maintain the genomic capacity to scavenge O~2~^•−^. Differences between genomic patterns of pennate and centric diatoms may arise when comparing metallo-forms of SOD, noting that @groussmanDiversityEvolutionaryHistory2015 found that pennate diatoms transcribe Cu/Zn-SOD but not Fe-SOD, whereas centric diatoms transcribe Fe-SOD more frequently than they transcribe Cu/Zn-SOD.
+Pennate and centric diatoms have similar fractions of their genomes encoding O~2~^•−^ scavenging (p = 9.7×10^-1^) (Data not presented).
+Our results support our hypothesis that differential diffusional exchange across diatoms of different shape does not influence the fraction of total gene content that encodes O~2~^•−^ scavenging enzymes, because O~2~^•−^ diffusion is limited by the cell membrane irrespective of cell shape (Hypothesis \@ref(hyp:SupOx)).
+Differences between genomic patterns of pennate and centric diatoms may arise when comparing metallo-forms of SOD, noting that @groussmanDiversityEvolutionaryHistory2015 found that pennate diatoms transcribe Cu/Zn-SOD but not Fe-SOD, whereas centric diatoms transcribe Fe-SOD more frequently than they transcribe Cu/Zn-SOD.
 
 ## Hydrogen Peroxide {.unnumbered}
 
 
+
+All prokaryotic (Figure \@ref(fig:ProkHyPeDotPlot)) and eukaryotic (Figure \@ref(fig:EukHyPeDotPlot)) phytoplankton, with the exception of a single transcriptome from the prasinophyte *Micromonas polaris*, have genes encoding H~2~O~2~ producing enzymes, as they all carry gene(s) encoding the ubiquitous enzyme Superoxide Dismutase. Genes encoding three oxidases producing H~2~O~2~ are also widely distributed across phytoplankton genomes. Genes for copropophyrinogen oxidase are found across all eukaryotic and prokaryotic phytoplankton, with the exception of one transcriptome. Genes encoding thiol oxidase and acyl CoA oxidase are found in nearly all eukaryotic phytoplankton, with the exception of three transcriptomes. Genes encoding L-aspartate oxidase are found in nearly all prokaryotes, and all green algae, but are nearly absent from other eukaryotic taxa. Sarcosine oxidase is not present in small diatoms and small green algae, but is present in nearly all dinoflagellates and haptophytes. (S)-2-hydroxy-acid oxidase is found in most eukaryotic phytoplankton, but rarely in dinoflagellates.
+
+All eukaryotic (Figure \@ref(fig:EukHyPeDotPlot)) and most prokaryotic phytoplankton (Figure \@ref(fig:ProkHyPeDotPlot)), have genes encoding H~2~O~2~ scavenging enzymes. Some strains of *Prochlorococcus* and *Synechococcus* have lost all genomic capacity to scavenge H~2~O~2~, and appear to rely on co-occuring hosts for H~2~O~2~ scavenging [@morrisDependenceCyanobacteriumProchlorococcus2011; @morrisBlackQueenHypothesis2012; @coeSurvivalProchlorococcusExtended2016].
+
+The absence from catalase from most analyzed cyanobacterial genomes supports @bernroitnerOccurrencePhylogenyStructure2009 who analyzed 44 different cyanobacterial genomes and found that only *Nostoc punctiforme* PCC73102 retained a full gene encoding catalase. In our analyses, only *Synechococcus elongatus* PCC11802 maintained a catalase encoding gene (Figure \@ref(fig:ProkHyPeDotPlot)). In the greens, catalase has been lost from the smaller prasinophytes but is maintained in the larger greens (Figure \@ref(fig:EukHyPeDotPlot)). The loss of catalase from smaller green algae may be evidence of the Black Queen Hypothesis in action [@morrisBlackQueenHypothesis2012], in that H~2~O~2~ can passively diffuse out of the smaller green algae but diffuses less out of larger green algae. Loss of function mutations in catalase encoding genes in small algae are therefore less deleterious than they would be to large green algae. Catalase, with a K~M~ of ~220 mM,  may be poorly retained because the cells maintain some genomic capacity to scavenge H~2~O~2~ using the enzymes ascorbate peroxidase, glutathione peroxidase and Cytochrome C peroxidase (Figure \@ref(fig:EukHyPeDotPlot)), with K~M~ in the low µM range [@bernroitnerOccurrencePhylogenyStructure2009].
+
+Our results support an earlier suggestion that increased genomic capacity for H~2~O~2~ scavenging in *Synechococcus* compared to *Prochlorococcus* is a result of the larger size in *Synechococcus* compared to *Prochlorococcus* [@morrisDependenceCyanobacteriumProchlorococcus2011] (Figure \@ref(fig:ProkHyPeDotPlot)). It is however important to note the vast differences between prokaryotic and eukaryotic phytoplankton, with most eukaryotic phytoplankton, irrespective of lineage, maintaining the genomic capacity to produce ascorbate peroxidase, glutathione peroxidase and Cytochrome C peroxidase (Figure \@ref(fig:EukHyPeDotPlot)). Peroxidases are often involved in pathways beyond simple ROS scavenging, including the Halliwell-Asada cycle for ascorbate peroxidase [@pandeyRedoxHomeostasisGene2015]. *Ostreococcus*, the smallest prasinophyte has a radius of 0.5 µm, comparable to that of the prokaryote *Synechococcus* (Table \@ref(tab:MetaData)), and would therefore share a similar short diffusion path length. Nevertheless *Ostreococcus*, in common with other eukaryotes, retains genomic capacities to produce ascorbate peroxidase, glutathione peroxidase and Cytochrome C peroxidase, which may thus reflect the cost of being eukaryotic (Figure \@ref(fig:EukHyPeDotPlot)).
 
 ### Influence of Cell Size on Gene Counts for Enzymes Metabolizing H~2~O~2~ {.unnumbered}
 
@@ -429,15 +421,15 @@ Given that the O~2~^•−^ is poorly diffusible across membranes, intracellular
 
 
 <div class="figure">
-<img src="../Figures/HyPeRadPlots-1.png" alt="**Comparison of log~10~ (Total number of genes encoding H~2~O~2~ metabolizing enzymes ('HyPe_count') normalized to the total number of genes present in each organism ('GeneModels_count')) vs. the log~10~( median cell radius in µm ('log_Radius_um')).** Poisson (solid line) or Quasi-Poisson (dashed line) regressions fitted to data ± Standard Error (dotted line). Regressions were run with (black line) or without (blue line) 'Colony' and 'Flagella' as co-variates. Selected prokaryote genomes are presented for comparison, but excluded from the presented regressions. Symbol color corresponds to taxon lineage ('Phylum'). Citations for data sources are in Supplementary Table S3. "  />
-<p class="caption">(\#fig:HyPeRadPlots)**Comparison of log~10~ (Total number of genes encoding H~2~O~2~ metabolizing enzymes ('HyPe_count') normalized to the total number of genes present in each organism ('GeneModels_count')) vs. the log~10~( median cell radius in µm ('log_Radius_um')).** Poisson (solid line) or Quasi-Poisson (dashed line) regressions fitted to data ± Standard Error (dotted line). Regressions were run with (black line) or without (blue line) 'Colony' and 'Flagella' as co-variates. Selected prokaryote genomes are presented for comparison, but excluded from the presented regressions. Symbol color corresponds to taxon lineage ('Phylum'). Citations for data sources are in Supplementary Table S3. </p>
+<img src="../Figures/HyPeRadPlots-1.png" alt="**Comparison of log~10~ (Total number of genes encoding H~2~O~2~ metabolizing enzymes ('HyPe_count') normalized to the total number of genes present in each organism ('GeneModels_count')) vs. the log~10~ (median cell radius in µm ('log_Radius_um')).** Poisson (solid line) or Quasi-Poisson (dashed line) regressions fitted to data ± Standard Error (dotted line). Regressions were run with (black line) or without (blue line) 'Colony' and 'Flagella' as co-variates. Selected prokaryote genomes are presented for comparison, but excluded from the presented regressions. Symbol color corresponds to taxon lineage ('Phylum'). Citations for data sources are in Supplementary Table S3. "  />
+<p class="caption">(\#fig:HyPeRadPlots)**Comparison of log~10~ (Total number of genes encoding H~2~O~2~ metabolizing enzymes ('HyPe_count') normalized to the total number of genes present in each organism ('GeneModels_count')) vs. the log~10~ (median cell radius in µm ('log_Radius_um')).** Poisson (solid line) or Quasi-Poisson (dashed line) regressions fitted to data ± Standard Error (dotted line). Regressions were run with (black line) or without (blue line) 'Colony' and 'Flagella' as co-variates. Selected prokaryote genomes are presented for comparison, but excluded from the presented regressions. Symbol color corresponds to taxon lineage ('Phylum'). Citations for data sources are in Supplementary Table S3. </p>
 </div>
 
-With increasing cell radius, eukaryotic phytoplankton have a smaller fraction of their total genes that encode the production of H~2~O~2~, as shown by the negative slope of the quasipoisson regression (Figure \@ref(fig:HyPeRadPlots), Blue line, Slope = -3.4×10^-1^ ± 5×10^-2^, p = 9.6×10^-10^). Including 'Flagella' and 'Colony' as co-variates did not influence the slope of the fraction of total genes encoding H~2~O~2~ production with increasing median cell radius (Black line, 'Flagella' p-value = 8.4×10^-1^, 'Colony' p-value = 4.7×10^-1^). Including data from selected prokaryotic phytoplankton did not qualitatively alter these results. The pattern of a smaller fraction of total genes for H~2~O~2~ production with increasing cell radius supports our Hypothesis \@ref(hyp:HyPeNitOxRadProduction) that large phytoplankton counter decreasing diffusional loss of H~2~O~2~ out of cells by having lower genomic capacity for H~2~O~2~ production, while losses of genes encoding H~2~O~2~ producing enzymes is more costly to small phytoplankton (Figure \@ref(fig:HyPeRadPlots)).  @diazProductionExtracellularReactive2018 found that a major factor that influences  the capacity for production of H~2~O~2~ is whether or not the organism can form blooms, in that bloom forming species produce more H~2~O~2~. The ability to form blooms was not analyzed in our data. 
+With increasing cell radius, eukaryotic phytoplankton have a smaller fraction of their total genes that encode the production of H~2~O~2~, quasipoisson regression (Figure \@ref(fig:HyPeRadPlots), Blue line, Slope = -3.4×10^-1^ ± 5×10^-2^, p = 9.6×10^-10^). Including 'Flagella' and 'Colony' as co-variates did not influence the negative slope of the fraction of total genes encoding H~2~O~2~ production with increasing median cell radius (Black line, 'Flagella' p-value = 8.4×10^-1^, 'Colony' p-value = 4.7×10^-1^). Including data from selected prokaryotic phytoplankton also did not qualitatively alter these results (Data not shown). The pattern of a smaller fraction of total genes for H~2~O~2~ production with increasing cell radius supports our Hypothesis \@ref(hyp:HyPeNitOxRad) that larger phytoplankton counter decreasing diffusional loss of H~2~O~2~ out of cells by having lower genomic capacity for H~2~O~2~ production, while losses of genes encoding H~2~O~2~ producing enzymes are more costly to small phytoplankton (Figure \@ref(fig:HyPeRadPlots)).  @diazProductionExtracellularReactive2018 found that a major influence upon the capacity for production of H~2~O~2~ is whether or not the organism can form blooms, with bloom forming species producing more H~2~O~2~. The ability to form blooms was not analyzed in our data as we did not find systematic information on potentials for bloom formation across taxa. 
 
-With increasing cell radius, eukaryotic phytoplankton have a smaller fraction of their total genes that encode the capacity to scavenge H~2~O~2~, as shown by the negative slope of the quasipoisson regression (Figure \@ref(fig:HyPeRadPlots), Blue line, Slope = -3.2×10^-1^ ± 5.6×10^-2^, p = 1.4×10^-7^). Including 'Flagella' and 'Colony' as co-variates did not influence the slope of the fraction of total genes encoding H~2~O~2~ scavenging with increasing median cell radius (Figure \@ref(fig:HyPeRadPlots), Black line, 'Flagella' p-value = 4.1×10^-1^, 'Colony' p-value = 1.6×10^-1^). Including data from selected prokaryotic phytoplankton did not qualitatively alter these results. A similar study solely focusing on small phytoplankton such as pico-cyanobacteria and pico-prasinophytes might yield different results as more genomes are sequenced, especially considering that @randhawaApplicabilityHydrogenPeroxide2012 found that H2O2 added to seawater at a concentration of 1.6 mg L^−1^ did not affect cells with a radius larger than 1 to 1.5 μm, and mainly harmed the prasinophyte *Micromonas pusilla*.
+With increasing cell radius, eukaryotic phytoplankton also have a smaller fraction of their total genes that encode the capacity to scavenge H~2~O~2~, quasipoisson regression (Figure \@ref(fig:HyPeRadPlots), Blue line, Slope = -3.2×10^-1^ ± 5.6×10^-2^, p = 1.4×10^-7^). Including 'Flagella' and 'Colony' as co-variates did not influence the negative slope of the fraction of total genes encoding H~2~O~2~ scavenging with increasing median cell radius (Figure \@ref(fig:HyPeRadPlots), Black line, 'Flagella' p-value = 4.1×10^-1^, 'Colony' p-value = 1.6×10^-1^). Including data from selected prokaryotic phytoplankton also did not qualitatively alter these results (Data not shown). A parallel analysis focusing only on small phytoplankton such as pico-cyanobacteria and pico-prasinophytes might yield different results as more genomes are sequenced, especially considering that @randhawaApplicabilityHydrogenPeroxide2012 found that H~2~O~2~ added to seawater at a concentration of 1.6 mg L^−1^ did not affect cells with a radius larger than 1 to 1.5 μm, but differentially harmed the picoprasinophyte *Micromonas pusilla*.
 
-Noting that the fraction of total genes allocated to both H~2~O~2~ production and scavenging decrease with increasing median cell radius, we found that the fraction of total genes that encode production of H~2~O~2~ decreases proportionally more with increasing cell radius than does the fraction of total genes that encode scavenging of H~2~O~2~ (4.6×10^-50^). The difference in slopes again supports our Hypothesis \@ref(hyp:HyPeNitOxRadProduction) that large phytoplankton counter decreasing diffusional loss of H~2~O~2~ out of cells by having lower genomic capacity for H~2~O~2~ production relative to H~2~O~2~ scavenging. Because median cell radius co-varied with Phylum, we generally excluded co-variate from our regressions, in order to focus on any cross-taxon patterns with changing median cell radius. Nevertheless, representatives of the Ochrophyte Phylum alone spanned more than an order of magnitude in median cell radius. We therefore tested whether the log~10~(total number of genes encoding the metabolism of O~2~^•−^, H~2~O~2~ or ^•^NO) varied with the log~10~ (median cell radius) across the Ochrophytes alone (Figure \@ref(fig:OchrophyteRadPlot)). We found that across Ochrophytes, the fraction of total genes encoding the production of H~2~O~2~ decreased with increasing cell radius (Slope = -1.6×10^-1^ ± 9.4×10^-2^), although the p value for the regression was 1×10^-1^. This marginal decrease in the total number of genes encoding H~2~O~2~ production with increasing median cell radius in Ochrophytes again tends to support our Hypothesis \@ref(hyp:HyPeNitOxRadProduction), with data from within a single phylum.
+Noting that the fraction of total genes allocated to both H~2~O~2~ production and scavenging decrease with increasing median cell radius, we found that the fraction of total genes that encode production of H~2~O~2~ decreases proportionally more with increasing cell radius than does the fraction of total genes that encode scavenging of H~2~O~2~ (4.6×10^-50^). The difference in slopes supports our Hypothesis \@ref(hyp:HyPeNitOxRad) that large phytoplankton counter decreasing diffusional loss of H~2~O~2~ out of cells by having lower genomic capacity for H~2~O~2~ production relative to H~2~O~2~ scavenging. Because median cell radius co-varied with Taxa, we generally excluded Taxa as a co-variate from our regressions, in order to focus on any cross-taxon patterns driven by changing median cell radius. Nevertheless, representatives of the Ochrophyte Phylum alone spanned more than an order of magnitude in median cell radius. We therefore tested whether the log~10~(total number of genes encoding the metabolism of O~2~^•−^, H~2~O~2~ or ^•^NO) varied with the log~10~ (median cell radius) across the Ochrophytes alone (Figure \@ref(fig:OchrophyteRadPlot)). We found that across Ochrophytes, the fraction of total genes encoding the production of H~2~O~2~ decreased with increasing cell radius (Slope = -1.6×10^-1^ ± 9.4×10^-2^), although the p-value for the regression was only 1×10^-1^. This marginal decrease in the total number of genes encoding H~2~O~2~ production with increasing median cell radius in Ochrophytes again tends to support our Hypothesis \@ref(hyp:HyPeNitOxRad), with data from within a single phylum to limit confounding influences of diverse evolutionary histories and cell biologies upon patterns.
 
 ### Influences of Flagella, Colony Formation and Cell Shape on Gene Counts for Enzymes Metabolizing H~2~O~2~ {.unnumbered}
 
@@ -450,7 +442,7 @@ Noting that the fraction of total genes allocated to both H~2~O~2~ production an
 <p class="caption">(\#fig:HyPeFlagPlot)**Comparison of total number of genes encoding H~2~O~2~ metabolizing enzymes ('HyPe_count') normalized to the total number of genes present in each organism ('GeneModels_count') vs. the presence or absence of flagella in the organism.** Symbol color corresponds to taxon lineage ('Phylum'). Notch spans ± standard error of the median. Box spans median ± 1 quartile of the data. Whiskers span the range excluding outliers in the data. Citations for data sources can be found in Supplementary Table S3.</p>
 </div>
 
-Setting aside the regressions vs median cell radius, non-flagellated vs. flagellated phytoplankton exhibit no statistically significant difference in the fraction of their total genes encoding the production of H~2~O~2~ (p = 5.9×10^-2^), whereas non-flagellated phytoplankton have a significantly larger proportion of their total gene content encoding H~2~O~2~ scavenging (p = 6.9×10^-3^), than do flagellated phytoplankton (Figure \@ref(fig:HyPeColonyPlot)). Thus, presence of flagella may contribute to the maintenance of H~2~O~2~ homeostasis across eukaryotic phytoplankton, but this potential influence is obscured by the range of cell size across eukaryotic phytoplankton.
+Setting aside influences of median cell radius, non-flagellated vs. flagellated phytoplankton exhibit no statistically significant difference in the fraction of their total genes encoding the production of H~2~O~2~ (p = 5.9×10^-2^), whereas non-flagellated phytoplankton have a significantly larger proportion of their total gene content encoding H~2~O~2~ scavenging (p = 6.9×10^-3^), than do flagellated phytoplankton (Figure \@ref(fig:HyPeFlagPlot)). Thus, presence of flagella may contribute to the maintenance of H~2~O~2~ homeostasis across eukaryotic phytoplankton, but this potential influence is obscured by the range of cell sizes across eukaryotic phytoplankton when flagella are included as a co-variate in size regressions.
 
 
 
@@ -461,18 +453,24 @@ Setting aside the regressions vs median cell radius, non-flagellated vs. flagell
 <p class="caption">(\#fig:HyPeColonyPlot)**Comparison of total number of genes encoding H~2~O~2~ metabolizing enzymes ('HyPe_count') normalized to the total number of genes present in each organism ('GeneModels_count') vs. the ability of the organism to form colonies.** Symbol color corresponds to taxon lineage ('Phylum'). Notch spans ± standard error of the median. Box spans median ± 1 quartile of the data. Whiskers span the range excluding outliers in the data. Citations for data sources can be found in Supplementary Table S3.</p>
 </div>
 
-Setting aside any cell size influence, non-colony forming phytoplankton have a smaller proportion of their total gene content encoding both H~2~O~2~ production (p = 3.2×10^-2^), and also H~2~O~2~ scavenging (Figure \@ref(fig:HyPeColonyPlot), p = 1.7×10^-2^), than do colony forming phytoplankton. Looking at percentage change, we found that the decrease in the fraction of total genes encoding H~2~O~2~ production between non-colony and colony forming phytoplankton is smaller (-24.71%), than the decrease in the fraction of total genes encoding H~2~O~2~ scavenging (-27.79%). Colony forming phytoplankton may have more active H~2~O~2~ metabolism with a particular emphasis on H~2~O~2~ scavenging, consistent with stronger H~2~O~2~ exchange among closely spaced cells within a colony [@omarDiffusionalInteractionsMarine2022]. 
+Setting aside cell size influences, non-colony forming phytoplankton have a smaller proportion of their total gene content encoding both H~2~O~2~ production (p = 3.2×10^-2^), and also H~2~O~2~ scavenging (Figure \@ref(fig:HyPeColonyPlot), p = 1.7×10^-2^), than do colony forming phytoplankton. Looking at proportional change, we found that the decrease in the fraction of total genes encoding H~2~O~2~ production between non-colony and colony forming phytoplankton is smaller (-24.71%), than the decrease in the fraction of total genes encoding H~2~O~2~ scavenging (-27.79%). Colony forming phytoplankton may have more active H~2~O~2~ metabolism with a particular emphasis on H~2~O~2~ scavenging, consistent with stronger H~2~O~2~ exchange among closely spaced cells within a colony (Hypothesis \@ref(hyp:Colony)) [@omarDiffusionalInteractionsMarine2022].
 
 
 
 
 
 
-Pennate and centric diatoms do not show statistically significant differences in the fraction of their total gene content encoding the production (p = 1.9×10^-1^) nor the scavenging of H~2~O~2~ (p = 9.6×10^-2^). This result does not support our Hypothesis \@ref(hyp:HyPeNitOxDiatom) that pennates have more genes encoding H~2~O~2~ producing enzymes due to their higher surface area to volume ratio (Data not presented).
+
+Pennate and centric diatoms do not show statistically significant differences in the fraction of their total gene content encoding the production (p = 1.9×10^-1^) nor the scavenging of H~2~O~2~ (p = 9.6×10^-2^). This result does not support our Hypothesis \@ref(hyp:HyPeNitOxDiatom) that pennates have more genes encoding H~2~O~2~ producing enzymes due to their higher surface area to volume ratio (Data not presented). 
 
 ## Nitric Oxide {.unnumbered}
 
 
+
+
+In the genomes and transcriptomes that we analysed, Nitric Oxide Synthase (NOS, EC:1.14.13.39) was the most frequently occurring ^•^NO producing enzyme encoded (Figure \@ref(fig:EukNitOxDotPlot)), but was not encoded, or at least not annotated, among prokaryotic phytoplankton (Data not presented). 
+
+Nitric Oxide Dioxygenase (NOD, EC:1.14.12.17) was the most frequently occurring of the ^•^NO scavenging enzymes (Figure \@ref(fig:EukNitOxDotPlot)). NOD sequences were identified in some eukaryotes, but were either not annotated, or not present in *Prochlorococcus*, most green algae and most centric diatoms. A NOS-like sequence has recently been identified in *Synechococcus*, that also has Nitric Oxide Dioxygenase-like function [@piccianoNitricOxideSynthase2019], and which might mediate NOD activity in some strains lacking annotated NOD sequences.
 
 ### Influence of Cell Size on Gene Counts for Enzymes Metabolizing ^•^NO {.unnumbered}
 
@@ -483,12 +481,13 @@ Pennate and centric diatoms do not show statistically significant differences in
 <p class="caption">(\#fig:NitOxRadPlots)**Comparison of log~10~ (Total number of genes encoding ^•^NO metabolizing enzymes ('NitOx_count') normalized to the total number of genes present in each organism ('GeneModels_count')) vs. the log~10~ (median cell radius in µm ('log_Radius_um')).** Poisson (solid line) or Quasi-Poisson (dashed line) regressions fitted to data ± Standard Error (dotted line). Regressions were run with (black line) or without (blue line) 'Colony' and 'Flagella' as co-variates. Selected prokaryote genomes are presented for comparison, but excluded from the presented regressions. Symbol color corresponds to taxon lineage ('Phylum').</p>
 </div>
 
-With increasing cell radius, eukaryotic phytoplankton do not have a varying fraction of their total genes to the capacity to produce ^•^NO, as seen in the quasipoisson regression in Figure \@ref(fig:NitOxRadPlots) (Blue line, Slope = -2.5×10^-1^ ± 1.7×10^-1^, p = 1.5×10^-1^). Including prokaryotes in the regression in Figure \@ref(fig:NitOxRadPlots) does not substantially alter the interpretation.
+With increasing cell radius eukaryotic phytoplankton do not vary in the fraction of total genes encoding the capacity to produce ^•^NO,  quasipoisson regression in Figure \@ref(fig:NitOxRadPlots) (Blue line, Slope = -2.5×10^-1^ ± 1.7×10^-1^, p = 1.5×10^-1^). Including prokaryotes in the regression in Figure \@ref(fig:NitOxRadPlots) does not substantially alter the interpretation (Data not presented).
 We re-ran the quasipoisson, excluding those organisms that completely lack genes encoding enzymes for ^•^NO production (NitOx_count = 0, points along the x-axis), which resulted in a decreasing slope with increasing cell radius. Thus those phytoplankton with any detected capacity to produce ^•^NO indeed have a smaller fraction of their total genes encoding ^•^NO production with increasing radius (Figure \@ref(fig:NitOxRadPlots), Blue line, Slope = -3.7×10^-1^ ± 1.1×10^-1^, p value = 8.6×10^-4^). 
 Including 'Flagella' and 'Colony' as co-factors to the regression that solely looks at organisms with the genomic capacity to produce ^•^NO resulted in a slope that is no longer significantly different from zero (Figure \@ref(fig:NitOxRadPlots), Black line, Slope = -2.5×10^-1^ ± 1.4×10^-1^, p = 7×10^-2^), driven by the influence of 'Flagella' (p-value = 1.4×10^-4^), but not 'Colony' (p-value = 1.8×10^-1^). 
 
+With increasing cell radius, eukaryotic phytoplankton do not vary in the fraction of their total genes encoding the capacity to scavenge ^•^NO,  quasipoisson regression slope not significantly different from zero (Figure \@ref(fig:NitOxRadPlots), Blue line, Slope = 1.3×10^-1^ ± 1.8×10^-1^, p = 4.7×10^-1^). Including prokaryotes in the quasipoisson regression from Figure \@ref(fig:NitOxRadPlots) does not alter the interpretation, as the slope is still not significantly different from zero. We re-ran the quasipoisson, excluding those organisms that completely lack genes encoding enzymes for ^•^NO scavenging (NitOx_count = 0, points along the x-axis), and found the exclusion did not alter the slope of the fraction of total genes encoding ^•^NO scavenging with increasing radius.
 
-With increasing cell radius, eukaryotic phytoplankton do not alter the fraction of their total genes to the capacity to scavenge ^•^NO, as seen in the quasipoisson regression slope not significantly different from zero (Figure \@ref(fig:NitOxRadPlots), Blue line, Slope = 1.3×10^-1^ ± 1.8×10^-1^, p = 4.7×10^-1^). Including prokaryotes in the quasipoisson regression from Figure \@ref(fig:NitOxRadPlots) does not alter the interpretation, as the slope of the quasipoisson regression is still not significantly different from zero. We re-ran the quasipoisson, excluding those organisms that completely lack genes encoding enzymes for ^•^NO scavenging (NitOx_count = 0, points along the x-axis), did not contribute to explaining the fraction of total genes encoding ^•^NO scavenging with increasing radius. Non-enzymatic paths contribute to intracellular and extracellular ^•^NO production [@zweierNonenzymaticNitricOxide1999], and may explain the absences of genes encoding ^•^NO production across some genomes across all taxonomic lineages. Alternately, ^•^NO homeostastis may be achieved in some lineages by regulating the active cellular uptake and release of intracellular ^•^NO, as has been recently demonstrated in humans [@chenCellPenetratingDeliveryNitric2021]. Although nitric oxide dioxygenase sequences have only been identified once before from phytoplankton through metatranscriptomic analyses (in diatoms and dinoflagellates) [@lampeStrategiesPhytoplanktonResponse2019], there is limited understanding as to what may contribute to the active removal of ^•^NO, and the lack of ^•^NO scavenging genes across multiple organisms. More research is needed on NOD in the active removal of ^•^NO, as well as the NOS sequences detected in Synechococcus that also display nitric oxide dioxygenase-like activity [@piccianoNitricOxideSynthase2019]. Perhaps the low reactivity of ^•^NO does not warrant the active removal of ^•^NO as long as the concentration does not exceed the toxic threshold. This explanation is plausible given that *Platymonas helgolandica*, *Platymonas subcordiformis*, *Skeletonema costatum*, *Gymnodinium sp.*, and *Prorocentrum donghaiense* showed optimum growth in the presence of ^•^NO concentrations between 10^-9^ and 10^-6^ mol L^−1^ [@peifengEffectsNitricOxide2021], which are higher than the concentrations found in the ocean (Table \@ref(tab:ROSDiffusion)).
+Non-enzymatic paths contribute to intracellular and extracellular ^•^NO production [@zweierNonenzymaticNitricOxide1999], and may explain the absences of genes encoding ^•^NO production from some genomes across taxonomic lineages. Alternately, ^•^NO homeostasis may be achieved in some lineages by regulating the active cellular uptake and release of intracellular ^•^NO, as has been recently demonstrated in humans [@chenCellPenetratingDeliveryNitric2021]. Although NOD sequences have only been identified from phytoplankton through metatranscriptomic analyses, in diatoms, haptophytes and dinoflagellates [@lampeStrategiesPhytoplanktonResponse2019], there is limited understanding as to what may contribute to the active removal of ^•^NO, and the lack of ^•^NO scavenging genes across multiple phytoplankters. More research is needed on possible contributions of NOD to the active removal of ^•^NO, as well as the NOS sequences detected in *Synechococcus* that also display NOD-like activity [@piccianoNitricOxideSynthase2019]. Perhaps the low toxicity of ^•^NO does not warrant the active removal of ^•^NO as long as the concentration does not exceed the toxic threshold. This explanation is plausible given that *Platymonas helgolandica*, *Platymonas subcordiformis*, *Skeletonema costatum*, *Gymnodinium sp.*, and *Prorocentrum donghaiense* showed optimum growth in the presence of ^•^NO concentrations between 10^-9^ and 10^-6^ mol L^−1^ [@peifengEffectsNitricOxide2021], which are higher than the concentrations found in the ocean (Table \@ref(tab:ROSDiffusion)).
 
 ### Influences of Flagella, Colony Formation and Cell Shape on Gene Counts for Enzymes Metabolizing ^•^NO {.unnumbered}
 
@@ -513,40 +512,36 @@ Comparing non-colony to colony forming phytoplankton does not show a statistical
 
 
 
-
 <div class="figure">
 <img src="../Figures/NitOxPennateCentricPlot-1.png" alt="**Comparison of total number of genes encoding ^•^NO metabolizing enzymes ('NitOx_count') normalized to the total number of genes present in each diatom ('GeneModels_count') vs. the growth form of the diatom ('PennateCentric').** Symbol color corresponds to taxon lineage ('Phylum'). Notch spans ± standard error of the median. Box spans median ± 1 quartile of the data. Whiskers span the range excluding outliers in the data. Citations for data sources can be found in Supplementary Table S3."  />
 <p class="caption">(\#fig:NitOxPennateCentricPlot)**Comparison of total number of genes encoding ^•^NO metabolizing enzymes ('NitOx_count') normalized to the total number of genes present in each diatom ('GeneModels_count') vs. the growth form of the diatom ('PennateCentric').** Symbol color corresponds to taxon lineage ('Phylum'). Notch spans ± standard error of the median. Box spans median ± 1 quartile of the data. Whiskers span the range excluding outliers in the data. Citations for data sources can be found in Supplementary Table S3.</p>
 </div>
 
-Most centric diatoms carry genes annotated as encoding ^•^NO producing enzymes, whereas most pennate diatoms do not (p = 6.2×10^-3^). In contrast, most centric diatoms lack genes annotated as encoding ^•^NO scavenging enzymes, whereas most centric diatoms carry those genes (p = 3.8×10^-5^) (Figure \@ref(fig:NitOxPennateCentricPlot)). 
+Most centric diatoms carry genes annotated as encoding ^•^NO producing enzymes, whereas most pennate diatoms do not (p = 6.2×10^-3^). In contrast, most centric diatoms lack genes annotated as encoding ^•^NO scavenging enzymes, whereas most pennate diatoms carry those genes (p = 3.8×10^-5^) (Figure \@ref(fig:NitOxPennateCentricPlot)). 
 
-The larger fractional gene allocation to ^•^NO production, and smaller fraction of genes that encode  ^•^NO scavenging enzymes, in centric diatoms (Figure \@ref(fig:NitOxPennateCentricPlot)) counters our hypothesis that diffusion from pennate diatoms would drive gene allocations in favor of ^•^NO production (Hypothesis \@ref(hyp:HyPeNitOxDiatom)). Given the strong contrast in annotated ^•^NO metabolism genes, it is likely that ^•^NO has regulatory or signaling roles that vary systematically between pennate and centric diatoms, outside any diffusional influences. For example, ^•^NO inhibits diatom adhesion to substrate [@thompsonRoleNitricOxide2008; @vardiDiatomGeneRegulating2008]. Pennates are more likely to grow adhered in biofilms [@hunsuckerSituMeasurementsDiatom2016], which may explain the striking differences in total gene allocation to  ^•^NO production and scavenging. Alternately, @didatoTranscriptomeSequencingThree2015 identified nitric oxide synthase sequences in the transcriptomes of three Pennate Diatom species (*Pseudo-nitzschia arenysensis*, *Pseudo-nitzschia delicatissima* and *Pseudo-nitzschia multistriata*), so it is possible the apparent lack of ^•^NO producing sequences in pennates is due to errors in the unsupervised annotations from eggNOG.
+The larger fractional gene allocation to ^•^NO production, and smaller fraction of genes that encode ^•^NO scavenging enzymes, in centric diatoms (Figure \@ref(fig:NitOxPennateCentricPlot)) counters our hypothesis that diffusion from pennate diatoms would drive gene allocations in favor of ^•^NO production (Hypothesis \@ref(hyp:HyPeNitOxDiatom)). Given the strong contrast in annotated ^•^NO metabolism genes, it is likely that ^•^NO has regulatory or signaling roles that vary systematically between pennate and centric diatoms, outside any diffusional influences. For example, ^•^NO inhibits diatom adhesion to substrate [@thompsonRoleNitricOxide2008; @vardiDiatomGeneRegulating2008]. Pennates are more likely to grow adhered in biofilms [@hunsuckerSituMeasurementsDiatom2016], which may explain the striking differences in total gene allocation to  ^•^NO production and scavenging. Alternately, @didatoTranscriptomeSequencingThree2015 identified putative NOS sequences in the transcriptomes of three Pennate Diatom species (*Pseudo-nitzschia arenysensis*, *Pseudo-nitzschia delicatissima* and *Pseudo-nitzschia multistriata*), so it is possible the apparent lack of ^•^NO producing sequences in pennates is due to errors in the unsupervised annotations from eggNOG.
 
 ## Summary {.unnumbered}
 
-H~2~O~2~, O~2~^•−^ and ^•^NO have multiple intracellular and extracellular roles across phytoplankton taxa [@roeUptakeMechanismsInorganic2014; @delrioReactiveOxygenSpecies2009; @sutherlandExtracellularSuperoxideProduction2019; @delrioReactiveOxygenSpecies2009; @delrioROSGenerationPeroxisomes2016]. The differential reactivities, diffusion distances, diffusibilities across cell membranes, and roles in cell signaling of H~2~O~2~, O~2~^•−^ and ^•^NO (Table \@ref(tab:ROSDiffusion)) influence genomic allocation patterns for the production and scavenging of these three ROS.
+The differential reactivities, diffusion distances, diffusibilities across cell membranes, and roles in cell signaling of H~2~O~2~, O~2~^•−^ and ^•^NO (Table \@ref(tab:ROSDiffusion)) influence genomic allocation patterns for the production and scavenging of these three distinct ROS.
 
-Our work analyzed the fraction of the total genes in a genome associated with the metabolism of a particular ROS. The presence or absence of genes encoding specific ROS metabolizing enzymes may be caused by genetic drift, or may relate to a selective advantage linked to other metabolites of the same enzyme, rather than an enzymatic role in ROS metabolism, *per se*.  Furthermore, the presence of a gene in a genome does not necessarily mean the encoded enzyme will be active, and closely related enzymes may mediate different activities in different organisms.
+O~2~^•−^ has high reactivity, short intracellular and extracellular lifetimes and limited cell membrane crossing. We did not find genes specifically encoding O~2~^•−^ production in eukaryotic phytoplankton genomes. As expected, genes encoding O~2~^•−^ scavenging were ubiquitous, but the fractional gene allocation to O~2~^•−^ scavenging decreases as cell radius, and the co-varying total gene count increases, consistent with a nearly fixed set of core genes scavenging O~2~^•−^ that do not change with increasing gene count. 
 
-Patterns of genomic allocations to production and scavenging of different ROS vary significantly by substrate.
-
-O~2~^•−^ has relatively high reactivity, short intracellular and extracellular lifetimes and limited cell membrane crossing. We did not find genes specifically encoding O~2~^•−^ production in eukaryotic phytoplankton genomes. As expected, genes encoding O~2~^•−^ scavenging were ubiquitous, but the fractional gene allocation to O~2~^•−^ scavenging decreases as cell radius (and the co-varying total gene count) increases, consistent with a nearly fixed set of core genes that do not change with increasing gene count. 
-
-H~2~O~2~ has low reactivity, long intracellular and extracellular lifetimes and readily crosses cell membranes.  Across eukaryotic phytoplankton, fraction of the total genes encoding H~2~O~2~ producing enzymes decreases with increasing cell radius, consistent with maintenance of ROS homeostasis in the face of slower diffusional losses from larger cells. The fraction of the total genes encoding H~2~O~2~ scavenging enzymes also decreases with increasing cell radius, but with a slope smaller than that for H~2~O~2~ producing enzymes. Presence of flagella and colony formation appear to influence H~2~O~2~ metabolism.
+H~2~O~2~ has lower reactivity, longer intracellular and extracellular lifetimes and readily crosses cell membranes. Across eukaryotic phytoplankton, the fraction of the total genes encoding H~2~O~2~ producing enzymes decreases with increasing cell radius, consistent with maintenance of ROS homeostasis in the face of slower diffusional losses from larger cells. The fraction of the total genes encoding H~2~O~2~ scavenging enzymes also decreases with increasing cell radius, but with a slope smaller than that for H~2~O~2~ producing enzymes. Presence of flagella and colony formation appear to influence H~2~O~2~ metabolism, supporting interactions between growth form and H~2~O~2~ homeostasis.
 
 ^•^NO has low reactivity, long intracellular and extracellular lifetimes and readily crosses cell membranes. Neither the fraction of the total genes for ^•^NO production nor for scavenging changed significantly with increasing cell radius, consistent with relatively low cytotoxicity and roles of ^•^NO in taxonomically diverse regulatory systems. Pennate diatoms frequently lack genes annotated as encoding ^•^NO producing enzymes, whereas centric diatoms frequently lack genes annotated as encoding ^•^NO scavenging enzymes. This finding is not explicable by differential diffusional losses of ^•^NO, but may reflect distinct roles of ^•^NO in the regulatory systems of diatom lineages.
 
-
 # Open Data Statement {.unnumbered}
 
-Code, genes annotated for ROS metabolism (MergedData.csv), MetaData.csv and DataDictionary.csv are stored on https://github.com/NaamanOmar/ROS_bioinfo/ROSGenomicPatternsAcrossMarinePhytoplankton.
+Code, genes annotated for ROS metabolism (MergedData.csv), MetaData.csv and DataDictionary.csv are stored on https://github.com/NaamanOmar/ROS_bioinfo/tree/master/ROSGenomicPatternsAcrossMarinePhytoplankton.
 
 Annotations of all genes from genomes or transcriptomes of organisms used in this study, MetaData.csv and DataDictionary.csv are stored on DRYAD (DOI pending) to facilitate reuse for other purposes.
 
 # Supplementary Materials {.unnumbered}
 
 ## Supplementary Figures {.unnumbered}
+
+
 
 <div class="figure">
 <img src="../Figures/RadTaxaviolin-1.png" alt="**Violin plot presenting the range of log~10~ of the median cell radius in µm ('log_Radius_um') for each taxonomic lineage ('Phylum').** Point colour corresponds to the source of the data, whether Genome or Transcriptome ('Ome'). Violin width indicates the fraction of all datapoints occuring at a cell radius ('log_Radius_um') within a phylum. Citations for data sources are in Supplementary Table S3."  />
@@ -564,8 +559,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
 <img src="../Figures/ManualAutoCompare-1.png" alt="**Comparison of paired counts of particular genes encoding ROS Production or Scavenging from manual and automatic annotations taken from the same organism.** Data was drawn from a subset of genomes and transcriptomes which were both manually and automatically annotated. Colour corresponds to the 'Gene' Points are jittered to avoid overlapping, resulting in blocks around frequently occuring counts. Dashed line is placed at 1:1 where Manual and Automated counts would be equal. Citations for data sources in Supplemental Data Table S4." width="100%" height="100%" />
 <p class="caption">(\#fig:ManualAutoCompare)**Comparison of paired counts of particular genes encoding ROS Production or Scavenging from manual and automatic annotations taken from the same organism.** Data was drawn from a subset of genomes and transcriptomes which were both manually and automatically annotated. Colour corresponds to the 'Gene' Points are jittered to avoid overlapping, resulting in blocks around frequently occuring counts. Dashed line is placed at 1:1 where Manual and Automated counts would be equal. Citations for data sources in Supplemental Data Table S4.</p>
 </div>
-
-
 
 
 
@@ -601,6 +594,30 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
 <p class="caption">(\#fig:OchrophyteRadPlot)**Comparison of log~10~ (Total number of genes encoding H~2~O~2~, O~2~^•−^ or ^•^NO metabolizing enzymes normalized to the total number of genes present in each Ochrophyte) vs. the log~10~( median cell radius in µm).** Poisson (solid line) or Quasi-Poisson (dashed line) regressions fitted to data ± Standard Error (dotted line). Regressions were run without (blue line) 'Colony' and 'Flagella' as co-variates. Citations for data sources are in Supplementary Table S3.</p>
 </div>
 
+<div class="figure">
+<img src="../Figures/EukSupOxDotPlot-1.png" alt="**Summary of O~2~^•−^ scavenging enzymes encoded within genomes and transcriptomes of eukaryotic phytoplankton analyzedTaxa are ordered from top to bottom along the left according to increasing median cell diameter within each taxonomic lineage.** Symbol colour corresponds to taxonomic lineages (‘Taxa’).Filled data points indicate that the data obtained from that organism was sourced from a genome, and unfilled data points were sourced from a transcriptome. The size of the symbol increases with the number of members of each enzyme found within each genome or transcriptome. Symbol absence means no sequences known to encode the enzyme family of interest were found in the target genome or transcriptome."  />
+<p class="caption">(\#fig:EukSupOxDotPlot)**Summary of O~2~^•−^ scavenging enzymes encoded within genomes and transcriptomes of eukaryotic phytoplankton analyzedTaxa are ordered from top to bottom along the left according to increasing median cell diameter within each taxonomic lineage.** Symbol colour corresponds to taxonomic lineages (‘Taxa’).Filled data points indicate that the data obtained from that organism was sourced from a genome, and unfilled data points were sourced from a transcriptome. The size of the symbol increases with the number of members of each enzyme found within each genome or transcriptome. Symbol absence means no sequences known to encode the enzyme family of interest were found in the target genome or transcriptome.</p>
+</div>
+
+
+
+<div class="figure">
+<img src="../Figures/EukHyPeDotPlot-1.png" alt="**Summary of H~2~O~2~ metabolizing enzymes encoded within genomes and transcriptomes of eukaryotic phytoplankton analyzed, faceted by whether the enzymes Produce or Scavenge H~2~O~2~.**Taxa are ordered from top to bottom along the left according to increasing median cell diameter within each taxonomic lineage.Symbol colour corresponds to taxonomic lineages (‘Taxa’).Filled data points indicate that the data obtained from that organism was sourced from a genome, and unfilled data points were sourced from a transcriptome.The size of the symbol increases with the number of members of each enzyme found within each genome or transcriptome.Symbol absence means no sequences known to encode the enzyme family of interest were found in the target genome or transcriptome."  />
+<p class="caption">(\#fig:EukHyPeDotPlot)**Summary of H~2~O~2~ metabolizing enzymes encoded within genomes and transcriptomes of eukaryotic phytoplankton analyzed, faceted by whether the enzymes Produce or Scavenge H~2~O~2~.**Taxa are ordered from top to bottom along the left according to increasing median cell diameter within each taxonomic lineage.Symbol colour corresponds to taxonomic lineages (‘Taxa’).Filled data points indicate that the data obtained from that organism was sourced from a genome, and unfilled data points were sourced from a transcriptome.The size of the symbol increases with the number of members of each enzyme found within each genome or transcriptome.Symbol absence means no sequences known to encode the enzyme family of interest were found in the target genome or transcriptome.</p>
+</div>
+
+<div class="figure">
+<img src="../Figures/ProkHyPeDotPlot-1.png" alt="**Summary of H~2~O~2~ metabolizing enzymes encoded within genomes of prokaryotic phytoplankton analyzed, faceted by whether the enzymes Produce or Scavenge H~2~O~2~.** Taxa are ordered from top to bottom along the left according to increasing median cell diameter within each taxonomic lineage. Symbol colour corresponds to the genus of the prokaryote.Filled data points indicate that the data obtained from that organism was sourced from a genome. The size of the symbol increases with the number of members of each enzyme found within each genome or transcriptome. Symbol absence means no sequences known to encode the enzyme family of interest were found in the target genome or transcriptome."  />
+<p class="caption">(\#fig:ProkHyPeDotPlot)**Summary of H~2~O~2~ metabolizing enzymes encoded within genomes of prokaryotic phytoplankton analyzed, faceted by whether the enzymes Produce or Scavenge H~2~O~2~.** Taxa are ordered from top to bottom along the left according to increasing median cell diameter within each taxonomic lineage. Symbol colour corresponds to the genus of the prokaryote.Filled data points indicate that the data obtained from that organism was sourced from a genome. The size of the symbol increases with the number of members of each enzyme found within each genome or transcriptome. Symbol absence means no sequences known to encode the enzyme family of interest were found in the target genome or transcriptome.</p>
+</div>
+
+<div class="figure">
+<img src="../Figures/EukNitOxDotPlot-1.png" alt="**Summary of ^•^NO metabolizing enzymes encoded within genomes and transcriptomes of eukaryotic phytoplankton analyzed, faceted by whether the enzymes Produce or Scavenge ^•^NO.** Taxa are ordered from top to bottom along the left according to increasing median cell diameter within each taxonomic lineage. Symbol colour corresponds to taxonomic lineages (‘Taxa’). Filled data points indicate that the data obtained from that organism was sourced from a genome, and unfilled data points were sourced from a transcriptome. The size of the symbol increases with the number of members of each enzyme found within each genome or transcriptome. Symbol absence means no sequences known to encode the enzyme family of interest were found in the target genome or transcriptome."  />
+<p class="caption">(\#fig:EukNitOxDotPlot)**Summary of ^•^NO metabolizing enzymes encoded within genomes and transcriptomes of eukaryotic phytoplankton analyzed, faceted by whether the enzymes Produce or Scavenge ^•^NO.** Taxa are ordered from top to bottom along the left according to increasing median cell diameter within each taxonomic lineage. Symbol colour corresponds to taxonomic lineages (‘Taxa’). Filled data points indicate that the data obtained from that organism was sourced from a genome, and unfilled data points were sourced from a transcriptome. The size of the symbol increases with the number of members of each enzyme found within each genome or transcriptome. Symbol absence means no sequences known to encode the enzyme family of interest were found in the target genome or transcriptome.</p>
+</div>
+
+
+
 ## Supplementary Tables {.unnumbered}
 
 <table class=" lightable-classic" style='font-family: "Arial Narrow", "Source Sans Pro", sans-serif; margin-left: auto; margin-right: auto;'>
@@ -610,1023 +627,413 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <th style="text-align:left;"> Variable </th>
    <th style="text-align:left;"> Units </th>
    <th style="text-align:left;"> Definition </th>
-   <th style="text-align:left;"> CodeLocation </th>
   </tr>
  </thead>
 <tbody>
   <tr>
-   <td style="text-align:left;"> Genus </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Genus of the organism </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> species </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Species of the organism </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Strain </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Strain of the organism </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
    <td style="text-align:left;"> FileName </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;"> Name of source genome or transcriptome file composed of three components - Name, Nucleic acid and Genome or Transcriptome, separated by dashes </td>
-   <td style="text-align:left;"> MergedData </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> Name </td>
+   <td style="text-align:left;"> EnzymeName </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Combination of Genus, species, Strain </td>
-   <td style="text-align:left;"> MergedData </td>
+   <td style="text-align:left;"> Name of ROS producing or scavenging enzyme </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> Ome </td>
+   <td style="text-align:left;"> ECNumber </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Genome or Transcriptome </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Taxa </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Taxonomic group that the organism falls in, typically phyla or superphyla </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Rad1_um </td>
-   <td style="text-align:left;"> &lt;b5&gt;m </td>
-   <td style="text-align:left;"> Smallest median radius (in &lt;b5&gt;m) along all three axes </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Rad2_um </td>
-   <td style="text-align:left;"> &lt;b5&gt;m </td>
-   <td style="text-align:left;"> Second largest median radius (in &lt;b5&gt;m) along all three axes </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Rad3_um </td>
-   <td style="text-align:left;"> &lt;b5&gt;m </td>
-   <td style="text-align:left;"> Largest median radius (in &lt;b5&gt;m) along all three axes </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Flagella </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Refers to whether or not the organism has a flagella </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> GenomeSize_mbp </td>
-   <td style="text-align:left;"> mbp </td>
-   <td style="text-align:left;"> Size of the genome in megabasepairs </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> GeneModels_count </td>
-   <td style="text-align:left;"> count </td>
-   <td style="text-align:left;"> Total number of genes in genome </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Latitude </td>
-   <td style="text-align:left;"> &lt;a1&gt; </td>
-   <td style="text-align:left;"> Source latitude from which the organism was sampled in degrees </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Longitude </td>
-   <td style="text-align:left;"> &lt;a1&gt; </td>
-   <td style="text-align:left;"> Source longitude from which the organism was sampled in degrees </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Marine </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> States whether the organism is Marine or not </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Enzyme_abbrev </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> ROSEnzymeName </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> ProdOrScav </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> ROSGene_count </td>
-   <td style="text-align:left;"> count </td>
-   <td style="text-align:left;"> Count of genes encoding an enzyme by EC number </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> EnzymeParent </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> PennateCentric </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Solely for Diatoms, indicates whether the Diatom is a Pennate or a Centric Diatom </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> SA_um2 </td>
-   <td style="text-align:left;"> &lt;b5&gt;m^2^ </td>
-   <td style="text-align:left;"> Surface area in &lt;b5&gt;m^2^ </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Volume_um3 </td>
-   <td style="text-align:left;"> &lt;b5&gt;m^3^ </td>
-   <td style="text-align:left;"> Volume in &lt;b5&gt;m^3^ </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> SAVol_um </td>
-   <td style="text-align:left;"> &lt;b5&gt;m^-1^ </td>
-   <td style="text-align:left;"> Surface area to Volume ratio in &lt;b5&gt;m^-1^ </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Radius_um </td>
-   <td style="text-align:left;"> &lt;b5&gt;m </td>
-   <td style="text-align:left;"> Smallest median radius (in &lt;b5&gt;m) along all three axes </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> log_Radius_um </td>
-   <td style="text-align:left;"> &lt;b5&gt;m </td>
-   <td style="text-align:left;"> log10 of Radius_&lt;b5&gt;m </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> log_GenomeSize_mbp </td>
-   <td style="text-align:left;"> mbp </td>
-   <td style="text-align:left;"> log10 of GenomeSize_mbp </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> log_GeneModels_count </td>
-   <td style="text-align:left;"> count </td>
-   <td style="text-align:left;"> log10 of GeneModel_count </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> log_Gene_count </td>
-   <td style="text-align:left;"> count </td>
-   <td style="text-align:left;"> log10 of Gene_count </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> abs_Latitude </td>
-   <td style="text-align:left;"> &lt;a1&gt; </td>
-   <td style="text-align:left;"> absolute of Latitude </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> log_Volume_um3 </td>
-   <td style="text-align:left;"> &lt;b5&gt;m^3^ </td>
-   <td style="text-align:left;"> log10 of Volume_&lt;b5&gt;m3 </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> log_SA_um2 </td>
-   <td style="text-align:left;"> &lt;b5&gt;m^2^ </td>
-   <td style="text-align:left;"> log10 of SA_&lt;b5&gt;m2 </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> log_SAVol_um </td>
-   <td style="text-align:left;"> &lt;b5&gt;m^-1^ </td>
-   <td style="text-align:left;"> log10 of SAVol_per&lt;b5&gt;m </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> EnzymeFamily_sum </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> EnzymeFamily_sum_total </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> log_EnzymeFamily_sumtotal </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> log_EnzymeFamily_sum </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> MergedData </td>
+   <td style="text-align:left;"> Enzyme Commission Number of enzyme </td>
   </tr>
   <tr>
    <td style="text-align:left;"> HyPe </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;"> Indicates whether the enzyme Produces or Scavenges Hydrogen Peroxide </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> HyPePriSec </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> If the Enzyme Produces or Scavenges Hydrogen Peroxide, HyPePriSec indicates whether Hydrogen Peroxide is a Primary or Secondary product or substrate </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> HyPe_citekey </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Citation for HyPe </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> NitOx </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Indicates whether the enzyme Produces or Scavenges Nitric Oxide </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> NitOxPriSec </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> If the Enzyme Produces or Scavenges Nitric Oxide, NitOxPriSec indicates whether Nitric Oxide is a Primary or Secondary product or substrate </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> NitOx_citekey </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Citation for NitOx_PriSec </td>
-   <td style="text-align:left;"> MergedData </td>
   </tr>
   <tr>
    <td style="text-align:left;"> SupOx </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;"> Indicates whether the enzyme Produces or Scavenges  Superoxide </td>
-   <td style="text-align:left;"> MergedData </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> SupOxPriSec </td>
+   <td style="text-align:left;"> NitOx </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> Indicates whether the enzyme Produces or Scavenges Nitric Oxide </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Genus </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> Genus of the organism </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> species </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> Species of the organism </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Strain </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> Strain of the organism </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Ome </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> Genome or Transcriptome </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Taxa </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> Taxonomic group that the organism falls in, typically class, phyla or superphyla </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Rad1_um </td>
+   <td style="text-align:left;"> µm </td>
+   <td style="text-align:left;"> Smallest median radius (in µm) along all three axes </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Rad2_um </td>
+   <td style="text-align:left;"> µm </td>
+   <td style="text-align:left;"> Second largest median radius (in µm) along all three axes </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Rad3_um </td>
+   <td style="text-align:left;"> µm </td>
+   <td style="text-align:left;"> Largest median radius (in µm) along all three axes </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Flagella </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> Refers to whether or not the organism has flagella </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> GenomeSize_mbp </td>
+   <td style="text-align:left;"> mbp </td>
+   <td style="text-align:left;"> Size of the genome in megabasepairs </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> GeneModels_count </td>
+   <td style="text-align:left;"> count </td>
+   <td style="text-align:left;"> Total number of genes in genome </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Latitude </td>
+   <td style="text-align:left;"> ° </td>
+   <td style="text-align:left;"> Source latitude from which the organism was sampled in degrees </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Longitude </td>
+   <td style="text-align:left;"> ° </td>
+   <td style="text-align:left;"> Source longitude from which the organism was sampled in degrees </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Marine </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> States whether the organism is Marine or not </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> PennateCentric </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> Solely for Diatoms, indicates whether the Diatom is a Pennate or a Centric Diatom </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> ColonySpecies </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> Indicates whether an organism can form colonies or not </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> KO </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> Kegg Orthology Number </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> HyPe_PriSec </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> If the Enzyme Produces or Scavenges Hydrogen Peroxide, HyPePriSec indicates whether Hydrogen Peroxide is a Primary or Secondary product or substrate </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> HyPe_PriSec_citekey </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> Citation for HyPe </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> NitOx_PriSec </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> If the Enzyme Produces or Scavenges Nitric Oxide, NitOxPriSec indicates whether Nitric Oxide is a Primary or Secondary product or substrate </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> NitOx_PriSec_citekey </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> Citation for NitOx_PriSec </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> SupOx_PriSec </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;"> If the Enzyme Produces or Scavenges Superoxide, SupOxPriSec indicates whether Superoxide is a Primary or Secondary product or substrate </td>
-   <td style="text-align:left;"> MergedData </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> SupOx_citekey </td>
+   <td style="text-align:left;"> SupOx_PriSec_citekey </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;"> Citation for SupOx_PriSec </td>
-   <td style="text-align:left;"> MergedData </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Reaction </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;"> Reaction of the enzyme to produce or scavenge ROS; if multiple reactions are present, they are separated by ";" </td>
-   <td style="text-align:left;"> MergedData </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> Reaction_citekey </td>
+   <td style="text-align:left;"> Reaction_citation </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;"> Citation for Reaction </td>
-   <td style="text-align:left;"> MergedData </td>
   </tr>
   <tr>
    <td style="text-align:left;"> ECTreeL1 </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;"> First Level Description of EC Tree </td>
-   <td style="text-align:left;"> MergedData </td>
   </tr>
   <tr>
    <td style="text-align:left;"> ECTreeL2 </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;"> Second Level Description of EC Tree </td>
-   <td style="text-align:left;"> MergedData </td>
   </tr>
   <tr>
    <td style="text-align:left;"> ECTreeL3 </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;"> Third Level Description of EC Tree </td>
-   <td style="text-align:left;"> MergedData </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> HyPe_count </td>
-   <td style="text-align:left;"> count </td>
-   <td style="text-align:left;"> Total count of genes encoding Production or Scavenging of HyPe </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> NitOx_count </td>
-   <td style="text-align:left;"> count </td>
-   <td style="text-align:left;"> Total count of genes encoding Production or Scavenging of NitOx </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> SupOx_count </td>
-   <td style="text-align:left;"> count </td>
-   <td style="text-align:left;"> Total count of genes encoding Production or Scavenging of SupOx </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> EnzymeName </td>
+   <td style="text-align:left;"> ProdAndScav </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> MergedData </td>
+   <td style="text-align:left;"> An enzyme that is annotated as both producing and scavenging the substrate </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> ECNumber </td>
+   <td style="text-align:left;"> RemoveEnzyme </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Enzyme Commision Number of the Enzyme </td>
-   <td style="text-align:left;"> MergedData </td>
+   <td style="text-align:left;"> Remove an enzyme as per methods </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Notes </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Notes about the Enzyme or ECNumber </td>
-   <td style="text-align:left;"> MergedData </td>
+   <td style="text-align:left;"> Notes </td>
   </tr>
   <tr>
    <td style="text-align:left;"> query_name </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> MergedData </td>
+   <td style="text-align:left;"> query sequence name </td>
   </tr>
   <tr>
    <td style="text-align:left;"> seed_eggNOG_ortholog </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Best matching ortholog (from eggNOG) to the sequence in a genome </td>
-   <td style="text-align:left;"> MergedData </td>
+   <td style="text-align:left;"> best protein match in eggNOG </td>
   </tr>
   <tr>
    <td style="text-align:left;"> seed_ortholog_evalue </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> MergedData </td>
+   <td style="text-align:left;"> best protein match (e-value) </td>
   </tr>
   <tr>
    <td style="text-align:left;"> seed_ortholog_score </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> MergedData </td>
+   <td style="text-align:left;"> best protein match (bit-score) </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> eggNOG Ogs </td>
+   <td style="text-align:left;"> eggNOG OGs </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> MergedData </td>
+   <td style="text-align:left;"> a comma-separated, clade depth-sorted (broadest to narrowest), list of Orthologous Groups (OGs) identified for this query. Note that each OG is represented in the following format: OG@tax_id|tax_name </td>
   </tr>
   <tr>
    <td style="text-align:left;"> narr_og_name </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> MergedData </td>
+   <td style="text-align:left;"> OG@tax_id|tax_name for the narrowest OG found for this query. </td>
   </tr>
   <tr>
    <td style="text-align:left;"> narr_og_cat </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> MergedData </td>
+   <td style="text-align:left;"> COG category corresponding to narr_og_name </td>
   </tr>
   <tr>
    <td style="text-align:left;"> narr_og_desc </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> MergedData </td>
+   <td style="text-align:left;"> Description corresponding to narr_og_name </td>
   </tr>
   <tr>
    <td style="text-align:left;"> best_og_name </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> MergedData </td>
+   <td style="text-align:left;"> OG@tax_id|tax_name for the OG chosen based on --tax_scope. </td>
   </tr>
   <tr>
    <td style="text-align:left;"> best_og_cat </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> MergedData </td>
+   <td style="text-align:left;"> COG category corresponding to best_og_name </td>
   </tr>
   <tr>
    <td style="text-align:left;"> best_og_desc </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> MergedData </td>
+   <td style="text-align:left;"> Description corresponding to best_og_name </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Preferred_name </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> MergedData </td>
+   <td style="text-align:left;"> EGGNOG annotation of enzyme name </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> Gos </td>
+   <td style="text-align:left;"> GOs </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> MergedData </td>
+   <td style="text-align:left;"> Gene Ontology </td>
   </tr>
   <tr>
    <td style="text-align:left;"> KEGG_ko </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> MergedData </td>
+   <td style="text-align:left;"> Kegg Orthology Number </td>
   </tr>
   <tr>
    <td style="text-align:left;"> KEGG_Pathway </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> MergedData </td>
+   <td style="text-align:left;"> KEGG Pathway </td>
   </tr>
   <tr>
    <td style="text-align:left;"> KEGG_Module </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> MergedData </td>
+   <td style="text-align:left;"> KEGG Module </td>
   </tr>
   <tr>
    <td style="text-align:left;"> KEGG_Reaction </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> MergedData </td>
+   <td style="text-align:left;"> KEGG Reaction </td>
   </tr>
   <tr>
    <td style="text-align:left;"> KEGG_rclass </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> MergedData </td>
+   <td style="text-align:left;"> KEGG rclass </td>
   </tr>
   <tr>
    <td style="text-align:left;"> BRITE </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> MergedData </td>
+   <td style="text-align:left;"> Hierarchical classification systems capturing functional hierarchies of various biological objects </td>
   </tr>
   <tr>
    <td style="text-align:left;"> KEGG_TC </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> MergedData </td>
+   <td style="text-align:left;"> KEGG Transporter Classification </td>
   </tr>
   <tr>
    <td style="text-align:left;"> CAZy </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> MergedData </td>
+   <td style="text-align:left;"> Carbohydrate-Active enZYmes </td>
   </tr>
   <tr>
    <td style="text-align:left;"> BiGG_Reaction </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> MergedData </td>
+   <td style="text-align:left;"> Biochemical Genetic and Genomic </td>
   </tr>
   <tr>
    <td style="text-align:left;"> PFAMs </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> MergedData </td>
+   <td style="text-align:left;"> Protein Families </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> GeneId </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> ROSEnzymeAbbrev </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> MergedData </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> TaxaColors </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Character vector to allot each taxa a unique color </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> WideData </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Data containing the Genus, species, Strain, Taxa, Ome and counts of all ROS related enzymes found within the genome or transcriptome </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> HyPeMerged </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Wide version of MergedData containing data relevant to HyPe </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> SupOxMerged </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Wide version of MergedData containing data relevant to SupOx </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> NitOxMerged </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Wide version of MergedData containing data relevant to NitOx </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> HyPe_count.p </td>
+   <td style="text-align:left;"> ROSGene_count </td>
    <td style="text-align:left;"> count </td>
-   <td style="text-align:left;"> Total number of genes encoding HyPe Producing enzymes </td>
-   <td style="text-align:left;"> ROSModels.Rmd; HyPeMerged </td>
+   <td style="text-align:left;"> Count of genes encoding an enzyme by EC number </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> HyPe_count.s </td>
+   <td style="text-align:left;"> TotalDetectedEnzymes </td>
    <td style="text-align:left;"> count </td>
-   <td style="text-align:left;"> Total number of genes encoding HyPe Scavenging enzymes </td>
-   <td style="text-align:left;"> ROSModels.Rmd; HyPeMerged </td>
+   <td style="text-align:left;"> Total count of detected enzyme encoding genes in the genome </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> HyPeDiff </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Difference between the total number of genes encoding HyPe Producing enzymes and the total number of genes encoding HyPe Scavenging enzymes (HyPe_count.p - HyPe_count.s) </td>
-   <td style="text-align:left;"> ROSModels.Rmd; HyPeMerged </td>
+   <td style="text-align:left;"> SA_um2 </td>
+   <td style="text-align:left;"> µm^2^ </td>
+   <td style="text-align:left;"> Surface area in µm^2^ </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> SupOx_count.p </td>
+   <td style="text-align:left;"> Volume_um3 </td>
+   <td style="text-align:left;"> µm^3^ </td>
+   <td style="text-align:left;"> Volume in µm^3^ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> SAVol_um </td>
+   <td style="text-align:left;"> µm^-1^ </td>
+   <td style="text-align:left;"> Surface area to Volume ratio in µm^-1^ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Radius_um </td>
+   <td style="text-align:left;"> µm </td>
+   <td style="text-align:left;"> Smallest median radius (in µm) along all three axes </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> log_Radius_um </td>
+   <td style="text-align:left;"> µm </td>
+   <td style="text-align:left;"> log10 of Radius_µm </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> log_GenomeSize_mbp </td>
+   <td style="text-align:left;"> mbp </td>
+   <td style="text-align:left;"> log10 of GenomeSize_mbp </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> log_GeneModels_count </td>
    <td style="text-align:left;"> count </td>
-   <td style="text-align:left;"> Total number of genes encoding SupOx Producing enzymes </td>
-   <td style="text-align:left;"> ROSModels.Rmd; SupOxMerged </td>
+   <td style="text-align:left;"> log10 of GeneModel_count </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> SupOx_count.s </td>
+   <td style="text-align:left;"> log_Gene_count </td>
    <td style="text-align:left;"> count </td>
-   <td style="text-align:left;"> Total number of genes encoding SupOx Scavenging enzymes </td>
-   <td style="text-align:left;"> ROSModels.Rmd; SupOxMerged </td>
+   <td style="text-align:left;"> log10 of Gene_count </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> SupOxDiff </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Difference between the total number of genes encoding SupOx Producing enzymes and the total number of genes encoding SupOx Scavenging enzymes (SupOx_count.p - SupOx_count.s) </td>
-   <td style="text-align:left;"> ROSModels.Rmd; SupOxMerged </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> NitOx_count.p </td>
-   <td style="text-align:left;"> count </td>
-   <td style="text-align:left;"> Total number of genes encoding NitOx Producing enzymes </td>
-   <td style="text-align:left;"> ROSModels.Rmd; NitOxMerged </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> NitOx_count.s </td>
-   <td style="text-align:left;"> count </td>
-   <td style="text-align:left;"> Total number of genes encoding NitOx Scavenging enzymes </td>
-   <td style="text-align:left;"> ROSModels.Rmd; NitOxMerged </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> NitOxDiff </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Difference between the total number of genes encoding NitOx Producing enzymes and the total number of genes encoding NitOx Scavenging enzymes (NitOx_count.p - NitOx_count.s) </td>
-   <td style="text-align:left;"> ROSModels.Rmd; NitOxMerged </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> ThresholdType </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Type of parameter to be used in the changepoint model under "type =" </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> HyPeRad </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Nested model containing Poisson and Quasi-poisson fits on regressions with HyPe_count on the y axis and log_Radius on the x axis. Prokaryotes are excluded from the models. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> HyPeRadNoZero </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Nested model containing Poisson and Quasi-poisson fits on regressions with HyPe_count on the y axis and log_Radius on the x axis. The model was run in organisms where HyPe Production or Scavenging enzymes were present. Prokaryotes are excluded from the models. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> HyPeRadProk </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Nested model containing Poisson and Quasi-poisson fits on regressions with HyPe_count on the y axis and log_Radius on the x axis. Prokaryotes are included in the models. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> SupOxRad </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Nested model containing Poisson and Quasi-poisson fits on regressions with SupOx_count on the y axis and log_Radius on the x axis. Prokaryotes are excluded from the models. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> SupOxRadNoZero </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Nested model containing Poisson and Quasi-poisson fits on regressions with SupOx_count on the y axis and log_Radius on the x axis. The model was run in organisms where SupOx Production or Scavenging enzymes were present. Prokaryotes are excluded from the models. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> SupOxRadProk </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Nested model containing Poisson and Quasi-poisson fits on regressions with SupOx_count on the y axis and log_Radius on the x axis. Prokaryotes are included in the models. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> NitOxRad </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Nested model containing Poisson and Quasi-poisson fits on regressions with NitOx_count on the y axis and log_Radius on the x axis. Prokaryotes are excluded from the models. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> NitOxRadNoZero </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Nested model containing Poisson and Quasi-poisson fits on regressions with NitOx_count on the y axis and log_Radius on the x axis. The model was run in organisms where NitOx Production or Scavenging enzymes were present. Prokaryotes are excluded from the models. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> NitOxRadProk </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Nested model containing Poisson and Quasi-poisson fits on regressions with NitOx_count on the y axis and log_Radius on the x axis. Prokaryotes are included in the models. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> HyPeRadComparison </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Nested model containing Gaussian fits on regressions with HyPeDiff on the y axis and log_Radius on the x axis. Prokaryotes are excluded from the regression. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> SupOxRadComparison </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Nested model containing Gaussian fits on regressions with SupOxDiff on the y axis and log_Radius on the x axis. Prokaryotes are excluded from the regression. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> NitOxRadComparison </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Nested model containing Gaussian fits on regressions with NitOxDiff on the y axis and log_Radius on the x axis. Prokaryotes are excluded from the regression. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> HyPeLat </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Nested model containing Poisson and Quasi-poisson fits on regressions with HyPe_count on the y axis and abs_Latitude on the x axis. Prokaryotes are excluded from the models. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> HyPeLatNoZero </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Nested model containing Poisson and Quasi-poisson fits on regressions with HyPe_count on the y axis and abs_Latitude on the x axis. The model was run in organisms where HyPe Production or Scavenging enzymes were present. Prokaryotes are excluded from the models. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> HyPeLatProk </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Nested model containing Poisson and Quasi-poisson fits on regressions with HyPe_count on the y axis and abs_Latitude on the x axis. Prokaryotes are included in the models. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> SupOxLat </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Nested model containing Poisson and Quasi-poisson fits on regressions with SupOx_count on the y axis and abs_Latitude on the x axis. Prokaryotes are excluded from the models. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> SupOxLatNoZero </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Nested model containing Poisson and Quasi-poisson fits on regressions with SupOx_count on the y axis and abs_Latitude on the x axis. The model was run in organisms where SupOx Production or Scavenging enzymes were present. Prokaryotes are excluded from the models. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> SupOxLatProk </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Nested model containing Poisson and Quasi-poisson fits on regressions with SupOx_count on the y axis and abs_Latitude on the x axis. Prokaryotes are included in the models. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> NitOxLat </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Nested model containing Poisson and Quasi-poisson fits on regressions with NitOx_count on the y axis and abs_Latitude on the x axis. Prokaryotes are excluded from the models. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> NitOxLatNoZero </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Nested model containing Poisson and Quasi-poisson fits on regressions with NitOx_count on the y axis and abs_Latitude on the x axis. The model was run in organisms where NitOx Production or Scavenging enzymes were present. Prokaryotes are excluded from the models. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> NitOxLatProk </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Nested model containing Poisson and Quasi-poisson fits on regressions with NitOx_count on the y axis and abs_Latitude on the x axis. Prokaryotes are included in the models. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> HyPeLatComparison </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Nested model containing Gaussian fits on regressions with HyPeDiff on the y axis and abs_Latitude on the x axis. Prokaryotes are excluded from the regression. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> SupOxLatComparison </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Nested model containing Gaussian fits on regressions with SupOxDiff on the y axis and abs_Latitude on the x axis. Prokaryotes are excluded from the regression. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> NitOxLatComparison </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Nested model containing Gaussian fits on regressions with NitOxDiff on the y axis and abs_Latitude on the x axis. Prokaryotes are excluded from the regression. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> fit </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, fit refers to a Gaussian regression. The y value may be HyPeDiff, SupOxDiff or NitOxDiff divided by GeneModel_count. The x value is either abs_Latitude or log_Radius </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> param </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, param refers to tidy(fit), and provides a summary of fit which includes the estimate, std.error, statistic and p.value. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> pred </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, param refers to augment(fit), and provides a summary of fit which includes the .fitted, .resid, std.resid, .hat, .sigma and .cooksd </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> qual </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, param refers to glance(fit), and provides a summary of fit which includes the null.deviance, df.null, logLik, AIC, BIC, deviance, df.residual and nobs </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> fit_taxa </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, fit referred to a Gaussian regression, while taking into account the effect of taxa. The y value may be HyPeDiff, SupOxDiff or NitOxDiff divided by GeneModel_count. The x value is either abs_Latitude or log_Radius </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
+   <td style="text-align:left;"> abs_Latitude </td>
+   <td style="text-align:left;"> ° </td>
+   <td style="text-align:left;"> absolute of Latitude </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> param_taxa </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, param refers to tidy(fit_taxa), and provides a summary of fit_taxa which includes the estimate, std.error, statistic and p.value. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> pred_taxa </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, param refers to augment(fit_taxa), and provides a summary of fit_taxa which includes the .fitted, .resid, std.resid, .hat, .sigma and .cooksd </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> qual_taxa </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, param refers to glance(fit_taxa), and provides a summary of fit_taxa which includes the null.deviance, df.null, logLik, AIC, BIC, deviance, df.residual and nobs </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> fit_p_offset </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, fit_p_offset refers to a Poisson regression. The y value may be HyPe_count, SupOx_count, NitOx_count offset by GeneModel_count. The x value is either abs_Latitude or log_Radius. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> param_p_offset </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, param_p_offset refers to tidy(fit_p_offset), and provides a summary of fit_p_offset which includes the estimate, std.error, statistic and p.value. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> pred_p_offset </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, pred_p_offset refers to augment(fit_p_offset), and provides a summary of fit_p_offset which includes the .fitted, .resid, std.resid, .hat, .sigma and .cooksd </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> qual_p_offset </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, qual_p_offset refers to glance(fit_p_offset), and provides a summary of fit_p_offset which includes the null.deviance, df.null, logLik, AIC, BIC, deviance, df.residual and nobs </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> fit_qp_offset </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, fit_qp_offset refers to a Quasi-poisson regression. The y value may be HyPe_count, SupOx_count, NitOx_count offset by GeneModel_count. The x value is either abs_Latitude or log_Radius. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> param_qp_offset </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, param_qp_offset refers to tidy(fit_qp_offset), and provides a summary of fit_qp_offset which includes the estimate, std.error, statistic and p.value. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> pred_qp_offset </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, pred_qp_offset refers to augment(fit_qp_offset), and provides a summary of fit_qp_offset which includes the .fitted, .resid, std.resid, .hat, .sigma and .cooksd </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> qual_qp_offset </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, qual_qp_offset refers to glance(fit_qp_offset), and provides a summary of fit_qp_offset which includes the null.deviance, df.null, logLik, AIC, BIC, deviance, df.residual and nobs </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> dispersion_p_offset </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, dispersion_p_offset performs a dispersion test on fit_p_offset. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> dispersion_p_offset_tidy </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, dispersion_p_offset_tidy is the tidy output from dispersion_p_offset </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> offset_regression </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, offset_regression would contain the results from fit_p_offset if dispersion_p_offset  &gt; 0.05, or fit_qp_offset if dispersion_p_offset &lt;b2&gt; 0.05. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> offset_regression_type </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, offset_regression_type indicates whether offset_regression is a Poisson or Quasi-poisson regression. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> offset_model </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, offset_model is the tidy output of offset_regression. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> fit_p_taxa_offset </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, fit_p_taxa_offset refers to a Poisson regression, taking into account the effect of taxa. The y value may be HyPe_count, SupOx_count, NitOx_count offset by GeneModel_count. The x value is either abs_Latitude or log_Radius. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
+   <td style="text-align:left;"> log_Volume_um3 </td>
+   <td style="text-align:left;"> µm^3^ </td>
+   <td style="text-align:left;"> log10 of Volume_µm3 </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> param_p_taxa_offset </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, param_p_taxa_offset refers to tidy(fit_p_taxa_offset), and provides a summary of fit_p_taxa_offset which includes the estimate, std.error, statistic and p.value. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> pred_p_taxa_offset </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, pred_p_taxa_offset refers to augment(fit_p_taxa_offset), and provides a summary of fit_p_taxa_offset which includes the .fitted, .resid, std.resid, .hat, .sigma and .cooksd </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> qual_p_taxa_offset </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, qual_p_taxa_offset refers to glance(fit_p_taxa_offset), and provides a summary of fit_p_taxa_offset which includes the null.deviance, df.null, logLik, AIC, BIC, deviance, df.residual and nobs </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> fit_qp_taxa_offset </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, fit_qp_taxa_offset refers to a Quasi-poisson regression, taking into account the effect of taxa. The y value may be HyPe_count, SupOx_count, NitOx_count offset by GeneModel_count. The x value is either abs_Latitude or log_Radius. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> param_qp_taxa_offset </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, param_qp_taxa_offset refers to tidy(fit_qp_taxa_offset), and provides a summary of fit_qp_taxa_offset which includes the estimate, std.error, statistic and p.value. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> pred_qp_taxa_offset </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, pred_qp_taxa_offset refers to augment(fit_qp_taxa_offset), and provides a summary of fit_qp_taxa_offset which includes the .fitted, .resid, std.resid, .hat, .sigma and .cooksd </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> qual_qp_taxa_offset </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, qual_qp_taxa_offset refers to glance(fit_qp_taxa_offset), and provides a summary of fit_qp_taxa_offset which includes the null.deviance, df.null, logLik, AIC, BIC, deviance, df.residual and nobs </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> dispersion_p_taxa_offset </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, dispersion_p_taxa_offset performs a dispersion test on fit_p_taxa_offset. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> dispersion_p_taxa_offset_tidy </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, dispersion_p_taxa_offset_tidy is the tidy output from dispersion_p_taxa_offset </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
+   <td style="text-align:left;"> log_SA_um2 </td>
+   <td style="text-align:left;"> µm^2^ </td>
+   <td style="text-align:left;"> log10 of SA_µm2 </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> taxa_offset_regression </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, taxa_offset_regression would contain the results from fit_p_taxa_offset if dispersion_p_taxa_offset  &gt; 0.05, or fit_qp_taxa_offset if dispersion_p_taxa_offset &lt;b2&gt; 0.05. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> taxa_offset_regression_type </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, taxa_offset_regression_type indicates whether taxa_offset_regression is a Poisson or Quasi-poisson regression. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> taxa_offset_model </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, taxa_offset_model is the tidy output of taxa_offset_regression. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> fit_p_taxaome_offset </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, fit_p_taxaome_offset refers to a Poisson regression, taking into account the effect of taxa and ome. The y value may be HyPe_count, SupOx_count, NitOx_count offset by GeneModel_count. The x value is either abs_Latitude or log_Radius. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> param_p_taxaome_offset </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, param_p_taxaome_offset refers to tidy(fit_p_taxaome_offset), and provides a summary of fit_p_taxaome_offset which includes the estimate, std.error, statistic and p.value. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> pred_p_taxaome_offset </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, pred_p_taxaome_offset refers to augment(fit_p_taxaome_offset), and provides a summary of fit_p_taxaome_offset which includes the .fitted, .resid, std.resid, .hat, .sigma and .cooksd </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> qual_p_taxaome_offset </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, qual_p_taxaome_offset refers to glance(fit_p_taxaome_offset), and provides a summary of fit_p_taxaome_offset which includes the null.deviance, df.null, logLik, AIC, BIC, deviance, df.residual and nobs </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> fit_qp_taxaome_offset </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, fit_qp_taxaome_offset refers to a Quasi-poisson regression, taking into account the effect of taxa and ome. The y value may be HyPe_count, SupOx_count, NitOx_count offset by GeneModel_count. The x value is either abs_Latitude or log_Radius. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> param_qp_taxaome_offset </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, param_qp_taxaome_offset refers to tidy(fit_qp_taxaome_offset), and provides a summary of fit_qp_taxaome_offset which includes the estimate, std.error, statistic and p.value. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
+   <td style="text-align:left;"> log_SAVol_um </td>
+   <td style="text-align:left;"> µm^-1^ </td>
+   <td style="text-align:left;"> log10 of SAVol_perµm </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> pred_qp_taxaome_offset </td>
+   <td style="text-align:left;"> Name </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, pred_qp_taxaome_offset refers to augment(fit_qp_taxaome_offset), and provides a summary of fit_qp_taxaome_offset which includes the .fitted, .resid, std.resid, .hat, .sigma and .cooksd </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
+   <td style="text-align:left;"> Combination of Genus, species, Strain </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> qual_qp_taxaome_offset </td>
+   <td style="text-align:left;"> Phylum </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, qual_qp_taxaome_offset refers to glance(fit_qp_taxaome_offset), and provides a summary of fit_qp_taxaome_offset which includes the null.deviance, df.null, logLik, AIC, BIC, deviance, df.residual and nobs </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
+   <td style="text-align:left;"> Taxonomic group that the organism falls in, typically class, phyla or superphyla </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> dispersion_p_taxaome_offset </td>
+   <td style="text-align:left;"> HyPe_count </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, dispersion_p_taxaome_offset performs a dispersion test on fit_p_taxaome_offset. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
+   <td style="text-align:left;"> Total count of genes encoding Production or Scavenging of HyPe </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> dispersion_p_taxaome_offset_tidy </td>
+   <td style="text-align:left;"> NitOx_count </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, dispersion_p_taxaome_offset_tidy is the tidy output from dispersion_p_taxaome_offset </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
+   <td style="text-align:left;"> Total count of genes encoding Production or Scavenging of NitOx </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> taxaome_offset_regression </td>
+   <td style="text-align:left;"> SupOx_count </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, taxaome_offset_regression would contain the results from fit_p_taxaome_offset if dispersion_p_taxaome_offset  &gt; 0.05, or fit_qp_taxaome_offset if dispersion_p_taxaome_offset &lt;b2&gt; 0.05. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
+   <td style="text-align:left;"> Total count of genes encoding Production or Scavenging of SupOx </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> taxaome_offset_regression_type </td>
+   <td style="text-align:left;"> TotalROSGene_count </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, taxaome_offset_regression_type indicates whether taxaome_offset_regression is a Poisson or Quasi-poisson regression. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
+   <td style="text-align:left;"> Total count of genes encoding Production or Scavenging of HyPe, NitOx and SupOx </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> taxaome_offset_model </td>
+   <td style="text-align:left;"> TransWGenomePresent </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> Within a model, taxaome_offset_model is the tidy output of taxaome_offset_regression. </td>
-   <td style="text-align:left;"> ROSModels.Rmd </td>
+   <td style="text-align:left;"> A transcriptome that also has a genome published; these are used for quality control </td>
   </tr>
 </tbody>
 </table>
@@ -2933,7 +2340,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <th style="text-align:right;"> Longitude </th>
    <th style="text-align:left;"> LogLat_citekey </th>
    <th style="text-align:right;"> ColonySpecies </th>
-   <th style="text-align:left;"> ColonyGenus </th>
    <th style="text-align:left;"> Colony_citekey </th>
    <th style="text-align:left;"> Notes </th>
   </tr>
@@ -2966,7 +2372,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -73.063900 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -2997,7 +2402,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -73.063900 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -3028,7 +2432,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> 4.000000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@ovaozcanEvaluationInteractionTemperature2020] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -3059,7 +2462,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> 4.000000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@ovaozcanEvaluationInteractionTemperature2020] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -3090,7 +2492,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> 129.240000 </td>
    <td style="text-align:left;"> [@matsumotoMorphologicalMolecularPhylogenetic2014] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@matsumotoMorphologicalMolecularPhylogenetic2014a] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -3121,7 +2522,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> 129.240000 </td>
    <td style="text-align:left;"> [@matsumotoMorphologicalMolecularPhylogenetic2014] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@matsumotoMorphologicalMolecularPhylogenetic2014a] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -3152,7 +2552,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -72.820000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@hevia-orubeMolecularMorphologicalAnalyses2016] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -3183,7 +2582,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -72.820000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@hevia-orubeMolecularMorphologicalAnalyses2016] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -3214,7 +2612,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -65.850000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@bucciarelliEffectsIronlightColimitation2009] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -3245,7 +2642,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -65.850000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@bucciarelliEffectsIronlightColimitation2009] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -3276,7 +2672,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -80.358000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@miklaszPhysicalConstraintsSize2012] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -3307,7 +2702,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@gaonkarSpeciesDetectionDelineation2020] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -3338,7 +2732,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -65.000000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@hevia-orubeMolecularMorphologicalAnalyses2016] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -3369,7 +2762,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -70.655000 </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@hevia-orubeMolecularMorphologicalAnalyses2016] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -3400,7 +2792,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> 48.000000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@sudaTaxonomicCharacterizationMarine2002a] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -3431,7 +2822,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> 48.000000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@sudaTaxonomicCharacterizationMarine2002a] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -3462,7 +2852,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -9.000000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@mitraEuryhalineNannochloropsisGaditana2015] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -3493,7 +2882,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -9.000000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@mitraEuryhalineNannochloropsisGaditana2015] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -3524,7 +2912,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -4.960000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@krienitzFoodAlgaeLesser2016] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -3555,7 +2942,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> 3.030000 </td>
    <td style="text-align:left;"> [@vaulotRoscoffCultureCollection2004] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@ooijenGenomicTransformationPicoeukaryote2012] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -3586,7 +2972,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> 3.030000 </td>
    <td style="text-align:left;"> [@vaulotRoscoffCultureCollection2004] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@ooijenGenomicTransformationPicoeukaryote2012] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -3617,7 +3002,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> 3.600000 </td>
    <td style="text-align:left;"> [@vaulotRoscoffCultureCollection2004] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@ooijenGenomicTransformationPicoeukaryote2012] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -3648,7 +3032,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> 3.600000 </td>
    <td style="text-align:left;"> [@vaulotRoscoffCultureCollection2004] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@ooijenGenomicTransformationPicoeukaryote2012] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -3679,7 +3062,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> 3.530000 </td>
    <td style="text-align:left;"> [@vaulotRoscoffCultureCollection2004] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@marinMolecularPhylogenyClassification2010] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -3710,7 +3092,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> 3.530000 </td>
    <td style="text-align:left;"> [@vaulotRoscoffCultureCollection2004] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@marinMolecularPhylogenyClassification2010] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -3741,7 +3122,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -4.170000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@slapetaGlobalDispersalAncient2006] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -3772,7 +3152,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -4.170000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@slapetaGlobalDispersalAncient2006] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -3803,7 +3182,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@takahashiLipidProductivityTALENinduced2018] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -3834,7 +3212,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@takahashiLipidProductivityTALENinduced2018] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -3865,7 +3242,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@vaulotRoscoffCultureCollection2004] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -3896,7 +3272,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@vaulotRoscoffCultureCollection2004] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -3927,7 +3302,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -122.350000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@krienitzPicocystisSalinarumChlorophyta2012] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -3958,7 +3332,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -82.716700 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@sekinoRoleCoccolithsUtilization1996] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -3989,7 +3362,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -82.716700 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@sekinoRoleCoccolithsUtilization1996] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -4020,7 +3392,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@bendifDescriptionTisochrysisLutea2013a] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -4051,7 +3422,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -73.270000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@sieburthUltrastructureEcologyAureococcus1988] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -4082,7 +3452,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -73.270000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@sieburthUltrastructureEcologyAureococcus1988] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -4113,7 +3482,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -77.238300 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@vaulotRoscoffCultureCollection2004] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -4144,7 +3512,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -77.238300 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@vaulotRoscoffCultureCollection2004] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -4175,7 +3542,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -145.116600 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@vaulotRoscoffCultureCollection2004] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -4206,7 +3572,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -70.670000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@markinaPorphyridiumPurpureumMicroalga2021] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -4237,7 +3602,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -68.000000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@miklaszPhysicalConstraintsSize2012] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -4268,7 +3632,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -68.000000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@miklaszPhysicalConstraintsSize2012] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -4299,7 +3662,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> 67.100000 </td>
    <td style="text-align:left;"> [@partenskyProchlorococcusMarinePhotosynthetic1999] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@parkCharacterizationBacterialCommunity2021] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -4330,7 +3692,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -60.000000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@parkCharacterizationBacterialCommunity2021] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -4361,7 +3722,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -68.140000 </td>
    <td style="text-align:left;"> [@partenskyProchlorococcusMarinePhotosynthetic1999] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@parkCharacterizationBacterialCommunity2021] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -4392,7 +3752,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> 40.330000 </td>
    <td style="text-align:left;"> [@partenskyProchlorococcusMarinePhotosynthetic1999] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@parkCharacterizationBacterialCommunity2021] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -4423,7 +3782,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> 20.000000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@parkCharacterizationBacterialCommunity2021] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -4454,7 +3812,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -70.782000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@guMorphologyPhylogenyToxicity2013] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -4485,7 +3842,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -70.583000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@limFeedingHarmfulPhototrophic2018] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -4516,7 +3872,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -97.320000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@sharmaDiurnalVariationTexas2000] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -4547,7 +3902,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -86.105000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@vaulotRoscoffCultureCollection2004] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -4578,7 +3932,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -75.100000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@vaulotRoscoffCultureCollection2004] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -4609,7 +3962,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -75.109700 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@dursunSpringBloomRaphidophycean2016a] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -4640,7 +3992,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -73.000000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@dursunSpringBloomRaphidophycean2016a] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -4671,7 +4022,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -4.770000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -4702,7 +4052,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -69.619200 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -4733,7 +4082,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -97.130000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@vaulotRoscoffCultureCollection2004] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -4764,7 +4112,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> 176.000000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@vaulotRoscoffCultureCollection2004] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -4795,8 +4142,7 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -82.601000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> [@ibaISOLATIONGROWTHDINOFLAGELLATE2014] </td>
+   <td style="text-align:left;"> [@ibaIsolationGrowthDinoglagellate2014] </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
@@ -4826,7 +4172,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@albrechtIdentificationCyanobacteriaEutrophic2017] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -4857,7 +4202,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> 144.750000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@otaPartenskyellaGlossopodiaGen2009] </td>
    <td style="text-align:left;"> CCCM811 is also known as CCMP2314 or CCMP1729 </td>
   </tr>
@@ -4888,7 +4232,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -158.000000 </td>
    <td style="text-align:left;"> [@billerGenomesDiverseIsolates2014] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@parkCharacterizationBacterialCommunity2021] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -4919,7 +4262,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> 136.000000 </td>
    <td style="text-align:left;"> [@shimadaSeasonalAppearanceProchlorococcus1995] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@parkCharacterizationBacterialCommunity2021] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -4950,7 +4292,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -158.000000 </td>
    <td style="text-align:left;"> [@urbachRapidDiversificationMarine1998] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@parkCharacterizationBacterialCommunity2021] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -4981,7 +4322,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -64.170000 </td>
    <td style="text-align:left;"> [@billerGenomesDiverseIsolates2014] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@parkCharacterizationBacterialCommunity2021] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -5012,7 +4352,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -158.000000 </td>
    <td style="text-align:left;"> [@billerGenomesDiverseIsolates2014] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@parkCharacterizationBacterialCommunity2021] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -5043,7 +4382,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -158.000000 </td>
    <td style="text-align:left;"> [@billerGenomesDiverseIsolates2014] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@parkCharacterizationBacterialCommunity2021] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -5074,7 +4412,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -64.350000 </td>
    <td style="text-align:left;"> [@rocapResolutionProchlorococcusSynechococcus2002] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@parkCharacterizationBacterialCommunity2021] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -5105,7 +4442,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -0.040000 </td>
    <td style="text-align:left;"> [@billerGenomesDiverseIsolates2014] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@parkCharacterizationBacterialCommunity2021] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -5136,7 +4472,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -0.040000 </td>
    <td style="text-align:left;"> [@billerGenomesDiverseIsolates2014] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@parkCharacterizationBacterialCommunity2021] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -5167,7 +4502,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -0.040000 </td>
    <td style="text-align:left;"> [@billerGenomesDiverseIsolates2014] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@parkCharacterizationBacterialCommunity2021] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -5198,7 +4532,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> 138.300000 </td>
    <td style="text-align:left;"> [@shimadaSeasonalAppearanceProchlorococcus1995] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@parkCharacterizationBacterialCommunity2021] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -5229,7 +4562,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -64.350000 </td>
    <td style="text-align:left;"> [@rocapResolutionProchlorococcusSynechococcus2002] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@parkCharacterizationBacterialCommunity2021] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -5260,7 +4592,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -64.350000 </td>
    <td style="text-align:left;"> [@rocapResolutionProchlorococcusSynechococcus2002] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@parkCharacterizationBacterialCommunity2021] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -5291,7 +4622,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -64.350000 </td>
    <td style="text-align:left;"> [@rocapResolutionProchlorococcusSynechococcus2002] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@parkCharacterizationBacterialCommunity2021] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -5322,7 +4652,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -64.240000 </td>
    <td style="text-align:left;"> [@rocapResolutionProchlorococcusSynechococcus2002] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@parkCharacterizationBacterialCommunity2021] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -5353,7 +4682,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -92.000000 </td>
    <td style="text-align:left;"> [@rocapResolutionProchlorococcusSynechococcus2002] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@parkCharacterizationBacterialCommunity2021] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -5384,7 +4712,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -93.000000 </td>
    <td style="text-align:left;"> [@rocapResolutionProchlorococcusSynechococcus2002] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@parkCharacterizationBacterialCommunity2021] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -5415,7 +4742,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -70.400000 </td>
    <td style="text-align:left;"> [@rocapResolutionProchlorococcusSynechococcus2002] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@parkCharacterizationBacterialCommunity2021] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -5446,7 +4772,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -180.000000 </td>
    <td style="text-align:left;"> [@rocapResolutionProchlorococcusSynechococcus2002] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@parkCharacterizationBacterialCommunity2021] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -5477,7 +4802,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -67.500000 </td>
    <td style="text-align:left;"> [@vaulotRoscoffCultureCollection2004] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@rosalesInfluenceSalinityGrowth2005] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -5508,7 +4832,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -70.401300 </td>
    <td style="text-align:left;"> [@marstonWholeGenomeSequenceCyanobacterium2020] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@rosalesInfluenceSalinityGrowth2005] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -5539,7 +4862,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -67.390000 </td>
    <td style="text-align:left;"> [@vaulotRoscoffCultureCollection2004] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@rosalesInfluenceSalinityGrowth2005] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -5570,7 +4892,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -70.460000 </td>
    <td style="text-align:left;"> [@vaulotRoscoffCultureCollection2004] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@rosalesInfluenceSalinityGrowth2005] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -5601,7 +4922,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@rosalesInfluenceSalinityGrowth2005] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -5632,7 +4952,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> 6.000000 </td>
    <td style="text-align:left;"> [@vaulotRoscoffCultureCollection2004] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@rosalesInfluenceSalinityGrowth2005] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -5663,7 +4982,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@rosalesInfluenceSalinityGrowth2005] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -5694,7 +5012,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> 129.000000 </td>
    <td style="text-align:left;"> [@shimuraCompleteGenomeSequence2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@rosalesInfluenceSalinityGrowth2005] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -5725,7 +5042,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -8.774722 </td>
    <td style="text-align:left;"> [@ramosCyanobacterialDiversityHeld2018] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@albrechtIdentificationCyanobacteriaEutrophic2017] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -5756,7 +5072,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -8.655339 </td>
    <td style="text-align:left;"> [@ramosCyanobacterialDiversityHeld2018] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@albrechtIdentificationCyanobacteriaEutrophic2017] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -5787,7 +5102,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> 78.120000 </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@rosalesInfluenceSalinityGrowth2005] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -5818,7 +5132,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -1.080000 </td>
    <td style="text-align:left;"> [@vaulotRoscoffCultureCollection2004] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@vogtFeedingCapabilitiesLimitations2013] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -5849,7 +5162,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -48.703300 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@findlayRapidBiodiagnosticEx2015] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -5880,7 +5192,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -48.703300 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@findlayRapidBiodiagnosticEx2015] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -5911,7 +5222,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@orlovaToxicityMorphologyDistribution2008a] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -5942,7 +5252,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@lundholmPhylogenyBacillariaceaeEmphasis2002] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -5973,7 +5282,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@lundholmPhylogenyBacillariaceaeEmphasis2002] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -6004,7 +5312,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@crowellCompleteChloroplastMitochondrial2019] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -6035,7 +5342,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@mahadikEffectDiatomMorphology2017] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -6066,7 +5372,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> 10.600000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@miklaszPhysicalConstraintsSize2012] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -6097,7 +5402,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -127.433800 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@gerikasribeiroCulturableDiversityArctic2020] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -6128,7 +5432,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -117.350000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@balzanoMorphologicalGeneticDiversity2017] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -6159,7 +5462,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -117.255000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@fernandesMucilaginousSpeciesThalassiosira2011] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -6190,7 +5492,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@mcfarlandEnhancedLightAbsorption2020] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -6221,7 +5522,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@finenkoEffectInorganicPhosphorus1974] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -6252,7 +5552,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@kirkTranscriptomeReprogrammingSymbiodiniaceae2020] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -6283,7 +5582,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@kirkTranscriptomeReprogrammingSymbiodiniaceae2020] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -6314,7 +5612,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@martinezEnergySourcesDepthGeneralist2020] </td>
    <td style="text-align:left;"> MesophyticColony </td>
   </tr>
@@ -6345,7 +5642,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@martinezEnergySourcesDepthGeneralist2020] </td>
    <td style="text-align:left;"> MesophyticColony </td>
   </tr>
@@ -6376,7 +5672,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> 163.000000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@thomsonAntarcticDistributionPigment2004] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -6407,7 +5702,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -74.499200 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@thomsonAntarcticDistributionPigment2004] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -6438,7 +5732,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> 163.000000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@shieldsSizefractionatedPhotosynthesisIrradiance2009] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -6469,7 +5762,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> 163.000000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@shieldsSizefractionatedPhotosynthesisIrradiance2009] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -6500,7 +5792,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -6531,7 +5822,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -6562,7 +5852,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -4.150000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@smaydaTurbulenceWatermassStratification2002] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -6593,8 +5882,7 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -70.673600 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> [@gardunoTwoDistinctColonial1996a] </td>
+   <td style="text-align:left;"> [@gardunoTwoDistinctColonial1996] </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
@@ -6624,7 +5912,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -117.140000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@kaczmarskaCrypticDiversityCosmopolitan2014] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -6655,7 +5942,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -113.560000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@dabekMultigenePhylogenyCymatosiraceae2019] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -6686,7 +5972,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -70.584200 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -6717,7 +6002,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@albrechtIdentificationCyanobacteriaEutrophic2017] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -6748,7 +6032,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -70.000000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@chungMarinePicophytoplankterKorea1996] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -6779,7 +6062,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@rozanskaInfluenceEnvironmentalFactors2009a] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -6810,7 +6092,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@hegsethIntrusionBloomingAtlantic2008] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -6841,7 +6122,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -48.000000 </td>
    <td style="text-align:left;"> [@webbPhenotypicGenotypicCharacterization2009] </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@fosterMeasuringCarbonN22013] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -6872,7 +6152,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -49.000000 </td>
    <td style="text-align:left;"> [@webbPhenotypicGenotypicCharacterization2009] </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@fosterMeasuringCarbonN22013] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -6903,7 +6182,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -158.000000 </td>
    <td style="text-align:left;"> [@webbPhenotypicGenotypicCharacterization2009] </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@fosterMeasuringCarbonN22013] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -6934,7 +6212,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -32.000000 </td>
    <td style="text-align:left;"> [@webbPhenotypicGenotypicCharacterization2009] </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@fosterMeasuringCarbonN22013] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -6965,7 +6242,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -157.000000 </td>
    <td style="text-align:left;"> [@webbPhenotypicGenotypicCharacterization2009] </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@fosterMeasuringCarbonN22013] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -6996,7 +6272,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -97.110000 </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@maresTaxonomicResolutionGenus2019] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -7027,7 +6302,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@cefarelliDiversityDiatomGenus2010] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -7058,7 +6332,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@rinesThinLayersCamouflage2002] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -7089,7 +6362,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@hernandez-becerrilSpeciesPlanktonicDiatom1998] </td>
    <td style="text-align:left;"> Another article: https://www.tandfonline.com/doi/pdf/10.2216/11-37.1?needAccess=true </td>
   </tr>
@@ -7106,7 +6378,7 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> 2.750 </td>
    <td style="text-align:right;"> 2.750 </td>
    <td style="text-align:right;"> 680.000 </td>
-   <td style="text-align:left;"> [@hasleMARINEPLANKTONICDIATOMS1987] </td>
+   <td style="text-align:left;"> [@hasleMarinePlanktonicDiatoms1987] </td>
    <td style="text-align:left;"> no </td>
    <td style="text-align:left;"> [@nanjappaDiatomFlagellarGenes2017] </td>
    <td style="text-align:right;"> 1.00000 </td>
@@ -7120,8 +6392,7 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> [@hasleMARINEPLANKTONICDIATOM2001] </td>
+   <td style="text-align:left;"> [@hasleMarinePlanktonicDiatom2001] </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
@@ -7151,7 +6422,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@amatoGrazerinducedTranscriptomicMetabolomic2018] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -7182,7 +6452,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@chengMorphologicalVariabilityGenetic2008] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -7215,7 +6484,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> (Symbiodinium) Fugacium </td>
@@ -7244,7 +6512,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;">  </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -7277,7 +6544,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Symbiodinium </td>
@@ -7308,7 +6574,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Ostreococcus </td>
@@ -7337,7 +6602,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -117.255000 </td>
    <td style="text-align:left;"> [@palenikTinyEukaryoteOstreococcus2007] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@vaulotRoscoffCultureCollection2004] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -7368,7 +6632,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -117.255000 </td>
    <td style="text-align:left;"> [@palenikTinyEukaryoteOstreococcus2007] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@vaulotRoscoffCultureCollection2004] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -7399,7 +6662,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -31.130000 </td>
    <td style="text-align:left;"> [@vaulotRoscoffCultureCollection2004] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@vaulotRoscoffCultureCollection2004] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -7430,7 +6692,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -31.130000 </td>
    <td style="text-align:left;"> [@vaulotRoscoffCultureCollection2004] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@vaulotRoscoffCultureCollection2004] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -7461,7 +6722,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> 166.330000 </td>
    <td style="text-align:left;"> [@vaulotRoscoffCultureCollection2004] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@simonRevisionGenusMicromonas2017] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -7492,7 +6752,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> 166.330000 </td>
    <td style="text-align:left;"> [@vaulotRoscoffCultureCollection2004] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@simonRevisionGenusMicromonas2017] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -7525,7 +6784,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Pavlovales </td>
@@ -7554,7 +6812,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -75.817200 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;">  </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -7587,7 +6844,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Ochromonadaceae </td>
@@ -7618,7 +6874,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Pelagomonas </td>
@@ -7647,7 +6902,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -136.833300 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@wildeMotilityCyanobacteriaPolysaccharide2015] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -7680,7 +6934,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Dunaliella </td>
@@ -7709,7 +6962,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;">  </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -7742,7 +6994,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Karenia </td>
@@ -7771,7 +7022,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -82.476300 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;">  </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@figueroaDescriptionHostspecificityStrain2008] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -7804,7 +7054,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Micromonas </td>
@@ -7833,7 +7082,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -74.750000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@vaulotRoscoffCultureCollection2004] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -7866,7 +7114,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Ochromonas </td>
@@ -7895,7 +7142,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -72.366700 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;">  </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -7928,7 +7174,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Pavlova </td>
@@ -7957,7 +7202,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -72.366700 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@vaulotRoscoffCultureCollection2004] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -7990,7 +7234,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Prorocentrum </td>
@@ -8019,7 +7262,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -73.250000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@vaulotRoscoffCultureCollection2004] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -8050,7 +7292,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -75.100000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@vaulotRoscoffCultureCollection2004] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -8083,7 +7324,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Paraphysomonas </td>
@@ -8112,7 +7352,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -158.000000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;">  </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -8145,7 +7384,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Chattonella </td>
@@ -8174,7 +7412,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;">  </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -8207,7 +7444,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Seminavis </td>
@@ -8236,7 +7472,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;">  </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -8269,7 +7504,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Baffinella </td>
@@ -8298,7 +7532,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -74.492200 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;">  </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -8331,7 +7564,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Nitzschia </td>
@@ -8360,7 +7592,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;">  </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -8393,7 +7624,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Thalassionema </td>
@@ -8422,7 +7652,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@hasleMarinePlanktonicDiatom2001] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -8453,7 +7682,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> -117.270000 </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@vaulotRoscoffCultureCollection2004] </td>
    <td style="text-align:left;"> Also known as Picochlorum SE3 </td>
   </tr>
@@ -8486,7 +7714,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Picochlorum </td>
@@ -8515,7 +7742,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@vaulotRoscoffCultureCollection2004] </td>
    <td style="text-align:left;"> Formerly known as Picochlorum (Nannochloris) MBIC10091 </td>
   </tr>
@@ -8548,7 +7774,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Chaetoceros </td>
@@ -8579,7 +7804,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> 0 </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Vitrella </td>
@@ -8608,7 +7832,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;"> 152.000000 </td>
    <td style="text-align:left;"> [@re3data.orgBigelowNationalCenter2017] </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;"> [@obornikMorphologyUltrastructureLife2012] </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -8641,7 +7864,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Chloropicon </td>
@@ -8670,7 +7892,6 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
    <td style="text-align:right;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:right;">  </td>
-   <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
