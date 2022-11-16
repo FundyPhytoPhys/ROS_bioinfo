@@ -87,6 +87,10 @@ KOCombinedHits <- CombinedHits %>%
   select(-EC) %>%
   rename(EC = ECNumber) %>%
   distinct(genome, query_name, EC, .keep_all = FALSE)
+
+```
+
+```{r}
 CombinedHits %<>%
   distinct(genome, query_name, .keep_all = TRUE) %>%
   left_join(., KOCombinedHits, by = c("query_name", "genome")) %>%
@@ -112,7 +116,6 @@ MergedData <- full_join(x = MetaData, y = ROSEnzymes, by = character()) %>%
   # filter(ECNumber == "1.10.3.17" & SupOx == "Production")
   # distinct(FileName, ECNumber, EnzymeName, .keep_all = TRUE)
 ```
-
 
 XXX Why do we have 22052 of data from MergedData but running the first 2 lines of it yields 24492 rows? Are we losing ~2000 rows of data?
 ```{r}
