@@ -89,6 +89,17 @@ KOCombinedHits <- CombinedHits %>%
   distinct(genome, query_name, EC, .keep_all = FALSE)
 
 ```
+Used a GO annotation of GO:0005840 to annotate ribosomal sequences.
+```{r}
+Ribosomes <- CombinedHits %>%
+  separate_rows(GOs, sep = ",") %>%
+  filter(GOs == "GO:0005840") %>%
+  group_by(genome) %>%
+  mutate(RibosomeCount = n()) %>%
+  ungroup() %>% 
+  select(genome, RibosomeCount) %>%
+  unique()
+```
 
 ```{r}
 CombinedHits %<>%
@@ -111,7 +122,8 @@ MergedData <- full_join(x = MetaData, y = ROSEnzymes, by = character()) %>%
   # mutate(ROSGene_count = n()) %>%
   # ungroup() %>%
   # fill in missing sets with a count of 0 XXX figure out how to do this using the complete function
-  complete(., nesting(FileName, EnzymeName, ECNumber, HyPe, SupOx, NitOx), fill = list(ROSGene_count = 0))# %>%
+  complete(., nesting(FileName, EnzymeName, ECNumber, HyPe, SupOx, NitOx), fill = list(ROSGene_count = 0)) %>%
+  left_join(., Ribosomes, by = c("FileName" = "genome"))
   # filter(ECNumber %notin% "1.10.3.17" & SupOx %notin% "Production")
   # filter(ECNumber == "1.10.3.17" & SupOx == "Production")
   # distinct(FileName, ECNumber, EnzymeName, .keep_all = TRUE)
