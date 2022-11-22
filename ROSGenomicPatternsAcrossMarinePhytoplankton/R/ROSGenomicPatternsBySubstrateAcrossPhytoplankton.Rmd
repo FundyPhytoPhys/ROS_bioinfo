@@ -326,8 +326,8 @@ GeneModelsRadPlot <- MergedData %>%
   # filter(Taxa != "Prokaryote") %>%
   filter(GeneModels_count != "0") %>%
   ggplot(aes(x=log_Radius_um, y= log_GeneModels_count)) +
-  ggConvexHull::geom_convexhull(alpha = 0.2, aes(fill = Phylum, color = Phylum)) +
-  geom_point(aes(shape = Ome, colour = Phylum), size = 3)+
+  ggConvexHull::geom_convexhull(alpha = 0.2, aes(fill = Taxa, color = Taxa)) +
+  geom_point(aes(shape = Ome, colour = Taxa), size = 3)+
   # ggalt::geom_encircle(aes(color = Phylum), expand = 0) +
   scale_colour_manual(values =TaxaColors)+
   scale_fill_manual(values =TaxaColors)+
@@ -351,6 +351,176 @@ GeneModelsRadPlot_cap <- glue("**Comparison of log~10~ of the total number of ge
                               .sep = " ")
 
 # ggsave(paste("Figure2",".png",sep = ""), plot = GeneModelsRadPlot, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+```
+
+```{r RibosomeRadPlot, fig.cap = RibosomeRadPlot_cap, echo=FALSE}
+RibosomeRadPlot <- MergedData %>%
+  # filter(Taxa != "Prokaryote") %>%
+  filter(GeneModels_count != "0") %>%
+  ggplot(aes(x=log_Radius_um, y= log10(RibosomeCount))) +
+  ggConvexHull::geom_convexhull(alpha = 0.2, aes(fill = Taxa, color = Taxa)) +
+  geom_point(aes(shape = Ome, colour = Taxa), size = 3)+
+  # ggalt::geom_encircle(aes(color = Phylum), expand = 0) +
+  scale_colour_manual(values =TaxaColors)+
+  scale_fill_manual(values =TaxaColors)+
+  scale_shape_manual(values = c(19,1)) +
+  theme_bw()+
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.text=element_text(size=12),
+        axis.title=element_text(size=14),
+        aspect.ratio = 1,
+        legend.text=element_text(size=10),
+        legend.title = element_text(size=12)) +
+  labs(x = ~log[10] ~ "(Median Cell Radius (µm))",
+       y = ~log[10] ~ "(Total Number of Ribosomal Genes)")
+
+RibosomeRadPlot
+```
+XXX
+```{r RibosomeGeneModels}
+MergedData %>% 
+  filter(GeneModels_count != "0") %>%
+  ggplot(aes(x = log10(RibosomeCount), y = log_GeneModels_count)) +
+  ggConvexHull::geom_convexhull(alpha = 0.2, aes(fill = Taxa, color = Taxa)) +
+  geom_point(aes(shape = Ome, colour = Taxa), size = 3) +
+  scale_colour_manual(values =TaxaColors)+
+  scale_fill_manual(values =TaxaColors)+
+  scale_shape_manual(values = c(19,1)) +
+  theme_bw() +
+  scale_x_continuous(limits = c(0,3))+
+  scale_y_continuous(limits = c(3,6))+
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.text=element_text(size=12),
+        axis.title=element_text(size=14),
+        aspect.ratio = 1,
+        legend.text=element_text(size=10),
+        legend.title = element_text(size=12))
+```
+
+
+```{r}
+NitOxFlagella <- MergedData %>% 
+  filter(Taxa != "Prokaryote", 
+         NitOx %in% c("Production", "Scavenging")) %>%
+  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, ROSGene_count, ECNumber, EnzymeName, ColonySpecies, NitOx_count, NitOx) %>%
+  unique() %>%
+  mutate(NitOx_countL = NitOx_count %>% as.logical() %>% as.numeric(),
+         FlagellaL = ifelse(Flagella == "yes", 1, 0)) %>%
+  select(FileName, NitOx_count, NitOx_countL, Flagella, FlagellaL,NitOx) %>%
+  # filter(GeneModels_count != 0) %>% #This is because of introducing exposure
+  nest(data = -c(NitOx)) %>%
+  mutate(fit_b_offset = map(data, possibly(~glm(.$NitOx_countL ~ .$FlagellaL, data = ., family = binomial(link = "logit")), otherwise = NULL)),
+                    param_b_offset = map(fit_b_offset, tidy),
+                    pred_b_offset = map(fit_b_offset, augment))
+```
+
+```{r, fig.width = 10, fig.height = 5}
+NitOxFlagellaFig <- NitOxFlagella %>%
+  unnest(param_b_offset) %>%
+  filter(p.value < 0.05) %>%
+  unnest(c( pred_b_offset)) %>%
+  # unnest(pred_b_offset) %>%
+  ggplot() +
+  geom_point(aes(x = `.$FlagellaL`, y = `.$NitOx_countL`)) +
+  geom_line(aes(x = `.$FlagellaL`, y = logit2prob(.fitted))) +
+  facet_grid(rows = vars(NitOx))
+  
+NitOxFlagellaFig
+```
+How would we present the probability, simply the number? 0 not flagellated, 1 flagellated. 
+
+```{r}
+NitOxRadFlagella <- MergedData %>% 
+  filter(Taxa != "Prokaryote", 
+         NitOx %in% c("Production", "Scavenging")) %>%
+  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, ROSGene_count, ECNumber, EnzymeName, ColonySpecies, NitOx_count, NitOx) %>%
+  unique() %>%
+  mutate(NitOx_countL = NitOx_count %>% as.logical() %>% as.numeric(),
+         FlagellaL = ifelse(Flagella == "yes", 1, 0)) %>%
+  select(FileName, NitOx_count, NitOx_countL, Flagella, FlagellaL,NitOx, log_Radius_um) %>%
+  # filter(GeneModels_count != 0) %>% #This is because of introducing exposure
+  nest(data = -c(NitOx)) %>%
+  mutate(fit_b_offset = map(data, possibly(~glm(.$NitOx_countL ~ .$log_Radius_um +.$FlagellaL, data = ., family = binomial(link = "logit")), otherwise = NULL)),
+                    param_b_offset = map(fit_b_offset, tidy),
+                    pred_b_offset = map(fit_b_offset, augment))
+```
+
+```{r, fig.width = 10, fig.height = 5}
+NitOxRadFlagellaFig <- NitOxRadFlagella %>%
+  unnest(param_b_offset) %>%
+  filter(p.value < 0.05) %>%
+  unnest(c( pred_b_offset)) %>%
+  # unnest(pred_b_offset) %>%
+  ggplot() +
+  geom_point(aes(x = `.$log_Radius_um`, y = `.$NitOx_countL`)) +
+  geom_line(aes(x = `.$log_Radius_um`, y = logit2prob(.fitted), color = as.factor(`.$FlagellaL`))) +
+  facet_grid(rows = vars(NitOx)) +
+  theme_bw()
+  
+NitOxRadFlagellaFig
+```
+
+```{r}
+EnzymeDiatom <- MergedData %>% 
+  filter(Taxa == "Diatom", 
+         NitOx %in% c("Production", "Scavenging")) %>%
+  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, ROSGene_count, ECNumber, EnzymeName, ColonySpecies, NitOx_count, NitOx) %>%
+  unique() %>%
+  mutate(NitOx_countL = NitOx_count %>% as.logical() %>% as.numeric(),
+         PennateCentricL = ifelse(PennateCentric == "Pennate", 1, 0)) %>%
+  # filter(GeneModels_count != 0) %>% #This is because of introducing exposure
+  nest(data = -c(NitOx)) %>%
+  mutate(fit_b_offset = map(data, possibly(~glm(.$NitOx_countL ~ .$PennateCentricL, data = ., family = binomial(link = "logit")), otherwise = NULL)),
+                    param_b_offset = map(fit_b_offset, tidy),
+                    pred_b_offset = map(fit_b_offset, augment))
+```
+
+Regressions are empty, not enough statistical power? Probably due to the nature of the data. Almost always present in one, almost always absent in the ohter.
+```{r, fig.width = 10, fig.height = 5}
+EnzymeDiatomFig <- EnzymeDiatom %>%
+  unnest(param_b_offset) %>%
+  filter(p.value < 0.05) %>%
+  unnest(c( pred_b_offset)) %>%
+  # unnest(pred_b_offset) %>%
+  ggplot() +
+  geom_point(aes(x = `.$PennateCentricL`, y = `.$NitOx_countL`)) +
+  geom_line(aes(x = `.$PennateCentricL`, y = logit2prob(.fitted))) +
+  facet_grid(rows = vars(NitOx))
+  
+EnzymeDiatomFig
+```
+
+```{r}
+NitOxRadDiatom <- MergedData %>% 
+  filter(Taxa == "Diatom", 
+         NitOx %in% c("Production", "Scavenging")) %>%
+  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, ROSGene_count, ECNumber, EnzymeName, ColonySpecies, NitOx_count, NitOx) %>%
+  unique() %>%
+  mutate(NitOx_countL = NitOx_count %>% as.logical() %>% as.numeric(),
+         PennateCentricL = ifelse(PennateCentric == "Pennate", 1, 0)) %>%
+  select(FileName, NitOx_count, NitOx_countL, PennateCentric, PennateCentricL,NitOx, log_Radius_um) %>%
+  # filter(GeneModels_count != 0) %>% #This is because of introducing exposure
+  nest(data = -c(NitOx)) %>%
+  mutate(fit_b_offset = map(data, possibly(~glm(.$NitOx_countL ~ .$log_Radius_um +.$PennateCentricL, data = ., family = binomial(link = "logit")), otherwise = NULL)),
+                    param_b_offset = map(fit_b_offset, tidy),
+                    pred_b_offset = map(fit_b_offset, augment))
+```
+
+```{r, fig.width = 10, fig.height = 5}
+NitOxRadDiatomFig <- NitOxRadDiatom %>%
+  unnest(param_b_offset) %>%
+  filter(p.value < 0.05) %>%
+  unnest(c( pred_b_offset)) %>%
+  # unnest(pred_b_offset) %>%
+  ggplot() +
+  geom_point(aes(x = `.$log_Radius_um`, y = `.$NitOx_countL`)) +
+  geom_line(aes(x = `.$log_Radius_um`, y = logit2prob(.fitted), color = as.factor(`.$PennateCentricL`))) +
+  facet_grid(rows = vars(NitOx)) +
+  theme_bw()
+  
+NitOxRadDiatomFig
 ```
 
 ```{r}
