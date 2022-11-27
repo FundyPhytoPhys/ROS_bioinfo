@@ -396,7 +396,9 @@ MergedData %>%
         axis.title=element_text(size=14),
         aspect.ratio = 1,
         legend.text=element_text(size=10),
-        legend.title = element_text(size=12))
+        legend.title = element_text(size=12)) +
+  labs(x = ~log[10] ~ "(Total Number of Ribosomal Genes)",
+       y = ~log[10] ~ "(Total Number of Genes)")
 ```
 
 
@@ -462,8 +464,40 @@ NitOxRadFlagellaFig <- NitOxRadFlagella %>%
 NitOxRadFlagellaFig
 ```
 
+
 ```{r}
-EnzymeDiatom <- MergedData %>% 
+NitOxRadColony <- MergedData %>% 
+  filter(Taxa != "Prokaryote", 
+         NitOx %in% c("Production", "Scavenging")) %>%
+  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, ROSGene_count, ECNumber, EnzymeName, ColonySpecies, NitOx_count, NitOx) %>%
+  unique() %>%
+  mutate(NitOx_countL = NitOx_count %>% as.logical() %>% as.numeric(),
+         ColonySpeciesL = ifelse(ColonySpecies == "1", 1, 0)) %>%
+  select(FileName, NitOx_count, NitOx_countL, ColonySpecies, ColonySpeciesL,NitOx, log_Radius_um) %>%
+  # filter(GeneModels_count != 0) %>% #This is because of introducing exposure
+  nest(data = -c(NitOx)) %>%
+  mutate(fit_b_offset = map(data, possibly(~glm(.$NitOx_countL ~ .$log_Radius_um +.$ColonySpeciesL, data = ., family = binomial(link = "logit")), otherwise = NULL)),
+                    param_b_offset = map(fit_b_offset, tidy),
+                    pred_b_offset = map(fit_b_offset, augment))
+```
+
+```{r, fig.width = 10, fig.height = 5}
+NitOxRadColonyFig <- NitOxRadColony %>%
+  unnest(param_b_offset) %>%
+  filter(p.value < 0.05) %>%
+  unnest(c( pred_b_offset)) %>%
+  # unnest(pred_b_offset) %>%
+  ggplot() +
+  geom_point(aes(x = `.$log_Radius_um`, y = `.$NitOx_countL`)) +
+  geom_line(aes(x = `.$log_Radius_um`, y = logit2prob(.fitted), color = as.factor(`.$ColonySpeciesL`))) +
+  facet_grid(rows = vars(NitOx)) +
+  theme_bw()
+  
+NitOxRadColonyFig
+```
+
+```{r}
+NitOxDiatom <- MergedData %>% 
   filter(Taxa == "Diatom", 
          NitOx %in% c("Production", "Scavenging")) %>%
   select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, ROSGene_count, ECNumber, EnzymeName, ColonySpecies, NitOx_count, NitOx) %>%
@@ -479,7 +513,23 @@ EnzymeDiatom <- MergedData %>%
 
 Regressions are empty, not enough statistical power? Probably due to the nature of the data. Almost always present in one, almost always absent in the ohter.
 ```{r, fig.width = 10, fig.height = 5}
-EnzymeDiatomFig <- EnzymeDiatom %>%
+NitOxDiatomFig <- NitOxDiatom %>%
+  unnest(param_b_offset) %>%
+  filter(p.value < 0.05) %>%
+  unnest(c( pred_b_offset)) %>%
+  filter(`.$PennateCentricL` %in% c(0,1)) %>%
+  # unnest(pred_b_offset) %>%
+  ggplot() +
+  geom_point(aes(x = `.$PennateCentricL`, y = `.$NitOx_countL`)) +
+  geom_text(aes(x = `.$PennateCentricL`, y = logit2prob(.fitted), label = logit2prob(.fitted))) +
+  # geom_line(aes(x = `.$PennateCentricL`, y = logit2prob(.fitted))) +
+  facet_grid(rows = vars(NitOx))
+  
+NitOxDiatomFig
+```
+
+```{r, fig.width = 10, fig.height = 5}
+NitOxDiatomFig <- NitOxDiatom %>%
   unnest(param_b_offset) %>%
   filter(p.value < 0.05) %>%
   unnest(c( pred_b_offset)) %>%
@@ -489,7 +539,7 @@ EnzymeDiatomFig <- EnzymeDiatom %>%
   geom_line(aes(x = `.$PennateCentricL`, y = logit2prob(.fitted))) +
   facet_grid(rows = vars(NitOx))
   
-EnzymeDiatomFig
+NitOxDiatomFig
 ```
 
 ```{r}
