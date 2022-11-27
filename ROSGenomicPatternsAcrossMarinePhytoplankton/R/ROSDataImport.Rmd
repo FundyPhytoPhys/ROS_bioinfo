@@ -205,6 +205,22 @@ WideData_cap <- "Supplemental Table 2: ROS Enzyme Count per Organism"
 ln_log10_conversion <- 2.30258499 # Divide to convert ln to log10; Multiply to convert ln to log10
 ```
 
+```{r}
+MergedData <- MergedData %>%
+  dplyr::mutate(Phylum = case_when(Taxa == "Dinoflagellate" ~ "Dinoflagellate", 
+                                   Taxa == "Diatom" ~ "Ochrophyte",
+                                   Taxa == "Pelagophyte" ~ "Ochrophyte",
+                                   Taxa == "Green" ~ "Green",
+                                   Taxa == "Raphidophyte" ~ "Ochrophyte",
+                                   Taxa == "Chromerid" ~ "Chromerid",
+                                   Taxa == "Haptophyte" ~ "Haptophyte",
+                                   Taxa == "Prokaryote" ~ "Prokaryote",
+                                   Taxa == "Cryptophyte" ~ "Cryptophyte",
+                                   Taxa == "Eustigmatophyte" ~ "Ochrophyte",
+                                   Taxa == "Chrysophyte" ~ "Ochrophyte",
+                                   Taxa == "Red" ~ "Red"))
+```
+
 ```{r Omes, include = FALSE}
 `%notin%` <- Negate(`%in%`)
 transcriptomes <- MergedData %>%
