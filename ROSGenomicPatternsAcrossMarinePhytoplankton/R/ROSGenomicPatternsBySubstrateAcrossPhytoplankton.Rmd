@@ -655,6 +655,9 @@ The absence of transcripts encoding SOD from the *Micromonas polaris* transcript
 
 ### Influence of Cell Size on Gene Counts for Enzymes Metabolizing O~2~^•−^ {.unnumbered}
 
+```{r}
+SupOxRadPlots <- knitr::include_graphics(file.path(Figures,"SupOxRadPlots.png"))
+```
 
 
 ```{r SupOxRadPlots, fig.cap = SupOxRadPlots_cap, fig.height= 7, fig.width= 7, echo = FALSE}
@@ -686,7 +689,9 @@ SupOxFlag_pval <- MergedData %>%
   compare_means(norm_SupOx ~ Flagella, data = ., method = "wilcox.test")
 ```
 
-
+```{r}
+SupOxFlagPlot <- knitr::include_graphics(file.path(Figures,"SupOxFlagPlot.png"))
+```
 
 ```{r SupOxFlagPlot, fig.cap = SupOxFlagPlot_cap, fig.height= 7, fig.width= 7, echo = FALSE}
 SupOxFlagPlot_cap <- glue("**Comparison of total number of genes encoding O~2~^•−^ scavenging enzymes ('SupOx_count') normalized to the total number of genes present in each organism ('GeneModels_count')) vs. the presence or absence of flagella in the organism.**",
@@ -861,6 +866,10 @@ HyPeDiff_pvalue <- pairs(emmeans::emmeans(HyPeDiff, "HyPe")) %>% tidy()
 HyPeDiff %>% anova(test = "F")
 ```
 
+```{r}
+HyPeRadPlots <- knitr::include_graphics(file.path(Figures,"HyPeRadPlots.png"))
+```
+
 
 ```{r HyPeRadPlots, fig.cap = HyPeRadPlots_cap, fig.height= 7, fig.width= 10, echo = FALSE}
 HyPeRadPlots_cap <- glue("**Comparison of log~10~ (Total number of genes encoding H~2~O~2~ metabolizing enzymes ('HyPe_count') normalized to the total number of genes present in each organism ('GeneModels_count')) vs. the log~10~ (median cell radius in µm ('log_Radius_um')).**",
@@ -922,6 +931,9 @@ HyPeScavFlagPlot_pval <- MergedData %>%
   compare_means(norm_HyPe ~ Flagella, data = ., method = "wilcox.test")
 ```
  
+```{r}
+HyPeFlagPlot <- knitr::include_graphics(file.path(Figures,"HyPeFlagPlot.png"))
+```
 
 
 ```{r HyPeFlagPlot, fig.cap = HyPeFlagPlot_cap, fig.height = 7, fig.width = 7, echo = FALSE}
@@ -976,6 +988,9 @@ HyPeScavColonyPlot_pval <- MergedData %>%
   compare_means(norm_HyPe ~ ColonySpecies, data = ., method = "wilcox.test")
 ```
 
+```{r}
+HyPeColonyPlot <- knitr::include_graphics(file.path(Figures,"HyPeColonyPlot.png"))
+```
 
 
 ```{r HyPeColonyPlot, fig.cap = HyPeColonyPlot_cap, fig.height = 7, fig.width = 7, echo = FALSE}
@@ -1065,7 +1080,9 @@ Nitric Oxide Dioxygenase (NOD, EC:1.14.12.17) was the most frequently occurring 
 
 ### Influence of Cell Size on Gene Counts for Enzymes Metabolizing ^•^NO {.unnumbered}
 
-
+```{r}
+NitOxRadPlots <- knitr::include_graphics(file.path(Figures,"NitOxRadPlots.png"))
+```
 
 ```{r NitOxRadPlots, fig.cap = NitOxRadPlots_cap, fig.height= 7, fig.width= 10, echo = FALSE}
 NitOxRadPlots_cap <- glue("**Comparison of log~10~ (Total number of genes encoding ^•^NO metabolizing enzymes ('NitOx_count') normalized to the total number of genes present in each organism ('GeneModels_count')) vs. the log~10~ (median cell radius in µm ('log_Radius_um')).**", 
@@ -1132,6 +1149,9 @@ NitOxScavFlagPlot_pval <- MergedData %>%
   compare_means(norm_NitOx ~ Flagella, data = ., method = "wilcox.test")
 ```
  
+```{r}
+NitOxFlagPlot <- knitr::include_graphics(file.path(Figures,"NitOxFlagPlot.png"))
+```
 
 
 ```{r NitOxFlagPlot, fig.cap = NitOxFlagPlot_cap, fig.height= 5, fig.width= 5, echo = FALSE}
@@ -1185,7 +1205,9 @@ NitOxScavColonyPlot_pval <- MergedData %>%
   compare_means(norm_NitOx ~ ColonySpecies, data = ., method = "wilcox.test")
 ```
 
-
+```{r}
+NitOxColonyPlot <- knitr::include_graphics(file.path(Figures,"NitOxColonyPlot.png"))
+```
 
 ```{r NitOxColonyPlot, fig.cap = NitOxColonyPlot_cap, fig.height= 5, fig.width= 5, echo = FALSE}
 NitOxColonyPlot_cap <- glue("**Comparison of total number of genes encoding ^•^NO metabolizing enzymes ('NitOx_count') normalized to the total number of genes present in each organism ('GeneModels_count') vs. the ability of the organism to form colonies.**", 
@@ -1239,7 +1261,9 @@ NitOxScavPennateCentricPlot_pval <- MergedData %>%
   compare_means(norm_NitOx ~ PennateCentric, data = ., method = "wilcox.test")
 ```
 
-
+```{r}
+NitOxPennateCentricPlot <- knitr::include_graphics(file.path(Figures,"NitOxPennateCentricPlot.png"))
+```
 
 ```{r NitOxPennateCentricPlot, fig.cap = NitOxPennateCentricPlot_cap, fig.height= 7, fig.width= 7, echo = FALSE}
 NitOxPennateCentricPlot_cap <- glue("**Comparison of total number of genes encoding ^•^NO metabolizing enzymes ('NitOx_count') normalized to the total number of genes present in each diatom ('GeneModels_count') vs. the growth form of the diatom ('PennateCentric').**", 
