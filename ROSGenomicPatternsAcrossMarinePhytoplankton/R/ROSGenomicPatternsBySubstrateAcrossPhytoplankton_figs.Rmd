@@ -1,0 +1,2136 @@
+---
+title: "Genomic Capacities for Reactive Oxygen Species Metabolism Across Marine Phytoplankton"
+author:
+- Naaman M. Omar:
+    institute: mta
+- Katherine Fleury:
+    institute: [mta, ualberta]
+- Brian Beardsall:
+    institute: [mta, dalhousie]
+- Ondřej Prášil:
+    institute: algatech
+- Douglas A. Campbell:
+    institute: mta
+    email: dcampbel@mta.ca
+    correspondence: TRUE
+institute:
+  - mta: 'Department of Biology, Mount Allison University, 53 York St., Sackville NB, Canada, E4L 1C9.'
+  - ualberta: 'Faculty of Veterinary Medicine, University of Calgary, 3280 Hospital Dr NW, Calgary, AB, T2N 4Z6.'
+  - dalhousie: 'Faculty of Computer Science, Dalhousie University, 6050 University Ave, Halifax, NS, B3H 1W5.'
+  - algatech: 'Center Algatech, Laboratory of Photosynthesis, Novohradska 237, Trebon, CZ 37981, Czech Republic.'
+date: "`r format(Sys.Date())`"
+output:
+  bookdown::html_document2:
+    code_folding: show
+    keep_md: yes
+    fig_caption: yes
+    toc: TRUE
+    toc_float: TRUE
+    toc_depth: 6
+    pandoc_args:
+      - '--lua-filter=scholarly-metadata.lua'
+      - '--lua-filter=author-info-blocks.lua'
+  bookdown::word_document2:
+    code_folding: show
+    keep_md: yes
+    fig_caption: yes
+    reference_docx: KnitTemplate.docx
+    pandoc_args:
+      - '--lua-filter=scholarly-metadata.lua'
+      - '--lua-filter=author-info-blocks.lua'
+bibliography: "`r file.path('..', '..', 'ROS_Phytoplankton.bib')`"
+csl: plos-one.csl
+# header-includes: 
+always_allow_html: true
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message =  FALSE, warning = FALSE, fig.path = "../Figures/")
+```
+
+```{r packages and paths, include = FALSE}
+library(tidyverse)
+library(cowplot)
+library(broom)
+# library(chngpt)
+library(ggpubr)
+library(glue)
+library(smatr)
+#https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html#installation
+library(bookdown)
+library(kableExtra)
+options(kableExtra.auto_format = FALSE)
+library(rcompanion)
+library(corrplot)
+library(knitr)
+# library(PanVizGenerator)
+library(ggiraphExtra)
+library(AER)
+googlesheets4::gs4_deauth() 
+```
+
+```{r assign filepaths, include = FALSE}
+Figures <- file.path("..", "Figures")
+DataIn <- file.path("..", "DataIn")
+FigureMaterial <- file.path("..", "..", "FigureMaterial")
+DataProcessed <- file.path("..", "DataProcessed")
+DataProcessedModels <- file.path("..", "DataProcessed")
+```
+
+```{r read in data, include = FALSE}
+MergedData <- readRDS(file.path(DataProcessed, "MergedData.Rds"))
+TaxaColors <- readRDS(file.path(DataProcessed, "TaxaColours.Rds"))
+WideData <- readRDS(file.path(DataProcessed, "WideData.Rds"))
+OmesPairs <- readRDS(file.path(DataProcessed, "OmesPairs.Rds"))
+```
+
+```{r generate ROSMin and ROSMax, include = FALSE}
+ROSMin <- MergedData %>% 
+  select(HyPe_count, GeneModels_count) %>% 
+  filter(HyPe_count != 0, GeneModels_count != 0) %>% 
+  mutate(ratio = 1/GeneModels_count) %>% #1 is the smallest possible number of genes that could be identified
+  select(ratio) %>%
+  min() %>% 
+  log10()
+
+ROSMax <- MergedData %>% 
+  select(HyPe_count, GeneModels_count) %>% 
+  filter(HyPe_count != 0, GeneModels_count != 0) %>% 
+  mutate(ratio = HyPe_count/GeneModels_count) %>% 
+  select(ratio) %>%
+  max() %>% 
+  log10()
+
+ROSRatioMax <- MergedData %>% 
+  select(HyPe_count, GeneModels_count) %>% 
+  filter(HyPe_count != 0, GeneModels_count != 0) %>% 
+  mutate(ratio = HyPe_count/GeneModels_count) %>% 
+  select(ratio) %>%
+  max() 
+```
+
+```{r ln_log10_conversion, include = FALSE}
+ln_log10_conversion <- 2.30258499 # Divide to convert ln to log10; Multiply to convert ln to log10
+```
+
+```{r generate ROSBoxPlotMax, include = FALSE}
+ROSBoxPlotMax <- MergedData %>% 
+  select(HyPe_count, GeneModels_count, Taxa) %>% 
+  filter(HyPe_count != 0, 
+         GeneModels_count != 0, 
+         Taxa == "Diatom") %>% 
+  mutate(ratio = (HyPe_count+1)/GeneModels_count) %>% 
+  select(ratio) %>%
+  max()
+
+MyShapeComparisons <- list(c("Pennate", "Centric"))
+MyColonyComparisons <- list(c("TRUE", "FALSE"))
+MyFlagellaComparisons <- list(c("yes", "no"))
+
+```
+
+```{r define functions, include = FALSE}
+`%notin%` <- Negate(`%in%`) #https://www.r-bloggers.com/2018/07/the-notin-operator/
+
+# ScientificTen is a function that converts a numeric value to scienific format. x is the numeric value whereas sf is the number of significant figures. Default is 2. 
+# ScientificTen <- function(x, sf = 2){
+#   y <- format(signif(x, sf), scientific = TRUE) %>% as.character()
+#   z <- str_split(y, pattern = "e")[[1]] 
+#   if(z[2]<0){
+#     return(glue(z[1],"×10","^",str_replace_all(z[2], "[[+]]", ""),"^"))
+#   }
+#   else{
+#     return(glue(z[1],"×10","^",z[2],"^"))
+#   }
+# }
+
+ScientificTen <- function(x, sf = 2){
+  y <- format(signif(x, sf), scientific = TRUE) %>% as.character()
+  z <- str_split(y, pattern = "e")[[1]] %>% as.numeric()
+  a <- if_else(z[2] > -10 & z[2] < 10, last(z[2]), z[2])
+  if(z[2]<0){
+    return(glue(z[1],"×10","^",str_replace_all(a, "[[+]]", ""),"^"))
+  }
+  else{
+    return(glue(z[1],"×10","^",a,"^"))
+  }
+}
+```
+
+XXX Cite this page for logit2prob https://sebastiansauer.github.io/convert_logit2prob/
+```{r logit2prob, include = FALSE}
+source("https://sebastiansauer.github.io/Rcode/logit2prob.R")
+```
+
+
+```{r ManualAutoCompareChi, include = FALSE}
+ManualAutoCompareData <- read_csv(file.path(DataIn, "SnakeManualAutomatedCountCompare.csv")) %>%
+  drop_na()
+
+# ManualAutoCompareChi <- chisq.test(ManualAutoCompareData$AutomatedECKO_count, ManualAutoCompareData$Manual_count, correct = TRUE) %>%
+#   tidy()
+
+ValidationCorTest <- cor.test(ManualAutoCompareData$AutomatedECKO_count, ManualAutoCompareData$Manual_count) %>% 
+  tidy()
+
+
+# Should I switch to a cor.test instead of a manual count?
+
+# ManualAutoCompareChi %>%
+#   kable(caption = "Chi-square test comparing manually and automatically annotated gene count data.") %>%
+#   kable_classic()
+```
+
+As expected, Fig \@ref(fig:ManualAutoCompare) shows a significant correlation (Correlation of `r signif(ValidationCorTest$estimate, 2)`, p = `r ScientificTen(ValidationCorTest$p.value, 2)`) between manually generated 'ROSGene_count' and the automated 'ROSGene_count' from the snakemake pipeline.
+
+```{r GeneModelsRadPlot, fig.cap = GeneModelsRadPlot_cap, echo=FALSE}
+GeneModelsRadPlot <- MergedData %>%
+  # filter(Taxa != "Prokaryote") %>%
+  filter(GeneModels_count != "0") %>%
+  ggplot(aes(x=log_Radius_um, y= log_GeneModels_count)) +
+  ggConvexHull::geom_convexhull(alpha = 0.2, aes(fill = Taxa, color = Taxa)) +
+  geom_point(aes(shape = Ome, colour = Taxa), size = 3)+
+  # ggalt::geom_encircle(aes(color = Phylum), expand = 0) +
+  scale_colour_manual(values =TaxaColors)+
+  scale_fill_manual(values =TaxaColors)+
+  scale_shape_manual(values = c(19,1)) +
+  theme_bw()+
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.text=element_text(size=12),
+        axis.title=element_text(size=14),
+        aspect.ratio = 1,
+        legend.text=element_text(size=10),
+        legend.title = element_text(size=12)) +
+  labs(x = ~log[10] ~ "(Median Cell Radius (µm))",
+       y = ~log[10] ~ "(Total Number of Genes)")
+
+GeneModelsRadPlot
+
+GeneModelsRadPlot_cap <- glue("**Comparison of log~10~ of the total number of genes in an organism ('log_GeneModels_count') to log~10~ of the median cell radius in µm ('log_Radius_um').**", 
+                              "Colour corresponds to the taxonomic lineage ('Phylum'), whereas symbol shape corresponds to the source of the data, whether Genome or Transcriptome ('Ome').", 
+                              "Citations for data sources are in Supplementary Table S3.",
+                              .sep = " ")
+
+# ggsave(paste("Figure2",".png",sep = ""), plot = GeneModelsRadPlot, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+```
+
+```{r RibosomeRadPlot, fig.cap = RibosomeRadPlot_cap, echo=FALSE}
+RibosomeRadPlot <- MergedData %>%
+  # filter(Taxa != "Prokaryote") %>%
+  filter(GeneModels_count != "0") %>%
+  ggplot(aes(x=log_Radius_um, y= log10(RibosomeCount))) +
+  ggConvexHull::geom_convexhull(alpha = 0.2, aes(fill = Taxa, color = Taxa)) +
+  geom_point(aes(shape = Ome, colour = Taxa), size = 3)+
+  # ggalt::geom_encircle(aes(color = Phylum), expand = 0) +
+  scale_colour_manual(values =TaxaColors)+
+  scale_fill_manual(values =TaxaColors)+
+  scale_shape_manual(values = c(19,1)) +
+  theme_bw()+
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.text=element_text(size=12),
+        axis.title=element_text(size=14),
+        aspect.ratio = 1,
+        legend.text=element_text(size=10),
+        legend.title = element_text(size=12)) +
+  labs(x = ~log[10] ~ "(Median Cell Radius (µm))",
+       y = ~log[10] ~ "(Total Number of Ribosomal Genes)")
+
+RibosomeRadPlot
+```
+XXX
+```{r RibosomeGeneModels}
+MergedData %>% 
+  filter(GeneModels_count != "0") %>%
+  ggplot(aes(x = log10(RibosomeCount), y = log_GeneModels_count)) +
+  ggConvexHull::geom_convexhull(alpha = 0.2, aes(fill = Taxa, color = Taxa)) +
+  geom_point(aes(shape = Ome, colour = Taxa), size = 3) +
+  scale_colour_manual(values =TaxaColors)+
+  scale_fill_manual(values =TaxaColors)+
+  scale_shape_manual(values = c(19,1)) +
+  theme_bw() +
+  scale_x_continuous(limits = c(0,3))+
+  scale_y_continuous(limits = c(3,6))+
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.text=element_text(size=12),
+        axis.title=element_text(size=14),
+        aspect.ratio = 1,
+        legend.text=element_text(size=10),
+        legend.title = element_text(size=12)) +
+  labs(x = ~log[10] ~ "(Total Number of Ribosomal Genes)",
+       y = ~log[10] ~ "(Total Number of Genes)")
+```
+
+
+```{r}
+NitOxFlagella <- MergedData %>% 
+  filter(Taxa != "Prokaryote", 
+         NitOx %in% c("Production", "Scavenging")) %>%
+  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, ROSGene_count, ECNumber, EnzymeName, ColonySpecies, NitOx_count, NitOx) %>%
+  unique() %>%
+  mutate(NitOx_countL = NitOx_count %>% as.logical() %>% as.numeric(),
+         FlagellaL = ifelse(Flagella == "yes", 1, 0)) %>%
+  select(FileName, NitOx_count, NitOx_countL, Flagella, FlagellaL,NitOx) %>%
+  # filter(GeneModels_count != 0) %>% #This is because of introducing exposure
+  nest(data = -c(NitOx)) %>%
+  mutate(fit_b_offset = map(data, possibly(~glm(.$NitOx_countL ~ .$FlagellaL, data = ., family = binomial(link = "logit")), otherwise = NULL)),
+                    param_b_offset = map(fit_b_offset, tidy),
+                    pred_b_offset = map(fit_b_offset, augment))
+```
+
+```{r, fig.width = 10, fig.height = 5}
+NitOxFlagellaFig <- NitOxFlagella %>%
+  unnest(param_b_offset) %>%
+  filter(p.value < 0.05) %>%
+  unnest(c( pred_b_offset)) %>%
+  # unnest(pred_b_offset) %>%
+  ggplot() +
+  geom_point(aes(x = `.$FlagellaL`, y = `.$NitOx_countL`)) +
+  geom_line(aes(x = `.$FlagellaL`, y = logit2prob(.fitted))) +
+  facet_grid(rows = vars(NitOx))
+  
+NitOxFlagellaFig
+```
+How would we present the probability, simply the number? 0 not flagellated, 1 flagellated. 
+
+```{r}
+NitOxRadFlagella <- MergedData %>% 
+  filter(Taxa != "Prokaryote", 
+         NitOx %in% c("Production", "Scavenging")) %>%
+  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, ROSGene_count, ECNumber, EnzymeName, ColonySpecies, NitOx_count, NitOx) %>%
+  unique() %>%
+  mutate(NitOx_countL = NitOx_count %>% as.logical() %>% as.numeric(),
+         FlagellaL = ifelse(Flagella == "yes", 1, 0)) %>%
+  select(FileName, NitOx_count, NitOx_countL, Flagella, FlagellaL,NitOx, log_Radius_um) %>%
+  # filter(GeneModels_count != 0) %>% #This is because of introducing exposure
+  nest(data = -c(NitOx)) %>%
+  mutate(fit_b_offset = map(data, possibly(~glm(.$NitOx_countL ~ .$log_Radius_um +.$FlagellaL, data = ., family = binomial(link = "logit")), otherwise = NULL)),
+                    param_b_offset = map(fit_b_offset, tidy),
+                    pred_b_offset = map(fit_b_offset, augment))
+```
+
+```{r, fig.width = 10, fig.height = 5}
+NitOxRadFlagellaFig <- NitOxRadFlagella %>%
+  unnest(param_b_offset) %>%
+  filter(p.value < 0.05) %>%
+  unnest(c( pred_b_offset)) %>%
+  # unnest(pred_b_offset) %>%
+  ggplot() +
+  geom_point(aes(x = `.$log_Radius_um`, y = `.$NitOx_countL`)) +
+  geom_line(aes(x = `.$log_Radius_um`, y = logit2prob(.fitted), color = as.factor(`.$FlagellaL`))) +
+  facet_grid(rows = vars(NitOx)) +
+  theme_bw()
+  
+NitOxRadFlagellaFig
+```
+
+
+```{r}
+NitOxRadColony <- MergedData %>% 
+  filter(Taxa != "Prokaryote", 
+         NitOx %in% c("Production", "Scavenging")) %>%
+  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, ROSGene_count, ECNumber, EnzymeName, ColonySpecies, NitOx_count, NitOx) %>%
+  unique() %>%
+  mutate(NitOx_countL = NitOx_count %>% as.logical() %>% as.numeric(),
+         ColonySpeciesL = ifelse(ColonySpecies == "1", 1, 0)) %>%
+  select(FileName, NitOx_count, NitOx_countL, ColonySpecies, ColonySpeciesL,NitOx, log_Radius_um) %>%
+  # filter(GeneModels_count != 0) %>% #This is because of introducing exposure
+  nest(data = -c(NitOx)) %>%
+  mutate(fit_b_offset = map(data, possibly(~glm(.$NitOx_countL ~ .$log_Radius_um +.$ColonySpeciesL, data = ., family = binomial(link = "logit")), otherwise = NULL)),
+                    param_b_offset = map(fit_b_offset, tidy),
+                    pred_b_offset = map(fit_b_offset, augment))
+```
+
+```{r, fig.width = 10, fig.height = 5}
+NitOxRadColonyFig <- NitOxRadColony %>%
+  unnest(param_b_offset) %>%
+  filter(p.value < 0.05) %>%
+  unnest(c( pred_b_offset)) %>%
+  # unnest(pred_b_offset) %>%
+  ggplot() +
+  geom_point(aes(x = `.$log_Radius_um`, y = `.$NitOx_countL`)) +
+  geom_line(aes(x = `.$log_Radius_um`, y = logit2prob(.fitted), color = as.factor(`.$ColonySpeciesL`))) +
+  facet_grid(rows = vars(NitOx)) +
+  theme_bw()
+  
+NitOxRadColonyFig
+```
+
+```{r}
+NitOxDiatom <- MergedData %>% 
+  filter(Taxa == "Diatom", 
+         NitOx %in% c("Production", "Scavenging")) %>%
+  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, ROSGene_count, ECNumber, EnzymeName, ColonySpecies, NitOx_count, NitOx) %>%
+  unique() %>%
+  mutate(NitOx_countL = NitOx_count %>% as.logical() %>% as.numeric(),
+         PennateCentricL = ifelse(PennateCentric == "Pennate", 1, 0)) %>%
+  # filter(GeneModels_count != 0) %>% #This is because of introducing exposure
+  nest(data = -c(NitOx)) %>%
+  mutate(fit_b_offset = map(data, possibly(~glm(.$NitOx_countL ~ .$PennateCentricL, data = ., family = binomial(link = "logit")), otherwise = NULL)),
+                    param_b_offset = map(fit_b_offset, tidy),
+                    pred_b_offset = map(fit_b_offset, augment))
+```
+
+Regressions are empty, not enough statistical power? Probably due to the nature of the data. Almost always present in one, almost always absent in the ohter.
+```{r, fig.width = 10, fig.height = 5}
+NitOxDiatomFig <- NitOxDiatom %>%
+  unnest(param_b_offset) %>%
+  filter(p.value < 0.05) %>%
+  unnest(c( pred_b_offset)) %>%
+  filter(`.$PennateCentricL` %in% c(0,1)) %>%
+  # unnest(pred_b_offset) %>%
+  ggplot() +
+  geom_point(aes(x = `.$PennateCentricL`, y = `.$NitOx_countL`)) +
+  geom_text(aes(x = `.$PennateCentricL`, y = logit2prob(.fitted), label = logit2prob(.fitted))) +
+  # geom_line(aes(x = `.$PennateCentricL`, y = logit2prob(.fitted))) +
+  facet_grid(rows = vars(NitOx))
+  
+NitOxDiatomFig
+```
+
+```{r, fig.width = 10, fig.height = 5}
+NitOxDiatomFig <- NitOxDiatom %>%
+  unnest(param_b_offset) %>%
+  filter(p.value < 0.05) %>%
+  unnest(c( pred_b_offset)) %>%
+  # unnest(pred_b_offset) %>%
+  ggplot() +
+  geom_point(aes(x = `.$PennateCentricL`, y = `.$NitOx_countL`)) +
+  geom_line(aes(x = `.$PennateCentricL`, y = logit2prob(.fitted))) +
+  facet_grid(rows = vars(NitOx))
+  
+NitOxDiatomFig
+```
+
+```{r}
+NitOxRadDiatom <- MergedData %>% 
+  filter(Taxa == "Diatom", 
+         NitOx %in% c("Production", "Scavenging")) %>%
+  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, ROSGene_count, ECNumber, EnzymeName, ColonySpecies, NitOx_count, NitOx) %>%
+  unique() %>%
+  mutate(NitOx_countL = NitOx_count %>% as.logical() %>% as.numeric(),
+         PennateCentricL = ifelse(PennateCentric == "Pennate", 1, 0)) %>%
+  select(FileName, NitOx_count, NitOx_countL, PennateCentric, PennateCentricL,NitOx, log_Radius_um) %>%
+  # filter(GeneModels_count != 0) %>% #This is because of introducing exposure
+  nest(data = -c(NitOx)) %>%
+  mutate(fit_b_offset = map(data, possibly(~glm(.$NitOx_countL ~ .$log_Radius_um +.$PennateCentricL, data = ., family = binomial(link = "logit")), otherwise = NULL)),
+                    param_b_offset = map(fit_b_offset, tidy),
+                    pred_b_offset = map(fit_b_offset, augment))
+```
+
+```{r, fig.width = 10, fig.height = 5}
+NitOxRadDiatomFig <- NitOxRadDiatom %>%
+  unnest(param_b_offset) %>%
+  filter(p.value < 0.05) %>%
+  unnest(c( pred_b_offset)) %>%
+  # unnest(pred_b_offset) %>%
+  ggplot() +
+  geom_point(aes(x = `.$log_Radius_um`, y = `.$NitOx_countL`)) +
+  geom_line(aes(x = `.$log_Radius_um`, y = logit2prob(.fitted), color = as.factor(`.$PennateCentricL`))) +
+  facet_grid(rows = vars(NitOx)) +
+  theme_bw()
+  
+NitOxRadDiatomFig
+```
+
+```{r}
+GeneModelsInvRadPlot <- MergedData %>%
+  # filter(Taxa != "Prokaryote") %>%
+  filter(GeneModels_count != "0") %>%
+  ggplot(aes(x=log_Radius_um, y= log10(1/GeneModels_count))) +
+  ggConvexHull::geom_convexhull(alpha = 0.2, aes(fill = Phylum, color = Phylum)) +
+  geom_point(aes(shape = Ome, colour = Phylum), size = 3)+
+  # ggalt::geom_encircle(aes(color = Phylum), expand = 0) +
+  scale_colour_manual(values =TaxaColors)+
+  scale_fill_manual(values =TaxaColors)+
+  scale_shape_manual(values = c(19,1)) +
+  theme_bw()+
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.text=element_text(size=12),
+        axis.title=element_text(size=14),
+        aspect.ratio = 1,
+        legend.text=element_text(size=10),
+        legend.title = element_text(size=12)) +
+  labs(x = ~log[10] ~ "(Median Cell Radius (µm))",
+       y = ~log[10] ~ "(Inverse Total Number of Genes)")
+
+GeneModelsInvRadPlot
+```
+
+```{r generate PoissonDistStats, include = FALSE}
+PoissonDistStats <- MergedData %>% 
+  select(FileName, SupOx, SupOx_count, HyPe, HyPe_count, NitOx, NitOx_count, Phylum) %>%
+  unique() %>%
+  pivot_longer(c(SupOx, HyPe, NitOx), names_to = "ROS", values_to = "ProdScav") %>% 
+  pivot_longer(c(SupOx_count, HyPe_count, NitOx_count), names_to = "ROS_countType", values_to = "ROS_count") %>%
+  select(FileName, ROS, ProdScav, ROS_countType, ROS_count, Phylum) %>%
+  filter(!is.na(ProdScav)) %>%
+  group_by(ROS, ProdScav) %>%
+  # .$ROS_count %>%
+  rstatix::shapiro_test(ROS_count) 
+```
+
+
+## Superoxide {.unnumbered}
+
+```{r read in SupOx Models, include = FALSE}
+SupOxRad <- readRDS(file.path(DataProcessedModels, "SupOxRad.Rds"))
+OchrophyteSupOxRad <- readRDS(file.path(DataProcessedModels, "OchrophyteSupOxRad.Rds"))
+SupOxRadProk <- readRDS(file.path(DataProcessedModels, "SupOxRadProk.Rds"))
+# SupOxLat <- readRDS(file.path(DataProcessedModels, "SupOxLat.Rds"))
+# SupOxLatProk <- readRDS(file.path(DataProcessedModels, "SupOxLatProk.Rds"))
+SupOxMerged <- readRDS(file.path(DataProcessed, "SupOxMerged.Rds"))
+```
+
+### Influence of Cell Size on Gene Counts for Enzymes Metabolizing O~2~^•−^ {.unnumbered}
+
+```{r generate SupOxRadPlot, include = FALSE}
+SupOxRad$Includes <- c("Eukaryote Regressions")
+SupOxRadProk$Includes <- c("Eukaryotes + Prokaryotes")
+# DiatomSupOxRad$Includes <- ("Diatom")
+
+SupOxRadPlots <- rbind(SupOxRad, SupOxRadProk) %>%
+  unnest(c(offset_model_regression), names_sep = "_") %>%
+  unnest(c(flagcol_offset_model_regression), names_sep = "_") %>%
+  pivot_wider(., names_from = c(flagcol_offset_model_regression_term), values_from = c(flagcol_offset_model_regression_estimate, flagcol_offset_model_regression_std.error, flagcol_offset_model_regression_statistic, flagcol_offset_model_regression_p.value)) %>%
+  pivot_wider(., names_from = c(offset_model_regression_term), values_from = c(offset_model_regression_estimate, offset_model_regression_std.error, offset_model_regression_statistic, offset_model_regression_p.value)) %>%
+  unnest(cols = c(data)) %>%
+  filter(Includes != "Eukaryotes + Prokaryotes") %>%
+  unique() %>%
+  ggplot() +
+  geom_point(aes(x = log_Radius_um, y = log10(SupOx_count/GeneModels_count), color = Phylum)) + 
+  geom_point(aes(x = log_Radius_um, y = log10(SupOx_count/GeneModels_count), color = Phylum), data = MergedData %>% filter(Phylum == "Prokaryote", SupOx == "Scavenging")) + 
+  geom_abline(data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
+              aes(intercept = `flagcol_offset_model_regression_estimate_(Intercept)`/ln_log10_conversion, 
+                  slope = `flagcol_offset_model_regression_estimate_.$log_Radius_um`/ln_log10_conversion, 
+                  linetype = flagcol_offset_regression_type), 
+              color = "black") +
+  geom_abline(data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
+              aes(intercept = (`flagcol_offset_model_regression_estimate_(Intercept)` + `flagcol_offset_model_regression_std.error_(Intercept)`) /ln_log10_conversion, 
+                  slope = (`flagcol_offset_model_regression_estimate_.$log_Radius_um` + `flagcol_offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion), 
+              linetype = "dotted", 
+              color = "black") +
+  geom_abline(data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
+              aes(intercept = (`flagcol_offset_model_regression_estimate_(Intercept)` - `flagcol_offset_model_regression_std.error_(Intercept)`) /ln_log10_conversion, 
+                  slope = (`flagcol_offset_model_regression_estimate_.$log_Radius_um` - `flagcol_offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion), 
+              linetype = "dotted", 
+              color = "black") +
+  geom_abline(aes(intercept = `offset_model_regression_estimate_(Intercept)`/ln_log10_conversion, 
+                  slope = `offset_model_regression_estimate_.$log_Radius_um`/ln_log10_conversion, 
+                  linetype = offset_regression_type), 
+              color = "blue") +
+  geom_abline(aes(intercept = (`offset_model_regression_estimate_(Intercept)` + `offset_model_regression_std.error_(Intercept)`) /ln_log10_conversion, 
+                  slope = (`offset_model_regression_estimate_.$log_Radius_um` + `offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion), 
+              linetype = "dotted", 
+              color = "blue") +
+  geom_abline(aes(intercept = (`offset_model_regression_estimate_(Intercept)` - `offset_model_regression_std.error_(Intercept)`) /ln_log10_conversion, 
+                  slope = (`offset_model_regression_estimate_.$log_Radius_um` - `offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion), 
+              linetype = "dotted", 
+              color = "blue") +
+  geom_text(data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
+            aes(x = 1.1, y = -4.7, label = paste("p-value =", signif(`flagcol_offset_model_regression_p.value_.$log_Radius_um`, digits = 2))), color = "black", check_overlap = TRUE) +
+  geom_text(aes(x = 1.1, y = -4.5, label = paste("p-value =", signif(`offset_model_regression_p.value_.$log_Radius_um`, digits = 2))), color = "blue", check_overlap = TRUE) +
+  scale_colour_manual(name = "Phylum", values =TaxaColors) +
+  scale_linetype_manual(name = "Regression type", values = c("poisson" = "solid" , "quasipoisson" = "twodash")) +
+  scale_fill_manual(name = "Phylum", values =TaxaColors, guide = "none") +
+  coord_cartesian(ylim = c(ROSMin, ROSMax)) +
+  facet_grid(cols = vars(SupOx)) + #, rows = vars(Includes)
+  scale_shape_manual(values = c(21,19,23,18)) +
+  theme_bw() +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.text = element_text(size=11),
+        axis.title = element_text(size=12), 
+        legend.text = element_text(size=11), 
+        legend.title = element_text(size=13),
+        strip.text = element_text(size=11)) +
+  labs(x = ~log[10] ~ "(Median Cell Radius (µm))", 
+       y = ~log[10] ~ "(Genes Encoding "~O[2]^`•-` ~" Metabolizing Enzymes Normalized to Total Genes)")
+
+# ggsave(paste("SupOxRadPlots",".png",sep = ""), plot = SupOxRadPlots, device = NULL, path = Figures,scale = 1, height=7, width= 10, units = c("in"),dpi = 300, limitsize = TRUE)
+# ggsave(paste("Figure3",".png",sep = ""), plot = SupOxRadPlots, device = NULL, path = Figures,scale = 1, height=7, width= 10, units = c("in"),dpi = 300, limitsize = TRUE)
+```
+
+```{r SupOxRadPlots, fig.cap = SupOxRadPlots_cap, fig.height= 7, fig.width= 7, echo = FALSE}
+SupOxRadPlots_cap <- glue("**Comparison of log~10~ (Total number of genes encoding O~2~^•−^ metabolizing enzymes ('SupOx_count') normalized to the total number of genes present in each organism ('GeneModels_count')) vs. the log~10~ (median cell radius in µm ('log_Radius_um')).**", 
+                            "Poisson (solid line) or Quasi-Poisson (dashed line) regressions fitted to data ± Standard Error (dotted line).",
+                            "Regressions were run with (black line) or without (blue line) 'Colony' and 'Flagella' as co-variates.", 
+                            "Selected prokaryote genomes are presented for comparison, but excluded from the presented regressions.",
+                            "Symbol color corresponds to taxon lineage ('Phylum').", 
+                            # "Citations for data sources can be found in Supplementary Table S3.", 
+                          .sep = " ")
+SupOxRadPlots
+```
+
+
+
+### Influences of Flagella, Colony Formation and Cell Shape on Gene Counts for Enzymes Metabolizing O~2~^•−^ {.unnumbered}
+
+```{r SupOxFlag_pval, include = FALSE}
+SupOxFlag_pval <- MergedData %>%
+  select(FileName, Flagella, SupOx_count, GeneModels_count, Phylum, SupOx, Genus, Taxa, ColonySpecies, PennateCentric) %>%
+  filter(SupOx == "Production" | SupOx == "Scavenging",
+         GeneModels_count != 0,
+         !is.na(Flagella), 
+         !is.na(SupOx),
+         Taxa != "Prokaryote") %>%
+  unique() %>%
+  mutate(norm_SupOx = SupOx_count/GeneModels_count) %>%
+  compare_means(norm_SupOx ~ Flagella, data = ., method = "wilcox.test")
+```
+
+```{r generate SupOxFlagPlot, include = FALSE}
+SupOxFlagPlot <- MergedData %>%
+  filter(SupOx == "Production" | SupOx == "Scavenging",
+         GeneModels_count != 0,
+         !is.na(Flagella), 
+         !is.na(SupOx),
+         Taxa != "Prokaryote") %>% #Taxa != "Prokaryote"
+  select(FileName, Flagella, SupOx_count, GeneModels_count, Phylum, SupOx, Genus) %>%
+  unique() %>%
+  ggplot(aes(x = Flagella, y = SupOx_count/GeneModels_count)) +
+  geom_boxplot(notch = TRUE, outlier.shape = NA) +
+  geom_jitter(aes(color = Phylum),width = 0.2, stat = "unique") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  xlab("") +
+  stat_compare_means(comparisons = MyFlagellaComparisons, method = "wilcox.test") +
+  facet_grid(cols = vars(c(SupOx))) +
+  scale_x_discrete(labels = c("no" = "No Flagella", "yes" = "Flagella")) +
+  scale_y_continuous(labels = scales::scientific)  +
+  scale_colour_manual(name = "Phylum", values =TaxaColors) +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.text.y = element_text(size=9),
+        axis.text.x = element_text(size=12),
+        axis.title = element_text(size=12), 
+        legend.text = element_text(size=10), 
+        legend.title = element_text(size=10),
+        strip.text = element_text(size=11)) +
+  labs(y = "Genes Encoding "~O[2]^`•-` ~" Scavenging Enzymes Normalized to Total Genes")
+
+# ggsave(paste("HyPePennateCentricPlot",".png",sep = ""), plot = HyPePennateCentricPlot, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+
+# ggsave(paste("Figure4",".png",sep = ""), plot = SupOxFlagPlot, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+```
+
+```{r SupOxFlagPlot, fig.cap = SupOxFlagPlot_cap, fig.height= 7, fig.width= 7, echo = FALSE}
+SupOxFlagPlot_cap <- glue("**Comparison of total number of genes encoding O~2~^•−^ scavenging enzymes ('SupOx_count') normalized to the total number of genes present in each organism ('GeneModels_count')) vs. the presence or absence of flagella in the organism.**",
+                          "Symbol color corresponds to taxon lineage ('Phylum').",
+                          "Notch spans ± standard error of the median.",
+                           "Box spans median ± 1 quartile of the data.",
+                           "Whiskers span the range excluding outliers in the data.",
+                          "Citations for data sources can be found in Supplementary Table S3.", .sep = " ")
+SupOxFlagPlot
+```
+
+
+
+```{r SupOxColony_pval, include = FALSE}
+SupOxColony_pval <- MergedData %>%
+  select(FileName, Flagella, SupOx_count, GeneModels_count, Phylum, SupOx, Genus, Taxa, ColonySpecies) %>%
+  filter(SupOx == "Scavenging",
+         !is.na(ColonySpecies),
+         GeneModels_count != 0, 
+         Taxa != "Prokaryote") %>%
+  mutate(norm_SupOx = SupOx_count/GeneModels_count) %>%  
+  unique() %>%
+  compare_means(norm_SupOx ~ ColonySpecies, data = ., method = "wilcox.test")
+```
+
+```{r generate SupOxColonyPlot, include = FALSE}
+# SupOxColonyPlot <- MergedData %>%
+#   filter(SupOx == "Production" | SupOx == "Scavenging",
+#          GeneModels_count != 0,
+#          !is.na(ColonySpecies),
+#          Taxa != "Prokaryote") %>% #Taxa != "Prokaryote"
+#   select(FileName, ColonySpecies, SupOx_count, GeneModels_count, Phylum, SupOx, Genus) %>%
+#   unique() %>%
+#   ggplot(aes(x = ColonySpecies, y = SupOx_count/GeneModels_count)) +
+#   geom_boxplot(notch = TRUE, outlier.shape = NA) +
+#   geom_jitter(aes(color = Phylum),width = 0.2, stat = "unique") +
+#   theme_bw() +
+#   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+#   xlab("") +
+#   stat_compare_means(comparisons = MyColonyComparisons, method = "wilcox.test") +
+#   facet_grid(cols = vars(c(SupOx))) +
+#   scale_x_discrete(labels = c("FALSE" = "Non-colony", "TRUE" = "Colony")) +
+#   scale_y_continuous(labels = scales::scientific)  +
+#   scale_colour_manual(name = "Phylum", values =TaxaColors) +
+#   theme(panel.grid.major = element_blank(),
+#         panel.grid.minor = element_blank(),
+#         axis.text.y = element_text(size=9),
+#         axis.text.x = element_text(size=12),
+#         axis.title = element_text(size=12),
+#         legend.text = element_text(size=10),
+#         legend.title = element_text(size=10),
+#         strip.text = element_text(size=11))  +
+#   labs(y = "Genes Encoding "~O[2]^`•-` ~" Metabolizing Enzymes Normalized to Total Genes")
+
+# ggsave(paste("HyPePennateCentricPlot",".png",sep = ""), plot = HyPePennateCentricPlot, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+```
+
+```{r SupOxColonyPlot, fig.cap = SupOxColonyPlot_cap, fig.height= 7, fig.width= 3.5, echo = FALSE}
+SupOxColonyPlot_cap <- glue("**Comparison of total number of genes encoding O~2~^•−^ scavenging enzymes ('SupOx_count') normalized to the total number of genes present in each organism ('GeneModels_count') vs. the ability of the organism to form colonies.**",
+                            "Symbol color corresponds to taxon lineage ('Phylum').",
+                            "Notch spans ± standard error of the median.",
+                           "Box spans median ± 1 quartile of the data.",
+                           "Whiskers span the range excluding outliers in the data.",
+                            "Citations for data sources can be found in Supplementary Table S3.", .sep = " ")
+# SupOxColonyPlot
+```
+
+
+
+```{r SupOxDiatomShape_pval, include = FALSE}
+SupOxScavPennateCentricPlot_pval <- MergedData %>%
+  select(FileName, Flagella, SupOx_count, GeneModels_count, Phylum, SupOx, Genus, Taxa, ColonySpecies, PennateCentric) %>%
+  filter(Taxa == "Diatom",
+         SupOx == "Scavenging",
+         GeneModels_count != 0) %>%
+  unique() %>%
+  mutate(norm_SupOx = SupOx_count/GeneModels_count) %>%
+  compare_means(norm_SupOx ~ PennateCentric, data = ., method = "wilcox.test")
+```
+
+
+```{r generate SupOxPennateCentricPlot, include = FALSE}
+# SupOxPennateCentricPlot <- MergedData %>%
+#   filter(Taxa == "Diatom",
+#          SupOx == "Scavenging",
+#          GeneModels_count != 0) %>%
+#   select(FileName, PennateCentric, SupOx_count, GeneModels_count, Phylum, SupOx, Genus) %>%
+#   unique() %>%
+#   ggplot(aes(x = PennateCentric, y = SupOx_count/GeneModels_count)) +
+#   geom_boxplot(notch = TRUE, outlier.shape = NA) +
+#   geom_jitter(aes(colour = Genus),width = 0.2, stat = "unique") +
+#   # coord_cartesian(ylim = c(ROSBoxPlotMin, ROSBoxPlotMax)) +
+#   theme_bw() +
+#   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+#   # ylab("Total number of Genes encoding Superoxide Scavenging") +
+#   xlab("") +
+#   # ggtitle("SupOx Scavenging") +
+#   facet_grid(cols = vars(SupOx)) +
+#   stat_compare_means(comparisons = MyShapeComparisons, method = "wilcox.test") +
+#   # ggforce::facet_zoom(ylim = c(0, ROSBoxPlotMax)) +
+#   scale_y_continuous(labels = scales::scientific) +
+#   theme(panel.grid.major = element_blank(),
+#         panel.grid.minor = element_blank(),
+#         axis.text.y = element_text(size=9),
+#         axis.text.x = element_text(size=12),
+#         axis.title = element_text(size=12), 
+#         legend.text = element_text(size=10), 
+#         legend.title = element_text(size=10),
+#         strip.text = element_text(size=11)) +
+#   labs(y = "Genes Encoding "~O[2]^`•-` ~" Metabolizing Enzymes Normalized to Total Genes")
+
+# ggsave(paste("SupOxPennateCentricPlot",".png",sep = ""), plot = SupOxPennateCentricPlot, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+
+```
+
+```{r SupOxPennateCentricPlot, fig.cap = SupOxPennateCentricPlot_cap, fig.height= 3.5, fig.width= 3.5, echo = FALSE}
+SupOxPennateCentricPlot_cap <- glue("**Comparison of total number of genes encoding O~2~^•−^ scavenging enzymes ('SupOx_count') normalized to the total number of genes present in each diatom ('GeneModels_count') vs. the growth form of the diatom ('PennateCentric').**",
+                                      "Symbol color corresponds to the genus of the diatom ('Genus').", 
+                                    "Notch spans ± standard error of the median.",
+                           "Box spans median ± 1 quartile of the data.",
+                           "Whiskers span the range excluding outliers in the data.",
+                                      "Citations for data sources can be found in Supplementary Table S3.", .sep = " ")
+# SupOxPennateCentricPlot
+```
+
+
+## Hydrogen Peroxide {.unnumbered}
+
+```{r read in HyPe models, include = FALSE}
+HyPeRad <- readRDS(file.path(DataProcessedModels, "HyPeRad.Rds"))
+OchrophyteHyPeRad <- readRDS(file.path(DataProcessedModels, "OchrophyteHyPeRad.Rds"))
+HyPeRadProk <- readRDS(file.path(DataProcessedModels, "HyPeRadProk.Rds"))
+# HyPeLat <- readRDS(file.path(DataProcessedModels, "HyPeLat.Rds"))
+# HyPeLatProk <- readRDS(file.path(DataProcessedModels, "HyPeLatProk.Rds"))
+HyPeMerged <- readRDS(file.path(DataProcessed, "HyPeMerged.Rds"))
+```
+
+
+
+### Influence of Cell Size on Gene Counts for Enzymes Metabolizing H~2~O~2~ {.unnumbered}
+
+```{r, include = FALSE}
+HyPeDiff <- MergedData %>%
+  filter(Taxa != "Prokaryote",
+         !is.na(HyPe)) %>%
+  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, HyPe_count, ColonySpecies, Phylum) %>%
+  unique() %>%
+  filter(GeneModels_count != 0) %>% #This is because of introducing exposure
+  glm(.$HyPe_count ~ .$log_Radius_um + HyPe , offset = log(GeneModels_count), data = ., family = quasipoisson(link = "log"))
+
+HyPeDiff2 <- MergedData %>%
+  filter(Taxa != "Prokaryote",
+         !is.na(HyPe)) %>%
+  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, HyPe_count, ColonySpecies, Phylum) %>%
+  unique() %>%
+  filter(GeneModels_count != 0) %>% #This is because of introducing exposure
+  glm(.$HyPe_count ~ .$log_Radius_um * HyPe , offset = log(GeneModels_count), data = ., family = quasipoisson(link = "log"))
+
+anova(HyPeDiff, HyPeDiff2, test = "F")
+
+emmeans::emmeans(HyPeDiff, "HyPe")
+HyPeDiff_pvalue <- pairs(emmeans::emmeans(HyPeDiff, "HyPe")) %>% tidy()
+HyPeDiff %>% anova(test = "F")
+```
+
+```{r generate HyPeRadPlots, include = FALSE}
+HyPeRad$Includes <- c("Eukaryote Regressions")
+HyPeRadProk$Includes <- c("Eukaryotes + Prokaryotes")
+# DiatomHyPeRad$Includes <- c("Diatom")
+
+
+OchrophyteHyPeRad <- OchrophyteHyPeRad %>% 
+  mutate(ROSType = "HyPe",
+         ROSName = "H~2~O~2~") %>%
+  rename(ROSMetabolism = HyPe)
+
+HyPeRadPlots <- rbind(HyPeRad, HyPeRadProk) %>%
+  filter(HyPe == "Production" | HyPe == "Scavenging") %>%
+  unnest(c(offset_model_regression), names_sep = "_") %>%
+  unnest(c(flagcol_offset_model_regression), names_sep = "_") %>%
+  pivot_wider(., names_from = c(flagcol_offset_model_regression_term), values_from = c(flagcol_offset_model_regression_estimate, flagcol_offset_model_regression_std.error, flagcol_offset_model_regression_statistic, flagcol_offset_model_regression_p.value)) %>%
+  pivot_wider(., names_from = c(offset_model_regression_term), values_from = c(offset_model_regression_estimate, 
+                                                                               offset_model_regression_std.error, offset_model_regression_statistic, offset_model_regression_p.value)) %>%
+  unnest(c(offset_model_pvalue), names_sep = "_") %>%
+  unnest(c(flagcol_offset_model_pvalue), names_sep = "_") %>%
+  unnest(cols = c(data)) %>%
+  filter(Includes != "Eukaryotes + Prokaryotes") %>%
+  unique() %>%
+  ggplot() +
+  geom_point(aes(x = log_Radius_um, y = log10(HyPe_count/GeneModels_count), color = Phylum)) +
+  geom_point(aes(x = log_Radius_um, y = log10(HyPe_count/GeneModels_count), color = Phylum), data = MergedData %>% filter(Phylum == "Prokaryote", !is.na(HyPe))) + 
+  geom_abline(data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
+              aes(intercept = `flagcol_offset_model_regression_estimate_(Intercept)`/ln_log10_conversion, 
+                  slope = `flagcol_offset_model_regression_estimate_.$log_Radius_um`/ln_log10_conversion, 
+                  linetype = flagcol_offset_regression_type), 
+              color = "black") +
+  geom_abline(data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
+              aes(intercept = (`flagcol_offset_model_regression_estimate_(Intercept)` + `flagcol_offset_model_regression_std.error_(Intercept)`) /ln_log10_conversion, 
+                  slope = (`flagcol_offset_model_regression_estimate_.$log_Radius_um` + `flagcol_offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion), 
+              linetype = "dotted", 
+              color = "black") +
+  geom_abline(data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
+              aes(intercept = (`flagcol_offset_model_regression_estimate_(Intercept)` - `flagcol_offset_model_regression_std.error_(Intercept)`) /ln_log10_conversion, 
+                  slope = (`flagcol_offset_model_regression_estimate_.$log_Radius_um` - `flagcol_offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion), 
+              linetype = "dotted", 
+              color = "black") +
+  geom_abline(aes(intercept = `offset_model_regression_estimate_(Intercept)`/ln_log10_conversion, 
+                  slope = `offset_model_regression_estimate_.$log_Radius_um`/ln_log10_conversion, 
+                  linetype = offset_regression_type), 
+              color = "blue") +
+  geom_abline(aes(intercept = (`offset_model_regression_estimate_(Intercept)` + `offset_model_regression_std.error_(Intercept)`) /ln_log10_conversion, 
+                  slope = (`offset_model_regression_estimate_.$log_Radius_um` + `offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion), 
+              linetype = "dotted", 
+              color = "blue") +
+  geom_abline(aes(intercept = (`offset_model_regression_estimate_(Intercept)` - `offset_model_regression_std.error_(Intercept)`) /ln_log10_conversion, 
+                  slope = (`offset_model_regression_estimate_.$log_Radius_um` - `offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion), 
+              linetype = "dotted", 
+              color = "blue") +
+  geom_text(data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
+            aes(x = 1.1, y = -4.1, label = paste("p-value =", signif(`offset_model_regression_p.value_.$log_Radius_um`, digits = 2))), color = "blue", check_overlap = TRUE) +
+  geom_text(aes(x = 1.1, y = -4.3, label = paste("p-value =", (signif(`flagcol_offset_model_regression_p.value_.$log_Radius_um`, digits = 2)))), color = "black", check_overlap = TRUE) +
+  # geom_point(data = MergedData %>% filter(Taxa == "Prokaryote", HyPe == "Production" | HyPe == "Scavenging"), aes(x = log_Radius_um, y= log10((HyPe_count/GeneModels_count)), color = Phylum)) +
+  # ggalt::geom_encircle(data = MergedData %>% filter(Taxa == "Prokaryote", HyPe == "Production" | HyPe == "Scavenging"), alpha = 0.1, aes(x=log_Radius_um, y= log10((HyPe_count/GeneModels_count)), color = Phylum), expand = 0, s_shape = 0.9) +
+  facet_grid(cols = vars(HyPe)) + #, rows = vars(Includes)
+  scale_colour_manual(name = "Phylum", values =TaxaColors) +
+  # gfun::scale_color_manual2(name = "Contains", values = c("blue", "black")) +
+  scale_linetype_manual(name = "Regression type", values = c("poisson" = "solid" , "quasipoisson" = "twodash")) +
+  scale_shape_manual(values = c(21,19,23,18)) +
+  coord_cartesian(ylim = c(ROSMin, ROSMax)) +
+  # scale_x_continuous(limits = c(-0.5, 1.6)) +
+  theme_bw() +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.text = element_text(size=11),
+        axis.title = element_text(size=12), 
+        legend.text = element_text(size=11), 
+        legend.title = element_text(size=13),
+        strip.text = element_text(size=11)) +
+  labs(x = ~log[10] ~ "(Median Cell Radius (µm))", 
+       y = ~log[10] ~ "(Genes Encoding "~H[2]~O[2]~" Metabolizing Enzymes Normalized to Total Genes)") 
+
+# ggsave(paste("HyPeRadPlots",".png",sep = ""), plot = HyPeRadPlots, device = NULL, path = Figures,scale = 1, height=7, width= 10, units = c("in"),dpi = 300, limitsize = TRUE)
+
+# ggsave(paste("Figure5",".png",sep = ""), plot = HyPeRadPlots, device = NULL, path = Figures,scale = 1, height=7, width= 10, units = c("in"),dpi = 300, limitsize = TRUE)
+
+```
+
+```{r HyPeRadPlots, fig.cap = HyPeRadPlots_cap, fig.height= 7, fig.width= 10, echo = FALSE}
+HyPeRadPlots_cap <- glue("**Comparison of log~10~ (Total number of genes encoding H~2~O~2~ metabolizing enzymes ('HyPe_count') normalized to the total number of genes present in each organism ('GeneModels_count')) vs. the log~10~ (median cell radius in µm ('log_Radius_um')).**",
+                            "Poisson (solid line) or Quasi-Poisson (dashed line) regressions fitted to data ± Standard Error (dotted line).",
+                            "Regressions were run with (black line) or without (blue line) 'Colony' and 'Flagella' as co-variates.", 
+                            "Selected prokaryote genomes are presented for comparison, but excluded from the presented regressions.", 
+                            "Symbol color corresponds to taxon lineage ('Phylum').",
+                            "Citations for data sources are in Supplementary Table S3. ",
+                         .sep = " ")
+
+HyPeRadPlots
+```
+
+
+
+### Influences of Flagella, Colony Formation and Cell Shape on Gene Counts for Enzymes Metabolizing H~2~O~2~ {.unnumbered}
+
+```{r HyPeFlagPlot_pval, include = FALSE}
+
+HyPeFlagellaDelta <- MergedData %>%
+  filter(HyPe == "Production" | HyPe == "Scavenging",
+         GeneModels_count != 0,
+         !is.na(Flagella),
+         Taxa != "Prokaryote") %>% 
+  select(FileName, HyPe, HyPe_count, GeneModels_count, Flagella) %>%
+  unique() %>%
+  pivot_wider(names_from = HyPe, values_from = HyPe_count) %>%
+  mutate(prodNorm = Production/GeneModels_count,
+         scavNorm = Scavenging/GeneModels_count) %>%
+  group_by(Flagella) %>%
+  summarize(Production = median(prodNorm), 
+            Scavenging = median(scavNorm)) %>%
+  mutate(deltaProduction = (Production[2] - Production[1])/ Production[1],
+         deltaScavenging = (Scavenging[2] - Scavenging[1])/ Scavenging[1])
+  
+
+HyPeProdFlagPlot_pval <- MergedData %>%
+  select(FileName, Flagella, HyPe_count, GeneModels_count, Phylum, HyPe, Genus, Taxa, ColonySpecies, PennateCentric) %>%
+  filter(HyPe == "Production",
+         !is.na(Flagella), 
+         GeneModels_count != 0,
+         Phylum != "Prokaryote") %>%
+  mutate(norm_HyPe = HyPe_count/GeneModels_count) %>%
+  unique() %>%
+  compare_means(norm_HyPe ~ Flagella, data = ., method = "wilcox.test")
+
+HyPeScavFlagPlot_pval <- MergedData %>%
+  select(FileName, Flagella, HyPe_count, GeneModels_count, Phylum, HyPe, Genus) %>%
+  filter(HyPe == "Scavenging",
+         !is.na(Flagella), 
+         GeneModels_count != 0,
+         Phylum != "Prokaryote") %>%
+  mutate(norm_HyPe = HyPe_count/GeneModels_count) %>%
+  unique() %>%
+  compare_means(norm_HyPe ~ Flagella, data = ., method = "wilcox.test")
+```
+ 
+```{r generate HyPeFlagPlot, include = FALSE}
+HyPeFlagPlot <- MergedData %>%
+  filter(HyPe == "Production" | HyPe == "Scavenging",
+         GeneModels_count != 0,
+         !is.na(Flagella), 
+         Taxa != "Prokaryote") %>% #Taxa != "Prokaryote"
+  select(FileName, Flagella, HyPe_count, GeneModels_count, Phylum, HyPe, Genus) %>%  
+  unique() %>%
+  ggplot(aes(x = Flagella, y = HyPe_count/GeneModels_count)) +
+  geom_boxplot(notch = TRUE, outlier.shape = NA) +
+  geom_jitter(aes(color = Phylum),width = 0.2, stat = "unique") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  xlab("") +
+  stat_compare_means(comparisons = MyFlagellaComparisons, method = "wilcox.test") +
+  facet_grid(cols = vars(c(HyPe))) +
+  scale_x_discrete(labels = c("no" = "No Flagella", "yes" = "Flagella")) +
+  scale_y_continuous(labels = scales::scientific)  +
+  scale_colour_manual(name = "Phylum", values =TaxaColors) +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.text.y = element_text(size=9),
+        axis.text.x = element_text(size=12),
+        axis.title = element_text(size=12), 
+        legend.text = element_text(size=10), 
+        legend.title = element_text(size=10),
+        strip.text = element_text(size=11)) +
+  labs(y = "Genes Encoding "~H[2]~O[2]~" Metabolizing Enzymes Normalized to Total Genes")
+
+# ggsave(paste("Figure6",".png",sep = ""), plot = HyPeFlagPlot, device = NULL, path = Figures,scale = 1, height=7, width= 10, units = c("in"),dpi = 300, limitsize = TRUE)
+```
+
+```{r HyPeFlagPlot, fig.cap = HyPeFlagPlot_cap, fig.height = 7, fig.width = 7, echo = FALSE}
+HyPeFlagPlot_cap <- glue("**Comparison of total number of genes encoding H~2~O~2~ metabolizing enzymes ('HyPe_count') normalized to the total number of genes present in each organism ('GeneModels_count') vs. the presence or absence of flagella in the organism.**", 
+                                       "Symbol color corresponds to taxon lineage ('Phylum').", 
+                         "Notch spans ± standard error of the median.",
+                           "Box spans median ± 1 quartile of the data.",
+                           "Whiskers span the range excluding outliers in the data.",
+                                       "Citations for data sources can be found in Supplementary Table S3.", .sep = " ")
+HyPeFlagPlot
+```
+
+
+```{r HyPeColonyPlot_pval, include = FALSE}
+
+HyPeColonyDelta <- MergedData %>%
+  filter(HyPe == "Production" | HyPe == "Scavenging",
+         GeneModels_count != 0,
+         !is.na(ColonySpecies),
+         Taxa != "Prokaryote") %>% 
+  select(FileName, HyPe, HyPe_count, GeneModels_count, ColonySpecies) %>%
+  unique() %>%
+  pivot_wider(names_from = HyPe, values_from = HyPe_count) %>%
+  mutate(prodNorm = Production/GeneModels_count,
+         scavNorm = Scavenging/GeneModels_count) %>%
+  group_by(ColonySpecies) %>%
+  summarize(Production = median(prodNorm), 
+            Scavenging = median(scavNorm)) %>%
+  mutate(deltaProduction = (Production[2] - Production[1])/ Production[1],
+         deltaScavenging = (Scavenging[2] - Scavenging[1])/ Scavenging[1])
+  
+
+HyPeProdColonyPlot_pval <- MergedData %>%
+  select(FileName, Flagella, HyPe_count, GeneModels_count, Phylum, HyPe, Genus, Taxa, ColonySpecies, PennateCentric) %>%
+  filter(HyPe == "Production",
+         GeneModels_count != 0,
+         !is.na(ColonySpecies), 
+         Taxa != "Prokaryote") %>%
+  mutate(norm_HyPe = HyPe_count/GeneModels_count) %>%
+  unique() %>%
+  compare_means(norm_HyPe ~ ColonySpecies, data = ., method = "wilcox.test")
+
+HyPeScavColonyPlot_pval <- MergedData %>%
+  select(FileName, Flagella, HyPe_count, GeneModels_count, Phylum, HyPe, Genus, Taxa, ColonySpecies, PennateCentric) %>%
+  filter(HyPe == "Scavenging",
+         GeneModels_count != 0,
+         !is.na(ColonySpecies), 
+         Taxa != "Prokaryote") %>%
+  mutate(norm_HyPe = HyPe_count/GeneModels_count) %>%
+  unique() %>%
+  compare_means(norm_HyPe ~ ColonySpecies, data = ., method = "wilcox.test")
+```
+
+```{r generate HyPeColonyPlot, include = FALSE}
+HyPeColonyPlot <- MergedData %>%
+  filter(HyPe == "Production" | HyPe == "Scavenging",
+         GeneModels_count != 0,
+         !is.na(ColonySpecies), 
+         Taxa != "Prokaryote") %>% #Taxa != "Prokaryote"
+  select(FileName, ColonySpecies, HyPe_count, GeneModels_count, Phylum, HyPe, Genus) %>%
+  unique() %>%
+  ggplot(aes(x = ColonySpecies, y = HyPe_count/GeneModels_count)) +
+  geom_boxplot(notch = TRUE, outlier.shape = NA) +
+  geom_jitter(aes(color = Phylum),width = 0.2, stat = "unique") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  xlab("") +
+  stat_compare_means(comparisons = MyColonyComparisons, method = "wilcox.test") +
+  facet_grid(cols = vars(c(HyPe))) +
+  scale_x_discrete(labels = c("FALSE" = "Non-colony", "TRUE" = "Colony")) +
+  scale_y_continuous(labels = scales::scientific)  +
+  scale_colour_manual(name = "Phylum", values =TaxaColors) +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.text.y = element_text(size=9),
+        axis.text.x = element_text(size=12),
+        axis.title = element_text(size=12), 
+        legend.text = element_text(size=10), 
+        legend.title = element_text(size=10),
+        strip.text = element_text(size=11)) +
+  labs(y = "Genes Encoding "~H[2]~O[2]~" Metabolizing Enzymes Normalized to Total Genes")
+
+# ggsave(paste("HyPePennateCentricPlot",".png",sep = ""), plot = HyPePennateCentricPlot, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+
+# ggsave(paste("Figure7",".png",sep = ""), plot = HyPeColonyPlot, device = NULL, path = Figures,scale = 1, height=7, width= 10, units = c("in"),dpi = 300, limitsize = TRUE)
+
+# HyPeColonyPlot
+```
+
+```{r HyPeColonyPlot, fig.cap = HyPeColonyPlot_cap, fig.height = 7, fig.width = 7, echo = FALSE}
+HyPeColonyPlot_cap <- glue("**Comparison of total number of genes encoding H~2~O~2~ metabolizing enzymes ('HyPe_count') normalized to the total number of genes present in each organism ('GeneModels_count') vs. the ability of the organism to form colonies.**", 
+                                       "Symbol color corresponds to taxon lineage ('Phylum').", 
+                           "Notch spans ± standard error of the median.",
+                           "Box spans median ± 1 quartile of the data.",
+                           "Whiskers span the range excluding outliers in the data.",
+                           
+                                       "Citations for data sources can be found in Supplementary Table S3.", .sep = " ")
+HyPeColonyPlot 
+```
+
+
+
+```{r HyPeDiatomShape_pval, include = FALSE}
+
+HyPePennateCentricDelta <- MergedData %>%
+  filter(HyPe == "Production" | HyPe == "Scavenging",
+         Taxa == "Diatom",
+         GeneModels_count != 0,
+         !is.na(PennateCentric),
+         Taxa != "Prokaryote") %>% 
+  select(FileName, HyPe, HyPe_count, GeneModels_count, PennateCentric) %>%
+  unique() %>%
+  pivot_wider(names_from = HyPe, values_from = HyPe_count) %>%
+  mutate(prodNorm = Production/GeneModels_count,
+         scavNorm = Scavenging/GeneModels_count) %>%
+  group_by(PennateCentric) %>%
+  summarize(Production = median(prodNorm), 
+            Scavenging = median(scavNorm)) %>%
+  mutate(deltaProduction = (Production[2] - Production[1])/ Production[1],
+         deltaScavenging = (Scavenging[2] - Scavenging[1])/ Scavenging[1])
+
+HyPeProdPennateCentricPlot_pval <- MergedData %>%
+  select(FileName, Flagella, HyPe_count, GeneModels_count, Phylum, HyPe, Genus, Taxa, ColonySpecies, PennateCentric) %>%
+  filter(Taxa == "Diatom",
+         HyPe == "Production",
+         GeneModels_count != 0,
+         !is.na(PennateCentric)) %>%
+  mutate(norm_HyPe = HyPe_count/GeneModels_count) %>%
+  unique() %>%
+  compare_means(norm_HyPe ~ PennateCentric, data = ., method = "wilcox.test")
+
+HyPeScavPennateCentricPlot_pval <- MergedData %>%
+  select(FileName, Flagella, HyPe_count, GeneModels_count, Phylum, HyPe, Genus, Taxa, ColonySpecies, PennateCentric) %>%
+  filter(Taxa == "Diatom",
+         HyPe == "Scavenging",
+         GeneModels_count != 0,
+         !is.na(PennateCentric)) %>%
+  mutate(norm_HyPe = HyPe_count/GeneModels_count) %>%
+  unique() %>%
+  compare_means(norm_HyPe ~ PennateCentric, data = ., method = "wilcox.test")
+```
+
+```{r generate HyPeProdPennateCentricPlot, include = FALSE}
+HyPePennateCentricPlot <- MergedData %>%
+  select(FileName, Flagella, HyPe_count, GeneModels_count, Phylum, HyPe, Genus, Taxa, ColonySpecies, PennateCentric) %>%
+  filter(Taxa == "Diatom",
+         HyPe == "Production" | HyPe == "Scavenging",
+         GeneModels_count != 0,
+         !is.na(PennateCentric)) %>%
+  unique() %>%
+  ggplot(aes(x = PennateCentric, y = HyPe_count/GeneModels_count)) +
+  geom_boxplot(notch = TRUE, outlier.shape = NA) +
+  geom_jitter(aes(colour = Genus),width = 0.2, stat = "unique") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  xlab("") +
+  stat_compare_means(comparisons = MyShapeComparisons, method = "wilcox.test") +
+  facet_grid(cols = vars(c(HyPe))) +
+  scale_y_continuous(labels = scales::scientific)  +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.text.y = element_text(size=9),
+        axis.text.x = element_text(size=12),
+        axis.title = element_text(size=12), 
+        legend.text = element_text(size=10), 
+        legend.title = element_text(size=10),
+        strip.text = element_text(size=11)) +
+  labs(y = "Genes Encoding "~H[2]~O[2]~" Metabolizing Enzymes Normalized to Total Genes")
+
+# ggsave(paste("HyPePennateCentricPlot",".png",sep = ""), plot = HyPePennateCentricPlot, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+
+```
+
+```{r HyPePennateCentricPlot, fig.cap = HyPePennateCentricPlot_cap, fig.height = 7, fig.width = 7, echo = FALSE}
+HyPePennateCentricPlot_cap <- glue("**Comparison of total number of genes encoding H~2~O~2~ metabolizing enzymes ('HyPe_count') normalized to the total number of genes in each diatom ('GeneModels_count') vs. the growth form of the diatom ('PennateCentric').**", 
+                                       "Symbol color corresponds to the genus of the diatom ('Genus').", 
+                                   "Notch spans ± standard error of the median.",
+                           "Box spans median ± 1 quartile of the data.",
+                           "Whiskers span the range excluding outliers in the data.",
+                                       "Citations for data sources can be found in Supplementary Table S3.", .sep = " ")
+# HyPePennateCentricPlot
+```
+
+
+
+## Nitric Oxide {.unnumbered}
+
+```{r read in NitOx Models, include = FALSE}
+NitOxRad <- readRDS(file.path(DataProcessedModels, "NitOxRad.Rds"))
+OchrophyteNitOxRad <- readRDS(file.path(DataProcessedModels, "OchrophyteNitOxRad.Rds"))
+NitOxRadNoZero <- readRDS(file.path(DataProcessedModels, "NitOxRadNoZero.Rds"))
+NitOxRadProk <- readRDS(file.path(DataProcessedModels, "NitOxRadProk.Rds"))
+# NitOxLat <- readRDS(file.path(DataProcessedModels, "NitOxLat.Rds"))
+# NitOxLatNoZero <- readRDS(file.path(DataProcessedModels, "NitOxLatNoZero.Rds"))
+# NitOxLatProk <- readRDS(file.path(DataProcessedModels, "NitOxLatProk.Rds"))
+NitOxMerged <- readRDS(file.path(DataProcessed, "NitOxMerged.Rds"))
+```
+
+
+
+
+### Influence of Cell Size on Gene Counts for Enzymes Metabolizing ^•^NO {.unnumbered}
+
+```{r generate NitOxProdRadPlot, include = FALSE}
+NitOxRad$Includes <- c("Eukaryote Regressions")
+NitOxRadProk$Includes <- c("Eukaryotes + Prokaryotes")
+NitOxRadNoZero$Includes <- c("Eukaryotes with zero values omitted")
+
+NitOxRadPlots <- rbind(NitOxRad, NitOxRadProk, NitOxRadNoZero) %>%
+  filter(NitOx == "Production"|NitOx == "Scavenging") %>%
+  unnest(c(offset_model_regression), names_sep = "_") %>%
+  unnest(c(flagcol_offset_model_regression), names_sep = "_") %>%
+  # filter(flagcol_offset_model_regression_term == c('(Intercept)', '.$log_Radius_um')) %>%
+  pivot_wider(., names_from = c(flagcol_offset_model_regression_term), values_from = c(flagcol_offset_model_regression_estimate, flagcol_offset_model_regression_std.error, flagcol_offset_model_regression_statistic, flagcol_offset_model_regression_p.value)) %>%
+  pivot_wider(., names_from = c(offset_model_regression_term), values_from = c(offset_model_regression_estimate, offset_model_regression_std.error, offset_model_regression_statistic, offset_model_regression_p.value)) %>%
+  unnest(cols = c(data)) %>%
+  filter(Includes != "Eukaryotes + Prokaryotes") %>%
+  unique() %>%
+  ggplot() +
+  geom_point(aes(x = log_Radius_um, y = log10(NitOx_count/GeneModels_count), color = Phylum)) + 
+  geom_abline(data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
+              aes(intercept = `flagcol_offset_model_regression_estimate_(Intercept)`/ln_log10_conversion, 
+                  slope = `flagcol_offset_model_regression_estimate_.$log_Radius_um`/ln_log10_conversion, 
+                  linetype = flagcol_offset_regression_type), 
+              color = "black") +
+  geom_abline(data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
+              aes(intercept = (`flagcol_offset_model_regression_estimate_(Intercept)` + `flagcol_offset_model_regression_std.error_(Intercept)`) /ln_log10_conversion, 
+                  slope = (`flagcol_offset_model_regression_estimate_.$log_Radius_um` + `flagcol_offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion), 
+              linetype = "dotted", 
+              color = "black") +
+  geom_abline(data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
+              aes(intercept = (`flagcol_offset_model_regression_estimate_(Intercept)` - `flagcol_offset_model_regression_std.error_(Intercept)`) /ln_log10_conversion, 
+                  slope = (`flagcol_offset_model_regression_estimate_.$log_Radius_um` - `flagcol_offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion), 
+              linetype = "dotted", 
+              color = "black") +
+  geom_abline(aes(intercept = `offset_model_regression_estimate_(Intercept)`/ln_log10_conversion, 
+                  slope = `offset_model_regression_estimate_.$log_Radius_um`/ln_log10_conversion, 
+                  linetype = offset_regression_type), 
+              color = "blue") +
+  geom_abline(aes(intercept = (`offset_model_regression_estimate_(Intercept)` + `offset_model_regression_std.error_(Intercept)`) /ln_log10_conversion, 
+                  slope = (`offset_model_regression_estimate_.$log_Radius_um` + `offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion), 
+              linetype = "dotted", 
+              color = "blue") +
+  geom_abline(aes(intercept = (`offset_model_regression_estimate_(Intercept)` - `offset_model_regression_std.error_(Intercept)`) /ln_log10_conversion, 
+                  slope = (`offset_model_regression_estimate_.$log_Radius_um` - `offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion), 
+              linetype = "dotted", 
+              color = "blue") +
+  geom_text(data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
+            aes(x = 0.0, y = -5.1, label = paste("p-value =", signif(`flagcol_offset_model_regression_p.value_.$log_Radius_um`, digits = 2))), color = "black", check_overlap = TRUE) +
+  geom_text(aes(x = 0.0, y = -4.9, label = paste("p-value =", signif(`offset_model_regression_p.value_.$log_Radius_um`, digits = 2))), color = "blue", check_overlap = TRUE) +
+  scale_colour_manual(name = "Phylum", values =TaxaColors) +
+  scale_linetype_manual(name = "Regression type", values = c("poisson" = "solid" , "quasipoisson" = "twodash")) +
+  scale_fill_manual(name = "Phylum", values =TaxaColors, guide = "none") +
+  coord_cartesian(ylim = c(ROSMin, ROSMax)) +
+  scale_shape_manual(values = c(21,19,23,18)) +
+  facet_grid(cols = vars(NitOx)) + #, rows = vars(Includes)
+  theme_bw() +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.text = element_text(size=11),
+        axis.title = element_text(size=12), 
+        legend.text = element_text(size=11), 
+        legend.title = element_text(size=13),
+        strip.text = element_text(size=11)) +
+  labs(x = ~log[10] ~ "(Median Cell Radius (µm))", 
+       y = ~log[10] ~ "(Genes Encoding "~NO^`•` ~" Metabolizing Enzymes Normalized to Total Genes)")
+
+# ggsave(paste("Figure8",".png",sep = ""), plot = NitOxRadPlots, device = NULL, path = Figures,scale = 1, height=7, width= 10, units = c("in"),dpi = 300, limitsize = TRUE)
+```
+
+```{r NitOxRadPlots, fig.cap = NitOxRadPlots_cap, fig.height= 7, fig.width= 10, echo = FALSE}
+NitOxRadPlots_cap <- glue("**Comparison of log~10~ (Total number of genes encoding ^•^NO metabolizing enzymes ('NitOx_count') normalized to the total number of genes present in each organism ('GeneModels_count')) vs. the log~10~ (median cell radius in µm ('log_Radius_um')).**", 
+                            "Poisson (solid line) or Quasi-Poisson (dashed line) regressions fitted to data ± Standard Error (dotted line).",
+                            "Regressions were run with (black line) or without (blue line) 'Colony' and 'Flagella' as co-variates.", 
+                            "Selected prokaryote genomes are presented for comparison, but excluded from the presented regressions.",
+                            "Symbol color corresponds to taxon lineage ('Phylum').", 
+                            # "Citations for data sources can be found in Supplementary Table S3.", 
+                          .sep = " ")
+
+NitOxRadPlots
+```
+
+
+
+### Influences of Flagella, Colony Formation and Cell Shape on Gene Counts for Enzymes Metabolizing ^•^NO {.unnumbered}
+
+```{r NitOxFlag_pval, include = FALSE}
+
+
+NitOxFlagellaDelta <- MergedData %>%
+  filter(NitOx == "Production" | NitOx == "Scavenging",
+         GeneModels_count != 0,
+         !is.na(Flagella),
+         !is.na(NitOx),
+         Taxa != "Prokaryote") %>% 
+  select(FileName, Flagella, NitOx_count, GeneModels_count, Phylum, NitOx) %>%
+  unique() %>%
+  pivot_wider(names_from = NitOx, values_from = NitOx_count) %>%
+  mutate(prodNorm = Production/GeneModels_count,
+         scavNorm = Scavenging/GeneModels_count) %>%
+  group_by(Flagella) %>%
+  summarize(Production = median(prodNorm), 
+            Scavenging = median(scavNorm)) %>%
+  mutate(deltaProduction = (Production[2] - Production[1])/ Production[1],
+         deltaScavenging = (Scavenging[2] - Scavenging[1])/ Scavenging[1])
+
+NitOxProdFlagPlot_pval <- MergedData %>%
+  select(FileName, Flagella, NitOx_count, GeneModels_count, Phylum, NitOx, Genus, Taxa, ColonySpecies, PennateCentric) %>%
+  filter(NitOx == "Production",
+         GeneModels_count != 0,
+         !is.na(Flagella), 
+         !is.na(NitOx),
+         Taxa != "Prokaryote") %>%
+  mutate(norm_NitOx = NitOx_count/GeneModels_count) %>%
+  unique() %>%
+  compare_means(norm_NitOx ~ Flagella, data = ., method = "wilcox.test")
+
+NitOxScavFlagPlot_pval <- MergedData %>%
+  select(FileName, Flagella, NitOx_count, GeneModels_count, Phylum, NitOx, Genus, Taxa, ColonySpecies, PennateCentric) %>%
+  filter(NitOx == "Scavenging",
+         GeneModels_count != 0,
+         !is.na(Flagella), 
+         !is.na(NitOx),
+         Taxa != "Prokaryote") %>%
+  mutate(norm_NitOx = NitOx_count/GeneModels_count) %>%
+  unique() %>%
+  compare_means(norm_NitOx ~ Flagella, data = ., method = "wilcox.test")
+```
+ 
+```{r generate NitOxFlagPlot, include = FALSE}
+NitOxFlagPlot <- MergedData %>%
+  filter(NitOx == "Production" | NitOx == "Scavenging",
+         GeneModels_count != 0,
+         !is.na(Flagella), 
+         !is.na(NitOx),
+         Taxa != "Prokaryote") %>% #Taxa != "Prokaryote"
+  select(FileName, Flagella, NitOx_count, GeneModels_count, Phylum, NitOx) %>%
+  unique() %>%
+  ggplot(aes(x = Flagella, y = NitOx_count/GeneModels_count)) +
+  geom_boxplot(notch = TRUE, outlier.shape = NA) +
+  geom_jitter(aes(color = Phylum),width = 0.2, stat = "unique") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  xlab("") +
+  stat_compare_means(comparisons = MyFlagellaComparisons, method = "wilcox.test") +
+  facet_grid(cols = vars(c(NitOx))) +
+  scale_x_discrete(labels = c("no" = "No Flagella", "yes" = "Flagella")) +
+  scale_y_continuous(labels = scales::scientific)  +
+  scale_colour_manual(name = "Phylum", values =TaxaColors) +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.text.y = element_text(size=9),
+        axis.text.x = element_text(size=12),
+        axis.title = element_text(size=12), 
+        legend.text = element_text(size=10), 
+        legend.title = element_text(size=10),
+        strip.text = element_text(size=11)) +
+  labs(y = "Genes Encoding " ~NO^`•`~" Metabolizing Enzymes Normalized to Total Genes")
+
+# ggsave(paste("HyPePennateCentricPlot",".png",sep = ""), plot = HyPePennateCentricPlot, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+
+# NitOxFlagPlot
+```
+
+```{r NitOxFlagPlot, fig.cap = NitOxFlagPlot_cap, fig.height= 5, fig.width= 5, echo = FALSE}
+NitOxFlagPlot_cap <- glue("**Comparison of total number of genes encoding ^•^NO metabolizing enzymes ('NitOx_count') normalized to the total number of genes present in each organism ('GeneModels_count') vs. the presence or absence of flagella in the organism.**", 
+                                       "Symbol color corresponds to taxon lineage ('Phylum').", 
+                          "Notch spans ± standard error of the median.",
+                           "Box spans median ± 1 quartile of the data.",
+                           "Whiskers span the range excluding outliers in the data.",
+                                       "Citations for data sources can be found in Supplementary Table S3.", .sep = " ")
+# NitOxFlagPlot
+```
+
+
+
+```{r NitOxColony_pval, include = FALSE}
+
+NitOxColonyDelta <- MergedData %>%
+  filter(NitOx == "Production" | NitOx == "Scavenging",
+         GeneModels_count != 0,
+         !is.na(ColonySpecies),
+         Taxa != "Prokaryote") %>% 
+  select(FileName, NitOx, NitOx_count, GeneModels_count, ColonySpecies) %>%
+  unique() %>%
+  pivot_wider(names_from = NitOx, values_from = NitOx_count) %>%
+  mutate(prodNorm = Production/GeneModels_count,
+         scavNorm = Scavenging/GeneModels_count) %>%
+  group_by(ColonySpecies) %>%
+  summarize(Production = median(prodNorm), 
+            Scavenging = median(scavNorm)) %>%
+  mutate(deltaProduction = (Production[2] - Production[1])/ Production[1],
+         deltaScavenging = (Scavenging[2] - Scavenging[1])/ Scavenging[1])
+
+NitOxProdColonyPlot_pval <- MergedData %>%
+  select(FileName, Flagella, NitOx_count, GeneModels_count, Phylum, NitOx, Genus, Taxa, ColonySpecies, PennateCentric) %>%
+  filter(NitOx == "Production",
+         GeneModels_count != 0,
+         !is.na(ColonySpecies),
+         Taxa != "Prokaryote") %>%
+  mutate(norm_NitOx = NitOx_count/GeneModels_count) %>%
+  unique() %>%
+  compare_means(norm_NitOx ~ ColonySpecies, data = ., method = "wilcox.test")
+
+NitOxScavColonyPlot_pval <- MergedData %>%
+  select(FileName, Flagella, NitOx_count, GeneModels_count, Phylum, NitOx, Genus, Taxa, ColonySpecies, PennateCentric) %>%
+  filter(NitOx == "Scavenging",
+         GeneModels_count != 0,
+         !is.na(ColonySpecies),
+         Taxa != "Prokaryote") %>%
+  mutate(norm_NitOx = NitOx_count/GeneModels_count) %>%
+  unique() %>%
+  compare_means(norm_NitOx ~ ColonySpecies, data = ., method = "wilcox.test")
+```
+
+```{r generate NitOxColonyPlot, include = FALSE}
+NitOxColonyPlot <- MergedData %>%
+  filter(NitOx == "Production" | NitOx == "Scavenging",
+         GeneModels_count != 0,
+         !is.na(ColonySpecies),
+         Taxa != "Prokaryote") %>%
+  select(FileName, ColonySpecies, NitOx_count, GeneModels_count, Phylum, NitOx) %>%
+  unique() %>%
+  ggplot(aes(x = ColonySpecies, y = NitOx_count/GeneModels_count)) +
+  geom_boxplot(notch = TRUE, outlier.shape = NA) +
+  geom_jitter(aes(color = Phylum),width = 0.2, stat = "unique") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  xlab("") +
+  stat_compare_means(comparisons = MyColonyComparisons, method = "wilcox.test") +
+  facet_grid(cols = vars(c(NitOx))) +
+  scale_x_discrete(labels = c("FALSE" = "Non-colony", "TRUE" = "Colony")) +
+  scale_y_continuous(labels = scales::scientific)  +
+  scale_colour_manual(name = "Phylum", values =TaxaColors) +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.text.y = element_text(size=9),
+        axis.text.x = element_text(size=12),
+        axis.title = element_text(size=12),
+        legend.text = element_text(size=10),
+        legend.title = element_text(size=10),
+        strip.text = element_text(size=11)) +
+  labs(y = "Genes Encoding " ~NO^`•`~" Metabolizing Enzymes Normalized to Total Genes")
+
+# ggsave(paste("HyPePennateCentricPlot",".png",sep = ""), plot = HyPePennateCentricPlot, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+
+# NitOxColonyPlot
+```
+
+```{r NitOxColonyPlot, fig.cap = NitOxColonyPlot_cap, fig.height= 5, fig.width= 5, echo = FALSE}
+NitOxColonyPlot_cap <- glue("**Comparison of total number of genes encoding ^•^NO metabolizing enzymes ('NitOx_count') normalized to the total number of genes present in each organism ('GeneModels_count') vs. the ability of the organism to form colonies.**", 
+                                       "Symbol color corresponds to taxon lineage ('Phylum').", 
+                            "Notch spans ± standard error of the median.",
+                           "Box spans median ± 1 quartile of the data.",
+                           "Whiskers span the range excluding outliers in the data.",
+                                       "Citations for data sources can be found in Supplementary Table S3.", .sep = " ")
+# NitOxColonyPlot
+```
+
+
+```{r NitOxDiatomShape_pval, include = FALSE}
+NitOxPennateCentricDelta <- MergedData %>%
+  filter(Taxa == "Diatom",
+         NitOx == "Production" | NitOx == "Scavenging",
+         GeneModels_count != 0,
+         !is.na(PennateCentric),
+         Taxa != "Prokaryote") %>% 
+  select(FileName, NitOx, NitOx_count, GeneModels_count, PennateCentric) %>%
+  unique() %>%
+  pivot_wider(names_from = NitOx, values_from = NitOx_count) %>%
+  mutate(prodNorm = Production/GeneModels_count,
+         scavNorm = Scavenging/GeneModels_count) %>%
+  group_by(PennateCentric) %>%
+  summarize(Production = median(prodNorm), 
+            Scavenging = median(scavNorm)) %>%
+  mutate(deltaProduction = (Production[2] - Production[1])/ Production[1],
+         deltaScavenging = (Scavenging[2] - Scavenging[1])/ Scavenging[1])
+
+NitOxProdPennateCentricPlot_pval <- MergedData %>%
+  select(FileName, Flagella, NitOx_count, GeneModels_count, Phylum, NitOx, Genus, Taxa, ColonySpecies, PennateCentric) %>%
+  filter(Taxa == "Diatom",
+         NitOx == "Production",
+         GeneModels_count != 0,
+         !is.na(PennateCentric)) %>%
+  mutate(norm_NitOx = NitOx_count/GeneModels_count) %>%
+  unique() %>%
+  compare_means(norm_NitOx ~ PennateCentric, data = ., method = "wilcox.test")
+
+NitOxScavPennateCentricPlot_pval <- MergedData %>%
+  select(FileName, Flagella, NitOx_count, GeneModels_count, Phylum, NitOx, Genus, Taxa, ColonySpecies, PennateCentric) %>%
+  filter(Taxa == "Diatom",
+         NitOx == "Scavenging",
+         GeneModels_count != 0,
+         !is.na(PennateCentric)) %>%
+  mutate(norm_NitOx = NitOx_count/GeneModels_count) %>%
+  unique() %>%
+  compare_means(norm_NitOx ~ PennateCentric, data = ., method = "wilcox.test")
+```
+
+```{r generate NitOxPennateCentricPlot, include = FALSE}
+NitOxPennateCentricPlot <- MergedData %>%
+  filter(Taxa == "Diatom",
+         NitOx == "Production" | NitOx == "Scavenging",
+         GeneModels_count != 0,
+         !is.na(PennateCentric),) %>%
+  select(FileName, PennateCentric, NitOx_count, GeneModels_count, Phylum, NitOx, Genus) %>%
+  unique() %>%
+  ggplot(aes(x = PennateCentric, y = NitOx_count/GeneModels_count)) +
+  geom_boxplot(notch = TRUE, outlier.shape = NA) +
+  geom_jitter(aes(colour = Genus),width = 0.2, stat = "unique") +
+  # coord_cartesian(ylim = c(ROSBoxPlotMin, ROSBoxPlotMax)) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  xlab("") +
+  facet_grid(cols = vars(NitOx)) +
+  stat_compare_means(comparisons = MyShapeComparisons, method = "wilcox.test") +
+  # ggforce::facet_zoom(ylim = c(0, ROSBoxPlotMax)) +
+  scale_y_continuous(labels = scales::scientific) +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.text.y = element_text(size=9),
+        axis.text.x = element_text(size=12),
+        axis.title = element_text(size=12), 
+        legend.text = element_text(size=10), 
+        legend.title = element_text(size=10),
+        strip.text = element_text(size=11)) +
+  labs(y = "Genes Encoding" ~NO^`•` ~" Metabolizing Enzymes Normalized to Total Genes")
+
+# ggsave(paste("NitOxPennateCentricPlot",".png",sep = ""), plot = NitOxPennateCentricPlot, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+
+# ggsave(paste("Figure9",".png",sep = ""), plot = NitOxPennateCentricPlot, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+
+```
+
+```{r NitOxPennateCentricPlot, fig.cap = NitOxPennateCentricPlot_cap, fig.height= 7, fig.width= 7, echo = FALSE}
+NitOxPennateCentricPlot_cap <- glue("**Comparison of total number of genes encoding ^•^NO metabolizing enzymes ('NitOx_count') normalized to the total number of genes present in each diatom ('GeneModels_count') vs. the growth form of the diatom ('PennateCentric').**", 
+                                    "Symbol color corresponds to taxon lineage ('Phylum').", 
+                                    "Notch spans ± standard error of the median.",
+                                    "Box spans median ± 1 quartile of the data.",
+                                    "Whiskers span the range excluding outliers in the data.",
+                                    "Citations for data sources can be found in Supplementary Table S3.", .sep = " ")
+NitOxPennateCentricPlot
+```
+
+
+
+```{r}
+EnzymeRad <- MergedData %>% 
+  filter(Taxa != "Prokaryote") %>%
+  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, ROSGene_count, ECNumber, EnzymeName) %>%
+  unique() %>%
+  mutate(ROSGene_countL = ROSGene_count %>% as.logical() %>% as.numeric()) %>%
+  # filter(GeneModels_count != 0) %>% #This is because of introducing exposure
+  nest(data = -c(ECNumber, EnzymeName)) %>%
+  mutate(fit_b_offset = map(data, possibly(~glm(.$ROSGene_countL ~ .$log_Radius_um, data = ., family = binomial(link = "logit")), otherwise = NULL)),
+                    param_b_offset = map(fit_b_offset, tidy),
+                    pred_b_offset = map(fit_b_offset, augment)) 
+
+```
+
+```{r, fig.height = 20, fig.width = 10}
+# EnzymeRad$Includes <- "Eukaryotes"
+# EnzymeRadTaxa$Includes <- "Eukaryotes + Taxa"
+# in logit, y = e^(mx+b)/(1+e^(mx+b))
+EnzymeRadFig <- EnzymeRad %>%
+  unnest(param_b_offset) %>%
+  pivot_wider(names_from = term,
+              values_from =  c(estimate, std.error, statistic, p.value)) %>%
+  mutate(halfwaypointY = 0.5,
+         halfwaypointX = log((halfwaypointY/(exp(`estimate_(Intercept)`)-halfwaypointY*exp(`estimate_(Intercept)`)))^(1/`estimate_.$log_Radius_um`)),
+         ) %>%
+  filter(`p.value_.$log_Radius_um` < 0.05) %>%
+  unnest(data, pred_b_offset) %>%
+  # mutate(EnzymeName_facet = factor(EnzymeName, levels = desc(.$halfwaypointY))) %>%
+  ggplot() +
+  # geom_rect(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf, aes(fill = HyPe), alpha = 0.005) +
+  geom_point(aes(x = log_Radius_um, y = ROSGene_countL, color = Taxa)) +
+  geom_line(aes(x = log_Radius_um, y = logit2prob(.fitted))) +
+  geom_hline(yintercept = 0.5, linetype = "dashed", color = "black") +
+  geom_vline(aes(xintercept = halfwaypointX), linetype = "dashed") +
+  geom_line(aes(x = log_Radius_um, y = exp(`estimate_.$log_Radius_um`*log_Radius_um + `estimate_(Intercept)`)/(1+exp(`estimate_.$log_Radius_um`*log_Radius_um + `estimate_(Intercept)`))), color = "red") +
+  facet_grid(rows = vars(reorder(EnzymeName, halfwaypointX))) +
+  # geom_ribbon(aes(x = log_Radius_um, ymin = logit2prob(.fitted - `std.error_.$log_Radius_um`), ymax = logit2prob(.fitted + `std.error_.$log_Radius_um`)), alpha = 0.1) +
+  scale_colour_manual(name = "Taxa", values =TaxaColors) +
+  theme_bw()
+EnzymeRadFig
+```
+
+## Supplementary Figures {.unnumbered}
+
+```{r O to N/A for dotplot, include = FALSE}
+#create a new data frame for the dot plot, this one will take all 0's and make them N/As so that they are not plotted (in other plots, 0 is still a data point)
+MergedData_na <- MergedData 
+MergedData_na[MergedData==0]=NA
+ROSEnzymeLevels <- WideData %>% 
+  select(-c(Genus, species, Strain, Taxa, Ome)) %>% 
+  colSums() %>% 
+  enframe() %>% 
+  arrange(desc(value))
+MergedData_na <- MergedData_na %>%
+  left_join(., ROSEnzymeLevels, by = c("EnzymeName" = "name")) %>%
+  rename(ROSEnzyme_TotalCount = value) %>%
+  mutate(EnzymeName = factor(.$EnzymeName, levels = ROSEnzymeLevels$name))
+# MergedData_na$Enzyme_parent_ASA <-  factor(MergedData_na$EnzymeParent, levels= c("Superoxide_dismutase","Glutathione_reductase","Ascorbate_cycle" ,"Peroxidase","Peroxiredoxin","Catalase", "NO_sythesis", "Oxidase"))
+MergedData_na$taxon_facet <- factor(MergedData_na$Taxa, levels= c("Cryptophyte","Diatom","Dinoflagellate" ,"Eustigmatophyte","Green","Haptophyte", "Pelagophyte", "Phaeista", "Red", "Prokaryote"))
+```
+
+```{r RadTaxaviolin, fig.cap=RadTaxaviolin_cap, echo = FALSE}
+RadTaxaviolin_cap <- glue("**Violin plot presenting the range of log~10~ of the median cell radius in µm ('log_Radius_um') for each taxonomic lineage ('Phylum').**", 
+                              "Point colour corresponds to the source of the data, whether Genome or Transcriptome ('Ome').", 
+                              "Violin width indicates the fraction of all datapoints occuring at a cell radius ('log_Radius_um') within a phylum.",
+                              "Citations for data sources are in Supplementary Table S3.",
+                              .sep = " ")
+
+RadTaxaviolin <- MergedData %>% 
+  # filter(Taxa != "Prokaryote") %>%
+  ggplot(aes(x= reorder(Phylum, log_Radius_um), y = log_Radius_um))+
+  geom_violin(scale = "area")+
+  geom_jitter(aes(shape = Ome, color = Phylum), stat = "unique", width = 0.2) +
+  theme_bw() +  
+  scale_shape_manual(values = c(19,1)) +
+  scale_color_manual(values = TaxaColors) +
+  # scale_y_continuous(limits = c(-0.6, 1.7)) %>%
+  # theme(legend.position = "bottom") +
+  coord_flip() +
+  guides(color="none") +
+  labs(x = "Phylum",
+       y = ~log[10] ~ "(Median Cell Radius (µm))")
+
+RadTaxaviolin
+
+# ggsave(paste("FigureS1",".png",sep = ""), plot = RadTaxaviolin, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+```
+
+```{r generate LongLatMap, include = FALSE}
+LongLatMap_cap <- glue("Longitude and Latitude of isolation of analyzed organisms, overlaid on a world map",
+                       "Point colour corresponds to the taxonomic lineage ('Phylum').",
+                       "Ocean colour corresponds to depth",
+                       "Citations for data sources are in Supplementary Table S3.",
+                       "Data used to generate world map produced from the 'ggOceanMaps' R package [@vihtakariGgOceanMapsPlotData2021]", .sep = " ")
+
+LongLatMap <- ggOceanMaps::basemap(data = data.frame(lon = c(-180, 0, 180), lat = c(90, 0, -90)), bathymetry = TRUE, lon.interval = 45) +
+  geom_point(data = MergedData, aes(x = Longitude, y = Latitude, color = Phylum)) +
+  coord_sf(expand = F)+
+  scale_colour_manual(values =TaxaColors) +
+  theme_bw() 
+
+# ggsave(paste("FigureS2",".png",sep = ""), plot = LongLatMap, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+```
+
+```{r LongLatMap, fig.cap = LongLatMap_cap, fig.height = 7, fig.width = 7, echo = FALSE}
+LongLatMap
+```
+
+```{r ManualAutoCompare, fig.cap = ManualAutoCompare_cap, fig.align = 'centre',out.width='100%', out.height='100%', echo = FALSE}
+ManualAutoCompare_cap <- glue::glue("**Comparison of paired counts of particular genes encoding ROS Production or Scavenging from manual and automatic annotations taken from the same organism.**", 
+                                    "Data was drawn from a subset of genomes and transcriptomes which were both manually and automatically annotated.",
+                                    "Colour corresponds to the 'Gene'",
+                                    "Points are jittered to avoid overlapping, resulting in blocks around frequently occuring counts.",
+                                    "Dashed line is placed at 1:1 where Manual and Automated counts would be equal.", 
+                                    "Citations for data sources in Supplemental Data Table S4.", .sep = " ")
+
+ManualAutoCompare <- ManualAutoCompareData %>%
+  select(-Automated_count) %>%
+  rename(Automated_count = AutomatedECKO_count) %>%
+  ggplot() +
+  geom_jitter(aes(x = Manual_count, y = Automated_count, color = ROSEnzymeAbbrev)) +
+  geom_abline(aes(intercept = 0, slope = 1), linetype = "dashed") +
+  coord_fixed(ratio = 1) +
+  labs(x = "Manual Gene Count", 
+       y = "Automatic Gene Count",
+       color = "Gene") +
+  theme_bw()
+
+ManualAutoCompare
+
+# ggsave(paste("FigureS3",".png",sep = ""), plot = ManualAutoCompare, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+```
+
+```{r generate PoissonDist, include = FALSE}
+PoissonDist_cap <- glue("**Histogram of occurrences of number of total genes, in a genome or transcriptome, (y axis) that code for the production of enzymes that produce or scavenge H~2~O~2~, O~2~^•−^ or ^•^NO *in vivo*.**",
+                        "Symbol color corresponds to taxon lineage ('Taxa')", .sep = " ")
+#                            "Symbol color corresponds to taxon lineage ('Taxa')", .sep = " "))
+
+PoissonDist <- MergedData %>% 
+  select(FileName, HyPe, HyPe_count, SupOx, SupOx_count, NitOx, NitOx_count, Phylum) %>%
+  unique() %>%
+  pivot_longer(c(HyPe, SupOx, NitOx), names_to = "ROS", values_to = "ProdScav") %>% 
+  pivot_longer(c(HyPe_count, SupOx_count, NitOx_count), names_to = "ROS_countType", values_to = "ROS_count") %>%
+  select(FileName, ProdScav, ROS_countType, ROS_count, Phylum, ROS) %>%
+  filter(!is.na(ProdScav)) %>%
+  unique() %>%
+  ggplot() + 
+  geom_histogram(aes(x= ROS_count, fill = Phylum), binwidth = 4) +
+  facet_grid(rows = vars(ROS), cols = vars(ProdScav), scales = "free_y") +
+  scale_fill_manual(values =TaxaColors) +
+  theme_bw() +
+  labs(x = "Number of Genes Encoding Metabolism of a Particular ROS",
+       y = "Frequency")
+
+# ggsave(paste("FigureS4",".png",sep = ""), plot = PoissonDist, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+```
+
+```{r PoissonDist, fig.cap = PoissonDist_cap, echo = FALSE}
+PoissonDist
+```
+
+```{r, include = FALSE}
+OmesJust <- OmesPairs %>%
+  select(EnzymeName, ECNumber, ROSGene_count.g, ROSGene_count.t, FileName.g) %>%
+  mutate(EnzymeNameFileName = interaction(EnzymeName, FileName.g)) 
+  # pivot_longer(c(ROSGene_count.g, ROSGene_count.t), names_to = "source", values_to = "ROSGene_count") #%>%
+  # head(100) #%>%
+  # compare_means(ROSGene_count ~ EnzymeNameFileName, paired = TRUE, data = ., method = "wilcox.test")
+
+
+# OmesPairs %>%
+#   select(EnzymeName, ECNumber, ROSGene_count.g, ROSGene_count.t, FileName.g) %>%
+#   mutate(EnzymeNameFileName = interaction(EnzymeName, FileName.g)) %>%
+#   pivot_longer(c(ROSGene_count.g, ROSGene_count.t), names_to = "source", values_to = "ROSGene_count") %>%
+#   head(100) %>%
+#   ggplot() +
+#   geom_point(aes(x = source, y = ROSGene_count, ), show.legend = "none") +
+#   geom_count(aes(x = source, y = ROSGene_count), show.legend = "none") 
+```
+
+
+```{r generate OmesPlot, include = FALSE}
+OmesPlot <- OmesPairs %>%
+  ggplot() + 
+  geom_jitter(aes(x = ROSGene_count.g, y = ROSGene_count.t, colour = Phylum, ),)  +#size = as.numeric(GenomeSize_mbp.g)  stat = "unique"
+  # geom_count(aes(x = ROSGene_count.g, y = ROSGene_count.t, colour = Phylum, ),)  +#size = as.numeric(GenomeSize_mbp.g)  stat = "unique"
+  # geom_point(aes(x = ROSGene_count.g, y = ROSGene_count.t, size = Omes_pairs_comparison)) +
+  geom_abline(intercept = 0, slope =  1, linetype = "dashed") +
+  theme_bw() +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.text=element_text(size=12),
+        axis.title=element_text(size=16), 
+        aspect.ratio = 1,
+        legend.text=element_text(size=9), 
+        legend.title = element_text(size=10)) +
+  guides(colour=guide_legend(title = "Phylum", override.aes = list(size=4)), size = guide_legend(title = "Genome Size (MBp)")) +
+  scale_colour_manual(values =TaxaColors) +
+  # scale_radius(breaks=c(2,4,6,8,10,12,15,20,25)) +
+  # xlab("ROS gene count by family (genome)") +
+  # ylab("ROS gene count by family (transcriptome)") +
+  coord_fixed(ratio = 1) +
+  scale_x_continuous(limits = c(0,28)) +
+  scale_y_continuous(limits = c(0,28)) +
+  labs(x = "Counts of Genes from Genome", 
+       y = "Counts of Genes from Transcriptome")
+  # ggforce::facet_zoom(xlim = c(0,10), ylim = c(0,10), zoom.size = 0.25)
+
+OmesPlot_cap <- glue("**Comparison of paired counts of particular genes encoding ROS Production or Scavenging from the genome ('ROSGene_count.g') or transcriptome ('ROSGene_count.t') taken from the same organism.**",
+                        "Data was drawn from a subset of analyzed organisms for which both genome and transcriptome were available.",
+                       "Colour corresponds to the taxonomic lineage ('Phylum')",
+                       "Points are jittered to avoid overlapping, resulting in blocks around frequently occuring counts.",
+                       "Dashed line is at 1:1 where 'ROSGene_count.g' and 'ROSGene_count.t' would be equal.", 
+                     "Citations for data sources are in Supplementary Table S3.",
+                    .sep = " ")
+
+# ggsave(paste("FigureS5",".png",sep = ""), plot = OmesPlot, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+
+```
+
+```{r OmesPlot, fig.cap = OmesPlot_cap, fig.height= 7, fig.width= 7, echo=FALSE}
+OmesPlot
+
+# ggsave(paste("OmesPlot",".png",sep = ""), plot = OmesPlot, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+```
+
+```{r GeneModelsLatPlot, fig.cap = GeneModelsLatPlot_cap, echo=FALSE}
+# GeneModelsLatPlot <- MergedData %>%
+#   # filter(Taxa != "Prokaryote") %>%
+#   filter(GeneModels_count != "0") %>%
+#   ggplot(aes(x=abs_Latitude, y= log_GeneModels_count)) +
+#   geom_point(aes(shape = Ome, colour = Taxa), size = 3)+
+#   ggalt::geom_encircle(aes(color = Phylum), expand = 0.01) +
+#   scale_colour_manual(values =TaxaColors)+
+#   theme_bw()+
+#   theme(panel.grid.major = element_blank(),
+#         panel.grid.minor = element_blank(),
+#         axis.text=element_text(size=12),
+#         axis.title=element_text(size=16),
+#         aspect.ratio = 1,
+#         legend.text=element_text(size=10),
+#         legend.title = element_text(size=12))#+
+#   # xlab("log Radius, µm")+
+#   # ylab("log Genome Size, mbp")
+# 
+# GeneModelsLatPlot
+
+GeneModelsLatPlot_cap <- glue("**Comparison of log10 of the total number of genes in an organism ('log_GeneModels_count') with the absolute value of the strains Latitude of isolation ('abs_Latitude').**", 
+                              "Colour corresponds to the taxonomic lineage ('Taxa'), whereas symbol shape corresponds to the source of the data, whether Genome or Transcriptome ('Ome').", 
+                              "Citations for data sources are in Supplementary Table S3.",
+                              .sep = " ")
+```
+
+```{r HyPeShapiro, include = FALSE}
+HyPeProdShapiro <- MergedData %>% 
+  select(FileName, HyPe,HyPe_count) %>%
+  unique() %>%
+  filter(HyPe == "Production") %>%
+  .$HyPe_count %>%
+  shapiro.test() %>%
+  tidy()
+
+HyPeScavShapiro <- MergedData %>% 
+  select(FileName, HyPe,HyPe_count) %>%
+  unique() %>%
+  filter(HyPe == "Scavenging") %>%
+  .$HyPe_count %>%
+  shapiro.test() %>% 
+  tidy()
+```
+
+```{r SupOxScavShapiro, include = FALSE}
+SupOxScavShapiro <- MergedData %>% 
+  filter(SupOx == "Scavenging") %>%
+  select(FileName, SupOx, SupOx_count) %>%
+  unique() %>%
+  # filter(SupOx == "Production") %>%
+  .$SupOx_count %>%
+  shapiro.test() %>%
+  tidy()
+```
+
+
+```{r NitOxShapiro, include = FALSE}
+NitOxProdShapiro <- MergedData %>% 
+  filter(NitOx == "Production") %>%
+  select(FileName, NitOx, NitOx_count) %>%
+  unique() %>%
+  # filter(NitOx == "Production") %>%
+  .$NitOx_count %>%
+  shapiro.test() %>%
+  tidy()
+
+NitOxScavShapiro <- MergedData %>% 
+  filter(NitOx == "Scavenging") %>%
+  select(FileName, NitOx, NitOx_count) %>%
+  unique() %>%
+  # filter(NitOx == "Production") %>%
+  .$NitOx_count %>%
+  shapiro.test() %>%
+  tidy()
+```
+
+
+```{r generate OchrophyteRadPlot, include=FALSE}
+OchrophyteHyPeRad$Includes <- c("Ochrophyte Regressions")
+OchrophyteNitOxRad$Includes <- c("Ochrophyte Regressions")
+OchrophyteSupOxRad$Includes <- c("Ochrophyte Regressions")
+
+OchrophyteSupOxRad <- OchrophyteSupOxRad %>% 
+  mutate(ROSType = "SupOx",
+         ROSName = "O~2~^•−^") %>%
+  rename(ROSMetabolism = SupOx)
+
+OchrophyteNitOxRad <- OchrophyteNitOxRad %>% 
+  mutate(ROSType = "NitOx",
+         ROSName = "^•^NO") %>%
+  rename(ROSMetabolism = NitOx)
+
+OchrophyteRadPlot <-  rbind(OchrophyteSupOxRad, OchrophyteHyPeRad, OchrophyteNitOxRad) %>%
+  # filter(HyPe == "Production" | HyPe == "Scavenging") %>%
+  unnest(c(offset_model_regression), names_sep = "_") %>%
+  unnest(c(flagcol_offset_model_regression), names_sep = "_") %>%
+  pivot_wider(., names_from = c(flagcol_offset_model_regression_term), values_from = c(flagcol_offset_model_regression_estimate, flagcol_offset_model_regression_std.error, flagcol_offset_model_regression_statistic, flagcol_offset_model_regression_p.value)) %>%
+  pivot_wider(., names_from = c(offset_model_regression_term), values_from = c(offset_model_regression_estimate, 
+                                                                               offset_model_regression_std.error, offset_model_regression_statistic, offset_model_regression_p.value)) %>%
+  unnest(c(offset_model_pvalue), names_sep = "_") %>%
+  unnest(c(flagcol_offset_model_pvalue), names_sep = "_") %>%
+  unnest(cols = c(data)) %>%
+  ggplot() +
+  geom_point(aes(x = log_Radius_um, y = log10(HyPe_count/GeneModels_count), color = Phylum)) +
+  geom_point(aes(x = log_Radius_um, y = log10(NitOx_count/GeneModels_count), color = Phylum)) +
+  geom_point(aes(x = log_Radius_um, y = log10(SupOx_count/GeneModels_count), color = Phylum)) +
+  geom_abline(aes(intercept = `offset_model_regression_estimate_(Intercept)`/ln_log10_conversion, 
+                  slope = `offset_model_regression_estimate_.$log_Radius_um`/ln_log10_conversion, 
+                  linetype = offset_regression_type), 
+              color = "blue") +
+  geom_abline(aes(intercept = (`offset_model_regression_estimate_(Intercept)` + `offset_model_regression_std.error_(Intercept)`) /ln_log10_conversion, 
+                  slope = (`offset_model_regression_estimate_.$log_Radius_um` + `offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion), 
+              linetype = "dotted", 
+              color = "blue") +
+  geom_abline(aes(intercept = (`offset_model_regression_estimate_(Intercept)` - `offset_model_regression_std.error_(Intercept)`) /ln_log10_conversion, 
+                  slope = (`offset_model_regression_estimate_.$log_Radius_um` - `offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion), 
+              linetype = "dotted", 
+              color = "blue") +
+  geom_text(aes(x = 1.1, y = -4.1, label = paste("p-value =", signif(`offset_model_regression_p.value_.$log_Radius_um`, digits = 2))), color = "blue", check_overlap = TRUE) +
+  facet_grid(cols = vars(ROSMetabolism), rows = vars(ROSType), ) +
+  scale_colour_manual(name = "Phylum", values =TaxaColors) + 
+  
+  scale_linetype_manual(name = "Regression type", values = c("poisson" = "solid" , "quasipoisson" = "twodash")) +
+  scale_shape_manual(values = c(21,19,23,18)) +
+  coord_cartesian(ylim = c(ROSMin, ROSMax)) +
+  guides(color = "none") +
+  # scale_x_continuous(limits = c(-0.5, 1.6)) +
+  theme_bw() +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.text = element_text(size=11),
+        axis.title = element_text(size=12), 
+        legend.text = element_text(size=11), 
+        legend.title = element_text(size=13),
+        strip.text = element_text(size=11)) +
+  labs(x = ~log[10] ~ "(Median Cell Radius (µm))", 
+       y = ~log[10] ~ "(Genes Encoding ROS Metabolizing Enzymes Normalized to Total Genes)") 
+
+# ggsave(paste("FigureS6",".png",sep = ""), plot = OchrophyteRadPlot, device = NULL, path = Figures,scale = 1, height=6, width= 10, units = c("in"),dpi = 300, limitsize = TRUE)
+```
+
+```{r OchrophyteRadPlot, fig.cap = OchrophyteRadPlot_cap, fig.height= 6, fig.width= 10, echo = FALSE}
+OchrophyteRadPlot_cap <- glue("**Comparison of log~10~ (Total number of genes encoding H~2~O~2~, O~2~^•−^ or ^•^NO metabolizing enzymes normalized to the total number of genes present in each Ochrophyte) vs. the log~10~( median cell radius in µm).**",
+                            "Poisson (solid line) or Quasi-Poisson (dashed line) regressions fitted to data ± Standard Error (dotted line).",
+                            "Regressions were run without (blue line) 'Colony' and 'Flagella' as co-variates.", 
+                            "Citations for data sources are in Supplementary Table S3.",
+                         .sep = " ")
+
+OchrophyteRadPlot
+```
+
+```{r EukSupOxDotPlot, fig.cap = EukSupOxDotPlot_cap, fig.height = 20, fig.width = 10, echo = FALSE}
+EukSupOxDotPlot <- MergedData_na %>%
+  filter(SupOx == "Scavenging" | SupOx == "Production", 
+         Taxa != "Prokaryote",
+         ROSEnzyme_TotalCount != 0, 
+         GeneModels_count != 0) %>%
+  ggplot() +
+  geom_point(aes(x = EnzymeName, y= reorder(interaction(Genus, species, Strain), -Radius_um), size = ROSGene_count, color = Taxa, shape = Ome)) +
+  scale_x_discrete(position ="top") +
+  scale_color_manual(values = TaxaColors) +
+  scale_shape_manual(values = c(16,1))+
+  scale_radius(breaks=c(2,4,6,8,10,12,15,20,25)) +
+  ggtitle("SupOx") +
+  theme_bw() +
+  # theme(axis.text.x = element_text(angle = 90, size = 10),
+  #       axis.text.y = element_text(face="italic",size = 10, vjust = 0)) +
+  facet_grid(rows = vars(Taxa), cols = vars(SupOx), scales = "free", space = "free") +
+  ggpubr::rotate_x_text(hjust = 0) +
+  labs(y = "Organism",
+       x = "Enzyme")
+  # theme(panel.grid.major = element_blank(),
+  #       panel.grid.minor = element_blank())
+EukSupOxDotPlot
+# saveRDS(EukSupOxDotPlot, file = file.path(Figures, "EukSupOxDotPlot.Rds"))
+
+EukSupOxDotPlot_cap <- glue("**Summary of O~2~^•−^ scavenging enzymes encoded within genomes and transcriptomes of eukaryotic phytoplankton analyzedTaxa are ordered from top to bottom along the left according to increasing median cell diameter within each taxonomic lineage.**", 
+                        "Symbol colour corresponds to taxonomic lineages (‘Taxa’).Filled data points indicate that the data obtained from that organism was sourced from a genome, and unfilled data points were sourced from a transcriptome.", 
+                        "The size of the symbol increases with the number of members of each enzyme found within each genome or transcriptome.",
+                        "Symbol absence means no sequences known to encode the enzyme family of interest were found in the target genome or transcriptome.", .sep = " ")
+
+# ggsave(paste("FigureS7",".png",sep = ""), plot = EukSupOxDotPlot, device = NULL, path = Figures,scale = 1, height=20, width= 10, units = c("in"),dpi = 300, limitsize = TRUE)
+
+```
+
+```{r ProkSupOxDotPlot, fig.height = 10, fig.width = 10, include = FALSE}
+ProkSupOxDotPlot <- MergedData_na %>%
+  filter(SupOx == "Scavenging" | SupOx == "Production", 
+         Taxa == "Prokaryote",
+         ROSEnzyme_TotalCount != 0, 
+         GeneModels_count != 0) %>%
+  ggplot() +
+  geom_point(aes(x = EnzymeName, y= reorder(interaction(Genus, species, Strain), -Radius_um), size = ROSGene_count, color = Genus, shape = Ome)) +
+  scale_x_discrete(position ="top") +
+  # scale_color_manual(values = TaxaColors) +
+  scale_shape_manual(values = c(16,1))+
+  scale_radius(breaks=c(1,2,3,4,5)) +
+  ggtitle("SupOx") +
+  theme_bw() +
+  # theme(axis.text.x = element_text(angle = 90, size = 10),
+  #       axis.text.y = element_text(face="italic",size = 10, vjust = 0)) +
+  facet_grid(rows = vars(Taxa), cols = vars(SupOx), scales = "free", space = "free") +
+  ggpubr::rotate_x_text(hjust = 0) +
+  labs(y = "Organism",
+       x = "Enzyme")
+  # theme(panel.grid.major = element_blank(),
+  #       panel.grid.minor = element_blank())
+# ProkSupOxDotPlot
+# saveRDS(ProkSupOxDotPlot, file = file.path(Figures, "ProkSupOxDotPlot.Rds"))
+
+ProkSupOxDotPlot_cap <- glue("**Summary of O~2~^•−^ scavenging enzymes encoded within genomes of prokaryotic phytoplankton analyzedTaxa are ordered from top to bottom along the left according to increasing median cell diameter within each taxonomic lineage.**", 
+                         "Symbol colour corresponds to the genus of the prokaryote.Filled data points indicate that the data obtained from that organism was sourced from a genome, and unfilled data points were sourced from a transcriptome.", 
+                         "The size of the symbol increases with the number of members of each enzyme found within each genome or transcriptome.Symbol absence means no sequences known to encode the enzyme family of interest were found in the target genome or transcriptome.", .sep = " ")
+```
+
+```{r EukHyPeDotPlot, fig.cap = EukHyPeDotPlot_cap, fig.height = 20, fig.width = 10, echo = FALSE}
+EukHyPeDotPlot <- MergedData_na %>%
+  filter(HyPe == "Production" | HyPe == "Scavenging", 
+         Taxa != "Prokaryote",
+         ROSEnzyme_TotalCount != 0,
+         GeneModels_count != 0) %>%
+  ggplot() +
+  geom_point(aes(x = EnzymeName, y= reorder(Name, -Radius_um), size = ROSGene_count, color = Taxa, shape = Ome)) +
+  scale_x_discrete(position ="top") +
+  scale_color_manual(values = TaxaColors) +
+  scale_shape_manual(values = c(16,1))+
+  scale_radius(breaks=c(2,4,6,8,10,12,15,20,25)) +
+  ggtitle("HyPe") +
+  theme_bw() +
+  # theme(axis.text.x = element_text(angle = 90, size = 10),
+  #       axis.text.y = element_text(face="italic",size = 10, vjust = 0)) +
+  facet_grid(rows = vars(Taxa), cols = vars(HyPe), scales = "free", space = "free") +
+  ggpubr::rotate_x_text(hjust = 0) +
+  labs(y = "Organism",
+       x = "Enzyme")
+  # theme(axis.text.x = element_text(face = ifelse(levels(MergedData_na$EnzymeName %in% MergedData_na$HyPe_PriSec), "bold", "italic")))
+  # theme(axis.text.x = ifelse(MergedData_na$HyPe_PriSec == "Primary", element_text(face = "bold"), NULL))
+  # ifelse(MergedData_na$HyPe_PriSec == "Primary", theme(axis.text.x = element_text(face = "bold")), NULL)
+  # ifelse(MergedData_na$HyPe_PriSec == "Primary" ~ theme(axis.text.x = element_text(face = "bold")),
+            # NULL)
+# theme(axis.text.x = element_text(face = "bold"))
+    # axis.text.x = element_text(face = ifelse(ROSEnzymes$HyPe_Prisec == "Primary", "bold", NULL)))
+EukHyPeDotPlot
+# saveRDS(EukHyPeDotPlot, file = file.path(Figures, "EukHyPeDotPlot.Rds"))
+
+EukHyPeDotPlot_cap <- glue("**Summary of H~2~O~2~ metabolizing enzymes encoded within genomes and transcriptomes of eukaryotic phytoplankton analyzed, faceted by whether the enzymes Produce or Scavenge H~2~O~2~.**",
+                           "Taxa are ordered from top to bottom along the left according to increasing median cell diameter within each taxonomic lineage.",
+                           "Symbol colour corresponds to taxonomic lineages (‘Taxa’).",
+                           "Filled data points indicate that the data obtained from that organism was sourced from a genome, and unfilled data points were sourced from a transcriptome.",
+                           "The size of the symbol increases with the number of members of each enzyme found within each genome or transcriptome.",
+                           "Symbol absence means no sequences known to encode the enzyme family of interest were found in the target genome or transcriptome."
+                           , .sep = " ")
+
+# ggsave(paste("FigureS8",".png",sep = ""), plot = EukHyPeDotPlot, device = NULL, path = Figures,scale = 1, height=20, width= 12, units = c("in"),dpi = 300, limitsize = TRUE)
+
+```
+
+```{r ProkHyPeDotPlot, fig.cap = ProkHyPeDotPlot_cap, fig.height = 10, fig.width = 10, echo = FALSE}
+ProkHyPeDotPlot <- MergedData_na %>%
+  filter(HyPe == "Production" | HyPe == "Scavenging", 
+         Taxa == "Prokaryote",
+         ROSEnzyme_TotalCount != 0, 
+         GeneModels_count != 0) %>%
+  ggplot() +
+  geom_point(aes(x = EnzymeName, y= reorder(interaction(Genus, species, Strain), -Radius_um), size = ROSGene_count, color = Genus, shape = Ome)) +
+  scale_x_discrete(position ="top") +
+  # scale_color_manual(values = TaxaColors) +
+  scale_shape_manual(values = c(16,1))+
+  scale_radius(breaks=c(1,2,3,4,5)) +
+  ggtitle("HyPe") +
+  theme_bw() +
+  # theme(axis.text.x = element_text(angle = 90, size = 10),
+  #       axis.text.y = element_text(face="italic",size = 10, vjust = 0)) +
+  facet_grid(rows = vars(Taxa), cols = vars(HyPe), scales = "free", space = "free") +
+  ggpubr::rotate_x_text(hjust = 0) +
+  labs(y = "Organism",
+       x = "Enzyme")
+  # theme(panel.grid.major = element_blank(),
+  #       panel.grid.minor = element_blank())
+ProkHyPeDotPlot
+# saveRDS(ProkHyPeDotPlot, file = file.path(Figures, "ProkHyPeDotPlot.Rds"))
+
+ProkHyPeDotPlot_cap <- glue("**Summary of H~2~O~2~ metabolizing enzymes encoded within genomes of prokaryotic phytoplankton analyzed, faceted by whether the enzymes Produce or Scavenge H~2~O~2~.**", 
+                               "Taxa are ordered from top to bottom along the left according to increasing median cell diameter within each taxonomic lineage.",
+                               "Symbol colour corresponds to the genus of the prokaryote.Filled data points indicate that the data obtained from that organism was sourced from a genome.", 
+                               "The size of the symbol increases with the number of members of each enzyme found within each genome or transcriptome.", 
+                               "Symbol absence means no sequences known to encode the enzyme family of interest were found in the target genome or transcriptome.", .sep = " ")
+
+# ggsave(paste("FigureS9",".png",sep = ""), plot = ProkHyPeDotPlot, device = NULL, path = Figures,scale = 1, height=10, width= 10, units = c("in"),dpi = 300, limitsize = TRUE)
+
+```
+
+```{r EukNitOxDotPlot, fig.cap = EukNitOxDotPlot_cap, fig.height = 20, fig.width = 10, echo = FALSE}
+EukNitOxDotPlot <- MergedData_na %>%
+  filter(NitOx == "Scavenging" | NitOx == "Production", 
+         Taxa != "Prokaryote",
+         ROSEnzyme_TotalCount != 0, 
+         GeneModels_count != 0) %>%
+  ggplot() +
+  geom_point(aes(x = EnzymeName, y= reorder(interaction(Genus, species, Strain), -Radius_um), size = ROSGene_count, color = Taxa, shape = Ome)) +
+  scale_x_discrete(position ="top") +
+  scale_color_manual(values = TaxaColors) +
+  scale_shape_manual(values = c(16,1))+
+  scale_radius(breaks=c(2,4,6,8,10,12,15,20,25)) +
+  ggtitle("NitOx") +
+  theme_bw() +
+  # theme(axis.text.x = element_text(angle = 90, size = 10),
+  #       axis.text.y = element_text(face="italic",size = 10, vjust = 0)) +
+  facet_grid(rows = vars(Taxa), cols = vars(NitOx), scales = "free", space = "free") +
+  ggpubr::rotate_x_text(hjust = 0) +
+  labs(y = "Organism",
+       x = "Enzyme")
+  # theme(panel.grid.major = element_blank(),
+  #       panel.grid.minor = element_blank())
+EukNitOxDotPlot
+# saveRDS(EukSupOxDotPlot, file = file.path(Figures, "EukSupOxDotPlot.Rds"))
+
+EukNitOxDotPlot_cap <- glue("**Summary of ^•^NO metabolizing enzymes encoded within genomes and transcriptomes of eukaryotic phytoplankton analyzed, faceted by whether the enzymes Produce or Scavenge ^•^NO.**", 
+                           "Taxa are ordered from top to bottom along the left according to increasing median cell diameter within each taxonomic lineage.",
+                           "Symbol colour corresponds to taxonomic lineages (‘Taxa’).", 
+                           "Filled data points indicate that the data obtained from that organism was sourced from a genome, and unfilled data points were sourced from a transcriptome.",
+                           "The size of the symbol increases with the number of members of each enzyme found within each genome or transcriptome.", 
+                           "Symbol absence means no sequences known to encode the enzyme family of interest were found in the target genome or transcriptome.", 
+                           .sep = " ")
+
+# ggsave(paste("FigureS10",".png",sep = ""), plot = EukNitOxDotPlot, device = NULL, path = Figures,scale = 1, height=20, width= 10, units = c("in"),dpi = 300, limitsize = TRUE)
+
+```
+
+```{r ProkNitOxDotPlot, fig.height = 10, fig.width = 10, include = FALSE}
+ProkNitOxDotPlot <- MergedData_na %>%
+  filter(NitOx == "Scavenging" | NitOx == "Production", 
+         Taxa == "Prokaryote",
+         ROSEnzyme_TotalCount != 0, 
+         GeneModels_count != 0) %>%
+  ggplot() +
+  geom_point(aes(x = EnzymeName, y= reorder(interaction(Genus, species, Strain), -Radius_um), size = ROSGene_count, color = Genus, shape = Ome)) +
+  scale_x_discrete(position ="top") +
+  # scale_color_manual(values = TaxaColors) +
+  scale_shape_manual(values = c(16,1))+
+  scale_radius(breaks=c(1,2,3,4,5)) +
+  ggtitle("SupOx") +
+  theme_bw() +
+  # theme(axis.text.x = element_text(angle = 90, size = 10),
+  #       axis.text.y = element_text(face="italic",size = 10, vjust = 0)) +
+  facet_grid(rows = vars(Taxa), cols = vars(NitOx), scales = "free", space = "free") +
+  ggpubr::rotate_x_text(hjust = 0) +
+  labs(y = "Organism",
+       x = "Enzyme")
+  # theme(panel.grid.major = element_blank(),
+  #       panel.grid.minor = element_blank())
+# ProkNitOxDotPlot
+# saveRDS(ProkSupOxDotPlot, file = file.path(Figures, "ProkSupOxDotPlot.Rds"))
+```
+
+## Supplementary Tables {.unnumbered}
+
+```{r DataDictionary, echo = FALSE}
+options(knitr.kable.NA = '')
+DataDictionary <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1lECellT86qCIs4bOzpCBZZPsijzV0MQFv7IQS7TS2HY/edit#gid=0")
+
+DataDictionary %>% 
+  select(Variable, Units, Definition) %>%
+  kable(caption = "Variable names, definitions, units, and first location of occurence in code, used for our data.") %>%
+  kable_classic()
+
+write_csv(DataDictionary, "SupportingData/TableS1.csv")
+```
+
+```{r ROSEnzymeList, echo = FALSE}
+options(knitr.kable.NA = '')
+ROSEnzymeList <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1haHVI5bFVjBGPNW8YTCvCBecWKdrvOeocT5WfIYWnk0/edit#gid=903519796")  
+
+ROSEnzymeList %>%
+  select(ECNumber, KO, EnzymeName, SupOx, HyPe, NitOx) %>%
+  kable(caption = "Enzyme Commission Number, Kegg Orthology Number, Enzyme Name and ROS Substrate Metabolised") %>%
+  kable_classic()
+
+write_csv(ROSEnzymeList, "SupportingData/TableS2.csv")
+
+```
+
+```{r MetaData, echo = FALSE}
+options(knitr.kable.NA = '')
+MetaData <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1kXm0GvMdTRbF12cG5Bps-2e_4MTjgUX7iUOjqiu-_c0/edit#gid=0") %>%
+  # dplyr::select(c(Genus, species, Strain, FileName, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, PennateCentric, ColonySpecies)) %>% 
+  mutate(Strain = as.character(Strain)) %>%
+  select(-c(Rad_ref, LogLat_ref, ColonyCitation_other))
+
+MetaData %>%
+  kable(caption = glue("Metadata for each organism")) %>%
+  kable_classic()
+
+write_csv(MetaData, "SupportingData/TableS3.csv")
+
+```
+
+```{r ManualAutoCompareData, echo = FALSE}
+options(knitr.kable.NA = '')
+ManualAutoCompareData %>%
+  select(-Automated_count) %>%
+  rename(Automated_count = AutomatedECKO_count) %>%
+  kable(caption = glue("Comparison of Manual and Automated Gene Counts")) %>%
+  kable_classic()
+
+write_csv(MetaData, "SupportingData/TableS4.csv")
+```
+
+# References {.unnumbered}
