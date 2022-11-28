@@ -671,6 +671,11 @@ SupOxRadPlots_cap <- glue("**Comparison of log~10~ (Total number of genes encodi
 SupOxRadPlots
 ```
 
+```{r}
+SupOxRadRiboPlots <- knitr::include_graphics(file.path(Figures,"SupOxRadRiboPlots.png"))
+SupOxRadRiboPlots
+```
+
 With increasing cell radius, eukaryotic phytoplankton have a smaller fraction of their total genes encoding scavenging of O~2~^•−^ (Fig \@ref(fig:SupOxRadPlots), Blue line, Slope = `r ScientificTen(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck('offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck('offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`, p-value = `r ScientificTen(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck('offset_model_regression', 1, "p.value", 2))`). The negative slope does not support our Hypothesis \@ref(hyp:SupOx) that phytoplankton do not differentially allocate a changing fraction of their total gene content to O~2~^•−^ production nor scavenging with increasing cell size. 
 Including 'Flagella' and 'Colony' as co-variates in the regression results, however, in a slope that is not statistically different from zero (Fig \@ref(fig:SupOxRadPlots), Black line, Slope = `r ScientificTen(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck('flagcol_offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck('flagcol_offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`, p-value = `r ScientificTen(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck('flagcol_offset_model_regression', 1, "p.value", 2))`), driven by the influence of 'Flagella' (p-value = `r ScientificTen(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck("flagcol_offset_model_pvalue", 1, tidy, "p.value", 3))`) but not 'Colony' (p-value = `r ScientificTen(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck("flagcol_offset_model_pvalue", 1, tidy, "p.value", 4))`). Including data from selected prokaryotic phytoplankton did not qualitatively alter these results (Data not shown). O~2~^•−^ metabolism in phytoplankton appears to be mediated by a nearly fixed set of core genes that do not change with increasing gene count, thus the fractional gene allocation to O~2~^•−^ decreases as cell radius, and the co-varying total gene count increases. Gene dosage does not emerge as a factor in phytoplankton O~2~^•−^ metabolism.
 
@@ -717,36 +722,8 @@ SupOxColony_pval <- MergedData %>%
   compare_means(norm_SupOx ~ ColonySpecies, data = ., method = "wilcox.test")
 ```
 
-```{r generate SupOxColonyPlot, include = FALSE}
-# SupOxColonyPlot <- MergedData %>%
-#   filter(SupOx == "Production" | SupOx == "Scavenging",
-#          GeneModels_count != 0,
-#          !is.na(ColonySpecies),
-#          Taxa != "Prokaryote") %>% #Taxa != "Prokaryote"
-#   select(FileName, ColonySpecies, SupOx_count, GeneModels_count, Phylum, SupOx, Genus) %>%
-#   unique() %>%
-#   ggplot(aes(x = ColonySpecies, y = SupOx_count/GeneModels_count)) +
-#   geom_boxplot(notch = TRUE, outlier.shape = NA) +
-#   geom_jitter(aes(color = Phylum),width = 0.2, stat = "unique") +
-#   theme_bw() +
-#   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-#   xlab("") +
-#   stat_compare_means(comparisons = MyColonyComparisons, method = "wilcox.test") +
-#   facet_grid(cols = vars(c(SupOx))) +
-#   scale_x_discrete(labels = c("FALSE" = "Non-colony", "TRUE" = "Colony")) +
-#   scale_y_continuous(labels = scales::scientific)  +
-#   scale_colour_manual(name = "Phylum", values =TaxaColors) +
-#   theme(panel.grid.major = element_blank(),
-#         panel.grid.minor = element_blank(),
-#         axis.text.y = element_text(size=9),
-#         axis.text.x = element_text(size=12),
-#         axis.title = element_text(size=12),
-#         legend.text = element_text(size=10),
-#         legend.title = element_text(size=10),
-#         strip.text = element_text(size=11))  +
-#   labs(y = "Genes Encoding "~O[2]^`•-` ~" Metabolizing Enzymes Normalized to Total Genes")
-
-# ggsave(paste("HyPePennateCentricPlot",".png",sep = ""), plot = HyPePennateCentricPlot, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+```{r}
+SupOxColonyPlot <- knitr::include_graphics(file.path(Figures,"SupOxColonyPlot.png"))
 ```
 
 ```{r SupOxColonyPlot, fig.cap = SupOxColonyPlot_cap, fig.height= 7, fig.width= 3.5, echo = FALSE}
@@ -757,6 +734,10 @@ SupOxColonyPlot_cap <- glue("**Comparison of total number of genes encoding O~2~
                            "Whiskers span the range excluding outliers in the data.",
                             "Citations for data sources can be found in Supplementary Table S3.", .sep = " ")
 # SupOxColonyPlot
+```
+
+```{r}
+SupOxColonyRiboPlot <- knitr::include_graphics(file.path(Figures,"SupOxColonyRiboPlot.png"))
 ```
 
 Setting aside any influence of cell size, colony and non-colony forming phytoplankton do not significantly differ in the fraction of their total gene content encoding O~2~^•−^ scavenging (p-value = `r ScientificTen(SupOxColony_pval$p)`) (Data not visualized), consistent with limited membrane permeability for O~2~^•−^ and thus limited colony level interactions in O~2~^•−^ metabolism.
@@ -773,38 +754,8 @@ SupOxScavPennateCentricPlot_pval <- MergedData %>%
 ```
 
 
-```{r generate SupOxPennateCentricPlot, include = FALSE}
-# SupOxPennateCentricPlot <- MergedData %>%
-#   filter(Taxa == "Diatom",
-#          SupOx == "Scavenging",
-#          GeneModels_count != 0) %>%
-#   select(FileName, PennateCentric, SupOx_count, GeneModels_count, Phylum, SupOx, Genus) %>%
-#   unique() %>%
-#   ggplot(aes(x = PennateCentric, y = SupOx_count/GeneModels_count)) +
-#   geom_boxplot(notch = TRUE, outlier.shape = NA) +
-#   geom_jitter(aes(colour = Genus),width = 0.2, stat = "unique") +
-#   # coord_cartesian(ylim = c(ROSBoxPlotMin, ROSBoxPlotMax)) +
-#   theme_bw() +
-#   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-#   # ylab("Total number of Genes encoding Superoxide Scavenging") +
-#   xlab("") +
-#   # ggtitle("SupOx Scavenging") +
-#   facet_grid(cols = vars(SupOx)) +
-#   stat_compare_means(comparisons = MyShapeComparisons, method = "wilcox.test") +
-#   # ggforce::facet_zoom(ylim = c(0, ROSBoxPlotMax)) +
-#   scale_y_continuous(labels = scales::scientific) +
-#   theme(panel.grid.major = element_blank(),
-#         panel.grid.minor = element_blank(),
-#         axis.text.y = element_text(size=9),
-#         axis.text.x = element_text(size=12),
-#         axis.title = element_text(size=12), 
-#         legend.text = element_text(size=10), 
-#         legend.title = element_text(size=10),
-#         strip.text = element_text(size=11)) +
-#   labs(y = "Genes Encoding "~O[2]^`•-` ~" Metabolizing Enzymes Normalized to Total Genes")
-
-# ggsave(paste("SupOxPennateCentricPlot",".png",sep = ""), plot = SupOxPennateCentricPlot, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
-
+```{r}
+SupOxPennateCentricPlot <- knitr::include_graphics(file.path(Figures,"SupOxPennateCentricPlot.png"))
 ```
 
 ```{r SupOxPennateCentricPlot, fig.cap = SupOxPennateCentricPlot_cap, fig.height= 3.5, fig.width= 3.5, echo = FALSE}
@@ -815,6 +766,10 @@ SupOxPennateCentricPlot_cap <- glue("**Comparison of total number of genes encod
                            "Whiskers span the range excluding outliers in the data.",
                                       "Citations for data sources can be found in Supplementary Table S3.", .sep = " ")
 # SupOxPennateCentricPlot
+```
+
+```{r}
+SupOxPennateCentricRiboPlot <- knitr::include_graphics(file.path(Figures,"SupOxPennateCentricRiboPlot.png"))
 ```
 
 Pennate and centric diatoms have similar fractions of their genomes encoding O~2~^•−^ scavenging (p-value = `r ScientificTen(SupOxScavPennateCentricPlot_pval$p)`) (Data not visualized).
@@ -935,6 +890,10 @@ HyPeScavFlagPlot_pval <- MergedData %>%
 HyPeFlagPlot <- knitr::include_graphics(file.path(Figures,"HyPeFlagPlot.png"))
 ```
 
+```{r}
+HyPeFlagRiboPlot <- knitr::include_graphics(file.path(Figures,"HyPeFlagRiboPlot.png"))
+```
+
 
 ```{r HyPeFlagPlot, fig.cap = HyPeFlagPlot_cap, fig.height = 7, fig.width = 7, echo = FALSE}
 HyPeFlagPlot_cap <- glue("**Comparison of total number of genes encoding H~2~O~2~ metabolizing enzymes ('HyPe_count') normalized to the total number of genes present in each organism ('GeneModels_count') vs. the presence or absence of flagella in the organism.**", 
@@ -1004,6 +963,10 @@ HyPeColonyPlot_cap <- glue("**Comparison of total number of genes encoding H~2~O
 HyPeColonyPlot 
 ```
 
+```{r}
+HyPeColonyRiboPlot <- knitr::include_graphics(file.path(Figures,"HyPeColonyRiboPlot.png"))
+```
+
 Setting aside cell size influences, non-colony forming phytoplankton have a smaller proportion of their total gene content encoding both H~2~O~2~ production (p-value = `r ScientificTen(HyPeProdColonyPlot_pval$p)`), and also H~2~O~2~ scavenging (Fig \@ref(fig:HyPeColonyPlot), p-value = `r ScientificTen(HyPeScavColonyPlot_pval$p)`), than do colony forming phytoplankton. Looking at proportional change, we found that the decrease in the fraction of total genes encoding H~2~O~2~ production between non-colony and colony forming phytoplankton is smaller (`r signif(HyPeColonyDelta$deltaProduction[[1]]*100, 4)`%), than the decrease in the fraction of total genes encoding H~2~O~2~ scavenging (`r signif(HyPeColonyDelta$deltaScavenging[[1]]*100, 4)`%). Colony forming phytoplankton may have more active H~2~O~2~ metabolism with a particular emphasis on H~2~O~2~ scavenging, consistent with stronger H~2~O~2~ exchange among closely spaced cells within a colony (Hypothesis \@ref(hyp:Colony)) [@omarDiffusionalInteractionsMarine2022].
 
 ```{r HyPeDiatomShape_pval, include = FALSE}
@@ -1046,7 +1009,13 @@ HyPeScavPennateCentricPlot_pval <- MergedData %>%
   compare_means(norm_HyPe ~ PennateCentric, data = ., method = "wilcox.test")
 ```
 
+```{r}
+HyPePennateCentricPlot <- knitr::include_graphics(file.path(Figures,"HyPePennateCentricPlot.png"))
+```
 
+```{r}
+HyPePennateCentricRiboPlot <- knitr::include_graphics(file.path(Figures,"HyPePennateCentricRiboPlot.png"))
+```
 
 ```{r HyPePennateCentricPlot, fig.cap = HyPePennateCentricPlot_cap, fig.height = 7, fig.width = 7, echo = FALSE}
 HyPePennateCentricPlot_cap <- glue("**Comparison of total number of genes encoding H~2~O~2~ metabolizing enzymes ('HyPe_count') normalized to the total number of genes in each diatom ('GeneModels_count') vs. the growth form of the diatom ('PennateCentric').**", 
@@ -1094,6 +1063,10 @@ NitOxRadPlots_cap <- glue("**Comparison of log~10~ (Total number of genes encodi
                           .sep = " ")
 
 NitOxRadPlots
+```
+
+```{r}
+NitOxRadRiboPlots <- knitr::include_graphics(file.path(Figures,"NitOxRadRiboPlots.png"))
 ```
 
 With increasing cell radius eukaryotic phytoplankton do not vary in the fraction of total genes encoding the capacity to produce ^•^NO (Fig \@ref(fig:NitOxRadPlots), Blue line, Slope = `r ScientificTen(NitOxRad %>% filter(NitOx == "Production") %>% pluck('offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(NitOxRad %>% filter(NitOx == "Production") %>% pluck('offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`, p-value = `r ScientificTen(NitOxRad %>% filter(NitOx == "Production") %>% pluck('offset_model_regression', 1, "p.value", 2))`). Including prokaryotes in the regression in Fig \@ref(fig:NitOxRadPlots) does not substantially alter the interpretation (Data not visualized).
@@ -1164,6 +1137,10 @@ NitOxFlagPlot_cap <- glue("**Comparison of total number of genes encoding ^•^N
 # NitOxFlagPlot
 ```
 
+```{r}
+NitOxFlagRiboPlot <- knitr::include_graphics(file.path(Figures,"NitOxFlagRiboPlot.png"))
+```
+
 Setting aside the influence of cell size, non-flagellated and flagellated phytoplankton do not show statistically significant differences in the fractions of total gene content encoding ^•^NO production (p-value = `r ScientificTen(NitOxProdFlagPlot_pval$p)`) nor  ^•^NO scavenging (p-value = `r ScientificTen(NitOxScavFlagPlot_pval$p)`) (Data not visualized), suggesting ^•^NO does not have a generalized interaction with flagella across eukaryotic phytoplankton groups.
 
 ```{r NitOxColony_pval, include = FALSE}
@@ -1219,6 +1196,9 @@ NitOxColonyPlot_cap <- glue("**Comparison of total number of genes encoding ^•
 # NitOxColonyPlot
 ```
 
+```{r}
+NitOxColonyRiboPlot <- knitr::include_graphics(file.path(Figures,"NitOxColonyRiboPlot.png"))
+```
 
 Comparing non-colony to colony forming phytoplankton does not show a statistically significant difference in the fraction of total gene content encoding ^•^NO production (p-value = `r ScientificTen(NitOxProdColonyPlot_pval$p)`) nor  ^•^NO scavenging (p-value = `r ScientificTen(NitOxScavColonyPlot_pval$p)`) (Data not visualized), suggesting ^•^NO metabolism does not have a generalized role in colony formation across eukaryotic phytoplankton groups.
 
@@ -1273,6 +1253,10 @@ NitOxPennateCentricPlot_cap <- glue("**Comparison of total number of genes encod
                                     "Whiskers span the range excluding outliers in the data.",
                                     "Citations for data sources can be found in Supplementary Table S3.", .sep = " ")
 NitOxPennateCentricPlot
+```
+
+```{r}
+NitOxPennateCentricRiboPlot <- knitr::include_graphics(file.path(Figures,"NitOxPennateCentricRiboPlot.png"))
 ```
 
 Most centric diatoms carry genes annotated as encoding ^•^NO producing enzymes, whereas most pennate diatoms do not (p-value = `r ScientificTen(NitOxProdPennateCentricPlot_pval$p)`). In contrast, most centric diatoms lack genes annotated as encoding ^•^NO scavenging enzymes, whereas most pennate diatoms carry those genes (p-value = `r ScientificTen(NitOxScavPennateCentricPlot_pval$p)`) (Fig \@ref(fig:NitOxPennateCentricPlot)). 
