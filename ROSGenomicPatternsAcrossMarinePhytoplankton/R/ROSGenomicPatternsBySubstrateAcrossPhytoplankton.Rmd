@@ -388,6 +388,7 @@ MergedData %>%
   scale_fill_manual(values =TaxaColors)+
   scale_shape_manual(values = c(19,1)) +
   theme_bw() +
+  coord_flip()+
   scale_x_continuous(limits = c(0,3))+
   scale_y_continuous(limits = c(3,6))+
   theme(panel.grid.major = element_blank(),
@@ -734,6 +735,10 @@ SupOxColonyPlot_cap <- glue("**Comparison of total number of genes encoding O~2~
                            "Whiskers span the range excluding outliers in the data.",
                             "Citations for data sources can be found in Supplementary Table S3.", .sep = " ")
 # SupOxColonyPlot
+```
+
+```{r}
+SupOxColonyPlot <- knitr::include_graphics(file.path(Figures,"SupOxColonyPlot.png"))
 ```
 
 ```{r}
@@ -1181,7 +1186,7 @@ NitOxScavColonyPlot_pval <- MergedData %>%
   unique() %>%
   compare_means(norm_NitOx ~ ColonySpecies, data = ., method = "wilcox.test")
 ```
-
+XXX
 ```{r}
 NitOxColonyPlot <- knitr::include_graphics(file.path(Figures,"NitOxColonyPlot.png"))
 ```
