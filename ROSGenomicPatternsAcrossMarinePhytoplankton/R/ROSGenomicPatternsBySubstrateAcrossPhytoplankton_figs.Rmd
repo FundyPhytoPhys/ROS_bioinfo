@@ -519,6 +519,8 @@ PoissonDistStats <- MergedData %>%
 SupOxRad <- readRDS(file.path(DataProcessedModels, "SupOxRad.Rds"))
 OchrophyteSupOxRad <- readRDS(file.path(DataProcessedModels, "OchrophyteSupOxRad.Rds"))
 SupOxRadProk <- readRDS(file.path(DataProcessedModels, "SupOxRadProk.Rds"))
+SupOxRadRibo <- readRDS(file.path(DataProcessedModels, "SupOxRadRibo.Rds"))
+SupOxRadProkRibo <- readRDS(file.path(DataProcessedModels, "SupOxRadProkRibo.Rds"))
 # SupOxLat <- readRDS(file.path(DataProcessedModels, "SupOxLat.Rds"))
 # SupOxLatProk <- readRDS(file.path(DataProcessedModels, "SupOxLatProk.Rds"))
 SupOxMerged <- readRDS(file.path(DataProcessed, "SupOxMerged.Rds"))
