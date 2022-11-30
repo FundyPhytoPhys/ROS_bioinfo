@@ -136,19 +136,17 @@ saveRDS(MergedData, file = file.path(DataOut, "AutomatedCounts.Rds"))
 ```
 
 ```{r manual colour scale, include = FALSE}
-TaxaColors = c("Green" = "darkgreen", 
-               "Diatom" = "brown4", 
-               "Haptophyte" = "royalblue", 
-               "Pelagophyte" = "navy", 
-               "Eustigmatophyte" = "purple", 
+TaxaColors = c("Green" = "darkgreen", # "Diatom" = "brown4", 
+               "Ochrophyte" = "brown4", 
+               "Haptophyte" = "royalblue", # "Pelagophyte" = "navy",  # "Eustigmatophyte" = "purple", 
                "Dinoflagellate" = "orange", 
                # "Ochromonadaceae" = "hotpink", 
                "Cryptophyte" = "seashell4", 
                "Red" = "red2", 
-               "Prokaryote" = "darkgoldenrod3", 
-               "Pelagophyte" = "tan4", 
-               "Raphidophyte" = "olivedrab", #"Symbiodinium"= "goldenrod1"
-               "Chrysophyte" = "firebrick1")
+               "Prokaryote" = "darkgoldenrod3")
+               # "Pelagophyte" = "tan4", 
+               # "Raphidophyte" = "olivedrab", #"Symbiodinium"= "goldenrod1"
+               # "Chrysophyte" = "firebrick1")
 saveRDS(TaxaColors, file = file.path(DataOut, "TaxaColours.Rds")) 
 ```
 
