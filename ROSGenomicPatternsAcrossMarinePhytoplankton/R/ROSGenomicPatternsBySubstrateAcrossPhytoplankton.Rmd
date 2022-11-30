@@ -753,7 +753,7 @@ SupOxColonyPlot_cap <- glue("**Comparison of total number of genes encoding O~2~
 ```
 
 ```{r}
-SupOxColonyPlot <- knitr::include_graphics(file.path(Figures,"SupOxColonyPlot.png"))
+# SupOxColonyPlot <- knitr::include_graphics(file.path(Figures,"SupOxColonyPlot.png"))
 ```
 
 ```{r}
