@@ -709,6 +709,21 @@ SupOxFlagPlot_cap <- glue("**Comparison of total number of genes encoding O~2~^�
 SupOxFlagPlot
 ```
 
+
+```{r}
+SupOxFlagRiboPlot <- knitr::include_graphics(file.path(Figures,"SupOxFlagRiboPlot.png"))
+```
+
+```{r SupOxFlagRiboPlot, fig.cap = SupOxFlagPlot_cap, fig.height= 7, fig.width= 7, echo = FALSE}
+SupOxFlagRiboPlot_cap <- glue("**Comparison of total number of genes encoding O~2~^•−^ scavenging enzymes ('SupOx_count') normalized to the total number of genes present in each organism ('GeneModels_count')) vs. the presence or absence of flagella in the organism.**",
+                          "Symbol color corresponds to taxon lineage ('Phylum').",
+                          "Notch spans ± standard error of the median.",
+                           "Box spans median ± 1 quartile of the data.",
+                           "Whiskers span the range excluding outliers in the data.",
+                          "Citations for data sources can be found in Supplementary Table S3.", .sep = " ")
+SupOxFlagRiboPlot
+```
+
 Consistent with the significant influence of flagella on the regressions vs. median cell radius (Fig \@ref(fig:SupOxRadPlots)), flagellated phytoplankton, irrespective of size, have a smaller proportion of their total gene content encoding O~2~^•−^ scavenging (Fig \@ref(fig:SupOxFlagPlot), p-value = `r ScientificTen(SupOxFlag_pval$p)`), than do non-flagellated phytoplankton. This suggests that cellular motility contributes to phytoplankton homeostasis of O~2~^•−^, possibly by supporting escape from localized pockets of O~2~^•−^.
 
 ```{r SupOxColony_pval, include = FALSE}
