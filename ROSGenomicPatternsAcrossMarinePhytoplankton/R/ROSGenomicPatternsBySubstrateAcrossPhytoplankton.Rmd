@@ -1087,6 +1087,7 @@ NitOxRadPlots
 
 ```{r}
 NitOxRadRiboPlots <- knitr::include_graphics(file.path(Figures,"NitOxRadRiboPlots.png"))
+NitOxRadRiboPlots
 ```
 
 With increasing cell radius eukaryotic phytoplankton do not vary in the fraction of total genes encoding the capacity to produce ^•^NO (Fig \@ref(fig:NitOxRadPlots), Blue line, Slope = `r ScientificTen(NitOxRad %>% filter(NitOx == "Production") %>% pluck('offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(NitOxRad %>% filter(NitOx == "Production") %>% pluck('offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`, p-value = `r ScientificTen(NitOxRad %>% filter(NitOx == "Production") %>% pluck('offset_model_regression', 1, "p.value", 2))`). Including prokaryotes in the regression in Fig \@ref(fig:NitOxRadPlots) does not substantially alter the interpretation (Data not visualized).
