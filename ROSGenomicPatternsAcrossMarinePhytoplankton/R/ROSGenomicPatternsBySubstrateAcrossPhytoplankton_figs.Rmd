@@ -613,8 +613,10 @@ SupOxRadProkRibo$Includes <- c("Eukaryotes + Prokaryotes")
 
 SupOxRadRiboPlots <- rbind(SupOxRadRibo, SupOxRadProkRibo) %>%
   unnest(c(offset_model_regression), names_sep = "_") %>%
+  unnest(c(taxa_offset_model_regression), names_sep = "_") %>%
   unnest(c(flagcol_offset_model_regression), names_sep = "_") %>%
   pivot_wider(., names_from = c(flagcol_offset_model_regression_term), values_from = c(flagcol_offset_model_regression_estimate, flagcol_offset_model_regression_std.error, flagcol_offset_model_regression_statistic, flagcol_offset_model_regression_p.value)) %>%
+  pivot_wider(., names_from = c(taxa_offset_model_regression_term), values_from = c(taxa_offset_model_regression_estimate, taxa_offset_model_regression_std.error, taxa_offset_model_regression_statistic, taxa_offset_model_regression_p.value)) %>%
   pivot_wider(., names_from = c(offset_model_regression_term), values_from = c(offset_model_regression_estimate, offset_model_regression_std.error, offset_model_regression_statistic, offset_model_regression_p.value)) %>%
   unnest(cols = c(data)) %>%
   filter(Includes != "Eukaryotes + Prokaryotes") %>%
@@ -622,21 +624,33 @@ SupOxRadRiboPlots <- rbind(SupOxRadRibo, SupOxRadProkRibo) %>%
   ggplot() +
   geom_point(aes(x = log_Radius_um, y = log10(SupOx_count/RibosomeCount), color = Phylum)) + 
   geom_point(aes(x = log_Radius_um, y = log10(SupOx_count/RibosomeCount), color = Phylum), data = MergedData %>% filter(Phylum == "Prokaryote", SupOx == "Scavenging")) + 
-  geom_abline(data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
+  geom_abline(#data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
               aes(intercept = `flagcol_offset_model_regression_estimate_(Intercept)`/ln_log10_conversion, 
                   slope = `flagcol_offset_model_regression_estimate_.$log_Radius_um`/ln_log10_conversion, 
                   linetype = flagcol_offset_regression_type), 
               color = "black") +
-  geom_abline(data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
+  geom_abline(#data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
               aes(intercept = (`flagcol_offset_model_regression_estimate_(Intercept)` + `flagcol_offset_model_regression_std.error_(Intercept)`) /ln_log10_conversion, 
                   slope = (`flagcol_offset_model_regression_estimate_.$log_Radius_um` + `flagcol_offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion), 
               linetype = "dotted", 
               color = "black") +
-  geom_abline(data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
+  geom_abline(#data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
               aes(intercept = (`flagcol_offset_model_regression_estimate_(Intercept)` - `flagcol_offset_model_regression_std.error_(Intercept)`) /ln_log10_conversion, 
                   slope = (`flagcol_offset_model_regression_estimate_.$log_Radius_um` - `flagcol_offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion), 
               linetype = "dotted", 
               color = "black") +
+  geom_abline(aes(intercept = `taxa_offset_model_regression_estimate_(Intercept)`/ln_log10_conversion, 
+                  slope = `taxa_offset_model_regression_estimate_.$log_Radius_um`/ln_log10_conversion, 
+                  linetype = taxa_offset_regression_type), 
+              color = "darkgreen") +
+  geom_abline(aes(intercept = (`taxa_offset_model_regression_estimate_(Intercept)` + `taxa_offset_model_regression_std.error_(Intercept)`) /ln_log10_conversion, 
+                  slope = (`taxa_offset_model_regression_estimate_.$log_Radius_um` + `taxa_offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion), 
+              linetype = "dotted", 
+              color = "darkgreen") +
+  geom_abline(aes(intercept = (`taxa_offset_model_regression_estimate_(Intercept)` - `taxa_offset_model_regression_std.error_(Intercept)`) /ln_log10_conversion, 
+                  slope = (`taxa_offset_model_regression_estimate_.$log_Radius_um` - `taxa_offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion), 
+              linetype = "dotted", 
+              color = "darkgreen") +
   geom_abline(aes(intercept = `offset_model_regression_estimate_(Intercept)`/ln_log10_conversion, 
                   slope = `offset_model_regression_estimate_.$log_Radius_um`/ln_log10_conversion, 
                   linetype = offset_regression_type), 
@@ -652,9 +666,11 @@ SupOxRadRiboPlots <- rbind(SupOxRadRibo, SupOxRadProkRibo) %>%
   geom_text(data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
             aes(x = 1.1, y = -3.7, label = paste("p-value =", signif(`flagcol_offset_model_regression_p.value_.$log_Radius_um`, digits = 2))), color = "black", check_overlap = TRUE) +
   geom_text(aes(x = 1.1, y = -3.5, label = paste("p-value =", signif(`offset_model_regression_p.value_.$log_Radius_um`, digits = 2))), color = "blue", check_overlap = TRUE) +
+  geom_text(aes(x = 1.1, y = -3.3, label = paste("p-value =", signif(`taxa_offset_model_regression_p.value_.$log_Radius_um`, digits = 2))), color = "darkgreen", check_overlap = TRUE) +
   scale_colour_manual(name = "Phylum", values =TaxaColors) +
   scale_linetype_manual(name = "Regression type", values = c("poisson" = "solid" , "quasipoisson" = "twodash")) +
   scale_fill_manual(name = "Phylum", values =TaxaColors, guide = "none") +
+  # scale_color_identity(labels=c("central","limits"), guide="legend") +
   # coord_cartesian(ylim = c(ROSMin, ROSMax)) +
   facet_grid(cols = vars(SupOx)) + #, rows = vars(Includes)
   scale_shape_manual(values = c(21,19,23,18)) +
@@ -1095,11 +1111,23 @@ HyPeRadProkRibo$Includes <- c("Eukaryotes + Prokaryotes")
 HyPeRadRiboPlots <- rbind(HyPeRadRibo, HyPeRadProkRibo) %>%
   filter(HyPe == "Production" | HyPe == "Scavenging") %>%
   unnest(c(offset_model_regression), names_sep = "_") %>%
-  # unnest(c(taxa_offset_model_regression), names_sep = "_") %>%
+  unnest(c(taxa_offset_model_regression), names_sep = "_") %>%
   unnest(c(flagcol_offset_model_regression), names_sep = "_") %>%
-  pivot_wider(., names_from = c(flagcol_offset_model_regression_term), values_from = c(flagcol_offset_model_regression_estimate, flagcol_offset_model_regression_std.error, flagcol_offset_model_regression_statistic, flagcol_offset_model_regression_p.value)) %>%
-  pivot_wider(., names_from = c(offset_model_regression_term), values_from = c(offset_model_regression_estimate, 
-                                                                               offset_model_regression_std.error, offset_model_regression_statistic, offset_model_regression_p.value)) %>%
+  pivot_wider(., names_from = c(flagcol_offset_model_regression_term), 
+              values_from = c(flagcol_offset_model_regression_estimate,
+                              flagcol_offset_model_regression_std.error,
+                              flagcol_offset_model_regression_statistic,
+                              flagcol_offset_model_regression_p.value)) %>%
+  pivot_wider(., names_from = c(taxa_offset_model_regression_term), 
+              values_from = c(taxa_offset_model_regression_estimate,
+                              taxa_offset_model_regression_std.error,
+                              taxa_offset_model_regression_statistic,
+                              taxa_offset_model_regression_p.value)) %>%
+  pivot_wider(., names_from = c(offset_model_regression_term), 
+              values_from = c(offset_model_regression_estimate, 
+                              offset_model_regression_std.error,
+                              offset_model_regression_statistic,
+                              offset_model_regression_p.value)) %>%
   unnest(c(offset_model_pvalue), names_sep = "_") %>%
   unnest(c(flagcol_offset_model_pvalue), names_sep = "_") %>%
   unnest(cols = c(data)) %>%
@@ -1107,37 +1135,37 @@ HyPeRadRiboPlots <- rbind(HyPeRadRibo, HyPeRadProkRibo) %>%
   unique() %>%
   ggplot() +
   geom_point(aes(x = log_Radius_um, y = log10(HyPe_count/RibosomeCount), color = Phylum)) +
-  geom_point(aes(x = log_Radius_um, y = log10(HyPe_count/RibosomeCount), color = Phylum), data = MergedData %>% filter(Phylum == "Prokaryote", !is.na(HyPe))) + 
-  geom_abline(data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05),
+  geom_point(aes(x = log_Radius_um, y = log10(HyPe_count/RibosomeCount), color = Phylum), data = MergedData %>% filter(Phylum == "Prokaryote", !is.na(HyPe))) +
+  geom_abline(#data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05),
               aes(intercept = `flagcol_offset_model_regression_estimate_(Intercept)`/ln_log10_conversion,
                   slope = `flagcol_offset_model_regression_estimate_.$log_Radius_um`/ln_log10_conversion,
                   linetype = flagcol_offset_regression_type),
               color = "black") +
-  geom_abline(data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05),
+  geom_abline(#data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05),
               aes(intercept = (`flagcol_offset_model_regression_estimate_(Intercept)` + `flagcol_offset_model_regression_std.error_(Intercept)`) /ln_log10_conversion,
                   slope = (`flagcol_offset_model_regression_estimate_.$log_Radius_um` + `flagcol_offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion),
               linetype = "dotted",
               color = "black") +
-  geom_abline(data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05),
+  geom_abline(#data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05),
               aes(intercept = (`flagcol_offset_model_regression_estimate_(Intercept)` - `flagcol_offset_model_regression_std.error_(Intercept)`) /ln_log10_conversion,
                   slope = (`flagcol_offset_model_regression_estimate_.$log_Radius_um` - `flagcol_offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion),
               linetype = "dotted",
               color = "black") +
-  # geom_abline(#data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05),
-  #             aes(intercept = `taxa_offset_model_regression_estimate_(Intercept)`/ln_log10_conversion,
-  #                 slope = `taxa_offset_model_regression_estimate_.$log_Radius_um`/ln_log10_conversion,
-  #                 linetype = taxa_offset_regression_type),
-  #             color = "green") +
-  # geom_abline(#data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05),
-  #             aes(intercept = (`taxa_offset_model_regression_estimate_(Intercept)` + `taxa_offset_model_regression_std.error_(Intercept)`) /ln_log10_conversion,
-  #                 slope = (`taxa_offset_model_regression_estimate_.$log_Radius_um` + `taxa_offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion),
-  #             linetype = "dotted",
-  #             color = "green") +
-  # geom_abline(#data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05),
-  #             aes(intercept = (`taxa_offset_model_regression_estimate_(Intercept)` - `taxa_offset_model_regression_std.error_(Intercept)`) /ln_log10_conversion,
-  #                 slope = (`taxa_offset_model_regression_estimate_.$log_Radius_um` - `taxa_offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion),
-  #             linetype = "dotted",
-  #             color = "green") +
+  geom_abline(#data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05),
+              aes(intercept = `taxa_offset_model_regression_estimate_(Intercept)`/ln_log10_conversion,
+                  slope = `taxa_offset_model_regression_estimate_.$log_Radius_um`/ln_log10_conversion,
+                  linetype = taxa_offset_regression_type),
+              color = "darkgreen") +
+  geom_abline(#data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05),
+              aes(intercept = (`taxa_offset_model_regression_estimate_(Intercept)` + `taxa_offset_model_regression_std.error_(Intercept)`) /ln_log10_conversion,
+                  slope = (`taxa_offset_model_regression_estimate_.$log_Radius_um` + `taxa_offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion),
+              linetype = "dotted",
+              color = "darkgreen") +
+  geom_abline(#data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05),
+              aes(intercept = (`taxa_offset_model_regression_estimate_(Intercept)` - `taxa_offset_model_regression_std.error_(Intercept)`) /ln_log10_conversion,
+                  slope = (`taxa_offset_model_regression_estimate_.$log_Radius_um` - `taxa_offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion),
+              linetype = "dotted",
+              color = "darkgreen") +
   geom_abline(aes(intercept = `offset_model_regression_estimate_(Intercept)`/ln_log10_conversion, 
                   slope = `offset_model_regression_estimate_.$log_Radius_um`/ln_log10_conversion, 
                   linetype = offset_regression_type), 
@@ -1156,7 +1184,7 @@ HyPeRadRiboPlots <- rbind(HyPeRadRibo, HyPeRadProkRibo) %>%
   # geom_text(aes(x = 1.1, y = -1.3, label = paste("p-value =", (signif(`flagcol_offset_model_regression_p.value_.$log_Radius_um`, digits = 2)))), color = "black", check_overlap = TRUE) +
   # geom_point(data = MergedData %>% filter(Taxa == "Prokaryote", HyPe == "Production" | HyPe == "Scavenging"), aes(x = log_Radius_um, y= log10((HyPe_count/GeneModels_count)), color = Phylum)) +
   # ggalt::geom_encircle(data = MergedData %>% filter(Taxa == "Prokaryote", HyPe == "Production" | HyPe == "Scavenging"), alpha = 0.1, aes(x=log_Radius_um, y= log10((HyPe_count/GeneModels_count)), color = Phylum), expand = 0, s_shape = 0.9) +
-  facet_grid(cols = vars(HyPe)) #+ #, rows = vars(Includes)
+  # facet_grid(cols = vars(HyPe)) + #, rows = vars(Includes)
   scale_colour_manual(name = "Phylum", values =TaxaColors) +
   # gfun::scale_color_manual2(name = "Contains", values = c("blue", "black")) +
   scale_linetype_manual(name = "Regression type", values = c("poisson" = "solid" , "quasipoisson" = "twodash")) +
@@ -1573,17 +1601,17 @@ NitOxRadPlots <- rbind(NitOxRad, NitOxRadProk, NitOxRadNoZero) %>%
   unique() %>%
   ggplot() +
   geom_point(aes(x = log_Radius_um, y = log10(NitOx_count/GeneModels_count), color = Phylum)) + 
-  geom_abline(data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
+  geom_abline(#data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
               aes(intercept = `flagcol_offset_model_regression_estimate_(Intercept)`/ln_log10_conversion, 
                   slope = `flagcol_offset_model_regression_estimate_.$log_Radius_um`/ln_log10_conversion, 
                   linetype = flagcol_offset_regression_type), 
               color = "black") +
-  geom_abline(data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
+  geom_abline(#data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
               aes(intercept = (`flagcol_offset_model_regression_estimate_(Intercept)` + `flagcol_offset_model_regression_std.error_(Intercept)`) /ln_log10_conversion, 
                   slope = (`flagcol_offset_model_regression_estimate_.$log_Radius_um` + `flagcol_offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion), 
               linetype = "dotted", 
               color = "black") +
-  geom_abline(data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
+  geom_abline(#data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
               aes(intercept = (`flagcol_offset_model_regression_estimate_(Intercept)` - `flagcol_offset_model_regression_std.error_(Intercept)`) /ln_log10_conversion, 
                   slope = (`flagcol_offset_model_regression_estimate_.$log_Radius_um` - `flagcol_offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion), 
               linetype = "dotted", 
@@ -1600,7 +1628,7 @@ NitOxRadPlots <- rbind(NitOxRad, NitOxRadProk, NitOxRadNoZero) %>%
                   slope = (`offset_model_regression_estimate_.$log_Radius_um` - `offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion), 
               linetype = "dotted", 
               color = "blue") +
-  geom_text(data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
+  geom_text(#data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
             aes(x = 0.0, y = -5.1, label = paste("p-value =", signif(`flagcol_offset_model_regression_p.value_.$log_Radius_um`, digits = 2))), color = "black", check_overlap = TRUE) +
   geom_text(aes(x = 0.0, y = -4.9, label = paste("p-value =", signif(`offset_model_regression_p.value_.$log_Radius_um`, digits = 2))), color = "blue", check_overlap = TRUE) +
   scale_colour_manual(name = "Phylum", values =TaxaColors) +
@@ -1644,30 +1672,47 @@ NitOxRadNoZeroRibo$Includes <- c("Eukaryotes with zero values omitted")
 NitOxRadRiboPlots <- rbind(NitOxRadRibo, NitOxRadProkRibo, NitOxRadNoZeroRibo) %>%
   filter(NitOx == "Production"|NitOx == "Scavenging") %>%
   unnest(c(offset_model_regression), names_sep = "_") %>%
+  unnest(c(taxa_offset_model_regression), names_sep = "_") %>%
   unnest(c(flagcol_offset_model_regression), names_sep = "_") %>%
   # filter(flagcol_offset_model_regression_term == c('(Intercept)', '.$log_Radius_um')) %>%
   pivot_wider(., names_from = c(flagcol_offset_model_regression_term), values_from = c(flagcol_offset_model_regression_estimate, flagcol_offset_model_regression_std.error, flagcol_offset_model_regression_statistic, flagcol_offset_model_regression_p.value)) %>%
+  pivot_wider(., names_from = c(taxa_offset_model_regression_term), values_from = c(taxa_offset_model_regression_estimate, taxa_offset_model_regression_std.error, taxa_offset_model_regression_statistic, taxa_offset_model_regression_p.value)) %>%
   pivot_wider(., names_from = c(offset_model_regression_term), values_from = c(offset_model_regression_estimate, offset_model_regression_std.error, offset_model_regression_statistic, offset_model_regression_p.value)) %>%
   unnest(cols = c(data)) %>%
   filter(Includes != "Eukaryotes + Prokaryotes") %>%
   unique() %>%
   ggplot() +
   geom_point(aes(x = log_Radius_um, y = log10(NitOx_count/RibosomeCount), color = Phylum)) + 
-  geom_abline(data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
+  geom_abline(#data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
               aes(intercept = `flagcol_offset_model_regression_estimate_(Intercept)`/ln_log10_conversion, 
                   slope = `flagcol_offset_model_regression_estimate_.$log_Radius_um`/ln_log10_conversion, 
                   linetype = flagcol_offset_regression_type), 
               color = "black") +
-  geom_abline(data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
+  geom_abline(#data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
               aes(intercept = (`flagcol_offset_model_regression_estimate_(Intercept)` + `flagcol_offset_model_regression_std.error_(Intercept)`) /ln_log10_conversion, 
                   slope = (`flagcol_offset_model_regression_estimate_.$log_Radius_um` + `flagcol_offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion), 
               linetype = "dotted", 
               color = "black") +
-  geom_abline(data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
+  geom_abline(#data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
               aes(intercept = (`flagcol_offset_model_regression_estimate_(Intercept)` - `flagcol_offset_model_regression_std.error_(Intercept)`) /ln_log10_conversion, 
                   slope = (`flagcol_offset_model_regression_estimate_.$log_Radius_um` - `flagcol_offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion), 
               linetype = "dotted", 
               color = "black") +
+  geom_abline(#data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
+              aes(intercept = `taxa_offset_model_regression_estimate_(Intercept)`/ln_log10_conversion, 
+                  slope = `taxa_offset_model_regression_estimate_.$log_Radius_um`/ln_log10_conversion, 
+                  linetype = taxa_offset_regression_type), 
+              color = "darkgreen") +
+  geom_abline(#data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
+              aes(intercept = (`taxa_offset_model_regression_estimate_(Intercept)` + `taxa_offset_model_regression_std.error_(Intercept)`) /ln_log10_conversion, 
+                  slope = (`taxa_offset_model_regression_estimate_.$log_Radius_um` + `taxa_offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion), 
+              linetype = "dotted", 
+              color = "darkgreen") +
+  geom_abline(#data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
+              aes(intercept = (`taxa_offset_model_regression_estimate_(Intercept)` - `taxa_offset_model_regression_std.error_(Intercept)`) /ln_log10_conversion, 
+                  slope = (`taxa_offset_model_regression_estimate_.$log_Radius_um` - `taxa_offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion), 
+              linetype = "dotted", 
+              color = "darkgreen") +
   geom_abline(aes(intercept = `offset_model_regression_estimate_(Intercept)`/ln_log10_conversion, 
                   slope = `offset_model_regression_estimate_.$log_Radius_um`/ln_log10_conversion, 
                   linetype = offset_regression_type), 
@@ -1680,8 +1725,10 @@ NitOxRadRiboPlots <- rbind(NitOxRadRibo, NitOxRadProkRibo, NitOxRadNoZeroRibo) %
                   slope = (`offset_model_regression_estimate_.$log_Radius_um` - `offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion), 
               linetype = "dotted", 
               color = "blue") +
-  geom_text(data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
+  geom_text(#data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
             aes(x = 0.0, y = -4.1, label = paste("p-value =", signif(`flagcol_offset_model_regression_p.value_.$log_Radius_um`, digits = 2))), color = "black", check_overlap = TRUE) +
+  geom_text(#data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
+            aes(x = 0.0, y = -3.7, label = paste("p-value =", signif(`taxa_offset_model_regression_p.value_.$log_Radius_um`, digits = 2))), color = "darkgreen", check_overlap = TRUE) +
   geom_text(aes(x = 0.0, y = -3.9, label = paste("p-value =", signif(`offset_model_regression_p.value_.$log_Radius_um`, digits = 2))), color = "blue", check_overlap = TRUE) +
   scale_colour_manual(name = "Phylum", values =TaxaColors) +
   scale_linetype_manual(name = "Regression type", values = c("poisson" = "solid" , "quasipoisson" = "twodash")) +
@@ -1870,13 +1917,14 @@ NitOxScavColonyPlot_pval <- MergedData %>%
 
 ```{r generate NitOxColonyPlot, include = FALSE}
 NitOxColonyPlot <- MergedData %>%
+  mutate(ColonySpecies == as.factor(ColonySpecies)) %>%
   filter(NitOx == "Production" | NitOx == "Scavenging",
          GeneModels_count != 0,
          !is.na(ColonySpecies),
          Taxa != "Prokaryote") %>%
   select(FileName, ColonySpecies, NitOx_count, GeneModels_count, Phylum, NitOx) %>%
   unique() %>%
-  ggplot(aes(x = ColonySpecies, y = NitOx_count/GeneModels_count)) +
+  ggplot(aes(x = as.factor(ColonySpecies), y = NitOx_count/GeneModels_count)) +
   geom_boxplot(notch = TRUE, outlier.shape = NA) +
   geom_jitter(aes(color = Phylum),width = 0.2, stat = "unique") +
   theme_bw() +
@@ -1884,7 +1932,7 @@ NitOxColonyPlot <- MergedData %>%
   xlab("") +
   stat_compare_means(comparisons = MyColonyComparisons, method = "wilcox.test") +
   facet_grid(cols = vars(c(NitOx))) +
-  scale_x_discrete(labels = c("FALSE" = "Non-colony", "TRUE" = "Colony")) +
+  scale_x_discrete(labels = c("0" = "Non-colony", "1" = "Colony")) +
   scale_y_continuous(labels = scales::scientific)  +
   scale_colour_manual(name = "Phylum", values =TaxaColors) +
   theme(panel.grid.major = element_blank(),
@@ -1897,7 +1945,7 @@ NitOxColonyPlot <- MergedData %>%
         strip.text = element_text(size=11)) +
   labs(y = "Genes Encoding " ~NO^`•`~" Metabolizing Enzymes Normalized to Total Genes")
 
-# ggsave(paste("HyPePennateCentricPlot",".png",sep = ""), plot = HyPePennateCentricPlot, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+ggsave(paste("NitOxColonyPlot",".png",sep = ""), plot = NitOxColonyPlot, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
 
 # NitOxColonyPlot
 ```
