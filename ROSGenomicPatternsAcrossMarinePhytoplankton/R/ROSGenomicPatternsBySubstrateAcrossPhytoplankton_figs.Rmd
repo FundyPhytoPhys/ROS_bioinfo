@@ -1103,10 +1103,10 @@ HyPeRadProkRibo$Includes <- c("Eukaryotes + Prokaryotes")
 # DiatomHyPeRad$Includes <- c("Diatom")
 
 
-# OchrophyteHyPeRad <- OchrophyteHyPeRad %>% 
-#   mutate(ROSType = "HyPe",
-#          ROSName = "H~2~O~2~") %>%
-#   rename(ROSMetabolism = HyPe)
+OchrophyteHyPeRad <- OchrophyteHyPeRad %>%
+  mutate(ROSType = "HyPe",
+         ROSName = "H~2~O~2~") #%>%
+  # rename(ROSMetabolism = HyPe)
 
 HyPeRadRiboPlots <- rbind(HyPeRadRibo, HyPeRadProkRibo) %>%
   filter(HyPe == "Production" | HyPe == "Scavenging") %>%
@@ -2275,7 +2275,7 @@ ManualAutoCompare <- ManualAutoCompareData %>%
 
 ManualAutoCompare
 
-# ggsave(paste("FigureS3",".png",sep = ""), plot = ManualAutoCompare, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+ggsave(paste("ManualAutoCompare",".png",sep = ""), plot = ManualAutoCompare, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
 ```
 
 ```{r generate PoissonDist, include = FALSE}
@@ -2299,7 +2299,7 @@ PoissonDist <- MergedData %>%
   labs(x = "Number of Genes Encoding Metabolism of a Particular ROS",
        y = "Frequency")
 
-# ggsave(paste("FigureS4",".png",sep = ""), plot = PoissonDist, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+ggsave(paste("PoissonDist",".png",sep = ""), plot = PoissonDist, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
 ```
 
 ```{r PoissonDist, fig.cap = PoissonDist_cap, echo = FALSE}
@@ -2361,7 +2361,7 @@ OmesPlot_cap <- glue("**Comparison of paired counts of particular genes encoding
                      "Citations for data sources are in Supplementary Table S3.",
                     .sep = " ")
 
-# ggsave(paste("FigureS5",".png",sep = ""), plot = OmesPlot, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+ggsave(paste("OmesPlot",".png",sep = ""), plot = OmesPlot, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
 
 ```
 
@@ -2510,7 +2510,7 @@ OchrophyteRadPlot <-  rbind(OchrophyteSupOxRad, OchrophyteHyPeRad, OchrophyteNit
   labs(x = ~log[10] ~ "(Median Cell Radius (µm))", 
        y = ~log[10] ~ "(Genes Encoding ROS Metabolizing Enzymes Normalized to Total Genes)") 
 
-# ggsave(paste("FigureS6",".png",sep = ""), plot = OchrophyteRadPlot, device = NULL, path = Figures,scale = 1, height=6, width= 10, units = c("in"),dpi = 300, limitsize = TRUE)
+ggsave(paste("OchrophyteRadPlot",".png",sep = ""), plot = OchrophyteRadPlot, device = NULL, path = Figures,scale = 1, height=6, width= 10, units = c("in"),dpi = 300, limitsize = TRUE)
 ```
 
 ```{r OchrophyteRadPlot, fig.cap = OchrophyteRadPlot_cap, fig.height= 6, fig.width= 10, echo = FALSE}
