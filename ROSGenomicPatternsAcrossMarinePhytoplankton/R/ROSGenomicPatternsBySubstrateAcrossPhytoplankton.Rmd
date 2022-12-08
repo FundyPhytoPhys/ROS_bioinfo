@@ -1364,17 +1364,8 @@ ManualAutoCompare_cap <- glue::glue("**Comparison of paired counts of particular
                                     "Dashed line is placed at 1:1 where Manual and Automated counts would be equal.", 
                                     "Citations for data sources in Supplemental Data Table S4.", .sep = " ")
 
-ManualAutoCompare <- ManualAutoCompareData %>%
-  select(-Automated_count) %>%
-  rename(Automated_count = AutomatedECKO_count) %>%
-  ggplot() +
-  geom_jitter(aes(x = Manual_count, y = Automated_count, color = ROSEnzymeAbbrev)) +
-  geom_abline(aes(intercept = 0, slope = 1), linetype = "dashed") +
-  coord_fixed(ratio = 1) +
-  labs(x = "Manual Gene Count", 
-       y = "Automatic Gene Count",
-       color = "Gene") +
-  theme_bw()
+ManualAutoCompare <- knitr::include_graphics(file.path(Figures,"ManualAutoCompare.png"))
+
 
 ManualAutoCompare
 
@@ -1386,23 +1377,9 @@ PoissonDist_cap <- glue("**Histogram of occurrences of number of total genes, in
                         "Symbol color corresponds to taxon lineage ('Taxa')", .sep = " ")
 #                            "Symbol color corresponds to taxon lineage ('Taxa')", .sep = " "))
 
-PoissonDist <- MergedData %>% 
-  select(FileName, HyPe, HyPe_count, SupOx, SupOx_count, NitOx, NitOx_count, Phylum) %>%
-  unique() %>%
-  pivot_longer(c(HyPe, SupOx, NitOx), names_to = "ROS", values_to = "ProdScav") %>% 
-  pivot_longer(c(HyPe_count, SupOx_count, NitOx_count), names_to = "ROS_countType", values_to = "ROS_count") %>%
-  select(FileName, ProdScav, ROS_countType, ROS_count, Phylum, ROS) %>%
-  filter(!is.na(ProdScav)) %>%
-  unique() %>%
-  ggplot() + 
-  geom_histogram(aes(x= ROS_count, fill = Phylum), binwidth = 4) +
-  facet_grid(rows = vars(ROS), cols = vars(ProdScav), scales = "free_y") +
-  scale_fill_manual(values =TaxaColors) +
-  theme_bw() +
-  labs(x = "Number of Genes Encoding Metabolism of a Particular ROS",
-       y = "Frequency")
 
-# ggsave(paste("FigureS4",".png",sep = ""), plot = PoissonDist, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+PoissonDist <- knitr::include_graphics(file.path(Figures,"PoissonDist.png"))
+
 ```
 
 ```{r PoissonDist, fig.cap = PoissonDist_cap, echo = FALSE}
@@ -1430,32 +1407,8 @@ OmesJust <- OmesPairs %>%
 
 
 ```{r generate OmesPlot, include = FALSE}
-OmesPlot <- OmesPairs %>%
-  ggplot() + 
-  geom_jitter(aes(x = ROSGene_count.g, y = ROSGene_count.t, colour = Phylum, ),)  +#size = as.numeric(GenomeSize_mbp.g)  stat = "unique"
-  # geom_count(aes(x = ROSGene_count.g, y = ROSGene_count.t, colour = Phylum, ),)  +#size = as.numeric(GenomeSize_mbp.g)  stat = "unique"
-  # geom_point(aes(x = ROSGene_count.g, y = ROSGene_count.t, size = Omes_pairs_comparison)) +
-  geom_abline(intercept = 0, slope =  1, linetype = "dashed") +
-  theme_bw() +
-  theme(panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        axis.text=element_text(size=12),
-        axis.title=element_text(size=16), 
-        aspect.ratio = 1,
-        legend.text=element_text(size=9), 
-        legend.title = element_text(size=10)) +
-  guides(colour=guide_legend(title = "Phylum", override.aes = list(size=4)), size = guide_legend(title = "Genome Size (MBp)")) +
-  scale_colour_manual(values =TaxaColors) +
-  # scale_radius(breaks=c(2,4,6,8,10,12,15,20,25)) +
-  # xlab("ROS gene count by family (genome)") +
-  # ylab("ROS gene count by family (transcriptome)") +
-  coord_fixed(ratio = 1) +
-  scale_x_continuous(limits = c(0,28)) +
-  scale_y_continuous(limits = c(0,28)) +
-  labs(x = "Counts of Genes from Genome", 
-       y = "Counts of Genes from Transcriptome")
-  # ggforce::facet_zoom(xlim = c(0,10), ylim = c(0,10), zoom.size = 0.25)
 
+OmesPlot <- knitr::include_graphics(file.path(Figures,"OmesPlot.png"))
 OmesPlot_cap <- glue("**Comparison of paired counts of particular genes encoding ROS Production or Scavenging from the genome ('ROSGene_count.g') or transcriptome ('ROSGene_count.t') taken from the same organism.**",
                         "Data was drawn from a subset of analyzed organisms for which both genome and transcriptome were available.",
                        "Colour corresponds to the taxonomic lineage ('Phylum')",
@@ -1553,70 +1506,14 @@ NitOxScavShapiro <- MergedData %>%
 
 
 ```{r generate OchrophyteRadPlot, include=FALSE}
-OchrophyteHyPeRad$Includes <- c("Ochrophyte Regressions")
-OchrophyteNitOxRad$Includes <- c("Ochrophyte Regressions")
-OchrophyteSupOxRad$Includes <- c("Ochrophyte Regressions")
 
-OchrophyteSupOxRad <- OchrophyteSupOxRad %>% 
-  mutate(ROSType = "SupOx",
-         ROSName = "O~2~^•−^") %>%
-  rename(ROSMetabolism = SupOx)
-
-OchrophyteNitOxRad <- OchrophyteNitOxRad %>% 
-  mutate(ROSType = "NitOx",
-         ROSName = "^•^NO") %>%
-  rename(ROSMetabolism = NitOx)
-
-OchrophyteRadPlot <-  rbind(OchrophyteSupOxRad, OchrophyteHyPeRad, OchrophyteNitOxRad) %>%
-  # filter(HyPe == "Production" | HyPe == "Scavenging") %>%
-  unnest(c(offset_model_regression), names_sep = "_") %>%
-  unnest(c(flagcol_offset_model_regression), names_sep = "_") %>%
-  pivot_wider(., names_from = c(flagcol_offset_model_regression_term), values_from = c(flagcol_offset_model_regression_estimate, flagcol_offset_model_regression_std.error, flagcol_offset_model_regression_statistic, flagcol_offset_model_regression_p.value)) %>%
-  pivot_wider(., names_from = c(offset_model_regression_term), values_from = c(offset_model_regression_estimate, 
-                                                                               offset_model_regression_std.error, offset_model_regression_statistic, offset_model_regression_p.value)) %>%
-  unnest(c(offset_model_pvalue), names_sep = "_") %>%
-  unnest(c(flagcol_offset_model_pvalue), names_sep = "_") %>%
-  unnest(cols = c(data)) %>%
-  ggplot() +
-  geom_point(aes(x = log_Radius_um, y = log10(HyPe_count/GeneModels_count), color = Phylum)) +
-  geom_point(aes(x = log_Radius_um, y = log10(NitOx_count/GeneModels_count), color = Phylum)) +
-  geom_point(aes(x = log_Radius_um, y = log10(SupOx_count/GeneModels_count), color = Phylum)) +
-  geom_abline(aes(intercept = `offset_model_regression_estimate_(Intercept)`/ln_log10_conversion, 
-                  slope = `offset_model_regression_estimate_.$log_Radius_um`/ln_log10_conversion, 
-                  linetype = offset_regression_type), 
-              color = "blue") +
-  geom_abline(aes(intercept = (`offset_model_regression_estimate_(Intercept)` + `offset_model_regression_std.error_(Intercept)`) /ln_log10_conversion, 
-                  slope = (`offset_model_regression_estimate_.$log_Radius_um` + `offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion), 
-              linetype = "dotted", 
-              color = "blue") +
-  geom_abline(aes(intercept = (`offset_model_regression_estimate_(Intercept)` - `offset_model_regression_std.error_(Intercept)`) /ln_log10_conversion, 
-                  slope = (`offset_model_regression_estimate_.$log_Radius_um` - `offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion), 
-              linetype = "dotted", 
-              color = "blue") +
-  geom_text(aes(x = 1.1, y = -4.1, label = paste("p-value =", signif(`offset_model_regression_p.value_.$log_Radius_um`, digits = 2))), color = "blue", check_overlap = TRUE) +
-  facet_grid(cols = vars(ROSMetabolism), rows = vars(ROSType), ) +
-  scale_colour_manual(name = "Phylum", values =TaxaColors) + 
-  
-  scale_linetype_manual(name = "Regression type", values = c("poisson" = "solid" , "quasipoisson" = "twodash")) +
-  scale_shape_manual(values = c(21,19,23,18)) +
-  coord_cartesian(ylim = c(ROSMin, ROSMax)) +
-  guides(color = "none") +
-  # scale_x_continuous(limits = c(-0.5, 1.6)) +
-  theme_bw() +
-  theme(panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        axis.text = element_text(size=11),
-        axis.title = element_text(size=12), 
-        legend.text = element_text(size=11), 
-        legend.title = element_text(size=13),
-        strip.text = element_text(size=11)) +
-  labs(x = ~log[10] ~ "(Median Cell Radius (µm))", 
-       y = ~log[10] ~ "(Genes Encoding ROS Metabolizing Enzymes Normalized to Total Genes)") 
 
 # ggsave(paste("FigureS6",".png",sep = ""), plot = OchrophyteRadPlot, device = NULL, path = Figures,scale = 1, height=6, width= 10, units = c("in"),dpi = 300, limitsize = TRUE)
 ```
 
 ```{r OchrophyteRadPlot, fig.cap = OchrophyteRadPlot_cap, fig.height= 6, fig.width= 10, echo = FALSE}
+OchrophyteRadPlot <- knitr::include_graphics(file.path(Figures,"OchrophyteRadPlot.png"))
+
 OchrophyteRadPlot_cap <- glue("**Comparison of log~10~ (Total number of genes encoding H~2~O~2~, O~2~^•−^ or ^•^NO metabolizing enzymes normalized to the total number of genes present in each Ochrophyte) vs. the log~10~( median cell radius in µm).**",
                             "Poisson (solid line) or Quasi-Poisson (dashed line) regressions fitted to data ± Standard Error (dotted line).",
                             "Regressions were run without (blue line) 'Colony' and 'Flagella' as co-variates.", 
