@@ -354,12 +354,17 @@ GeneModelsRadPlot_cap <- glue("**Comparison of log~10~ of the total number of ge
 ```
 
 ```{r RibosomeRadPlot, fig.cap = RibosomeRadPlot_cap, echo=FALSE}
+RibosomeRadPlot_cap <- glue("**Comparison of log~10~ of the total number of ribosomal genes in an organism ('log10(RibosomeCount)') to log~10~ of the median cell radius in µm ('log_Radius_um').**", 
+                              "Colour corresponds to the taxonomic lineage ('Phylum'), whereas symbol shape corresponds to the source of the data, whether Genome or Transcriptome ('Ome').", 
+                              "Citations for data sources are in Supplementary Table S3.",
+                              .sep = " ")
+
 RibosomeRadPlot <- MergedData %>%
   # filter(Taxa != "Prokaryote") %>%
   filter(GeneModels_count != "0") %>%
   ggplot(aes(x=log_Radius_um, y= log10(RibosomeCount))) +
   ggConvexHull::geom_convexhull(alpha = 0.2, aes(fill = Phylum, color = Phylum)) +
-  geom_point(aes(shape = Ome, colour = Taxa), size = 3)+
+  geom_point(aes(shape = Ome, colour = Phylum), size = 3)+
   # ggalt::geom_encircle(aes(color = Phylum), expand = 0) +
   scale_colour_manual(values =TaxaColors)+
   scale_fill_manual(values =TaxaColors)+
@@ -382,8 +387,8 @@ XXX
 MergedData %>% 
   filter(GeneModels_count != "0") %>%
   ggplot(aes(x = log10(RibosomeCount), y = log_GeneModels_count)) +
-  ggConvexHull::geom_convexhull(alpha = 0.2, aes(fill = Taxa, color = Taxa)) +
-  geom_point(aes(shape = Ome, colour = Taxa), size = 3) +
+  ggConvexHull::geom_convexhull(alpha = 0.2, aes(fill = Phylum, color = Phylum)) +
+  geom_point(aes(shape = Ome, colour = Phylum), size = 3) +
   scale_colour_manual(values =TaxaColors)+
   scale_fill_manual(values =TaxaColors)+
   scale_shape_manual(values = c(19,1)) +
@@ -401,38 +406,6 @@ MergedData %>%
   labs(x = ~log[10] ~ "(Total Number of Ribosomal Genes)",
        y = ~log[10] ~ "(Total Number of Genes)")
 ```
-
-
-```{r}
-NitOxFlagella <- MergedData %>% 
-  filter(Taxa != "Prokaryote", 
-         NitOx %in% c("Production", "Scavenging")) %>%
-  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, ROSGene_count, ECNumber, EnzymeName, ColonySpecies, NitOx_count, NitOx) %>%
-  unique() %>%
-  mutate(NitOx_countL = NitOx_count %>% as.logical() %>% as.numeric(),
-         FlagellaL = ifelse(Flagella == "yes", 1, 0)) %>%
-  select(FileName, NitOx_count, NitOx_countL, Flagella, FlagellaL,NitOx) %>%
-  # filter(GeneModels_count != 0) %>% #This is because of introducing exposure
-  nest(data = -c(NitOx)) %>%
-  mutate(fit_b_offset = map(data, possibly(~glm(.$NitOx_countL ~ .$FlagellaL, data = ., family = binomial(link = "logit")), otherwise = NULL)),
-                    param_b_offset = map(fit_b_offset, tidy),
-                    pred_b_offset = map(fit_b_offset, augment))
-```
-
-```{r, fig.width = 10, fig.height = 5}
-NitOxFlagellaFig <- NitOxFlagella %>%
-  unnest(param_b_offset) %>%
-  filter(p.value < 0.05) %>%
-  unnest(c( pred_b_offset)) %>%
-  # unnest(pred_b_offset) %>%
-  ggplot() +
-  geom_point(aes(x = `.$FlagellaL`, y = `.$NitOx_countL`)) +
-  geom_line(aes(x = `.$FlagellaL`, y = logit2prob(.fitted))) +
-  facet_grid(rows = vars(NitOx))
-  
-NitOxFlagellaFig
-```
-How would we present the probability, simply the number? 0 not flagellated, 1 flagellated. 
 
 ```{r}
 NitOxRadFlagella <- MergedData %>% 
@@ -497,51 +470,7 @@ NitOxRadColonyFig <- NitOxRadColony %>%
 NitOxRadColonyFig
 ```
 
-```{r}
-NitOxDiatom <- MergedData %>% 
-  filter(Taxa == "Diatom", 
-         NitOx %in% c("Production", "Scavenging")) %>%
-  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, ROSGene_count, ECNumber, EnzymeName, ColonySpecies, NitOx_count, NitOx) %>%
-  unique() %>%
-  mutate(NitOx_countL = NitOx_count %>% as.logical() %>% as.numeric(),
-         PennateCentricL = ifelse(PennateCentric == "Pennate", 1, 0)) %>%
-  # filter(GeneModels_count != 0) %>% #This is because of introducing exposure
-  nest(data = -c(NitOx)) %>%
-  mutate(fit_b_offset = map(data, possibly(~glm(.$NitOx_countL ~ .$PennateCentricL, data = ., family = binomial(link = "logit")), otherwise = NULL)),
-                    param_b_offset = map(fit_b_offset, tidy),
-                    pred_b_offset = map(fit_b_offset, augment))
-```
 
-Regressions are empty, not enough statistical power? Probably due to the nature of the data. Almost always present in one, almost always absent in the ohter.
-```{r, fig.width = 10, fig.height = 5}
-NitOxDiatomFig <- NitOxDiatom %>%
-  unnest(param_b_offset) %>%
-  filter(p.value < 0.05) %>%
-  unnest(c( pred_b_offset)) %>%
-  filter(`.$PennateCentricL` %in% c(0,1)) %>%
-  # unnest(pred_b_offset) %>%
-  ggplot() +
-  geom_point(aes(x = `.$PennateCentricL`, y = `.$NitOx_countL`)) +
-  geom_text(aes(x = `.$PennateCentricL`, y = logit2prob(.fitted), label = logit2prob(.fitted))) +
-  # geom_line(aes(x = `.$PennateCentricL`, y = logit2prob(.fitted))) +
-  facet_grid(rows = vars(NitOx))
-  
-NitOxDiatomFig
-```
-
-```{r, fig.width = 10, fig.height = 5}
-NitOxDiatomFig <- NitOxDiatom %>%
-  unnest(param_b_offset) %>%
-  filter(p.value < 0.05) %>%
-  unnest(c( pred_b_offset)) %>%
-  # unnest(pred_b_offset) %>%
-  ggplot() +
-  geom_point(aes(x = `.$PennateCentricL`, y = `.$NitOx_countL`)) +
-  geom_line(aes(x = `.$PennateCentricL`, y = logit2prob(.fitted))) +
-  facet_grid(rows = vars(NitOx))
-  
-NitOxDiatomFig
-```
 
 ```{r}
 NitOxRadDiatom <- MergedData %>% 
@@ -574,30 +503,6 @@ NitOxRadDiatomFig <- NitOxRadDiatom %>%
 NitOxRadDiatomFig
 ```
 
-```{r}
-GeneModelsInvRadPlot <- MergedData %>%
-  # filter(Taxa != "Prokaryote") %>%
-  filter(GeneModels_count != "0") %>%
-  ggplot(aes(x=log_Radius_um, y= log10(1/GeneModels_count))) +
-  ggConvexHull::geom_convexhull(alpha = 0.2, aes(fill = Phylum, color = Phylum)) +
-  geom_point(aes(shape = Ome, colour = Phylum), size = 3)+
-  # ggalt::geom_encircle(aes(color = Phylum), expand = 0) +
-  scale_colour_manual(values =TaxaColors)+
-  scale_fill_manual(values =TaxaColors)+
-  scale_shape_manual(values = c(19,1)) +
-  theme_bw()+
-  theme(panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        axis.text=element_text(size=12),
-        axis.title=element_text(size=14),
-        aspect.ratio = 1,
-        legend.text=element_text(size=10),
-        legend.title = element_text(size=12)) +
-  labs(x = ~log[10] ~ "(Median Cell Radius (µm))",
-       y = ~log[10] ~ "(Inverse Total Number of Genes)")
-
-GeneModelsInvRadPlot
-```
 
 ```{r generate PoissonDistStats, include = FALSE}
 PoissonDistStats <- MergedData %>% 
@@ -677,8 +582,8 @@ SupOxRadRiboPlots <- knitr::include_graphics(file.path(Figures,"SupOxRadRiboPlot
 SupOxRadRiboPlots
 ```
 
-With increasing cell radius, eukaryotic phytoplankton have a smaller fraction of their total genes encoding scavenging of O~2~^•−^ (Fig \@ref(fig:SupOxRadPlots), Blue line, Slope = `r ScientificTen(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck('offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck('offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`, p-value = `r ScientificTen(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck('offset_model_regression', 1, "p.value", 2))`). The negative slope does not support our Hypothesis \@ref(hyp:SupOx) that phytoplankton do not differentially allocate a changing fraction of their total gene content to O~2~^•−^ production nor scavenging with increasing cell size. 
-Including 'Flagella' and 'Colony' as co-variates in the regression results, however, in a slope that is not statistically different from zero (Fig \@ref(fig:SupOxRadPlots), Black line, Slope = `r ScientificTen(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck('flagcol_offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck('flagcol_offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`, p-value = `r ScientificTen(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck('flagcol_offset_model_regression', 1, "p.value", 2))`), driven by the influence of 'Flagella' (p-value = `r ScientificTen(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck("flagcol_offset_model_pvalue", 1, tidy, "p.value", 3))`) but not 'Colony' (p-value = `r ScientificTen(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck("flagcol_offset_model_pvalue", 1, tidy, "p.value", 4))`). Including data from selected prokaryotic phytoplankton did not qualitatively alter these results (Data not shown). O~2~^•−^ metabolism in phytoplankton appears to be mediated by a nearly fixed set of core genes that do not change with increasing gene count, thus the fractional gene allocation to O~2~^•−^ decreases as cell radius, and the co-varying total gene count increases. Gene dosage does not emerge as a factor in phytoplankton O~2~^•−^ metabolism.
+With increasing cell radius, eukaryotic phytoplankton have a smaller fraction of their total genes encoding scavenging of O~2~^•−^ (Fig \@ref(fig:SupOxRadPlots), Blue line, Slope = `r ScientificTen(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck('offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck('offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`, p-value = `r ScientificTen(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck('offset_model_regression', 1, "p.value", 2))`, pseudo R^2^ = `r 1-(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck('offset_model', 1, "deviance")/SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck('offset_model', 1, "null.deviance"))`). The negative slope does not support our Hypothesis \@ref(hyp:SupOx) that phytoplankton do not differentially allocate a changing fraction of their total gene content to O~2~^•−^ production nor scavenging with increasing cell size. 
+Including 'Flagella' and 'Colony' as co-variates in the regression results, however, in a slope that is not statistically different from zero (Fig \@ref(fig:SupOxRadPlots), Black line, Slope = `r ScientificTen(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck('flagcol_offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck('flagcol_offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`, p-value = `r ScientificTen(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck('flagcol_offset_model_regression', 1, "p.value", 2))`, pseudo R^2^ = `r 1-(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck('flagcol_offset_model', 1, "deviance")/SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck('flagcol_offset_model', 1, "null.deviance"))`), driven by the influence of 'Flagella' (p-value = `r ScientificTen(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck("flagcol_offset_model_pvalue", 1, tidy, "p.value", 3))`) but not 'Colony' (p-value = `r ScientificTen(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck("flagcol_offset_model_pvalue", 1, tidy, "p.value", 4))`). Including data from selected prokaryotic phytoplankton did not qualitatively alter these results (Data not shown). O~2~^•−^ metabolism in phytoplankton appears to be mediated by a nearly fixed set of core genes that do not change with increasing gene count, thus the fractional gene allocation to O~2~^•−^ decreases as cell radius, and the co-varying total gene count increases. Gene dosage does not emerge as a factor in phytoplankton O~2~^•−^ metabolism.
 
 ### Influences of Flagella, Colony Formation and Cell Shape on Gene Counts for Enzymes Metabolizing O~2~^•−^ {.unnumbered}
 
@@ -708,7 +613,6 @@ SupOxFlagPlot_cap <- glue("**Comparison of total number of genes encoding O~2~^�
                           "Citations for data sources can be found in Supplementary Table S3.", .sep = " ")
 SupOxFlagPlot
 ```
-
 
 ```{r}
 SupOxFlagRiboPlot <- knitr::include_graphics(file.path(Figures,"SupOxFlagRiboPlot.png"))
@@ -858,11 +762,11 @@ HyPeRadPlots_cap <- glue("**Comparison of log~10~ (Total number of genes encodin
 HyPeRadPlots
 ```
 
-With increasing cell radius, eukaryotic phytoplankton have a smaller fraction of their total genes that encode the production of H~2~O~2~ (Fig \@ref(fig:HyPeRadPlots), Blue line, Slope = `r ScientificTen(HyPeRad %>% filter(HyPe == "Production") %>% pluck('offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(HyPeRad %>% filter(HyPe == "Production") %>% pluck('offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`, p-value = `r ScientificTen(HyPeRad %>% filter(HyPe == "Production") %>% pluck('offset_model_regression', 1, "p.value", 2))`). Including 'Flagella' and 'Colony' as co-variates did not influence the negative slope of the fraction of total genes encoding H~2~O~2~ production with increasing median cell radius (Black line, 'Flagella' p-value = `r ScientificTen(HyPeRad$flagcol_offset_model_pvalue[[1]] %>% pluck("p.value",3))`, 'Colony' p-value = `r ScientificTen(HyPeRad$flagcol_offset_model_pvalue[[1]] %>% pluck("p.value",4))`). Including data from selected prokaryotic phytoplankton also did not qualitatively alter these results (Data not shown). The pattern of a smaller fraction of total genes for H~2~O~2~ production with increasing cell radius supports our Hypothesis \@ref(hyp:HyPeNitOxRad) that larger phytoplankton counter decreasing diffusional loss of H~2~O~2~ out of cells by having lower genomic capacity for H~2~O~2~ production, while losses of genes encoding H~2~O~2~ producing enzymes are more costly to small phytoplankton (Fig \@ref(fig:HyPeRadPlots)).  @diazProductionExtracellularReactive2018 found that a major influence upon the capacity for production of H~2~O~2~ is whether or not the organism can form blooms, with bloom forming species producing more H~2~O~2~. The ability to form blooms was not analyzed in our data as we did not find systematic information on potentials for bloom formation across taxa. 
+With increasing cell radius, eukaryotic phytoplankton have a smaller fraction of their total genes that encode the production of H~2~O~2~ (Fig \@ref(fig:HyPeRadPlots), Blue line, Slope = `r ScientificTen(HyPeRad %>% filter(HyPe == "Production") %>% pluck('offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(HyPeRad %>% filter(HyPe == "Production") %>% pluck('offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`, p-value = `r ScientificTen(HyPeRad %>% filter(HyPe == "Production") %>% pluck('offset_model_regression', 1, "p.value", 2))`, pseudo R^2^ = `r 1-(HyPeRad %>% filter(HyPe == "Production") %>% pluck('offset_model', 1, "deviance")/HyPeRad %>% filter(HyPe == "Production") %>% pluck('offset_model', 1, "null.deviance"))`). Including 'Flagella' and 'Colony' as co-variates did not influence the negative slope of the fraction of total genes encoding H~2~O~2~ production with increasing median cell radius (Black line, 'Flagella' p-value = `r ScientificTen(HyPeRad %>% pluck("flagcol_offset_model_pvalue",1) %>% tidy() %>% pluck("p.value", 3))`, 'Colony' p-value = `r ScientificTen(HyPeRad %>% pluck("flagcol_offset_model_pvalue",1) %>% tidy() %>% pluck("p.value", 4))`). Including data from selected prokaryotic phytoplankton also did not qualitatively alter these results (Data not shown). The pattern of a smaller fraction of total genes for H~2~O~2~ production with increasing cell radius supports our Hypothesis \@ref(hyp:HyPeNitOxRad) that larger phytoplankton counter decreasing diffusional loss of H~2~O~2~ out of cells by having lower genomic capacity for H~2~O~2~ production, while losses of genes encoding H~2~O~2~ producing enzymes are more costly to small phytoplankton (Fig \@ref(fig:HyPeRadPlots)).  @diazProductionExtracellularReactive2018 found that a major influence upon the capacity for production of H~2~O~2~ is whether or not the organism can form blooms, with bloom forming species producing more H~2~O~2~. The ability to form blooms was not analyzed in our data as we did not find systematic information on potentials for bloom formation across taxa. 
 
-With increasing cell radius, eukaryotic phytoplankton also have a smaller fraction of their total genes that encode the capacity to scavenge H~2~O~2~ (Fig \@ref(fig:HyPeRadPlots), Blue line, Slope = `r ScientificTen(HyPeRad %>% filter(HyPe == "Scavenging") %>% pluck('offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(HyPeRad %>% filter(HyPe == "Scavenging") %>% pluck('offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`, p-value = `r ScientificTen(HyPeRad %>% filter(HyPe == "Scavenging") %>% pluck('offset_model_regression', 1, "p.value", 2))`). Including 'Flagella' and 'Colony' as co-variates did not influence the negative slope of the fraction of total genes encoding H~2~O~2~ scavenging with increasing median cell radius (Fig \@ref(fig:HyPeRadPlots), Black line, 'Flagella' p-value = `r ScientificTen(HyPeRad$flagcol_offset_model_pvalue[[2]] %>% pluck("p.value",3))`, 'Colony' p-value = `r ScientificTen(HyPeRad$flagcol_offset_model_pvalue[[2]] %>% pluck("p.value",4))`). Including data from selected prokaryotic phytoplankton also did not qualitatively alter these results (Data not shown). A parallel analysis focusing only on small phytoplankton such as pico-cyanobacteria and pico-prasinophytes might yield different results as more genomes are sequenced, especially considering that @randhawaApplicabilityHydrogenPeroxide2012 found that H~2~O~2~ added to seawater at a concentration of 1.6 mg L^-1^ did not affect cells with a radius larger than 1 to 1.5 μm, but differentially harmed the picoprasinophyte *Micromonas pusilla*.
+With increasing cell radius, eukaryotic phytoplankton also have a smaller fraction of their total genes that encode the capacity to scavenge H~2~O~2~ (Fig \@ref(fig:HyPeRadPlots), Blue line, Slope = `r ScientificTen(HyPeRad %>% filter(HyPe == "Scavenging") %>% pluck('offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(HyPeRad %>% filter(HyPe == "Scavenging") %>% pluck('offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`, p-value = `r ScientificTen(HyPeRad %>% filter(HyPe == "Scavenging") %>% pluck('offset_model_regression', 1, "p.value", 2))`, pseudo R^2^ = `r 1-(HyPeRad %>% filter(HyPe == "Scavenging") %>% pluck('offset_model', 1, "deviance")/HyPeRad %>% filter(HyPe == "Scavenging") %>% pluck('offset_model', 1, "null.deviance"))`). Including 'Flagella' and 'Colony' as co-variates did not influence the negative slope of the fraction of total genes encoding H~2~O~2~ scavenging with increasing median cell radius (Fig \@ref(fig:HyPeRadPlots), Black line, 'Flagella' p-value = `r ScientificTen(HyPeRad %>% pluck("flagcol_offset_model_pvalue",2) %>% tidy() %>% pluck("p.value", 3))`, 'Colony' p-value = `r ScientificTen(HyPeRad %>% pluck("flagcol_offset_model_pvalue",2) %>% tidy() %>% pluck("p.value", 4))`). Including data from selected prokaryotic phytoplankton also did not qualitatively alter these results (Data not shown). A parallel analysis focusing only on small phytoplankton such as pico-cyanobacteria and pico-prasinophytes might yield different results as more genomes are sequenced, especially considering that @randhawaApplicabilityHydrogenPeroxide2012 found that H~2~O~2~ added to seawater at a concentration of 1.6 mg L^-1^ did not affect cells with a radius larger than 1 to 1.5 μm, but differentially harmed the picoprasinophyte *Micromonas pusilla*.
 
-Noting that the fraction of total genes allocated to both H~2~O~2~ production and scavenging decrease with increasing median cell radius, we found that the fraction of total genes that encode production of H~2~O~2~ decreases proportionally more with increasing cell radius than does the fraction of total genes that encode scavenging of H~2~O~2~ (`r ScientificTen(HyPeDiff_pvalue$p.value)`). The difference in slopes supports our Hypothesis \@ref(hyp:HyPeNitOxRad) that large phytoplankton counter decreasing diffusional loss of H~2~O~2~ out of cells by having lower genomic capacity for H~2~O~2~ production relative to H~2~O~2~ scavenging. Because median cell radius co-varied with Taxa, we generally excluded Taxa as a co-variate from our regressions, in order to focus on any cross-taxon patterns driven by changing median cell radius. Nevertheless, representatives of the Ochrophyte Phylum alone spanned more than an order of magnitude in median cell radius. We therefore tested whether the log~10~(total number of genes encoding the metabolism of O~2~^•−^, H~2~O~2~ or ^•^NO) varied with the log~10~ (median cell radius) across the Ochrophytes alone (Fig \@ref(fig:OchrophyteRadPlot)). We found that across Ochrophytes, the fraction of total genes encoding the production of H~2~O~2~ decreased with increasing cell radius (Slope = `r ScientificTen(OchrophyteHyPeRad %>% filter(ROSMetabolism == "Production") %>% pluck('offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(OchrophyteHyPeRad %>% filter(ROSMetabolism == "Production") %>% pluck('offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`), although the p-value for the regression was only `r ScientificTen(OchrophyteHyPeRad %>% filter(ROSMetabolism == "Production") %>% pluck('offset_model_regression', 1, "p.value", 2))`. This marginal decrease in the total number of genes encoding H~2~O~2~ production with increasing median cell radius in Ochrophytes again tends to support our Hypothesis \@ref(hyp:HyPeNitOxRad), with data from within a single phylum to limit confounding influences of diverse evolutionary histories and cell biologies upon patterns.
+Noting that the fraction of total genes allocated to both H~2~O~2~ production and scavenging decrease with increasing median cell radius, we found that the fraction of total genes that encode production of H~2~O~2~ decreases proportionally more with increasing cell radius than does the fraction of total genes that encode scavenging of H~2~O~2~ (`r ScientificTen(HyPeDiff_pvalue$p.value)`). The difference in slopes supports our Hypothesis \@ref(hyp:HyPeNitOxRad) that large phytoplankton counter decreasing diffusional loss of H~2~O~2~ out of cells by having lower genomic capacity for H~2~O~2~ production relative to H~2~O~2~ scavenging. Because median cell radius co-varied with Taxa, we generally excluded Taxa as a co-variate from our regressions, in order to focus on any cross-taxon patterns driven by changing median cell radius. Nevertheless, representatives of the Ochrophyte Phylum alone spanned more than an order of magnitude in median cell radius. We therefore tested whether the log~10~(total number of genes encoding the metabolism of O~2~^•−^, H~2~O~2~ or ^•^NO) varied with the log~10~ (median cell radius) across the Ochrophytes alone (Fig \@ref(fig:OchrophyteRadPlot)). We found that across Ochrophytes, the fraction of total genes encoding the production of H~2~O~2~ decreased with increasing cell radius (Slope = `r ScientificTen(OchrophyteHyPeRad %>% filter(HyPe == "Production") %>% pluck('offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(OchrophyteHyPeRad %>% filter(HyPe == "Production") %>% pluck('offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`), although the p-value for the regression was only `r ScientificTen(OchrophyteHyPeRad %>% filter(HyPe == "Production") %>% pluck('offset_model_regression', 1, "p.value", 2))`. This marginal decrease in the total number of genes encoding H~2~O~2~ production with increasing median cell radius in Ochrophytes again tends to support our Hypothesis \@ref(hyp:HyPeNitOxRad), with data from within a single phylum to limit confounding influences of diverse evolutionary histories and cell biologies upon patterns.
 
 ### Influences of Flagella, Colony Formation and Cell Shape on Gene Counts for Enzymes Metabolizing H~2~O~2~ {.unnumbered}
 
@@ -1090,11 +994,11 @@ NitOxRadRiboPlots <- knitr::include_graphics(file.path(Figures,"NitOxRadRiboPlot
 NitOxRadRiboPlots
 ```
 
-With increasing cell radius eukaryotic phytoplankton do not vary in the fraction of total genes encoding the capacity to produce ^•^NO (Fig \@ref(fig:NitOxRadPlots), Blue line, Slope = `r ScientificTen(NitOxRad %>% filter(NitOx == "Production") %>% pluck('offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(NitOxRad %>% filter(NitOx == "Production") %>% pluck('offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`, p-value = `r ScientificTen(NitOxRad %>% filter(NitOx == "Production") %>% pluck('offset_model_regression', 1, "p.value", 2))`). Including prokaryotes in the regression in Fig \@ref(fig:NitOxRadPlots) does not substantially alter the interpretation (Data not visualized).
-We re-ran the `r NitOxRad$offset_regression_type[[1]]`, excluding those organisms that completely lack genes encoding enzymes for ^•^NO production (NitOx_count = 0, points along the x-axis), which resulted in a decreasing slope with increasing cell radius. Thus those phytoplankton with any detected capacity to produce ^•^NO indeed have a smaller fraction of their total genes encoding ^•^NO production with increasing radius (Fig \@ref(fig:NitOxRadPlots), Blue line, Slope = `r ScientificTen(NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck('offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck('offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`, p-value = `r ScientificTen(NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck('offset_model_regression', 1, "p.value", 2))`). 
-Including 'Flagella' and 'Colony' as co-factors to the regression that solely looks at organisms with the genomic capacity to produce ^•^NO resulted in a slope that is no longer significantly different from zero (Fig \@ref(fig:NitOxRadPlots), Black line, Slope = `r ScientificTen(NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck('flagcol_offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck('flagcol_offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`, p-value = `r ScientificTen(NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck('flagcol_offset_model_regression', 1, "p.value", 2))`), driven by the influence of 'Flagella' (p-value = `r ScientificTen(NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck("flagcol_offset_model_pvalue", 1, tidy, "p.value", 3))`), but not 'Colony' (p-value = `r ScientificTen(NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck("flagcol_offset_model_pvalue", 1, tidy, "p.value", 4))`). 
+With increasing cell radius eukaryotic phytoplankton do not vary in the fraction of total genes encoding the capacity to produce ^•^NO (Fig \@ref(fig:NitOxRadPlots), Blue line, Slope = `r ScientificTen(NitOxRad %>% filter(NitOx == "Production") %>% pluck('offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(NitOxRad %>% filter(NitOx == "Production") %>% pluck('offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`, p-value = `r ScientificTen(NitOxRad %>% filter(NitOx == "Production") %>% pluck('offset_model_regression', 1, "p.value", 2))`, pseudo R^2^ = `r 1-(NitOxRad %>% filter(NitOx == "Production") %>% pluck('offset_model', 1, "deviance")/NitOxRad %>% filter(NitOx == "Production") %>% pluck('offset_model', 1, "null.deviance"))`). Including prokaryotes in the regression in Fig \@ref(fig:NitOxRadPlots) does not substantially alter the interpretation (Data not visualized).
+We re-ran the `r NitOxRad$offset_regression_type[[1]]`, excluding those organisms that completely lack genes encoding enzymes for ^•^NO production (NitOx_count = 0, points along the x-axis), which resulted in a decreasing slope with increasing cell radius. Thus those phytoplankton with any detected capacity to produce ^•^NO indeed have a smaller fraction of their total genes encoding ^•^NO production with increasing radius (Fig \@ref(fig:NitOxRadPlots), Blue line, Slope = `r ScientificTen(NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck('offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck('offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`, p-value = `r ScientificTen(NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck('offset_model_regression', 1, "p.value", 2))`, pseudo R^2^ = `r 1-(NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck('offset_model', 1, "deviance")/NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck('offset_model', 1, "null.deviance"))`). 
+Including 'Flagella' and 'Colony' as co-factors to the regression that solely looks at organisms with the genomic capacity to produce ^•^NO resulted in a slope that is no longer significantly different from zero (Fig \@ref(fig:NitOxRadPlots), Black line, Slope = `r ScientificTen(NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck('flagcol_offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck('flagcol_offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`, p-value = `r ScientificTen(NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck('flagcol_offset_model_regression', 1, "p.value", 2))`, pseudo R^2^ = `r 1-(NitOxRad %>% filter(NitOx == "Production") %>% pluck('flagcol_offset_model', 1, "deviance")/NitOxRad %>% filter(NitOx == "Production") %>% pluck('flagcol_offset_model', 1, "null.deviance"))`), driven by the influence of 'Flagella' (p-value = `r ScientificTen(NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck("flagcol_offset_model_pvalue", 1, tidy, "p.value", 3))`), but not 'Colony' (p-value = `r ScientificTen(NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck("flagcol_offset_model_pvalue", 1, tidy, "p.value", 4))`). 
 
-With increasing cell radius, eukaryotic phytoplankton do not vary in the fraction of their total genes encoding the capacity to scavenge ^•^NO,  `r NitOxRad$offset_regression_type[[2]]` regression slope not significantly different from zero (Fig \@ref(fig:NitOxRadPlots), Blue line, Slope = `r ScientificTen(NitOxRad %>% filter(NitOx == "Scavenging") %>% pluck('offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(NitOxRad %>% filter(NitOx == "Scavenging") %>% pluck('offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`, p-value = `r ScientificTen(NitOxRad %>% filter(NitOx == "Scavenging") %>% pluck('offset_model_regression', 1, "p.value", 2))`). Including prokaryotes in the `r NitOxRadProk$offset_regression_type[[2]]` regression from Fig \@ref(fig:NitOxRadPlots) does not alter the interpretation, as the slope is still not significantly different from zero. We re-ran the `r NitOxRad$offset_regression_type[[2]]`, excluding those organisms that completely lack genes encoding enzymes for ^•^NO scavenging (NitOx_count = 0, points along the x-axis), and found the exclusion did not alter the slope of the fraction of total genes encoding ^•^NO scavenging with increasing radius.
+With increasing cell radius, eukaryotic phytoplankton do not vary in the fraction of their total genes encoding the capacity to scavenge ^•^NO,  `r NitOxRad$offset_regression_type[[2]]` regression slope not significantly different from zero (Fig \@ref(fig:NitOxRadPlots), Blue line, Slope = `r ScientificTen(NitOxRad %>% filter(NitOx == "Scavenging") %>% pluck('offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(NitOxRad %>% filter(NitOx == "Scavenging") %>% pluck('offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`, p-value = `r ScientificTen(NitOxRad %>% filter(NitOx == "Scavenging") %>% pluck('offset_model_regression', 1, "p.value", 2))`, pseudo R^2^ = `r 1-(NitOxRad %>% filter(NitOx == "Scavenging") %>% pluck('flagcol_offset_model', 1, "deviance")/NitOxRad %>% filter(NitOx == "Scavenging") %>% pluck('flagcol_offset_model', 1, "null.deviance"))`). Including prokaryotes in the `r NitOxRadProk$offset_regression_type[[2]]` regression from Fig \@ref(fig:NitOxRadPlots) does not alter the interpretation, as the slope is still not significantly different from zero. We re-ran the `r NitOxRad$offset_regression_type[[2]]`, excluding those organisms that completely lack genes encoding enzymes for ^•^NO scavenging (NitOx_count = 0, points along the x-axis), and found the exclusion did not alter the slope of the fraction of total genes encoding ^•^NO scavenging with increasing radius.
 
 Non-enzymatic paths contribute to intracellular and extracellular ^•^NO production [@zweierNonenzymaticNitricOxide1999], and may explain the absences of genes encoding ^•^NO production from some genomes across taxonomic lineages. Alternately, ^•^NO homeostasis may be achieved in some lineages by regulating the active cellular uptake and release of intracellular ^•^NO, as has been recently demonstrated in humans [@chenCellPenetratingDeliveryNitric2021]. Although NOD sequences have only been identified from phytoplankton through metatranscriptomic analyses, in diatoms, haptophytes and dinoflagellates [@lampeStrategiesPhytoplanktonResponse2019], there is limited understanding as to what may contribute to the active removal of ^•^NO, and the lack of ^•^NO scavenging genes across multiple phytoplankters. More research is needed on possible contributions of NOD to the active removal of ^•^NO, as well as the NOS sequences detected in *Synechococcus* that also display NOD-like activity [@piccianoNitricOxideSynthase2019]. Perhaps the low toxicity of ^•^NO does not warrant the active removal of ^•^NO as long as the concentration does not exceed the toxic threshold. This explanation is plausible given that *Platymonas helgolandica*, *Platymonas subcordiformis*, *Skeletonema costatum*, *Gymnodinium* sp., and *Prorocentrum donghaiense* showed optimum growth in the presence of ^•^NO concentrations between 10^-9^ and 10^-6^ mol L^-1^ [@peifengEffectsNitricOxide2021], which are higher than the concentrations found in the ocean (Table \@ref(tab:ROSDiffusion)).
 
@@ -1148,6 +1052,22 @@ NitOxFlagPlot <- knitr::include_graphics(file.path(Figures,"NitOxFlagPlot.png"))
 ```
 
 
+```{r}
+NitOxFlagella <- MergedData %>% 
+  filter(Taxa != "Prokaryote", 
+         NitOx %in% c("Production", "Scavenging")) %>%
+  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, ROSGene_count, ECNumber, EnzymeName, ColonySpecies, NitOx_count, NitOx) %>%
+  unique() %>%
+  mutate(NitOx_countL = NitOx_count %>% as.logical() %>% as.numeric(),
+         FlagellaL = ifelse(Flagella == "yes", 1, 0)) %>%
+  select(FileName, NitOx_count, NitOx_countL, Flagella, FlagellaL,NitOx) %>%
+  # filter(GeneModels_count != 0) %>% #This is because of introducing exposure
+  nest(data = -c(NitOx)) %>%
+  mutate(fit_b_offset = map(data, possibly(~glm(.$NitOx_countL ~ .$FlagellaL, data = ., family = binomial(link = "logit")), otherwise = NULL)),
+                    param_b_offset = map(fit_b_offset, tidy),
+                    pred_b_offset = map(fit_b_offset, augment))
+```
+
 ```{r NitOxFlagPlot, fig.cap = NitOxFlagPlot_cap, fig.height= 5, fig.width= 5, echo = FALSE}
 NitOxFlagPlot_cap <- glue("**Comparison of total number of genes encoding ^•^NO metabolizing enzymes ('NitOx_count') normalized to the total number of genes present in each organism ('GeneModels_count') vs. the presence or absence of flagella in the organism.**", 
                                        "Symbol color corresponds to taxon lineage ('Phylum').", 
@@ -1162,7 +1082,9 @@ NitOxFlagPlot_cap <- glue("**Comparison of total number of genes encoding ^•^N
 NitOxFlagRiboPlot <- knitr::include_graphics(file.path(Figures,"NitOxFlagRiboPlot.png"))
 ```
 
-Setting aside the influence of cell size, non-flagellated and flagellated phytoplankton do not show statistically significant differences in the fractions of total gene content encoding ^•^NO production (p-value = `r ScientificTen(NitOxProdFlagPlot_pval$p)`) nor  ^•^NO scavenging (p-value = `r ScientificTen(NitOxScavFlagPlot_pval$p)`) (Data not visualized), suggesting ^•^NO does not have a generalized interaction with flagella across eukaryotic phytoplankton groups.
+Setting aside the influence of cell size, non-flagellated and flagellated phytoplankton do not show statistically significant differences in the fractions of total gene content encoding ^•^NO production (p-value = `r ScientificTen(NitOxProdFlagPlot_pval$p)`) nor  ^•^NO scavenging (p-value = `r ScientificTen(NitOxScavFlagPlot_pval$p)`) (Data not visualized), suggesting ^•^NO does not have a generalized interaction with flagella across eukaryotic phytoplankton groups. 
+
+Presence absence = non-flagellated phytoplankton have `r logit2prob(NitOxFlagella %>% filter(NitOx == "Production") %>% pluck("param_b_offset", 1, "estimate",2)*0 + NitOxFlagella %>% filter(NitOx == "Production") %>% pluck("param_b_offset", 1, "estimate", 1))` probability of having a nitric oxide producing gene as opposed to `r logit2prob(NitOxFlagella %>% filter(NitOx == "Production") %>% pluck("param_b_offset", 1, "estimate",2)*1 + NitOxFlagella %>% filter(NitOx == "Production") %>% pluck("param_b_offset", 1, "estimate", 1))` in flagellated phytoplankton (p-value = `r ScientificTen(NitOxFlagella %>% filter(NitOx == "Production") %>% pluck("param_b_offset", 1, "p.value", 2))`. Non flagellated phytoplankton also have a `r logit2prob(NitOxFlagella %>% filter(NitOx == "Scavenging") %>% pluck("param_b_offset", 1, "estimate",2)*0 + NitOxFlagella %>% filter(NitOx == "Scavenging") %>% pluck("param_b_offset", 1, "estimate", 1))` probability of having a nitric oxide scavenging gene, as opposed to `r logit2prob(NitOxFlagella %>% filter(NitOx == "Scavenging") %>% pluck("param_b_offset", 1, "estimate",2)*1 + NitOxFlagella %>% filter(NitOx == "Scavenging") %>% pluck("param_b_offset", 1, "estimate", 1))` in flagellated phytoplankton (p-value = `r ScientificTen(NitOxFlagella %>% filter(NitOx == "Scavenging") %>% pluck("param_b_offset", 1, "p.value", 2))`.
 
 ```{r NitOxColony_pval, include = FALSE}
 
@@ -1207,6 +1129,22 @@ XXX
 NitOxColonyPlot <- knitr::include_graphics(file.path(Figures,"NitOxColonyPlot.png"))
 ```
 
+```{r}
+NitOxColony <- MergedData %>% 
+  filter(Taxa != "Prokaryote", 
+         NitOx %in% c("Production", "Scavenging")) %>%
+  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, ROSGene_count, ECNumber, EnzymeName, ColonySpecies, NitOx_count, NitOx) %>%
+  unique() %>%
+  mutate(NitOx_countL = NitOx_count %>% as.logical() %>% as.numeric(),
+         ColonySpeciesL = ifelse(ColonySpecies == "1", 1, 0)) %>%
+  select(FileName, NitOx_count, NitOx_countL, ColonySpecies, ColonySpeciesL,NitOx, log_Radius_um) %>%
+  # filter(GeneModels_count != 0) %>% #This is because of introducing exposure
+  nest(data = -c(NitOx)) %>%
+  mutate(fit_b_offset = map(data, possibly(~glm(.$NitOx_countL ~ .$ColonySpeciesL, data = ., family = binomial(link = "logit")), otherwise = NULL)),
+                    param_b_offset = map(fit_b_offset, tidy),
+                    pred_b_offset = map(fit_b_offset, augment))
+```
+
 ```{r NitOxColonyPlot, fig.cap = NitOxColonyPlot_cap, fig.height= 5, fig.width= 5, echo = FALSE}
 NitOxColonyPlot_cap <- glue("**Comparison of total number of genes encoding ^•^NO metabolizing enzymes ('NitOx_count') normalized to the total number of genes present in each organism ('GeneModels_count') vs. the ability of the organism to form colonies.**", 
                                        "Symbol color corresponds to taxon lineage ('Phylum').", 
@@ -1222,6 +1160,9 @@ NitOxColonyRiboPlot <- knitr::include_graphics(file.path(Figures,"NitOxColonyRib
 ```
 
 Comparing non-colony to colony forming phytoplankton does not show a statistically significant difference in the fraction of total gene content encoding ^•^NO production (p-value = `r ScientificTen(NitOxProdColonyPlot_pval$p)`) nor  ^•^NO scavenging (p-value = `r ScientificTen(NitOxScavColonyPlot_pval$p)`) (Data not visualized), suggesting ^•^NO metabolism does not have a generalized role in colony formation across eukaryotic phytoplankton groups.
+
+Presence absence = non-colony forming phytoplankton have `r logit2prob(NitOxColony %>% filter(NitOx == "Production") %>% pluck("param_b_offset", 1, "estimate",2)*0 + NitOxColony %>% filter(NitOx == "Production") %>% pluck("param_b_offset", 1, "estimate", 1))` probability of having a nitric oxide producing gene as opposed to `r logit2prob(NitOxColony %>% filter(NitOx == "Production") %>% pluck("param_b_offset", 1, "estimate",2)*1 + NitOxColony %>% filter(NitOx == "Production") %>% pluck("param_b_offset", 1, "estimate", 1))` in colony forming phytoplankton (p-value = `r ScientificTen(NitOxColony %>% filter(NitOx == "Production") %>% pluck("param_b_offset", 1, "p.value", 2))`. Non colony forming phytoplankton also have a `r logit2prob(NitOxColony %>% filter(NitOx == "Scavenging") %>% pluck("param_b_offset", 1, "estimate",2)*0 + NitOxColony %>% filter(NitOx == "Scavenging") %>% pluck("param_b_offset", 1, "estimate", 1))` probability of having a nitric oxide scavenging gene, as opposed to `r logit2prob(NitOxColony %>% filter(NitOx == "Scavenging") %>% pluck("param_b_offset", 1, "estimate",2)*1 + NitOxColony %>% filter(NitOx == "Scavenging") %>% pluck("param_b_offset", 1, "estimate", 1))` in colony forming phytoplankton (p-value = `r ScientificTen(NitOxColony %>% filter(NitOx == "Scavenging") %>% pluck("param_b_offset", 1, "p.value", 2))`.
+
 
 ```{r NitOxDiatomShape_pval, include = FALSE}
 NitOxPennateCentricDelta <- MergedData %>%
@@ -1266,6 +1207,21 @@ NitOxScavPennateCentricPlot_pval <- MergedData %>%
 NitOxPennateCentricPlot <- knitr::include_graphics(file.path(Figures,"NitOxPennateCentricPlot.png"))
 ```
 
+```{r}
+NitOxDiatom <- MergedData %>% 
+  filter(Taxa == "Diatom", 
+         NitOx %in% c("Production", "Scavenging")) %>%
+  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, ROSGene_count, ECNumber, EnzymeName, ColonySpecies, NitOx_count, NitOx) %>%
+  unique() %>%
+  mutate(NitOx_countL = NitOx_count %>% as.logical() %>% as.numeric(),
+         PennateCentricL = ifelse(PennateCentric == "Pennate", 1, 0)) %>%
+  # filter(GeneModels_count != 0) %>% #This is because of introducing exposure
+  nest(data = -c(NitOx)) %>%
+  mutate(fit_b_offset = map(data, possibly(~glm(.$NitOx_countL ~ .$PennateCentricL, data = ., family = binomial(link = "logit")), otherwise = NULL)),
+                    param_b_offset = map(fit_b_offset, tidy),
+                    pred_b_offset = map(fit_b_offset, augment))
+```
+
 ```{r NitOxPennateCentricPlot, fig.cap = NitOxPennateCentricPlot_cap, fig.height= 7, fig.width= 7, echo = FALSE}
 NitOxPennateCentricPlot_cap <- glue("**Comparison of total number of genes encoding ^•^NO metabolizing enzymes ('NitOx_count') normalized to the total number of genes present in each diatom ('GeneModels_count') vs. the growth form of the diatom ('PennateCentric').**", 
                                     "Symbol color corresponds to taxon lineage ('Phylum').", 
@@ -1283,6 +1239,8 @@ NitOxPennateCentricRiboPlot <- knitr::include_graphics(file.path(Figures,"NitOxP
 Most centric diatoms carry genes annotated as encoding ^•^NO producing enzymes, whereas most pennate diatoms do not (p-value = `r ScientificTen(NitOxProdPennateCentricPlot_pval$p)`). In contrast, most centric diatoms lack genes annotated as encoding ^•^NO scavenging enzymes, whereas most pennate diatoms carry those genes (p-value = `r ScientificTen(NitOxScavPennateCentricPlot_pval$p)`) (Fig \@ref(fig:NitOxPennateCentricPlot)). 
 
 The larger fractional gene allocation to ^•^NO production, and smaller fraction of genes that encode ^•^NO scavenging enzymes, in centric diatoms (Fig \@ref(fig:NitOxPennateCentricPlot)) counters our hypothesis that diffusion from pennate diatoms would drive gene allocations in favor of ^•^NO production (Hypothesis \@ref(hyp:HyPeNitOxDiatom)). Given the strong contrast in annotated ^•^NO metabolism genes, it is likely that ^•^NO has regulatory or signaling roles that vary systematically between pennate and centric diatoms, outside any diffusional influences. For example, ^•^NO inhibits diatom adhesion to substrate [@thompsonRoleNitricOxide2008; @vardiDiatomGeneRegulating2008]. Pennates are more likely to grow adhered in biofilms [@hunsuckerSituMeasurementsDiatom2016], which may explain the striking differences in total gene allocation to  ^•^NO production and scavenging. Alternately, @didatoTranscriptomeSequencingThree2015 identified putative NOS sequences in the transcriptomes of three Pennate Diatom species (*Pseudo-nitzschia arenysensis*, *Pseudo-nitzschia delicatissima* and *Pseudo-nitzschia multistriata*), so it is possible the apparent lack of ^•^NO producing sequences in pennates is due to errors in the unsupervised annotations from eggNOG.
+
+Presence absence = centric diatoms have `r logit2prob(NitOxDiatom %>% filter(NitOx == "Production") %>% pluck("param_b_offset", 1, "estimate",2)*0 + NitOxDiatom %>% filter(NitOx == "Production") %>% pluck("param_b_offset", 1, "estimate", 1))` probability of having a nitric oxide producing gene as opposed to a `r logit2prob(NitOxDiatom %>% filter(NitOx == "Production") %>% pluck("param_b_offset", 1, "estimate",2)*1 + NitOxDiatom %>% filter(NitOx == "Production") %>% pluck("param_b_offset", 1, "estimate", 1))` probability in pennate diatoms (p-value = `r ScientificTen(NitOxDiatom %>% filter(NitOx == "Production") %>% pluck("param_b_offset", 1, "p.value", 2))`. Centric diatoms also have a `r logit2prob(NitOxDiatom %>% filter(NitOx == "Scavenging") %>% pluck("param_b_offset", 1, "estimate",2)*0 + NitOxDiatom %>% filter(NitOx == "Scavenging") %>% pluck("param_b_offset", 1, "estimate", 1))` probability of having a nitric oxide scavenging gene, as opposed to a `r logit2prob(NitOxDiatom %>% filter(NitOx == "Scavenging") %>% pluck("param_b_offset", 1, "estimate",2)*1 + NitOxDiatom %>% filter(NitOx == "Scavenging") %>% pluck("param_b_offset", 1, "estimate", 1))` probability in colony forming phytoplankton (p-value = `r ScientificTen(NitOxDiatom %>% filter(NitOx == "Scavenging") %>% pluck("param_b_offset", 1, "p.value", 2))`.
 
 ```{r}
 EnzymeRad <- MergedData %>% 
@@ -1374,22 +1332,9 @@ RadTaxaviolin_cap <- glue("**Violin plot presenting the range of log~10~ of the 
                               "Citations for data sources are in Supplementary Table S3.",
                               .sep = " ")
 
-RadTaxaviolin <- MergedData %>% 
-  # filter(Taxa != "Prokaryote") %>%
-  ggplot(aes(x= reorder(Phylum, log_Radius_um), y = log_Radius_um))+
-  geom_violin(scale = "area")+
-  geom_jitter(aes(shape = Ome, color = Phylum), stat = "unique", width = 0.2) +
-  theme_bw() +  
-  scale_shape_manual(values = c(19,1)) +
-  scale_color_manual(values = TaxaColors) +
-  # scale_y_continuous(limits = c(-0.6, 1.7)) %>%
-  # theme(legend.position = "bottom") +
-  coord_flip() +
-  guides(color="none") +
-  labs(x = "Phylum",
-       y = ~log[10] ~ "(Median Cell Radius (µm))")
-
+RadTaxaviolin <- knitr::include_graphics(file.path(Figures,"RadTaxaviolin.png"))
 RadTaxaviolin
+
 
 # ggsave(paste("FigureS1",".png",sep = ""), plot = RadTaxaviolin, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
 ```
@@ -1401,11 +1346,8 @@ LongLatMap_cap <- glue("Longitude and Latitude of isolation of analyzed organism
                        "Citations for data sources are in Supplementary Table S3.",
                        "Data used to generate world map produced from the 'ggOceanMaps' R package [@vihtakariGgOceanMapsPlotData2021]", .sep = " ")
 
-LongLatMap <- ggOceanMaps::basemap(data = data.frame(lon = c(-180, 0, 180), lat = c(90, 0, -90)), bathymetry = TRUE, lon.interval = 45) +
-  geom_point(data = MergedData, aes(x = Longitude, y = Latitude, color = Phylum)) +
-  coord_sf(expand = F)+
-  scale_colour_manual(values =TaxaColors) +
-  theme_bw() 
+LongLatMap <- knitr::include_graphics(file.path(Figures,"LongLatMap.png"))
+
 
 # ggsave(paste("FigureS2",".png",sep = ""), plot = LongLatMap, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
 ```
