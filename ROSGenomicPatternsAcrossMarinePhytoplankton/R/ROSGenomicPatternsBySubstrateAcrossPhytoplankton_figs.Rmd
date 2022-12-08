@@ -1876,6 +1876,37 @@ ggsave(paste("NitOxFlagRiboPlot",".png",sep = ""), plot = NitOxFlagRiboPlot, dev
 # NitOxFlagPlot
 ```
 
+```{r}
+NitOxFlagella <- MergedData %>% 
+  filter(Taxa != "Prokaryote", 
+         NitOx %in% c("Production", "Scavenging")) %>%
+  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, ROSGene_count, ECNumber, EnzymeName, ColonySpecies, NitOx_count, NitOx) %>%
+  unique() %>%
+  mutate(NitOx_countL = NitOx_count %>% as.logical() %>% as.numeric(),
+         FlagellaL = ifelse(Flagella == "yes", 1, 0)) %>%
+  select(FileName, NitOx_count, NitOx_countL, Flagella, FlagellaL,NitOx) %>%
+  # filter(GeneModels_count != 0) %>% #This is because of introducing exposure
+  nest(data = -c(NitOx)) %>%
+  mutate(fit_b_offset = map(data, possibly(~glm(.$NitOx_countL ~ .$FlagellaL, data = ., family = binomial(link = "logit")), otherwise = NULL)),
+                    param_b_offset = map(fit_b_offset, tidy),
+                    pred_b_offset = map(fit_b_offset, augment))
+```
+
+```{r, fig.width = 10, fig.height = 5}
+NitOxFlagellaFig <- NitOxFlagella %>%
+  unnest(param_b_offset) %>%
+  filter(p.value < 0.05) %>%
+  unnest(c( pred_b_offset)) %>%
+  # unnest(pred_b_offset) %>%
+  ggplot() +
+  geom_point(aes(x = `.$FlagellaL`, y = `.$NitOx_countL`)) +
+  geom_line(aes(x = `.$FlagellaL`, y = logit2prob(.fitted))) +
+  facet_grid(rows = vars(NitOx))
+  
+NitOxFlagellaFig
+```
+
+
 ```{r NitOxColony_pval, include = FALSE}
 
 NitOxColonyDelta <- MergedData %>%
@@ -2199,7 +2230,7 @@ RadTaxaviolin <- MergedData %>%
 
 RadTaxaviolin
 
-# ggsave(paste("FigureS1",".png",sep = ""), plot = RadTaxaviolin, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+ggsave(paste("RadTaxaviolin",".png",sep = ""), plot = RadTaxaviolin, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
 ```
 
 ```{r generate LongLatMap, include = FALSE}
@@ -2215,7 +2246,7 @@ LongLatMap <- ggOceanMaps::basemap(data = data.frame(lon = c(-180, 0, 180), lat 
   scale_colour_manual(values =TaxaColors) +
   theme_bw() 
 
-# ggsave(paste("FigureS2",".png",sep = ""), plot = LongLatMap, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+ggsave(paste("LongLatMap",".png",sep = ""), plot = LongLatMap, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
 ```
 
 ```{r LongLatMap, fig.cap = LongLatMap_cap, fig.height = 7, fig.width = 7, echo = FALSE}
