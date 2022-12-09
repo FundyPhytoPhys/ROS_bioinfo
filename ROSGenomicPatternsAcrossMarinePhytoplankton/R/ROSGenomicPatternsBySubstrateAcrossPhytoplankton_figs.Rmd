@@ -1118,7 +1118,7 @@ HyPeRadRiboPlots <- rbind(HyPeRadRibo, HyPeRadProkRibo) %>%
                               flagcol_offset_model_regression_std.error,
                               flagcol_offset_model_regression_statistic,
                               flagcol_offset_model_regression_p.value)) %>%
-  pivot_wider(., names_from = c(taxa_offset_model_regression_term), 
+  pivot_wider(., names_from = c(taxa_offset_model_regression_term),
               values_from = c(taxa_offset_model_regression_estimate,
                               taxa_offset_model_regression_std.error,
                               taxa_offset_model_regression_statistic,
@@ -1129,6 +1129,8 @@ HyPeRadRiboPlots <- rbind(HyPeRadRibo, HyPeRadProkRibo) %>%
                               offset_model_regression_statistic,
                               offset_model_regression_p.value)) %>%
   unnest(c(offset_model_pvalue), names_sep = "_") %>%
+  unnest(c(taxa_offset_model_pvalue), names_sep = "_") %>%
+
   unnest(c(flagcol_offset_model_pvalue), names_sep = "_") %>%
   unnest(cols = c(data)) %>%
   filter(Includes != "Eukaryotes + Prokaryotes") %>%
@@ -1166,25 +1168,25 @@ HyPeRadRiboPlots <- rbind(HyPeRadRibo, HyPeRadProkRibo) %>%
                   slope = (`taxa_offset_model_regression_estimate_.$log_Radius_um` - `taxa_offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion),
               linetype = "dotted",
               color = "darkgreen") +
-  geom_abline(aes(intercept = `offset_model_regression_estimate_(Intercept)`/ln_log10_conversion, 
-                  slope = `offset_model_regression_estimate_.$log_Radius_um`/ln_log10_conversion, 
-                  linetype = offset_regression_type), 
+  geom_abline(aes(intercept = `offset_model_regression_estimate_(Intercept)`/ln_log10_conversion,
+                  slope = `offset_model_regression_estimate_.$log_Radius_um`/ln_log10_conversion,
+                  linetype = offset_regression_type),
               color = "blue") +
-  geom_abline(aes(intercept = (`offset_model_regression_estimate_(Intercept)` + `offset_model_regression_std.error_(Intercept)`) /ln_log10_conversion, 
-                  slope = (`offset_model_regression_estimate_.$log_Radius_um` + `offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion), 
-              linetype = "dotted", 
+  geom_abline(aes(intercept = (`offset_model_regression_estimate_(Intercept)` + `offset_model_regression_std.error_(Intercept)`) /ln_log10_conversion,
+                  slope = (`offset_model_regression_estimate_.$log_Radius_um` + `offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion),
+              linetype = "dotted",
               color = "blue") +
-  geom_abline(aes(intercept = (`offset_model_regression_estimate_(Intercept)` - `offset_model_regression_std.error_(Intercept)`) /ln_log10_conversion, 
-                  slope = (`offset_model_regression_estimate_.$log_Radius_um` - `offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion), 
-              linetype = "dotted", 
+  geom_abline(aes(intercept = (`offset_model_regression_estimate_(Intercept)` - `offset_model_regression_std.error_(Intercept)`) /ln_log10_conversion,
+                  slope = (`offset_model_regression_estimate_.$log_Radius_um` - `offset_model_regression_std.error_.$log_Radius_um`)/ln_log10_conversion),
+              linetype = "dotted",
               color = "blue") +
-  geom_text(data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05), 
+  geom_text(#data = . %>% filter(`offset_model_regression_p.value_.$log_Radius_um` < 0.05),
             aes(x = 1.1, y = -1.1, label = paste("p-value =", signif(`offset_model_regression_p.value_.$log_Radius_um`, digits = 2))), color = "blue", check_overlap = TRUE) +
   geom_text(aes(x = 1.1, y = -1.3, label = paste("p-value =", (signif(`flagcol_offset_model_regression_p.value_.$log_Radius_um`, digits = 2)))), color = "black", check_overlap = TRUE) +
-  # geom_text(aes(x = 1.1, y = -1.3, label = paste("p-value =", (signif(`flagcol_offset_model_regression_p.value_.$log_Radius_um`, digits = 2)))), color = "black", check_overlap = TRUE) +
+  geom_text(aes(x = 1.1, y = -1.5, label = paste("p-value =", (signif(`taxa_offset_model_regression_p.value_.$log_Radius_um`, digits = 2)))), color = "darkgreen", check_overlap = TRUE) +
   # geom_point(data = MergedData %>% filter(Taxa == "Prokaryote", HyPe == "Production" | HyPe == "Scavenging"), aes(x = log_Radius_um, y= log10((HyPe_count/GeneModels_count)), color = Phylum)) +
   # ggalt::geom_encircle(data = MergedData %>% filter(Taxa == "Prokaryote", HyPe == "Production" | HyPe == "Scavenging"), alpha = 0.1, aes(x=log_Radius_um, y= log10((HyPe_count/GeneModels_count)), color = Phylum), expand = 0, s_shape = 0.9) +
-  # facet_grid(cols = vars(HyPe)) + #, rows = vars(Includes)
+  facet_grid(cols = vars(HyPe)) + #, rows = vars(Includes)
   scale_colour_manual(name = "Phylum", values =TaxaColors) +
   # gfun::scale_color_manual2(name = "Contains", values = c("blue", "black")) +
   scale_linetype_manual(name = "Regression type", values = c("poisson" = "solid" , "quasipoisson" = "twodash")) +
@@ -1201,6 +1203,7 @@ HyPeRadRiboPlots <- rbind(HyPeRadRibo, HyPeRadProkRibo) %>%
         strip.text = element_text(size=11)) +
   labs(x = ~log[10] ~ "(Median Cell Radius (µm))", 
        y = ~log[10] ~ "(Genes Encoding "~H[2]~O[2]~" Metabolizing Enzymes Normalized to Total Ribosomal Genes)") 
+HyPeRadRiboPlots
 
 ggsave(paste("HyPeRadRiboPlots",".png",sep = ""), plot = HyPeRadRiboPlots, device = NULL, path = Figures,scale = 1, height=7, width= 10, units = c("in"),dpi = 300, limitsize = TRUE)
 
@@ -2144,6 +2147,117 @@ ggsave(paste("NitOxPennateCentricRiboPlot",".png",sep = ""), plot = NitOxPennate
 # ggsave(paste("Figure9",".png",sep = ""), plot = NitOxPennateCentricPlot, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
 
 ```
+
+```{r, fig.height = 5, fig.width = 5}
+NormalizeFlagellaPlot <- MergedData %>%
+  filter(Taxa != "Prokaryote",
+         #NitOx == "Production" | NitOx == "Scavenging",
+         GeneModels_count != 0,
+         RibosomeCount != 0,
+         !is.na(Flagella),) %>%
+  pivot_longer(c(GeneModels_count, RibosomeCount), names_to = "Normalizer", values_to = "Normalize_count") %>%
+  select(FileName, Flagella, Phylum, Normalizer, Normalize_count) %>%
+  unique() %>%
+  ggplot(aes(x = as.factor(Flagella), y = Normalize_count)) +
+  geom_boxplot(notch = TRUE, outlier.shape = NA) +
+  geom_jitter(aes(colour = Phylum),width = 0.2, stat = "unique") +
+  # coord_cartesian(ylim = c(ROSBoxPlotMin, ROSBoxPlotMax)) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  xlab("") +
+  facet_wrap(vars(Normalizer), 
+             scales = "free", 
+             labeller = as_labeller(c(GeneModels_count='Total Number of Genes', 
+                                      RibosomeCount='Total Number of Ribosomal Genes'))) +
+  stat_compare_means(comparisons = MyFlagellaComparisons, method = "wilcox.test") +
+  # ggforce::facet_zoom(ylim = c(0, ROSBoxPlotMax)) +
+  scale_x_discrete(labels = c("no" = "No Flagella", "yes" = "Flagella")) +
+  scale_y_continuous(labels = scales::scientific) +
+  scale_colour_manual(name = "Phylum", values =TaxaColors) +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.text.y = element_text(size=9),
+        axis.text.x = element_text(size=12),
+        axis.title = element_text(size=12), 
+        legend.text = element_text(size=10), 
+        legend.title = element_text(size=10),
+        strip.text = element_text(size=11)) 
+
+NormalizeFlagellaPlot
+```
+
+```{r}
+NormalizeColonyPlot <- MergedData %>%
+  filter(Taxa != "Prokaryote",
+         #NitOx == "Production" | NitOx == "Scavenging",
+         GeneModels_count != 0,
+         !is.na(ColonySpecies),) %>%
+  pivot_longer(c(GeneModels_count, RibosomeCount), names_to = "Normalizer", values_to = "Normalize_count") %>%
+  select(FileName, ColonySpecies, Phylum, Normalizer, Normalize_count) %>%
+  unique() %>%
+  ggplot(aes(x = as.factor(ColonySpecies), y = Normalize_count)) +
+  geom_boxplot(notch = TRUE, outlier.shape = NA) +
+  geom_jitter(aes(colour = Phylum),width = 0.2, stat = "unique") +
+  # coord_cartesian(ylim = c(ROSBoxPlotMin, ROSBoxPlotMax)) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  xlab("") +
+  facet_wrap(vars(Normalizer), 
+             scales = "free", 
+             labeller = as_labeller(c(GeneModels_count='Total Number of Genes', 
+                                      RibosomeCount='Total Number of Ribosomal Genes'))) +
+  stat_compare_means(comparisons = MyColonyComparisons, method = "wilcox.test") +
+  # ggforce::facet_zoom(ylim = c(0, ROSBoxPlotMax)) +
+  scale_x_discrete(labels = c("0" = "Non-colony", "1" = "Colony")) +
+  scale_y_continuous(labels = scales::scientific) +
+  scale_colour_manual(name = "Phylum", values =TaxaColors) +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.text.y = element_text(size=9),
+        axis.text.x = element_text(size=12),
+        axis.title = element_text(size=12), 
+        legend.text = element_text(size=10), 
+        legend.title = element_text(size=10),
+        strip.text = element_text(size=11)) 
+
+NormalizeColonyPlot
+```
+
+```{r}
+TotalGenePennateCentricPlot <- MergedData %>%
+  filter(Taxa == "Diatom",
+         #NitOx == "Production" | NitOx == "Scavenging",
+         GeneModels_count != 0,
+         !is.na(PennateCentric),) %>%
+  pivot_longer(c(GeneModels_count, RibosomeCount), names_to = "Normalizer", values_to = "Normalize_count") %>%
+  select(FileName, PennateCentric, Normalize_count, Normalizer, Phylum, Genus) %>%
+  unique() %>%
+  ggplot(aes(x = PennateCentric, y = Normalize_count)) +
+  geom_boxplot(notch = TRUE, outlier.shape = NA) +
+  geom_jitter(aes(colour = Genus),width = 0.2, stat = "unique") +
+  # coord_cartesian(ylim = c(ROSBoxPlotMin, ROSBoxPlotMax)) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  xlab("") +
+  facet_wrap(vars(Normalizer), 
+             scales = "free", 
+             labeller = as_labeller(c(GeneModels_count='Total Number of Genes', 
+                                      RibosomeCount='Total Number of Ribosomal Genes'))) +
+  stat_compare_means(comparisons = MyShapeComparisons, method = "wilcox.test") +
+  # ggforce::facet_zoom(ylim = c(0, ROSBoxPlotMax)) +
+  scale_y_continuous(labels = scales::scientific) +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.text.y = element_text(size=9),
+        axis.text.x = element_text(size=12),
+        axis.title = element_text(size=12), 
+        legend.text = element_text(size=10), 
+        legend.title = element_text(size=10),
+        strip.text = element_text(size=11)) 
+
+TotalGenePennateCentricPlot
+```
+
 
 ```{r}
 EnzymeRad <- MergedData %>% 
