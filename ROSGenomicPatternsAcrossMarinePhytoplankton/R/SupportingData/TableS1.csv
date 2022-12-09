@@ -1,0 +1,82 @@
+Variable,Units,Definition
+FileName,NA,"Name of source genome or transcriptome file composed of three components - Name, Nucleic acid and Genome or Transcriptome, separated by dashes"
+EnzymeName,NA,Name of ROS producing or scavenging enzyme
+ECNumber,NA,Enzyme Commission Number of enzyme
+HyPe,NA,Indicates whether the enzyme Produces or Scavenges Hydrogen Peroxide
+SupOx,NA,Indicates whether the enzyme Produces or Scavenges  Superoxide
+NitOx,NA,Indicates whether the enzyme Produces or Scavenges Nitric Oxide
+Genus,NA,Genus of the organism
+species,NA,Species of the organism
+Strain,NA,Strain of the organism
+Ome,NA,Genome or Transcriptome
+Taxa,NA,"Taxonomic group that the organism falls in, typically class, phyla or superphyla"
+Rad1_um,µm,Smallest median radius (in µm) along all three axes
+Rad2_um,µm,Second largest median radius (in µm) along all three axes
+Rad3_um,µm,Largest median radius (in µm) along all three axes
+Flagella,NA,Refers to whether or not the organism has flagella
+GenomeSize_mbp,mbp,Size of the genome in megabasepairs
+GeneModels_count,count,Total number of genes in genome
+Latitude,°,Source latitude from which the organism was sampled in degrees
+Longitude,°,Source longitude from which the organism was sampled in degrees
+Marine,NA,States whether the organism is Marine or not
+PennateCentric,NA,"Solely for Diatoms, indicates whether the Diatom is a Pennate or a Centric Diatom"
+ColonySpecies,NA,Indicates whether an organism can form colonies or not
+KO,NA,Kegg Orthology Number
+HyPe_PriSec,NA,"If the Enzyme Produces or Scavenges Hydrogen Peroxide, HyPePriSec indicates whether Hydrogen Peroxide is a Primary or Secondary product or substrate"
+HyPe_PriSec_citekey,NA,Citation for HyPe
+NitOx_PriSec,NA,"If the Enzyme Produces or Scavenges Nitric Oxide, NitOxPriSec indicates whether Nitric Oxide is a Primary or Secondary product or substrate"
+NitOx_PriSec_citekey,NA,Citation for NitOx_PriSec
+SupOx_PriSec,NA,"If the Enzyme Produces or Scavenges Superoxide, SupOxPriSec indicates whether Superoxide is a Primary or Secondary product or substrate"
+SupOx_PriSec_citekey,NA,Citation for SupOx_PriSec
+Reaction,NA,"Reaction of the enzyme to produce or scavenge ROS; if multiple reactions are present, they are separated by "";"""
+Reaction_citation,NA,Citation for Reaction
+ECTreeL1,NA,First Level Description of EC Tree
+ECTreeL2,NA,Second Level Description of EC Tree
+ECTreeL3,NA,Third Level Description of EC Tree
+ProdAndScav,NA,An enzyme that is annotated as both producing and scavenging the substrate
+RemoveEnzyme,NA,Remove an enzyme as per methods
+Notes,NA,Notes
+query_name,NA,query sequence name
+seed_eggNOG_ortholog,NA,best protein match in eggNOG
+seed_ortholog_evalue,NA,best protein match (e-value)
+seed_ortholog_score,NA,best protein match (bit-score)
+eggNOG OGs,NA,"a comma-separated, clade depth-sorted (broadest to narrowest), list of Orthologous Groups (OGs) identified for this query. Note that each OG is represented in the following format: OG@tax_id|tax_name"
+narr_og_name,NA,OG@tax_id|tax_name for the narrowest OG found for this query.
+narr_og_cat,NA,COG category corresponding to narr_og_name
+narr_og_desc,NA,Description corresponding to narr_og_name
+best_og_name,NA,OG@tax_id|tax_name for the OG chosen based on --tax_scope.
+best_og_cat,NA,COG category corresponding to best_og_name
+best_og_desc,NA,Description corresponding to best_og_name
+Preferred_name,NA,EGGNOG annotation of enzyme name
+GOs,NA,Gene Ontology
+KEGG_ko,NA,Kegg Orthology Number
+KEGG_Pathway,NA,KEGG Pathway
+KEGG_Module,NA,KEGG Module
+KEGG_Reaction,NA,KEGG Reaction
+KEGG_rclass,NA,KEGG rclass
+BRITE,NA,Hierarchical classification systems capturing functional hierarchies of various biological objects
+KEGG_TC,NA,KEGG Transporter Classification
+CAZy,NA,Carbohydrate-Active enZYmes
+BiGG_Reaction,NA,Biochemical Genetic and Genomic
+PFAMs,NA,Protein Families
+ROSGene_count,count,Count of genes encoding an enzyme by EC number
+TotalDetectedEnzymes,count,Total count of detected enzyme encoding genes in the genome
+SA_um2,µm^2^,Surface area in µm^2^
+Volume_um3,µm^3^,Volume in µm^3^
+SAVol_um,µm^-1^,Surface area to Volume ratio in µm^-1^
+Radius_um,µm,Smallest median radius (in µm) along all three axes
+log_Radius_um,µm,log10 of Radius_µm
+log_GenomeSize_mbp,mbp,log10 of GenomeSize_mbp
+log_GeneModels_count,count,log10 of GeneModel_count
+log_Gene_count,count,log10 of Gene_count
+abs_Latitude,°,absolute of Latitude
+log_Volume_um3,µm^3^,log10 of Volume_µm3
+log_SA_um2,µm^2^,log10 of SA_µm2
+log_SAVol_um,µm^-1^,log10 of SAVol_perµm
+Name,NA,"Combination of Genus, species, Strain"
+Phylum,NA,"Taxonomic group that the organism falls in, typically class, phyla or superphyla"
+HyPe_count,NA,Total count of genes encoding Production or Scavenging of HyPe
+NitOx_count,NA,Total count of genes encoding Production or Scavenging of NitOx
+SupOx_count,NA,Total count of genes encoding Production or Scavenging of SupOx
+TotalROSGene_count,NA,"Total count of genes encoding Production or Scavenging of HyPe, NitOx and SupOx"
+TransWGenomePresent,NA,A transcriptome that also has a genome published; these are used for quality control

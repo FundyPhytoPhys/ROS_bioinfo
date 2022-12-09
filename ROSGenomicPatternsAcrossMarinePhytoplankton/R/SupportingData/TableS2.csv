@@ -1,0 +1,158 @@
+ECNumber,KO,EnzymeName,HyPe,HyPe_PriSec,HyPe_PriSec_citekey,NitOx,NitOx_PriSec,NitOx_PriSec_citekey,SupOx,SupOx_PriSec,SupOx_PriSec_citekey,Reaction,Reaction_citation,ECTreeL1,ECTreeL2,ECTreeL3,ProdAndScav,RemoveEnzyme,Notes
+1.1.3.4,NA,Glucose oxidase,Production,Primary,NA,NA,NA,NA,NA,NA,NA,Glucose + O~2~ ‚Üí H~2~O~2~ + Glucono - \delta - lactone,[@taoKineticStudiesEnzymeCatalyzed2009],Oxidoreductases,Acting on the CH-OH group of donors,With oxygen as acceptor,NA,0,NA
+1.1.3.B4,NA,Glycerol oxidase,Production,Primary,NA,NA,NA,NA,NA,NA,NA,Glycerol + O~2~ ‚Üí H~2~O~2~ + Glyceraldehyde,[@uwajimaGlycerolOxidaseNovel1984],Oxidoreductases,Acting on the CH-OH group of donors,With oxygen as acceptor,NA,0,NA
+1.1.3.5,K21840,Hexose oxidase,Production,Primary,NA,NA,NA,NA,NA,NA,NA,A hexose + O~2~ ‚Üí H~2~O~2~ + A hexose lactone,[@hansenHexoseOxidaseRed1997],Oxidoreductases,Acting on the CH-OH group of donors,With oxygen as acceptor,NA,0,NA
+1.1.3.6,K03333,Cholesterol oxidase,Production,Primary,NA,NA,NA,NA,NA,NA,NA,Cholesterol + O~2~ ‚Üí H~2~O~2~ + Cholest-5-en-3-one,[@pollegioniCholesterolOxidaseBiotechnological2009],Oxidoreductases,Acting on the CH-OH group of donors,With oxygen as acceptor,NA,0,NA
+1.1.3.7,NA,Aryl-Alcohol oxidase,Production,Primary,NA,NA,NA,NA,NA,NA,NA,An Aromatic Primary Alcohol + O~2~ ‚Üí H~2~O~2~ + An aromatic Aldehyde,[@serranoReactionMechanismsApplications2020],Oxidoreductases,Acting on the CH-OH group of donors,With oxygen as acceptor,NA,0,NA
+1.1.3.8,K00103,L-gulonolactone oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Oxidoreductases,Acting on the CH-OH group of donors,With oxygen as acceptor,NA,0,NA
+1.1.3.9,K04618,Galactose oxidase,Production,Primary,NA,NA,NA,NA,NA,NA,NA,D-galactose + O~2~ ‚Üí H~2~O~2~ + D-galacto-hexodialdose,[@baronStructureMechanismGalactose1994],Oxidoreductases,Acting on the CH-OH group of donors,With oxygen as acceptor,NA,0,NA
+1.1.3.10,K23272,Pyranose oxidase,Production,Primary,NA,NA,NA,NA,NA,NA,NA,D-glucose + O~2~ ‚Üí H~2~O~2~ + 2-dehydro-d-galactose,[@leitnerPurificationCharacterizationPyranose2001],Oxidoreductases,Acting on the CH-OH group of donors,With oxygen as acceptor,NA,0,NA
+1.1.3.11,NA,L-sorbose oxidase,Production,Primary,NA,NA,NA,NA,NA,NA,NA,L-sorbose + O~2~ ‚Üí H~2~O~2~ + 5-dehydro-D-fructose,[@schomburgLSorboseOxidase1995],Oxidoreductases,Acting on the CH-OH group of donors,With oxygen as acceptor,NA,0,NA
+1.1.3.12,K18607,Pyridoxine 4-oxidase,Production,Primary,NA,NA,NA,NA,NA,NA,NA,Pyridoxine + O~2~ ‚Üí H~2~O~2~ + pyridoxal,[@mugoCrystalStructurePyridoxine2013],Oxidoreductases,Acting on the CH-OH group of donors,With oxygen as acceptor,NA,0,NA
+1.1.3.13,K17066,Alcohol oxidase,Production,Primary,NA,NA,NA,NA,NA,NA,NA,A primary alcohol + O~2~ ‚Üí H~2~O~2~ + An aldehyde,[@hopkinsBiochemistryAlcoholOxidase1987],Oxidoreductases,Acting on the CH-OH group of donors,With oxygen as acceptor,NA,0,NA
+1.1.3.15,K00104;K11517,(S)-2-hydroxy-acid oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Oxidoreductases,Acting on the CH-OH group of donors,With oxygen as acceptor,NA,0,"previously listed as EC 1.1.3.1, glycolate oxidase"
+1.1.3.16,K10724,Ecdysone oxidase,Production,Primary,NA,NA,NA,NA,NA,NA,NA,ecdysone + O~2~ ‚Üí H~2~O~2~ + 3-dehydroecdysone,[@koolmanEcdysoneOxidaseReaction1978],Oxidoreductases,Acting on the CH-OH group of donors,With oxygen as acceptor,NA,0,NA
+1.1.3.17,K17755,choline oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Oxidoreductases,Acting on the CH-OH group of donors,With oxygen as acceptor,1,0,NA
+1.1.3.18,NA,secondary-alcohol oxidase,Production,Primary,NA,NA,NA,NA,NA,NA,NA,A Secondary Alcohol + O~2~ ‚Üí H~2~O~2~ + An aldehyde,[@picklSubstrateToleranceAlcohol2015],Oxidoreductases,Acting on the CH-OH group of donors,With oxygen as acceptor,NA,0,NA
+1.1.3.19,NA,4-hydroxymandelate oxidase (decarboxylating),Production,Primary,NA,NA,NA,NA,NA,NA,NA,(S)-4-hydroxymandelate + O~2~ ‚Üí H~2~O~2~ + CO~2~ + 4-hydroxybenzaldehyde,[@bhatPurificationPropertiesL4Hydroxymandelate1976],Oxidoreductases,Acting on the CH-OH group of donors,With oxygen as acceptor,NA,0,NA
+1.1.3.20,K17756,long-chain-alcohol oxidase,Production,Primary,NA,NA,NA,NA,NA,NA,NA,2 Long-chain alcohols + O~2~ ‚Üí H~2~O~2~ + 2 long-chain aldehydes,[@schomburgLongchainalcoholOxidase1995],Oxidoreductases,Acting on the CH-OH group of donors,With oxygen as acceptor,NA,0,NA
+1.1.3.21,K00105,glycerol-3-phosphate oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Oxidoreductases,Acting on the CH-OH group of donors,With oxygen as acceptor,NA,0,NA
+1.1.3.27,NA,hydroxyphytanate oxidase,Production,Primary,NA,NA,NA,NA,NA,NA,NA,L-2-Hydroxyphytanate + O~2~ ‚Üí H~2~O~2~ + 2-oxophytanate,[@schomburgHydroxyphytanateOxidase1995],Oxidoreductases,Acting on the CH-OH group of donors,With oxygen as acceptor,NA,0,NA
+1.1.3.30,NA,polyvinyl-alcohol oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Oxidoreductases,Acting on the CH-OH group of donors,With oxygen as acceptor,NA,0,NA
+1.1.3.37,K00107,"D-arabinono-1,4-lactone oxidase",Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Oxidoreductases,Acting on the CH-OH group of donors,With oxygen as acceptor,NA,0,NA
+1.1.3.38,K20153,vanillyl-alcohol oxidase,Production,Primary,NA,NA,NA,NA,NA,NA,NA,vanillyl alcohol + O~2~ ‚Üí H~2~O~2~ + vanillin,[@baronStructureMechanismGalactose1994],Oxidoreductases,Acting on the CH-OH group of donors,With oxygen as acceptor,NA,0,NA
+1.1.3.39,NA,nucleoside oxidase (H2O2-forming),Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Oxidoreductases,Acting on the CH-OH group of donors,With oxygen as acceptor,NA,0,NA
+1.1.3.40,NA,D-mannitol oxidase,Production,Primary,NA,NA,NA,NA,NA,NA,NA,D-mannitol + O~2~ ‚Üí H~2~O~2~ + D-mannose,[@lobo-da-cunhaMannitolOxidasePolyol2018],Oxidoreductases,Acting on the CH-OH group of donors,With oxygen as acceptor,NA,0,NA
+1.1.3.41,K00594,alditol oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Oxidoreductases,Acting on the CH-OH group of donors,With oxygen as acceptor,NA,0,NA
+1.1.3.42,K20550,prosolanapyrone-II oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Oxidoreductases,Acting on the CH-OH group of donors,With oxygen as acceptor,NA,0,NA
+1.1.3.45,K15949,aclacinomycin-N oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Oxidoreductases,Acting on the CH-OH group of donors,With oxygen as acceptor,NA,0,NA
+1.1.3.46,K16422,4-hydroxymandelate oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Oxidoreductases,Acting on the CH-OH group of donors,With oxygen as acceptor,NA,0,NA
+1.1.3.47,K16873,5-(hydroxymethyl)furfural oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Oxidoreductases,Acting on the CH-OH group of donors,With oxygen as acceptor,NA,0,NA
+1.1.3.48,K19714,3-deoxy-alpha-D-manno-octulosonate 8-oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Oxidoreductases,Acting on the CH-OH group of donors,With oxygen as acceptor,NA,0,NA
+1.1.5.13,K15736,(S)-2-hydroxyglutarate dehydrogenase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.1.98.3,K16653,decaprenylphospho-beta-D-ribofuranose 2-dehydrogenase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.1.99.B3,NA,glucooligosaccharide oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.1.99.18,NA,cellobiose dehydrogenase (acceptor),Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.2.3.1,K00157,aldehyde oxidase,Production,Primary,NA,NA,NA,NA,NA,NA,NA,An Aldehyde + H~2~O + O~2~ ‚Üí A carboxylate + H~2~O~2~,[@rotheAldehydeOxidaseIsoenzymes1974],Oxidoreductases,Acting on the aldehyde or oxo group of donors,With oxygen as acceptor,NA,0,NA
+1.2.3.3,K00158,pyruvate oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.2.3.4,NA,oxalate oxidase,Production,Primary,NA,NA,NA,NA,NA,NA,NA,Oxalate + O~2~ + 2 H^2^ ‚Üí  2 CO~2~ + H~2~O~2~,[@pundirIsolationPurificationImmobilization1993],Oxidoreductases,Acting on the aldehyde or oxo group of donors,With oxygen as acceptor,NA,0,NA
+1.2.3.5,NA,glyoxylate oxidase,Production,Primary,NA,NA,NA,NA,NA,NA,NA,Glyoxylate + O~2~ + H~2~O  ‚Üí Oxalate + H~2~O~2~,[@choyGutMicrobiomeMetabolic2018],Oxidoreductases,Acting on the aldehyde or oxo group of donors,With oxygen as acceptor,NA,0,NA
+1.2.3.7,K11817,indole-3-acetaldehyde oxidase,Production,Primary,NA,NA,NA,NA,NA,NA,NA,indol-3-acetaldehyde + H~2~O + O~2~ ‚Üí (indol-3-yl)acetate + H~2~O~2~,[@rahmanDraftGenomeSequence2013],Oxidoreductases,Acting on the aldehyde or oxo group of donors,With oxygen as acceptor,NA,0,NA
+1.2.3.9,NA,aryl-aldehyde oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,1,0,NA
+1.2.3.14,K09842,abscisic-aldehyde oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.2.3.15,K20929,(methyl)glyoxal oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.3.3.3,K00228,coproporphyrinogen oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.3.3.4,K00231,protoporphyrinogen oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.3.3.6,K00232,acyl-CoA oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.3.3.8,K22089,tetrahydroberberine oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.3.3.11,K06137,pyrroloquinoline-quinone synthase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.3.3.12,NA,L-galactonolactone oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.3.3.13,K21375,albonoursin synthase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.3.3.14,K15949,aclacinomycin-A oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.3.3.16,K05897,oxazoline dehydrogenase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.3.98.1,K00226,dihydroorotate dehydrogenase (fumarate),Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,1,0,NA
+1.4.3.1,K00272,D-aspartate oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.4.3.B1,K09471,gamma-glutamylputrescine oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.4.3.2,K03334,L-amino-acid oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.4.3.3,K00273,D-amino-acid oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,1,0,NA
+1.4.3.4,K00274,monoamine oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.4.3.5,K00275,pyridoxal 5'-phosphate synthase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.4.3.7,NA,D-glutamate oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.4.3.8,NA,ethanolamine oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.4.3.10,K03343,putrescine oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.4.3.11,NA,L-glutamate oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.4.3.12,NA,cyclohexylamine oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.4.3.13,K00277,protein-lysine 6-oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.4.3.14,NA,L-lysine oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.4.3.15,NA,D-glutamate(D-aspartate) oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.4.3.16,K00278,L-aspartate oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.4.3.19,K03153,glycine oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.4.3.20,K17831,L-lysine 6-oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.4.3.21,K00276,primary-amine oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.4.3.22,K11182,diamine oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.4.3.23,K19884,7-chloro-L-tryptophan oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.4.3.25,K21639,L-arginine oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.5.3.1,K00301;K00302;K00303;K00304;K00305,sarcosine oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.5.3.4,NA,N6-methyl-lysine oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.5.3.5,K19826,(S)-6-hydroxynicotine oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.5.3.6,K19890,(R)-6-hydroxynicotine oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.5.3.7,K00306,L-pipecolate oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.5.3.10,K00309,dimethylglycine oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.5.3.12,NA,dihydrobenzophenanthridine oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.5.3.13,K00308,N1-acetylpolyamine oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.5.3.14,K13366,"polyamine oxidase (propane-1,3-diamine-forming)",Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.5.3.15,NA,N8-acetylspermidine oxidase (propane-1,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.5.3.16,K12259,spermine oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.5.3.17,K13367;K17839,non-specific polyamine oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.5.3.18,K17833,L-saccharopine oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.5.8.4,K00315,dimethylglycine dehydrogenase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.6.3.1,K13411,NAD(P)H oxidase (H2O2-forming),Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.6.3.3,K17870,NADH oxidase (H2O2-forming),Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.6.3.5,K18208,renalase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.7.3.1,K19823,nitroalkane oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.7.3.3,K00365,factor-independent urate hydroxylase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.8.3.1,K00387,sulfite oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.8.3.2,K10758;K17783;K17891,thiol oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.8.3.3,NA,glutathione oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.8.3.4,K17285,methanethiol oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.8.3.5,K05906,prenylcysteine oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.8.3.6,K05906,farnesylcysteine lyase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.10.3.4,K20219,o-aminophenol oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.10.3.5,NA,3-hydroxyanthranilate oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.10.3.6,NA,rifamycin-B oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.11.1.1,K05910,NADH peroxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,1,0,NA
+1.13.12.9,K21795,phenylalanine 2-monooxygenase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.13.12.16,K00459,nitronate monooxygenase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.14.99.24,NA,steroid 9alpha-monooxygenase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.14.99.66,K11450,"[histone H3]-N6,N6-dimethyl-L-lysine4 FAD-dependent demethylase",Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.15.1.1,K00518;K04564;K04565;K16627,superoxide dismutase,Production,NA,NA,NA,NA,NA,Scavenging,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.15.1.2,K05919,superoxide reductase,Production,NA,NA,NA,NA,NA,Scavenging,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.16.3.2,K00522;K02217,bacterial non-heme ferritin,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,1,0,NA
+1.17.1.4,K00087;K11177;K11178;K13479;K13481;K13482,xanthine dehydrogenase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.17.3.2,NA,xanthine oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.21.3.3,K00307,reticuline oxidase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.21.3.7,K20501,tetrahydrocannabinolic acid synthase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.21.3.8,K20502,cannabidiolic acid synthase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+2.1.1.148,K03465,thymidylate synthase (FAD),Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+4.1.1.107,K01618,"3,4-dihydroxyphenylacetaldehyde synthase",Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+4.1.1.108,K22327,4-hydroxyphenylacetaldehyde synthase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+4.1.1.109,K22328,phenylacetaldehyde synthase,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.1.3.17,K17755,choline oxidase,Scavenging,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,1,0,On both???
+1.2.3.9,NA,aryl-aldehyde oxidase,Scavenging,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,1,0,On both???
+1.3.98.5,K00435;K25033,hydrogen peroxide-dependent heme synthase,Scavenging,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,1,0,On both???
+1.4.3.3,K00273,D-amino-acid oxidase,Scavenging,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,1,1,"On both???, genetically modified version produces h2o2"
+1.11.1.1,K05910,NADH peroxidase,Scavenging,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,1,0,On both???
+1.11.1.B2,NA,chloride peroxidase (vanadium-containing),Scavenging,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.11.1.3,NA,fatty-acid peroxidase,Scavenging,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.11.1.5,K00428,cytochrome-c peroxidase,Scavenging,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.11.1.6,K03781,catalase,Scavenging,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.11.1.7,K00430;K10788;K12550;K19511;K21201,peroxidase,Scavenging,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.11.1.8,K00431,iodide peroxidase,Scavenging,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.11.1.9,K00432,glutathione peroxidase,Scavenging,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.11.1.10,K00433;K17990,chloride peroxidase,Scavenging,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.11.1.11,K00434,L-ascorbate peroxidase,Scavenging,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.11.1.13,K20205,manganese peroxidase,Scavenging,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.11.1.14,K23515,lignin peroxidase,Scavenging,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.11.1.16,NA,versatile peroxidase,Scavenging,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.11.1.19,K15733,dye decolorizing peroxidase,Scavenging,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.11.1.21,K03782,catalase-peroxidase,Scavenging,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.11.1.23,K12903;K22392,(S)-2-hydroxypropylphosphonic acid epoxidase,Scavenging,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.11.2.1,K21820,unspecific peroxygenase,Scavenging,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.11.2.2,K10789,myeloperoxidase,Scavenging,NA,NA,Scavenging,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.11.2.3,K17991,plant seed peroxygenase,Scavenging,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.11.2.4,K15629,fatty-acid peroxygenase,Scavenging,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.11.2.5,K20208,3-methyl-L-tyrosine peroxygenase,Scavenging,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.11.2.6,K24287,L-tyrosine peroxygenase,Scavenging,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.14.18.1,K00505,tyrosinase,Scavenging,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.16.3.2,K00522;K02217,bacterial non-heme ferritin,Scavenging,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,1,0,On both???
+1.21.98.2,K19885,dichlorochromopyrrolate synthase,Scavenging,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.10.3.17,K12262,superoxide oxidase,NA,NA,NA,NA,NA,NA,Scavenging,Primary,NA,NA,NA,NA,NA,NA,1,0,NA
+1.10.3.17,K12262,superoxide oxidase,NA,NA,NA,NA,NA,NA,Production,Primary,NA,NA,NA,NA,NA,NA,1,1,"On both???, removed as the enzyme does not produce h2o2 in vivo, more info in methods"
+1.7.2.1,K00368,nitrite reductase (NO-forming),NA,NA,NA,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,1,0,NA
+1.7.2.5,K04561,nitric oxide reductase (cytochrome c),NA,NA,NA,Production,Primary,NA,NA,NA,NA,NA,NA,NA,NA,NA,1,0,NA
+1.7.2.7,K20932;K20933;K20934,hydrazine synthase,NA,NA,NA,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.7.6.1,K22962,nitrite dismutase,NA,NA,NA,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.14.13.39,K13240;K13241;K13242;K13427,nitric-oxide synthase (NADPH),NA,NA,NA,Production,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
+1.7.2.1,K00368,nitrite reductase (NO-forming),NA,NA,NA,Scavenging,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,1,0,On both???
+1.7.2.5,K04561,nitric oxide reductase (cytochrome c),NA,NA,NA,Scavenging,Primary,[@silaghi-dumitrescuFlavoDiironProteinDesulfovibrio2005;@blombergImprovedFreeEnergy2016],NA,NA,NA,2NO + 2H^+^ 2e^-^ → N~2~O + H~2~O,[@blombergImprovedFreeEnergy2016],NA,NA,NA,1,0,On both???
+1.14.12.17,K05916,nitric oxide dioxygenase,NA,NA,NA,Scavenging,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NA
