@@ -167,15 +167,15 @@ source("https://sebastiansauer.github.io/Rcode/logit2prob.R")
 
 # Abstract {.unnumbered}
 
-Marine phytoplankton produce and scavenge Reactive Oxygen Species, to support cellular processes, while limiting damaging reactions. Some prokaryotic picophytoplankton have, however, lost all genes encoding scavenging of hydrogen peroxide. Such losses of metabolic function can only apply to Reactive Oxygen Species which potentially traverse the cell membrane, before provoking damaging intracellular reactions.
-We therefore hypothesized that cell radius influences which elements of Reactive Oxygen Species metabolism are potentially dispensable from a cell. We investigated genomes and transcriptomes from diverse marine eukaryotic phytoplankton, ranging from 0.4 to 44 µm radius, to analyze the genomic allocations encoding enzymes metabolizing Reactive Oxygen Species.
-Superoxide has high reactivity, short lifetimes and limited membrane permeability. Genes encoding superoxide scavenging were ubiquitous, but the fractional gene allocation decreased with increasing cell radius, consistent with a nearly fixed set of core genes for scavenging superoxide pools.
+Marine phytoplankton produce and scavenge Reactive Oxygen Species, to support cellular processes, while limiting damaging reactions. Some prokaryotic picophytoplankton have, however, lost all genes encoding scavenging of hydrogen peroxide. Such losses of metabolic function can only apply to Reactive Oxygen Species which potentially traverse the cell membrane outwards, before provoking damaging intracellular reactions.
+We hypothesized that cell radius influences which elements of Reactive Oxygen Species metabolism are partially or fully dispensable from a cell. We therefore investigated genomes and transcriptomes from diverse marine eukaryotic phytoplankton, ranging from 0.4 to 44 µm radius, to analyze the genomic allocations encoding enzymes metabolizing Reactive Oxygen Species.
+Superoxide has high reactivity, short lifetimes and limited membrane permeability. Genes encoding superoxide scavenging are ubiquitous across phytoplankton, but the fractional gene allocation decreased with increasing cell radius, consistent with a nearly fixed set of core genes for scavenging superoxide pools.
 Hydrogen peroxide has lower reactivity, longer intracellular and extracellular lifetimes and readily crosses cell membranes. Genomic allocations to hydrogen peroxide production decrease with increasing cell radius, more than do genomic allocations to scavenging of hydrogen peroxide, consistent with maintenance of ROS homeostasis in the face of slower diffusional losses of hydrogen peroxide from larger cells. Gene allocations to hydrogen peroxide metabolism are positively influenced by capacity for colony formation, suggesting more active hydrogen peroxide metabolism among the closely spaced cells of colonies, compared to single cells; and by the presence of flagella, suggesting an interaction between flagella and maintenance of Reactive Oxygen Species homeostasis.
-Nitric Oxide has low reactivity, long intracellular and extracellular lifetimes and readily crosses cell membranes. Neither Nitric Oxide production nor scavenging genomic capacities changed with increasing cell radius. Centric vs. pennate diatoms, however, show contrasting gene allocations to nitric oxide metabolism, consistent with diverse roles of nitric oxide across taxa.
+Nitric Oxide has low reactivity, long intracellular and extracellular lifetimes and readily crosses cell membranes. Neither Nitric Oxide production nor scavenging genomic capacities changed with increasing cell radius. Many taxa, however, lack the genomic capacity for nitric oxide production or scavenging. The probability of presence of capacity to produce nitric oxide decreases with increasing cell size, and is influenced by flagella and colony formation. In contrast, the probability of presence of capacity to scavenge nitric oxide increases with increasing cell size, and is again influenced by flagella and colony formation.
 
 # Introduction {.unnumbered}
 
-Phytoplankton cells span a large size range, from picoplankton (<2µm), nanoplankton (2 to 20µm), microplankton (20 to 200µm) to macroplankton (200 to <2000µm) [@finkelPhytoplanktonChangingWorld2010]. Cell size interacts with multiple selective pressures, including cellular metabolic rate, light absorption, nutrient uptake, cell nutrient quotas, trophic interactions and diffusional exchanges with the environment  [@finkelPhytoplanktonChangingWorld2010; @andersenModellingEmergentTrophic2015; @finkelLightAbsorptionSize2001; @geiderSizeDependenceGrowth1986; @stromMicrozooplanktonGrazingCoastal2007]. Beyond simple size, cells of different shapes differ in surface area to volume ratio. For example, more elongated cells, such as pennate diatoms, have a larger surface area to volume ratio compared to more rounded cells, such as centric diatoms, of equivalent biovolume [@litchmanLinkingTraitsSpecies2010], which can in turn influence diffusional exchanges between cells and their environment. 
+Phytoplankton cells span a large size range, from picoplankton (<2µm), nanoplankton (2 to 20µm), microplankton (20 to 200µm) to macroplankton (200 to <2000µm) [@finkelPhytoplanktonChangingWorld2010]. Cell size interacts with multiple selective pressures, including cellular metabolic rate, light absorption, nutrient uptake, cell nutrient quotas, trophic interactions and diffusional exchanges with the environment  [@finkelPhytoplanktonChangingWorld2010; @andersenModellingEmergentTrophic2015; @finkelLightAbsorptionSize2001; @geiderSizeDependenceGrowth1986; @stromMicrozooplanktonGrazingCoastal2007]. Beyond simple size, cell shapes and growth forms influence diffusional exchanges between cells and their environment [@litchmanLinkingTraitsSpecies2010].
 
 ## Characteristics of Reactive Oxygen Species {.unnumbered}
 
@@ -189,25 +189,24 @@ ROSDiffusion %>%
   kable_classic()
 ```
 
-Superoxide (O~2~^•−^), a radical anion generated through the monovalent reduction of O~2~ to O~2~^•−^ [@hayyanSuperoxideIonGeneration2016], is present in the oceans at concentrations of 10^-12^ to 10^-9^ [@diazProductionExtracellularReactive2018; @adesinaPhotochemicallyGeneratedNitric2021]. O~2~^•−^ is highly reactive [@fridovichOxygenToxicityRadical1998] with organic compounds including thiols [@winterbournThiolChemistrySpecificity2008] and with metals [@roeUptakeMechanismsInorganic2014; @roseInfluenceExtracellularSuperoxide2012]. As the first ROS in a sequential series of reductions of O~2~, O~2~^•−^ is a 'gateway' to production of other ROS. O~2~^•−^ is produced both inside and outside a cell, but shows limited diffusion across the hydrophobic cell membrane [@korshunovPotentialRolePeriplasmic2002]. Electron transfers to O~2~ from the photosynthetic and mitochondrial electron transport chains generate intracellular O~2~^•−^ as a by-product [@kozulevaMinimizingElectronFlow2020; @blokhinaReactiveOxygenSpecies2010; @asadaUnivalentReductionMolecular1974; @kozulevaEvaluationParticipationFerredoxin2010;@pospisilProductionReactiveOxygen2009; @pospisilRoleMetalsProduction2014]. Multiple oxidases (Table \@ref(tab:ROSEnzymeList)) reduce O~2~ and generate either H~2~O [@solomonO2ReductionH2O2008], or alternately O~2~^•−^ and/or Hydrogen Peroxide (H~2~O~2~) [@messnerMechanismSuperoxideHydrogen2002; @mittlerOxidativeStressAntioxidants2002]. Biogenic production of extracellular ROS mediated by taxa ranging from heterotrophic bacteria to diatoms is significant in marine environments [@zhangExtensiveDarkBiological2016; @diazWidespreadProductionExtracellular2013; @diazProductionExtracellularReactive2018; @diazProductionExtracellularSuperoxide2018; @roseMeasurementImplicationsNonphotochemically2008; @schneiderSpeciesLevelVariabilityExtracellular2016; @sutherlandExtracellularSuperoxideProduction2019; @kustkaExtracellularProductionSuperoxide2005; @hanselDynamicsExtracellularSuperoxide2016]. Increasing cell suspension density leads to decreased O~2~^•−^ production per cell [@sutherlandExtracellularSuperoxideProduction2019; @hanselTightRegulationExtracellular2019; @marshallSuperoxideProductionMarine2005]. Some extracellular O~2~^•−^ production likely contributes to cell growth, in that the removal of extracellular ROS from cultures of the heterotrophic bacteria *Roseobacter* inhibits its growth [@hanselTightRegulationExtracellular2019]. O~2~^•−^ in coastal waters is primarily attributable to extracellular production mediated by eukaryotic phytoplankton [@sutherlandSpatialHeterogeneityParticleAssociated2020]. In contrast, *Prochlorococcus* MED4 shows the least extracellular production of O~2~^•−^ among microbes analyzed to date [@sutherlandExtracellularSuperoxideProduction2019]. O~2~^•−^ production patterns can vary even within a genus [@schneiderSpeciesLevelVariabilityExtracellular2016].
+Superoxide (O~2~^•−^), a radical anion generated through the monovalent reduction of O~2~ to O~2~^•−^ [@hayyanSuperoxideIonGeneration2016], is highly reactive [@fridovichOxygenToxicityRadical1998] with organic compounds including thiols [@winterbournThiolChemistrySpecificity2008] and with metals [@roeUptakeMechanismsInorganic2014; @roseInfluenceExtracellularSuperoxide2012]. As the first ROS in a sequential series of reductions of O~2~, O~2~^•−^ is a 'gateway' to production of other ROS. O~2~^•−^ is produced both inside and outside a cell [@kozulevaMinimizingElectronFlow2020; @blokhinaReactiveOxygenSpecies2010; @asadaUnivalentReductionMolecular1974; @kozulevaEvaluationParticipationFerredoxin2010;@pospisilProductionReactiveOxygen2009; @pospisilRoleMetalsProduction2014], but shows limited diffusion across the hydrophobic cell membrane [@korshunovPotentialRolePeriplasmic2002]. Multiple oxidases (Table \@ref(tab:ROSEnzymeList)) reduce O~2~ and generate either H~2~O [@solomonO2ReductionH2O2008], or alternately O~2~^•−^ and/or Hydrogen Peroxide (H~2~O~2~) [@messnerMechanismSuperoxideHydrogen2002; @mittlerOxidativeStressAntioxidants2002]. Biogenic production of extracellular ROS mediated by taxa ranging from heterotrophic bacteria to diatoms is significant in marine environments [@zhangExtensiveDarkBiological2016; @diazWidespreadProductionExtracellular2013; @diazProductionExtracellularReactive2018; @diazProductionExtracellularSuperoxide2018; @roseMeasurementImplicationsNonphotochemically2008; @schneiderSpeciesLevelVariabilityExtracellular2016; @sutherlandExtracellularSuperoxideProduction2019; @kustkaExtracellularProductionSuperoxide2005; @hanselDynamicsExtracellularSuperoxide2016; @marshallSuperoxideProductionMarine2005]. Some extracellular O~2~^•−^ production likely contributes to cell growth [@hanselTightRegulationExtracellular2019]. O~2~^•−^ in coastal waters is primarily attributable to extracellular production mediated by eukaryotic phytoplankton [@sutherlandSpatialHeterogeneityParticleAssociated2020].
 
-Two known enzymes mediate conversion of O~2~^•−^ to H~2~O~2~; the ubiquitous dismutation of O~2~^•−^ catalyzed by diverse Superoxide Dismutases (SOD) or the less prevalent reduction of O~2~^•−^, catalyzed by Superoxide Reductase (SOR) at the expense of metabolic reductant. O~2~^•−^ also dismutates spontaneously to produce H~2~O~2~ and O~2~ [@zafiriouChemistrySuperoxideIonradical1990], although @sutherlandDarkBiologicalSuperoxide2020 found that ~52% of dark O~2~^•−^ production instead likely undergoes oxidation back to O~2~.  Extracellular production of O~2~^•−^ thus indirectly contributes to extracellular H~2~O~2~ pools [@wuttigPathwaysSuperoxideDecay2013; @sutherlandExtracellularSuperoxideProduction2019; @scanlanEcologicalGenomicsMarine2009; @schneiderSpeciesLevelVariabilityExtracellular2016].
+Two known enzymes mediate conversion of O~2~^•−^ to H~2~O~2~; the ubiquitous dismutation of O~2~^•−^ catalyzed by diverse Superoxide Dismutases (SOD) or the less prevalent reduction of O~2~^•−^, catalyzed by Superoxide Reductase (SOR) at the expense of metabolic reductant. O~2~^•−^ also dismutates spontaneously to produce H~2~O~2~ and O~2~ [@zafiriouChemistrySuperoxideIonradical1990], although @sutherlandDarkBiologicalSuperoxide2020 found that ~52% of dark O~2~^•−^ production instead likely undergoes oxidation back to O~2~. Extracellular production of O~2~^•−^ thus indirectly contributes to extracellular H~2~O~2~ pools [@wuttigPathwaysSuperoxideDecay2013; @sutherlandExtracellularSuperoxideProduction2019; @scanlanEcologicalGenomicsMarine2009; @schneiderSpeciesLevelVariabilityExtracellular2016].
 
-H~2~O~2~ is an uncharged compound, present in the ocean at concentrations of 10^-9^ to 10^-6^ mol L^-1^ [@diazProductionExtracellularReactive2018], depending upon location and conditions including temperature, light level, depth of the mixed layer and the concentration of total dissolved organic carbon [@yuanDistributionHydrogenPeroxide2001]. In aquatic systems, H~2~O~2~ has lifetimes of hours to days (Table \@ref(tab:ROSDiffusion)) [@lesserOxidativeStressMarine2006; @diazProductionExtracellularReactive2018]. H~2~O~2~ passively traverses cell membranes [@halliwellFreeRadicalsBiology1999], primarily through aquaporins [@bienertAquaporinfacilitatedTransmembraneDiffusion2014; @almasalmehStructuralDeterminantsHydrogen2014; @wangCharacterizationAquaporindrivenHydrogen2020; @millerAquaporin3MediatesHydrogen2010], allowing exchange of intracellular and extracellular pools of H~2~O~2~, although cells can maintain a concentration gradient between internal and external H~2~O~2~ [@seaverHydrogenPeroxideFluxes2001].
+H~2~O~2~ passively traverses cell membranes [@halliwellFreeRadicalsBiology1999], primarily through aquaporins [@bienertAquaporinfacilitatedTransmembraneDiffusion2014; @almasalmehStructuralDeterminantsHydrogen2014; @wangCharacterizationAquaporindrivenHydrogen2020; @millerAquaporin3MediatesHydrogen2010], allowing exchange of intracellular and extracellular pools of H~2~O~2~, although cells can maintain a concentration gradient between internal and external H~2~O~2~ [@seaverHydrogenPeroxideFluxes2001].
 
-H~2~O~2~ is acutely toxic to most cells in the range of 10^-5^ to 10^-4^ mol L^-1^ [@halliwellFreeRadicalsBiology1999] (Table \@ref(tab:ROSDiffusion)). H~2~O~2~ can react with thiols and methionine [@winterbournThiolChemistrySpecificity2008] and can interfere with gene expression [@fedurayevHydrogenPeroxideParticipates2018]. Cytotoxic effects of H~2~O~2~, including lipid damage, are however, primarily caused by H~2~O~2~ dismutating into the hydroxyl radical, which is strongly oxidative [@lesserOxidativeStressMarine2006].
+H~2~O~2~ is acutely toxic to most cells in the range of 10^-5^ to 10^-4^ mol L^-1^ [@halliwellFreeRadicalsBiology1999], reacting with thiols and methionine [@winterbournThiolChemistrySpecificity2008] and interfering with gene expression [@fedurayevHydrogenPeroxideParticipates2018]. Cytotoxic effects of H~2~O~2~, including lipid damage, are however, primarily caused by H~2~O~2~ dismutating into the hydroxyl radical, which is strongly oxidative [@lesserOxidativeStressMarine2006].
 
-Multiple different oxidases are important in producing H~2~O~2~ including glycolate oxidase, NADPH oxidase, oxalate oxidase, amine oxidase [@mittlerOxidativeStressAntioxidants2002] and many others (Table \@ref(tab:ROSEnzymeList)), but abiotic processes, including rainfall, may be dominant sources of extracellular H~2~O~2~ in seawater [@averyHydrogenPeroxideBermuda2005; @kellyMeasurementsPeroxidesCloudwater1985; @willeyCoastalRainwaterHydrogen1996]. H~2~O~2~ concentrations in seawater follow a diurnal cycle with a peak at mid-day [@morrisDielRegulationHydrogen2016; @averyHydrogenPeroxideBermuda2005; @yuanDistributionHydrogenPeroxide2001], suggesting significant direct or indirect photochemical or photobiological generation of H~2~O~2~. Heterotrophs do not contribute much of the H~2~O~2~ production but significantly mediate H~2~O~2~ detoxification [@bondHeterotrophicBacteriaExhibit2020].  H~2~O~2~ also decomposes spontaneously, though slowly, into water and oxygen [@senguptaControllingNonCatalyticDecomposition2004], and contributes significantly to the redox cycling of copper and iron in seawater [@milleroRateReductionCopper1991; @moffettReactionKineticsHydrogen1987].
+Multiple different oxidases are important in producing H~2~O~2~ (Table \@ref(tab:ROSEnzymeList)), but abiotic processes, including rainfall, may be dominant sources of extracellular H~2~O~2~ in seawater [@averyHydrogenPeroxideBermuda2005; @kellyMeasurementsPeroxidesCloudwater1985; @willeyCoastalRainwaterHydrogen1996]. H~2~O~2~ concentrations in seawater follow a diurnal cycle with a peak at mid-day [@morrisDielRegulationHydrogen2016; @averyHydrogenPeroxideBermuda2005; @yuanDistributionHydrogenPeroxide2001], suggesting significant direct or indirect photochemical or photobiological generation of H~2~O~2~. Heterotrophs do not contribute much of the H~2~O~2~ production but significantly mediate H~2~O~2~ detoxification [@bondHeterotrophicBacteriaExhibit2020].  H~2~O~2~ also decomposes spontaneously, though slowly, into water and oxygen [@senguptaControllingNonCatalyticDecomposition2004], and contributes significantly to the redox cycling of copper and iron in seawater [@milleroRateReductionCopper1991; @moffettReactionKineticsHydrogen1987].
 
-*Prochlorococcus* and some strains of *Synechococcus* lack all genes encoding enzymes for scavenging of H~2~O~2~, and are therefore difficult to grow in axenic cultures, particularly at higher cell densities. Growth and survival of these strains improves when co-cultured with other 'helper' bacteria which carry genes for catalase [@zinserCrossprotectionHydrogenPeroxide2018; @morrisDependenceCyanobacteriumProchlorococcus2011; @morrisFacilitationRobustGrowth2008; @coeSurvivalProchlorococcusExtended2016]. These culture results were found at *Prochlorococcus* cell densities somewhat higher than typical ocean levels of 1 × 10^5^ to 3 × 10^5^ *Prochlorococcus* cells ml^-1^ [@partenskyProchlorococcusMarinePhotosynthetic1999], where auto-intoxication from metabolism of the *Prochlorococcus* cell population might be less prevalent [@omarDiffusionalInteractionsMarine2022]. In the open ocean, extracellular H~2~O~2~ levels generally remain below the acutely cytotoxic threshold of ~1 x 10^-5^ M, perhaps partly through activity of co-occuring helper microorganisms that retain capacity to produce catalase [@zinserCrossprotectionHydrogenPeroxide2018; @morrisDielRegulationHydrogen2016].
-
-Despite its radical nature and ability to react with biomolecules, ^•^NO functions widely as a signaling molecule [@vardiStressSurveillanceSystem2006; @thomsonEcophysiologyBrineDinoflagellate2000]. Optimal *in vivo* concentrations of ^•^NO for phytoplankton growth vary significantly across taxa, from 10^-8^ to 10^-9^ mol extracellular ^•^NO L^-1^ [@zhangStudyPatternsChemical2005]. ^•^NO is produced both biogenically through arginine dependent Nitric Oxide Synthases (NOS) or Nitric Oxide Associated Proteins (NOA) [@vardiCellSignalingMarine2008], as well as through abiotic processes including nitrite photolysis [@zafiriouNitricOxideSeawater1980]. Overexpression of ^•^NO producing genes in the diatom *Phaeodactylum tricornutum* results in reduced growth, photosynthetic activity and ability to adhere to surfaces, and thus likely a decrease in biofilm formation [@vardiDiatomGeneRegulating2008]. @vardiDiatomGeneRegulating2008 further suggest that ^•^NO influences cell motility in that diatoms increase ^•^NO production under stressful conditions thereby decreasing cellular adhesion, freeing the cell to find a more suitable habitat to which to adhere. ^•^NO can be enzymatically scavenged through Nitric Oxide Dioxygenase (NOD) or Nitric Oxide Reductases (NOR) [@fujiwaraCytochromeCbtypeNitric1996] (Table \@ref(tab:ROSEnzymeList)), and may also react non-enzymatically with reduced glutathione (GSH) to form S-nitrosoglutathione (GSNO) [@delrioReactiveOxygenSpecies2009; @jahnovaSNitrosoglutathioneReductaseMaster2019].
+Despite its radical nature and ability to react with biomolecules, ^•^NO functions widely as a signaling molecule [@vardiStressSurveillanceSystem2006; @thomsonEcophysiologyBrineDinoflagellate2000; @vardiDiatomGeneRegulating2008]. ^•^NO is produced both biogenically through arginine dependent Nitric Oxide Synthases (NOS) or Nitric Oxide Associated Proteins (NOA) [@vardiCellSignalingMarine2008], as well as through abiotic processes including nitrite photolysis [@zafiriouNitricOxideSeawater1980]. 
+^•^NO can be enzymatically scavenged through Nitric Oxide Dioxygenase (NOD) or Nitric Oxide Reductases (NOR) [@fujiwaraCytochromeCbtypeNitric1996] (Table \@ref(tab:ROSEnzymeList)), and may also react non-enzymatically with reduced glutathione (GSH) to form S-nitrosoglutathione (GSNO) [@delrioReactiveOxygenSpecies2009; @jahnovaSNitrosoglutathioneReductaseMaster2019].
 Most cellular damage mediated by ^•^NO is attributed to the reaction of ^•^NO with O~2~^•−^ to produce Peroxinitrite (ONOO^−^). The reaction of ^•^NO with O~2~^•−^ to produce ONOO^-^ is limited by the extracellular concentration of ^•^NO and is not a major ^•^NO sink in seawater [@adesinaPhotochemicallyGeneratedNitric2021]. 
 
-Other important ROS, Singlet Oxygen (^1^O~2~), Peroxynitrite (ONOO^-^) and Hydroxyl Radical (HO^•^) are not known to be directly produced nor scavenged by enzymatic processes [@collinChemicalBasisReactive2019; [@marusawaHydroxylRadicalStrong2002; @gutteridgeReactivityHydroxylHydroxyllike1984; @mcgillChapterOxidantStress2013; @daviesProteinsDamagedOxygen1987; @halliwellFreeRadicalsBiology1999]. In seawater, HO^•^ is present in concentrations of 10^-18^ to 10^-15^ mol L^-1^, and has a diffusion distance of only ~4.5 nm before destruction with a lifetime of µs [@diazProductionExtracellularReactive2018; @lesserOxidativeStressMarine2006]. Because of the high reactivity of HO^•^, it is unlikely that there are any scavengers dedicated to HO^•^ specifically [@halliwellFreeRadicalsBiology1999], although reactions with dissolved organic matter non-specifically scavenge extracellular HO^•^ [@brezonikNitrateInducedPhotolysisNatural1998].
+Other important ROS, Singlet Oxygen (^1^O~2~), Peroxynitrite (ONOO^-^) and Hydroxyl Radical (HO^•^) are not known to be directly produced nor scavenged by enzymatic processes [@collinChemicalBasisReactive2019; [@marusawaHydroxylRadicalStrong2002; @gutteridgeReactivityHydroxylHydroxyllike1984; @mcgillChapterOxidantStress2013; @daviesProteinsDamagedOxygen1987; @halliwellFreeRadicalsBiology1999]. Because of the high reactivity of HO^•^, it is unlikely that there are any scavengers dedicated to HO^•^ specifically [@halliwellFreeRadicalsBiology1999], although reactions with dissolved organic matter non-specifically scavenge extracellular HO^•^ [@brezonikNitrateInducedPhotolysisNatural1998].
 
 ## The Black Queen Hypothesis {.unnumbered}
-The Black Queen Hypothesis states that loss of function mutations may proceed so long as some interacting community members retain the function, and the function can occur outside a given cell [@morrisBlackQueenHypothesis2012]. The Black Queen Hypothesis was formulated on the basis of *Prochlorococcus* and H~2~O~2~. *Prochlorococcus* (the beneficiary) lost the gene *katG* encoding an enzyme which scavenges H~2~O~2~. Instead *Prochlorococcus* allows H~2~O~2~ outwards across the cell membrane to be dealt with by community members retaining the capacity to scavenge H~2~O~2~, thus saving *Prochlorococcus* the cost of maintaining the genes and metabolism for scavenging H~2~O~2~ [@morrisDependenceCyanobacteriumProchlorococcus2011; @morrisBlackQueenHypothesis2012].
+The Black Queen Hypothesis states that loss of function mutations may proceed so long as some interacting community members retain the function, and the function can occur outside a given cell [@morrisBlackQueenHypothesis2012]. The Black Queen Hypothesis was formulated on the basis of *Prochlorococcus* and H~2~O~2~. *Prochlorococcus* (the beneficiary) lost the gene *katG* encoding an enzyme which scavenges H~2~O~2~. Instead *Prochlorococcus* allows H~2~O~2~ outwards across the cell membrane to be dealt with by community members retaining the capacity to scavenge H~2~O~2~, thus saving *Prochlorococcus* the cost of maintaining the genes and metabolism for scavenging H~2~O~2~ [@morrisDependenceCyanobacteriumProchlorococcus2011; @morrisBlackQueenHypothesis2012]. Growth and survival of these strains improves when co-cultured with other 'helper' bacteria which carry genes for catalase [@zinserCrossprotectionHydrogenPeroxide2018; @morrisDependenceCyanobacteriumProchlorococcus2011; @morrisFacilitationRobustGrowth2008; @coeSurvivalProchlorococcusExtended2016]. 
 
 ## Hypotheses and Significance {.unnumbered}
 
@@ -853,6 +852,10 @@ With increasing cell radius, eukaryotic phytoplankton do not vary in the fractio
 
 Non-enzymatic paths contribute to intracellular and extracellular ^•^NO production [@zweierNonenzymaticNitricOxide1999], and may explain the absences of genes encoding ^•^NO production from some genomes across taxonomic lineages. Alternately, ^•^NO homeostasis may be achieved in some lineages by regulating the active cellular uptake and release of intracellular ^•^NO, as has been recently demonstrated in humans [@chenCellPenetratingDeliveryNitric2021]. Although NOD sequences have only been identified from phytoplankton through metatranscriptomic analyses, in diatoms, haptophytes and dinoflagellates [@lampeStrategiesPhytoplanktonResponse2019], there is limited understanding as to what may contribute to the active removal of ^•^NO, and the lack of ^•^NO scavenging genes across multiple phytoplankters. More research is needed on possible contributions of NOD to the active removal of ^•^NO, as well as the NOS sequences detected in *Synechococcus* that also display NOD-like activity [@piccianoNitricOxideSynthase2019]. Perhaps the low toxicity of ^•^NO does not warrant the active removal of ^•^NO as long as the concentration does not exceed the toxic threshold. This explanation is plausible given that *Platymonas helgolandica*, *Platymonas subcordiformis*, *Skeletonema costatum*, *Gymnodinium* sp., and *Prorocentrum donghaiense* showed optimum growth in the presence of ^•^NO concentrations between 10^-9^ and 10^-6^ mol L^-1^ [@peifengEffectsNitricOxide2021], which are higher than the concentrations found in the ocean (Table \@ref(tab:ROSDiffusion)).
 
+Irrespective of count of genes that encode the metabolism of ^•^NO, binomial models looking at the presence or absence of genes that encode the production or scavenging of ^•^NO reveal that there is no statistically discerable cell size associated difference between organisms that have the genomic capacity to produce nitric oxide and those that do not have the genomic capacity to produce nitric oxide (Figure XXX, slope = XXX, p = XXX). On the contrary, large phytoplankton are more likely to have genes encoding nitric oxide scavenging (Figure XXX, slope = XXX, p = XXX). The 
+
+XXX Flagella and colony do not have statistically significant differences based on presence absence.
+
 ### Influences of Flagella, Colony Formation and Cell Shape on Gene Counts for Enzymes Metabolizing ^•^NO {.unnumbered}
 
 ```{r NitOxFlag_pval, include = FALSE}
@@ -1125,7 +1128,7 @@ MergedData_na <- MergedData_na %>%
   rename(ROSEnzyme_TotalCount = value) %>%
   mutate(EnzymeName = factor(.$EnzymeName, levels = ROSEnzymeLevels$name))
 # MergedData_na$Enzyme_parent_ASA <-  factor(MergedData_na$EnzymeParent, levels= c("Superoxide_dismutase","Glutathione_reductase","Ascorbate_cycle" ,"Peroxidase","Peroxiredoxin","Catalase", "NO_sythesis", "Oxidase"))
-MergedData_na$taxon_facet <- factor(MergedData_na$Taxa, levels= c("Cryptophyte","Diatom","Dinoflagellate" ,"Eustigmatophyte","Green","Haptophyte", "Pelagophyte", "Phaeista", "Red", "Prokaryote"))
+MergedData_na$taxon_facet <- factor(MergedData_na$Taxa, levels= c("Cryptophyte","Diatom","Dinoflagellate" , "Eustigmatophyte", "Green", "Haptophyte", "Pelagophyte", "Phaeista", "Red", "Prokaryote"))
 ```
 
 ```{r RadTaxaviolin, fig.cap=RadTaxaviolin_cap, echo = FALSE}
@@ -1333,7 +1336,7 @@ EukSupOxDotPlot <- MergedData_na %>%
          ROSEnzyme_TotalCount != 0, 
          GeneModels_count != 0) %>%
   ggplot() +
-  geom_point(aes(x = EnzymeName, y= reorder(interaction(Genus, species, Strain), -Radius_um), size = ROSGene_count, color = Taxa, shape = Ome)) +
+  geom_point(aes(x = EnzymeName, y= reorder(interaction(Genus, species, Strain), -Radius_um), size = ROSGene_count, color = Phylum, shape = Ome)) +
   scale_x_discrete(position ="top") +
   scale_color_manual(values = TaxaColors) +
   scale_shape_manual(values = c(16,1))+
@@ -1390,7 +1393,7 @@ ProkSupOxDotPlot_cap <- glue("**Summary of O~2~^•−^ scavenging enzymes encod
                          "The size of the symbol increases with the number of members of each enzyme found within each genome or transcriptome.Symbol absence means no sequences known to encode the enzyme family of interest were found in the target genome or transcriptome.", .sep = " ")
 ```
 
-```{r, include = FALSE, fig.cap = SupOxRadRiboPlots_cap}
+```{r, echo = FALSE, fig.cap = SupOxRadRiboPlots_cap}
 SupOxRadRiboPlots_cap <- glue("**Comparison of log~10~ (Total number of genes encoding O~2~^•−^ metabolizing enzymes ('SupOx_count') normalized to the total number of ribosomal genes present in each organism ('GeneModels_count')) vs. the log~10~ (median cell radius in µm ('log_Radius_um')).**", 
                             "Poisson (solid line) or Quasi-Poisson (dashed line) regressions fitted to data ± Standard Error (dotted line).",
                             "Regressions were run with (black line) or without (blue line) 'Colony' and 'Flagella' as co-variates.", 
@@ -1429,7 +1432,7 @@ SupOxColonyRiboPlot <- knitr::include_graphics(file.path(Figures,"SupOxColonyRib
 SupOxColonyRiboPlot
 ```
 
-```{r, include = FALSE, fig.cap = SupOxPennateCentricRiboPlot_cap}
+```{r, echo = FALSE, fig.cap = SupOxPennateCentricRiboPlot_cap}
 SupOxPennateCentricRiboPlot_cap <- glue("**Comparison of total number of genes encoding O~2~^•−^ scavenging enzymes ('SupOx_count') normalized to the total number of ribosomal genes present in each diatom ('GeneModels_count') vs. the growth form of the diatom ('PennateCentric').**",
                                       "Symbol color corresponds to the genus of the diatom ('Genus').", 
                                     "Notch spans ± standard error of the median.",
@@ -1451,7 +1454,7 @@ EukHyPeDotPlot <- MergedData_na %>%
          ROSEnzyme_TotalCount != 0,
          GeneModels_count != 0) %>%
   ggplot() +
-  geom_point(aes(x = EnzymeName, y= reorder(Name, -Radius_um), size = ROSGene_count, color = Taxa, shape = Ome)) +
+  geom_point(aes(x = EnzymeName, y= reorder(Name, -Radius_um), size = ROSGene_count, color = Phylum, shape = Ome)) +
   scale_x_discrete(position ="top") +
   scale_color_manual(values = TaxaColors) +
   scale_shape_manual(values = c(16,1))+
@@ -1535,7 +1538,7 @@ HyPeRadRiboPlots
 ```
 
 
-```{r, include = FALSE, fig.cap = HyPeFlagRiboPlot_cap}
+```{r, echo = FALSE, fig.cap = HyPeFlagRiboPlot_cap}
 HyPeFlagRiboPlot <- knitr::include_graphics(file.path(Figures,"HyPeFlagRiboPlot.png"))
 HyPeFlagRiboPlot_cap <- glue("**Comparison of total number of genes encoding H~2~O~2~ metabolizing enzymes ('HyPe_count') normalized to the total number of ribosomal genes present in each organism ('GeneModels_count') vs. the presence or absence of flagella in the organism.**", 
                                        "Symbol color corresponds to taxon lineage ('Phylum').", 
@@ -1557,8 +1560,16 @@ HyPeColonyRiboPlot_cap <- glue("**Comparison of total number of genes encoding H
                                        "Citations for data sources can be found in Supplementary Table S3.", .sep = " ")
 ```
 
-```{r, include = FALSE}
+```{r, echo = FALSE, fig.cap = HyPePennateCentricRiboPlot_cap}
 HyPePennateCentricRiboPlot <- knitr::include_graphics(file.path(Figures,"HyPePennateCentricRiboPlot.png"))
+HyPePennateCentricRiboPlot_cap <- glue("**Comparison of total number of genes encoding H~2~O~2~ metabolizing enzymes ('HyPe_count') normalized to the total number of ribosomal genes in each diatom ('GeneModels_count') vs. the growth form of the diatom ('PennateCentric').**", 
+                                       "Symbol color corresponds to the genus of the diatom ('Genus').", 
+                                   "Notch spans ± standard error of the median.",
+                           "Box spans median ± 1 quartile of the data.",
+                           "Whiskers span the range excluding outliers in the data.",
+                                       "Citations for data sources can be found in Supplementary Table S3.", .sep = " ")
+
+HyPePennateCentricRiboPlot
 ```
 
 ```{r EukNitOxDotPlot, fig.cap = EukNitOxDotPlot_cap, fig.height = 20, fig.width = 10, echo = FALSE}
@@ -1568,7 +1579,7 @@ EukNitOxDotPlot <- MergedData_na %>%
          ROSEnzyme_TotalCount != 0, 
          GeneModels_count != 0) %>%
   ggplot() +
-  geom_point(aes(x = EnzymeName, y= reorder(interaction(Genus, species, Strain), -Radius_um), size = ROSGene_count, color = Taxa, shape = Ome)) +
+  geom_point(aes(x = EnzymeName, y= reorder(interaction(Genus, species, Strain), -Radius_um), size = ROSGene_count, color = Phylum, shape = Ome)) +
   scale_x_discrete(position ="top") +
   scale_color_manual(values = TaxaColors) +
   scale_shape_manual(values = c(16,1))+
@@ -1624,9 +1635,47 @@ ProkNitOxDotPlot <- MergedData_na %>%
 # saveRDS(ProkSupOxDotPlot, file = file.path(Figures, "ProkSupOxDotPlot.Rds"))
 ```
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, fig.cap = NitOxRadRiboPlots_cap}
+NitOxRadRiboPlots_cap <- glue("**Comparison of log~10~ (Total number of genes encoding ^•^NO metabolizing enzymes ('NitOx_count') normalized to the total number of ribosomal genes present in each organism ('GeneModels_count')) vs. the log~10~ (median cell radius in µm ('log_Radius_um')).**", 
+                            "Poisson (solid line) or Quasi-Poisson (dashed line) regressions fitted to data ± Standard Error (dotted line).",
+                            "Regressions were run with (black line) or without (blue line) 'Colony' and 'Flagella' as co-variates.", 
+                            "Selected prokaryote genomes are presented for comparison, but excluded from the presented regressions.",
+                            "Symbol color corresponds to taxon lineage ('Phylum').", 
+                            # "Citations for data sources can be found in Supplementary Table S3.", 
+                          .sep = " ")
 NitOxRadRiboPlots <- knitr::include_graphics(file.path(Figures,"NitOxRadRiboPlots.png"))
 NitOxRadRiboPlots
+```
+
+```{r, include = FALSE}
+NitOxRadBinom <- MergedData %>% 
+  filter(Taxa != "Prokaryote") %>%
+  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, ROSGene_count, ECNumber, EnzymeName, ColonySpecies, NitOx_count, NitOx) %>%
+  unique() %>%
+  mutate(NitOx_countL = NitOx_count %>% 
+           as.logical() %>% 
+           as.numeric()) %>%
+  select(FileName, NitOx_count, NitOx_countL, NitOx, log_Radius_um) %>%
+  # filter(GeneModels_count != 0) %>% #This is because of introducing exposure
+  nest(data = -c(NitOx)) %>%
+  mutate(fit_b_offset = map(data, possibly(~glm(.$NitOx_countL ~ .$log_Radius_um, data = ., family = binomial(link = "logit")), otherwise = NULL)),
+                    param_b_offset = map(fit_b_offset, tidy),
+                    pred_b_offset = map(fit_b_offset, augment))
+```
+
+```{r, fig.width = 10, fig.height = 5, echo = FALSE}
+NitOxRadBinomFig <- NitOxRadBinom %>%
+  unnest(param_b_offset) %>%
+  filter(p.value < 0.05) %>%
+  unnest(c( pred_b_offset)) %>%
+  # unnest(pred_b_offset) %>%
+  ggplot() +
+  geom_point(aes(x = `.$log_Radius_um`, y = `.$NitOx_countL`)) +
+  geom_line(aes(x = `.$log_Radius_um`, y = logit2prob(.fitted))) +
+  facet_grid(rows = vars(NitOx)) +
+  theme_bw()
+  
+NitOxRadBinomFig
 ```
 
 ```{r, include = FALSE}
@@ -1725,19 +1774,42 @@ NitOxRadDiatomFig <- NitOxRadDiatom %>%
 NitOxRadDiatomFig
 ```
 
-```{r, echo=FALSE}
-NitOxColonyRiboPlot <- knitr::include_graphics(file.path(Figures,"NitOxColonyRiboPlot.png"))
-NitOxColonyRiboPlot
-```
-
-```{r, echo=FALSE}
+```{r, echo=FALSE, fig.cap = NitOxFlagRiboPlot_cap}
 NitOxFlagRiboPlot <- knitr::include_graphics(file.path(Figures,"NitOxFlagRiboPlot.png"))
 NitOxFlagRiboPlot
+
+NitOxFlagRiboPlot_cap <- glue("**Comparison of total number of genes encoding ^•^NO metabolizing enzymes ('NitOx_count') normalized to the total number of ribosomal genes present in each organism ('GeneModels_count') vs. the presence or absence of flagella in the organism.**", 
+                                       "Symbol color corresponds to taxon lineage ('Phylum').", 
+                          "Notch spans ± standard error of the median.",
+                           "Box spans median ± 1 quartile of the data.",
+                           "Whiskers span the range excluding outliers in the data.",
+                                       "Citations for data sources can be found in Supplementary Table S3.", .sep = " ")
 ```
 
-```{r, echo = FALSE}
+```{r, echo=FALSE, fig.cap = NitOxColonyRiboPlot_cap}
+NitOxColonyRiboPlot <- knitr::include_graphics(file.path(Figures,"NitOxColonyRiboPlot.png"))
+NitOxColonyRiboPlot
+
+NitOxColonyRiboPlot_cap <- glue("**Comparison of total number of genes encoding ^•^NO metabolizing enzymes ('NitOx_count') normalized to the total number of ribosomal genes present in each organism ('GeneModels_count') vs. the ability of the organism to form colonies.**", 
+                                       "Symbol color corresponds to taxon lineage ('Phylum').", 
+                            "Notch spans ± standard error of the median.",
+                           "Box spans median ± 1 quartile of the data.",
+                           "Whiskers span the range excluding outliers in the data.",
+                                       "Citations for data sources can be found in Supplementary Table S3.", .sep = " ")
+```
+
+
+
+```{r, echo = FALSE, fig.cap = NitOxPennateCentricRiboPlot_cap}
 NitOxPennateCentricRiboPlot <- knitr::include_graphics(file.path(Figures,"NitOxPennateCentricRiboPlot.png"))
 NitOxPennateCentricRiboPlot
+
+NitOxPennateCentricRiboPlot_cap <- glue("**Comparison of total number of genes encoding ^•^NO metabolizing enzymes ('NitOx_count') normalized to the total number of ribosomal genes present in each diatom ('GeneModels_count') vs. the growth form of the diatom ('PennateCentric').**", 
+                                    "Symbol color corresponds to taxon lineage ('Phylum').", 
+                                    "Notch spans ± standard error of the median.",
+                                    "Box spans median ± 1 quartile of the data.",
+                                    "Whiskers span the range excluding outliers in the data.",
+                                    "Citations for data sources can be found in Supplementary Table S3.", .sep = " ")
 ```
 
 ## Supplementary Tables {.unnumbered}
