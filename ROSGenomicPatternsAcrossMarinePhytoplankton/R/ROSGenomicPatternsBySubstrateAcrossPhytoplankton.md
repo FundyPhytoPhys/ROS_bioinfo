@@ -372,115 +372,6 @@ MergedData %>%
 ![](../Figures/RibosomeGeneModels-1.png)<!-- -->
 
 
-```r
-NitOxRadFlagella <- MergedData %>% 
-  filter(Taxa != "Prokaryote", 
-         NitOx %in% c("Production", "Scavenging")) %>%
-  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, ROSGene_count, ECNumber, EnzymeName, ColonySpecies, NitOx_count, NitOx) %>%
-  unique() %>%
-  mutate(NitOx_countL = NitOx_count %>% as.logical() %>% as.numeric(),
-         FlagellaL = ifelse(Flagella == "yes", 1, 0)) %>%
-  select(FileName, NitOx_count, NitOx_countL, Flagella, FlagellaL,NitOx, log_Radius_um) %>%
-  # filter(GeneModels_count != 0) %>% #This is because of introducing exposure
-  nest(data = -c(NitOx)) %>%
-  mutate(fit_b_offset = map(data, possibly(~glm(.$NitOx_countL ~ .$log_Radius_um +.$FlagellaL, data = ., family = binomial(link = "logit")), otherwise = NULL)),
-                    param_b_offset = map(fit_b_offset, tidy),
-                    pred_b_offset = map(fit_b_offset, augment))
-```
-
-
-```r
-NitOxRadFlagellaFig <- NitOxRadFlagella %>%
-  unnest(param_b_offset) %>%
-  filter(p.value < 0.05) %>%
-  unnest(c( pred_b_offset)) %>%
-  # unnest(pred_b_offset) %>%
-  ggplot() +
-  geom_point(aes(x = `.$log_Radius_um`, y = `.$NitOx_countL`)) +
-  geom_line(aes(x = `.$log_Radius_um`, y = logit2prob(.fitted), color = as.factor(`.$FlagellaL`))) +
-  facet_grid(rows = vars(NitOx)) +
-  theme_bw()
-  
-NitOxRadFlagellaFig
-```
-
-![](../Figures/unnamed-chunk-2-1.png)<!-- -->
-
-
-
-```r
-NitOxRadColony <- MergedData %>% 
-  filter(Taxa != "Prokaryote", 
-         NitOx %in% c("Production", "Scavenging")) %>%
-  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, ROSGene_count, ECNumber, EnzymeName, ColonySpecies, NitOx_count, NitOx) %>%
-  unique() %>%
-  mutate(NitOx_countL = NitOx_count %>% as.logical() %>% as.numeric(),
-         ColonySpeciesL = ifelse(ColonySpecies == "1", 1, 0)) %>%
-  select(FileName, NitOx_count, NitOx_countL, ColonySpecies, ColonySpeciesL,NitOx, log_Radius_um) %>%
-  # filter(GeneModels_count != 0) %>% #This is because of introducing exposure
-  nest(data = -c(NitOx)) %>%
-  mutate(fit_b_offset = map(data, possibly(~glm(.$NitOx_countL ~ .$log_Radius_um +.$ColonySpeciesL, data = ., family = binomial(link = "logit")), otherwise = NULL)),
-                    param_b_offset = map(fit_b_offset, tidy),
-                    pred_b_offset = map(fit_b_offset, augment))
-```
-
-
-```r
-NitOxRadColonyFig <- NitOxRadColony %>%
-  unnest(param_b_offset) %>%
-  filter(p.value < 0.05) %>%
-  unnest(c( pred_b_offset)) %>%
-  # unnest(pred_b_offset) %>%
-  ggplot() +
-  geom_point(aes(x = `.$log_Radius_um`, y = `.$NitOx_countL`)) +
-  geom_line(aes(x = `.$log_Radius_um`, y = logit2prob(.fitted), color = as.factor(`.$ColonySpeciesL`))) +
-  facet_grid(rows = vars(NitOx)) +
-  theme_bw()
-  
-NitOxRadColonyFig
-```
-
-![](../Figures/unnamed-chunk-4-1.png)<!-- -->
-
-
-
-
-```r
-NitOxRadDiatom <- MergedData %>% 
-  filter(Taxa == "Diatom", 
-         NitOx %in% c("Production", "Scavenging")) %>%
-  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, ROSGene_count, ECNumber, EnzymeName, ColonySpecies, NitOx_count, NitOx) %>%
-  unique() %>%
-  mutate(NitOx_countL = NitOx_count %>% as.logical() %>% as.numeric(),
-         PennateCentricL = ifelse(PennateCentric == "Pennate", 1, 0)) %>%
-  select(FileName, NitOx_count, NitOx_countL, PennateCentric, PennateCentricL,NitOx, log_Radius_um) %>%
-  # filter(GeneModels_count != 0) %>% #This is because of introducing exposure
-  nest(data = -c(NitOx)) %>%
-  mutate(fit_b_offset = map(data, possibly(~glm(.$NitOx_countL ~ .$log_Radius_um +.$PennateCentricL, data = ., family = binomial(link = "logit")), otherwise = NULL)),
-                    param_b_offset = map(fit_b_offset, tidy),
-                    pred_b_offset = map(fit_b_offset, augment))
-```
-
-
-```r
-NitOxRadDiatomFig <- NitOxRadDiatom %>%
-  unnest(param_b_offset) %>%
-  filter(p.value < 0.05) %>%
-  unnest(c( pred_b_offset)) %>%
-  # unnest(pred_b_offset) %>%
-  ggplot() +
-  geom_point(aes(x = `.$log_Radius_um`, y = `.$NitOx_countL`)) +
-  geom_line(aes(x = `.$log_Radius_um`, y = logit2prob(.fitted), color = as.factor(`.$PennateCentricL`))) +
-  facet_grid(rows = vars(NitOx)) +
-  theme_bw()
-  
-NitOxRadDiatomFig
-```
-
-![](../Figures/unnamed-chunk-6-1.png)<!-- -->
-
-
-
 
 Fig \@ref(fig:PoissonDist) shows that the frequencies of counts of genes encoding the metabolism of O~2~^•−^, H~2~O~2~ or ^•^NO within an organism are not normally distributed (Shapiro-Wilk Test [@shapiroAnalysisVarianceTest1965] with a p-value of 6.4×10^-30^ for O~2~^•−^ scavenging, 9.4×10^-24^ for H~2~O~2~ production, 5×10^-25^ for H~2~O~2~ scavenging, 1.2×10^-18^ for ^•^NO production and  1.5×10^-30^ for ^•^NO scavenging). The frequencies of gene counts instead follow a Poisson distribution. Therefore, for subsequent analyses we used Poisson or Quasi-Poisson regressions to compare the counts of genes that encode the production or scavenging of O~2~^•−^, H~2~O~2~ or ^•^NO within an organism to log~10~ of the median cell radius in µm. Code used to produce the Poisson and Quasi-Poisson models is on https://github.com/NaamanOmar/ROS_bioinfo/tree/master/ROSGenomicPatternsAcrossMarinePhytoplankton.
 
@@ -491,24 +382,6 @@ The total number of genes in each organism increased with the median cell radius
 To further investigate possible influences of colony formation, the presence of flagella or diatom cell shape (pennate or centric), upon the fraction of genes that encode the metabolism of H~2~O~2~, O~2~^•−^ or ^•^NO, we used a Wilcoxon test [@kassambaraGgpubrGgplot2Based2018]. 
 
 # Results and Discussion {.unnumbered}
-
-XXX likely use RUBISCO
-XXX Phylum column missing?
-
-
-```r
-ConservedEnzymesFig <- MergedData %>%
-  filter(ECNumber %in% c("4.1.1.39", "2.1.1.170")) %>% 
-  ggplot() +
-  geom_point(aes(x = log_Radius_um, y = ROSGene_count, color = Taxa, shape = Ome)) +
-  scale_colour_manual(name = "Phylum", values =TaxaColors) +
-  facet_grid(rows = vars(EnzymeName))
-  
-ConservedEnzymesFig
-```
-
-![](../Figures/unnamed-chunk-7-1.png)<!-- -->
-
 
 ## Superoxide {.unnumbered}
 
@@ -523,23 +396,12 @@ The absence of transcripts encoding SOD from the *Micromonas polaris* transcript
 ### Influence of Cell Size on Gene Counts for Enzymes Metabolizing O~2~^•−^ {.unnumbered}
 
 
-```r
-SupOxRadPlots <- knitr::include_graphics(file.path(Figures,"SupOxRadPlots.png"))
-```
 
 
 <div class="figure">
 <img src="../Figures/SupOxRadPlots.png" alt="**Comparison of log~10~ (Total number of genes encoding O~2~^•−^ metabolizing enzymes ('SupOx_count') normalized to the total number of genes present in each organism ('GeneModels_count')) vs. the log~10~ (median cell radius in µm ('log_Radius_um')).** Poisson (solid line) or Quasi-Poisson (dashed line) regressions fitted to data ± Standard Error (dotted line). Regressions were run with (black line) or without (blue line) 'Colony' and 'Flagella' as co-variates. Selected prokaryote genomes are presented for comparison, but excluded from the presented regressions. Symbol color corresponds to taxon lineage ('Phylum')." width="3000" />
 <p class="caption">(\#fig:SupOxRadPlots)**Comparison of log~10~ (Total number of genes encoding O~2~^•−^ metabolizing enzymes ('SupOx_count') normalized to the total number of genes present in each organism ('GeneModels_count')) vs. the log~10~ (median cell radius in µm ('log_Radius_um')).** Poisson (solid line) or Quasi-Poisson (dashed line) regressions fitted to data ± Standard Error (dotted line). Regressions were run with (black line) or without (blue line) 'Colony' and 'Flagella' as co-variates. Selected prokaryote genomes are presented for comparison, but excluded from the presented regressions. Symbol color corresponds to taxon lineage ('Phylum').</p>
 </div>
-
-
-```r
-SupOxRadRiboPlots <- knitr::include_graphics(file.path(Figures,"SupOxRadRiboPlots.png"))
-SupOxRadRiboPlots
-```
-
-<img src="../Figures/SupOxRadRiboPlots.png" width="3000" />
 
 With increasing cell radius, eukaryotic phytoplankton have a smaller fraction of their total genes encoding scavenging of O~2~^•−^ (Fig \@ref(fig:SupOxRadPlots), Blue line, Slope = -2.1×10^-1^ ± 7.1×10^-2^, p-value = 4.2×10^-3^, pseudo R^2^ = 0.0870217). The negative slope does not support our Hypothesis \@ref(hyp:SupOx) that phytoplankton do not differentially allocate a changing fraction of their total gene content to O~2~^•−^ production nor scavenging with increasing cell size. 
 Including 'Flagella' and 'Colony' as co-variates in the regression results, however, in a slope that is not statistically different from zero (Fig \@ref(fig:SupOxRadPlots), Black line, Slope = -6.7×10^-2^ ± 6.8×10^-2^, p-value = 3.3×10^-1^, pseudo R^2^ = 0.078205), driven by the influence of 'Flagella' (p-value = 3.7×10^-2^) but not 'Colony' (p-value = 8.6×10^-1^). Including data from selected prokaryotic phytoplankton did not qualitatively alter these results (Data not shown). O~2~^•−^ metabolism in phytoplankton appears to be mediated by a nearly fixed set of core genes that do not change with increasing gene count, thus the fractional gene allocation to O~2~^•−^ decreases as cell radius, and the co-varying total gene count increases. Gene dosage does not emerge as a factor in phytoplankton O~2~^•−^ metabolism.
@@ -549,23 +411,10 @@ Including 'Flagella' and 'Colony' as co-variates in the regression results, howe
 
 
 
-```r
-SupOxFlagPlot <- knitr::include_graphics(file.path(Figures,"SupOxFlagPlot.png"))
-```
 
 <div class="figure">
 <img src="../Figures/SupOxFlagPlot.png" alt="**Comparison of total number of genes encoding O~2~^•−^ scavenging enzymes ('SupOx_count') normalized to the total number of genes present in each organism ('GeneModels_count')) vs. the presence or absence of flagella in the organism.** Symbol color corresponds to taxon lineage ('Phylum'). Notch spans ± standard error of the median. Box spans median ± 1 quartile of the data. Whiskers span the range excluding outliers in the data. Citations for data sources can be found in Supplementary Table S3." width="2100" />
 <p class="caption">(\#fig:SupOxFlagPlot)**Comparison of total number of genes encoding O~2~^•−^ scavenging enzymes ('SupOx_count') normalized to the total number of genes present in each organism ('GeneModels_count')) vs. the presence or absence of flagella in the organism.** Symbol color corresponds to taxon lineage ('Phylum'). Notch spans ± standard error of the median. Box spans median ± 1 quartile of the data. Whiskers span the range excluding outliers in the data. Citations for data sources can be found in Supplementary Table S3.</p>
-</div>
-
-
-```r
-SupOxFlagRiboPlot <- knitr::include_graphics(file.path(Figures,"SupOxFlagRiboPlot.png"))
-```
-
-<div class="figure">
-<img src="../Figures/SupOxFlagRiboPlot.png" alt="**Comparison of total number of genes encoding O~2~^•−^ scavenging enzymes ('SupOx_count') normalized to the total number of genes present in each organism ('GeneModels_count')) vs. the presence or absence of flagella in the organism.** Symbol color corresponds to taxon lineage ('Phylum'). Notch spans ± standard error of the median. Box spans median ± 1 quartile of the data. Whiskers span the range excluding outliers in the data. Citations for data sources can be found in Supplementary Table S3." width="2100" />
-<p class="caption">(\#fig:SupOxFlagRiboPlot)**Comparison of total number of genes encoding O~2~^•−^ scavenging enzymes ('SupOx_count') normalized to the total number of genes present in each organism ('GeneModels_count')) vs. the presence or absence of flagella in the organism.** Symbol color corresponds to taxon lineage ('Phylum'). Notch spans ± standard error of the median. Box spans median ± 1 quartile of the data. Whiskers span the range excluding outliers in the data. Citations for data sources can be found in Supplementary Table S3.</p>
 </div>
 
 Consistent with the significant influence of flagella on the regressions vs. median cell radius (Fig \@ref(fig:SupOxRadPlots)), flagellated phytoplankton, irrespective of size, have a smaller proportion of their total gene content encoding O~2~^•−^ scavenging (Fig \@ref(fig:SupOxFlagPlot), p-value = 4.3×10^-3^), than do non-flagellated phytoplankton. This suggests that cellular motility contributes to phytoplankton homeostasis of O~2~^•−^, possibly by supporting escape from localized pockets of O~2~^•−^.
@@ -585,9 +434,6 @@ SupOxColonyPlot <- knitr::include_graphics(file.path(Figures,"SupOxColonyPlot.pn
 ```
 
 
-```r
-SupOxColonyRiboPlot <- knitr::include_graphics(file.path(Figures,"SupOxColonyRiboPlot.png"))
-```
 
 Setting aside any influence of cell size, colony and non-colony forming phytoplankton do not significantly differ in the fraction of their total gene content encoding O~2~^•−^ scavenging (p-value = 8.1×10^-1^) (Data not visualized), consistent with limited membrane permeability for O~2~^•−^ and thus limited colony level interactions in O~2~^•−^ metabolism.
 
@@ -595,16 +441,10 @@ Setting aside any influence of cell size, colony and non-colony forming phytopla
 
 
 
-```r
-SupOxPennateCentricPlot <- knitr::include_graphics(file.path(Figures,"SupOxPennateCentricPlot.png"))
-```
 
 
 
 
-```r
-SupOxPennateCentricRiboPlot <- knitr::include_graphics(file.path(Figures,"SupOxPennateCentricRiboPlot.png"))
-```
 
 Pennate and centric diatoms have similar fractions of their genomes encoding O~2~^•−^ scavenging (p-value = 9.7×10^-1^) (Data not visualized).
 Our results support our hypothesis that differential diffusional exchange across diatoms of different shape does not influence the fraction of total gene content that encodes O~2~^•−^ scavenging enzymes, because O~2~^•−^ diffusion is limited by the cell membrane irrespective of cell shape (Hypothesis \@ref(hyp:SupOx)).
@@ -627,9 +467,6 @@ Our results support an earlier suggestion that increased genomic capacity for H~
 
 
 
-```r
-HyPeRadPlots <- knitr::include_graphics(file.path(Figures,"HyPeRadPlots.png"))
-```
 
 
 <div class="figure">
@@ -648,14 +485,6 @@ Noting that the fraction of total genes allocated to both H~2~O~2~ production an
 
  
 
-```r
-HyPeFlagPlot <- knitr::include_graphics(file.path(Figures,"HyPeFlagPlot.png"))
-```
-
-
-```r
-HyPeFlagRiboPlot <- knitr::include_graphics(file.path(Figures,"HyPeFlagRiboPlot.png"))
-```
 
 
 <div class="figure">
@@ -668,9 +497,6 @@ Setting aside influences of median cell radius, non-flagellated vs. flagellated 
 
 
 
-```r
-HyPeColonyPlot <- knitr::include_graphics(file.path(Figures,"HyPeColonyPlot.png"))
-```
 
 
 <div class="figure">
@@ -678,24 +504,12 @@ HyPeColonyPlot <- knitr::include_graphics(file.path(Figures,"HyPeColonyPlot.png"
 <p class="caption">(\#fig:HyPeColonyPlot)**Comparison of total number of genes encoding H~2~O~2~ metabolizing enzymes ('HyPe_count') normalized to the total number of genes present in each organism ('GeneModels_count') vs. the ability of the organism to form colonies.** Symbol color corresponds to taxon lineage ('Phylum'). Notch spans ± standard error of the median. Box spans median ± 1 quartile of the data. Whiskers span the range excluding outliers in the data. Citations for data sources can be found in Supplementary Table S3.</p>
 </div>
 
-
-```r
-HyPeColonyRiboPlot <- knitr::include_graphics(file.path(Figures,"HyPeColonyRiboPlot.png"))
-```
-
 Setting aside cell size influences, non-colony forming phytoplankton have a smaller proportion of their total gene content encoding both H~2~O~2~ production (p-value = 3.2×10^-2^), and also H~2~O~2~ scavenging (Fig \@ref(fig:HyPeColonyPlot), p-value = 1.7×10^-2^), than do colony forming phytoplankton. Looking at proportional change, we found that the decrease in the fraction of total genes encoding H~2~O~2~ production between non-colony and colony forming phytoplankton is smaller (-24.71%), than the decrease in the fraction of total genes encoding H~2~O~2~ scavenging (-27.79%). Colony forming phytoplankton may have more active H~2~O~2~ metabolism with a particular emphasis on H~2~O~2~ scavenging, consistent with stronger H~2~O~2~ exchange among closely spaced cells within a colony (Hypothesis \@ref(hyp:Colony)) [@omarDiffusionalInteractionsMarine2022].
 
 
 
 
-```r
-HyPePennateCentricPlot <- knitr::include_graphics(file.path(Figures,"HyPePennateCentricPlot.png"))
-```
 
-
-```r
-HyPePennateCentricRiboPlot <- knitr::include_graphics(file.path(Figures,"HyPePennateCentricRiboPlot.png"))
-```
 
 
 
@@ -713,9 +527,6 @@ Nitric Oxide Dioxygenase (NOD, EC:1.14.12.17) was the most frequently occurring 
 ### Influence of Cell Size on Gene Counts for Enzymes Metabolizing ^•^NO {.unnumbered}
 
 
-```r
-NitOxRadPlots <- knitr::include_graphics(file.path(Figures,"NitOxRadPlots.png"))
-```
 
 <div class="figure">
 <img src="../Figures/NitOxRadPlots.png" alt="**Comparison of log~10~ (Total number of genes encoding ^•^NO metabolizing enzymes ('NitOx_count') normalized to the total number of genes present in each organism ('GeneModels_count')) vs. the log~10~ (median cell radius in µm ('log_Radius_um')).** Poisson (solid line) or Quasi-Poisson (dashed line) regressions fitted to data ± Standard Error (dotted line). Regressions were run with (black line) or without (blue line) 'Colony' and 'Flagella' as co-variates. Selected prokaryote genomes are presented for comparison, but excluded from the presented regressions. Symbol color corresponds to taxon lineage ('Phylum')." width="3000" />
@@ -723,12 +534,6 @@ NitOxRadPlots <- knitr::include_graphics(file.path(Figures,"NitOxRadPlots.png"))
 </div>
 
 
-```r
-NitOxRadRiboPlots <- knitr::include_graphics(file.path(Figures,"NitOxRadRiboPlots.png"))
-NitOxRadRiboPlots
-```
-
-<img src="../Figures/NitOxRadRiboPlots.png" width="3000" />
 
 With increasing cell radius eukaryotic phytoplankton do not vary in the fraction of total genes encoding the capacity to produce ^•^NO (Fig \@ref(fig:NitOxRadPlots), Blue line, Slope = -2.5×10^-1^ ± 1.7×10^-1^, p-value = 1.5×10^-1^, pseudo R^2^ = 0.0239463). Including prokaryotes in the regression in Fig \@ref(fig:NitOxRadPlots) does not substantially alter the interpretation (Data not visualized).
 We re-ran the quasipoisson, excluding those organisms that completely lack genes encoding enzymes for ^•^NO production (NitOx_count = 0, points along the x-axis), which resulted in a decreasing slope with increasing cell radius. Thus those phytoplankton with any detected capacity to produce ^•^NO indeed have a smaller fraction of their total genes encoding ^•^NO production with increasing radius (Fig \@ref(fig:NitOxRadPlots), Blue line, Slope = -3.7×10^-1^ ± 1.1×10^-1^, p-value = 8.6×10^-4^, pseudo R^2^ = 0.133218). 
@@ -741,11 +546,8 @@ Non-enzymatic paths contribute to intracellular and extracellular ^•^NO produc
 ### Influences of Flagella, Colony Formation and Cell Shape on Gene Counts for Enzymes Metabolizing ^•^NO {.unnumbered}
 
 
- 
 
-```r
-NitOxFlagPlot <- knitr::include_graphics(file.path(Figures,"NitOxFlagPlot.png"))
-```
+
 
 
 
@@ -767,11 +569,6 @@ NitOxFlagella <- MergedData %>%
 
 
 
-
-```r
-NitOxFlagRiboPlot <- knitr::include_graphics(file.path(Figures,"NitOxFlagRiboPlot.png"))
-```
-
 Setting aside the influence of cell size, non-flagellated and flagellated phytoplankton do not show statistically significant differences in the fractions of total gene content encoding ^•^NO production (p-value = 6.3×10^-1^) nor  ^•^NO scavenging (p-value = 8.9×10^-1^) (Data not visualized), suggesting ^•^NO does not have a generalized interaction with flagella across eukaryotic phytoplankton groups. 
 
 Presence absence = non-flagellated phytoplankton have 0.4655172 probability of having a nitric oxide producing gene as opposed to 0.6222222 in flagellated phytoplankton (p-value = 4.3×10^-4^. Non flagellated phytoplankton also have a 0.4482759 probability of having a nitric oxide scavenging gene, as opposed to 0.5555556 in flagellated phytoplankton (p-value = 3.1×10^-2^.
@@ -784,28 +581,10 @@ NitOxColonyPlot <- knitr::include_graphics(file.path(Figures,"NitOxColonyPlot.pn
 ```
 
 
-```r
-NitOxColony <- MergedData %>% 
-  filter(Taxa != "Prokaryote", 
-         NitOx %in% c("Production", "Scavenging")) %>%
-  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, ROSGene_count, ECNumber, EnzymeName, ColonySpecies, NitOx_count, NitOx) %>%
-  unique() %>%
-  mutate(NitOx_countL = NitOx_count %>% as.logical() %>% as.numeric(),
-         ColonySpeciesL = ifelse(ColonySpecies == "1", 1, 0)) %>%
-  select(FileName, NitOx_count, NitOx_countL, ColonySpecies, ColonySpeciesL,NitOx, log_Radius_um) %>%
-  # filter(GeneModels_count != 0) %>% #This is because of introducing exposure
-  nest(data = -c(NitOx)) %>%
-  mutate(fit_b_offset = map(data, possibly(~glm(.$NitOx_countL ~ .$ColonySpeciesL, data = ., family = binomial(link = "logit")), otherwise = NULL)),
-                    param_b_offset = map(fit_b_offset, tidy),
-                    pred_b_offset = map(fit_b_offset, augment))
-```
 
 
 
 
-```r
-NitOxColonyRiboPlot <- knitr::include_graphics(file.path(Figures,"NitOxColonyRiboPlot.png"))
-```
 
 Comparing non-colony to colony forming phytoplankton does not show a statistically significant difference in the fraction of total gene content encoding ^•^NO production (p-value = 7.7×10^-1^) nor  ^•^NO scavenging (p-value = 2.7×10^-1^) (Data not visualized), suggesting ^•^NO metabolism does not have a generalized role in colony formation across eukaryotic phytoplankton groups.
 
@@ -815,25 +594,8 @@ Presence absence = non-colony forming phytoplankton have 0.5882353 probability o
 
 
 
-```r
-NitOxPennateCentricPlot <- knitr::include_graphics(file.path(Figures,"NitOxPennateCentricPlot.png"))
-```
 
 
-```r
-NitOxDiatom <- MergedData %>% 
-  filter(Taxa == "Diatom", 
-         NitOx %in% c("Production", "Scavenging")) %>%
-  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, ROSGene_count, ECNumber, EnzymeName, ColonySpecies, NitOx_count, NitOx) %>%
-  unique() %>%
-  mutate(NitOx_countL = NitOx_count %>% as.logical() %>% as.numeric(),
-         PennateCentricL = ifelse(PennateCentric == "Pennate", 1, 0)) %>%
-  # filter(GeneModels_count != 0) %>% #This is because of introducing exposure
-  nest(data = -c(NitOx)) %>%
-  mutate(fit_b_offset = map(data, possibly(~glm(.$NitOx_countL ~ .$PennateCentricL, data = ., family = binomial(link = "logit")), otherwise = NULL)),
-                    param_b_offset = map(fit_b_offset, tidy),
-                    pred_b_offset = map(fit_b_offset, augment))
-```
 
 <div class="figure">
 <img src="../Figures/NitOxPennateCentricPlot.png" alt="**Comparison of total number of genes encoding ^•^NO metabolizing enzymes ('NitOx_count') normalized to the total number of genes present in each diatom ('GeneModels_count') vs. the growth form of the diatom ('PennateCentric').** Symbol color corresponds to taxon lineage ('Phylum'). Notch spans ± standard error of the median. Box spans median ± 1 quartile of the data. Whiskers span the range excluding outliers in the data. Citations for data sources can be found in Supplementary Table S3." width="2100" />
@@ -841,9 +603,6 @@ NitOxDiatom <- MergedData %>%
 </div>
 
 
-```r
-NitOxPennateCentricRiboPlot <- knitr::include_graphics(file.path(Figures,"NitOxPennateCentricRiboPlot.png"))
-```
 
 Most centric diatoms carry genes annotated as encoding ^•^NO producing enzymes, whereas most pennate diatoms do not (p-value = 6.2×10^-3^). In contrast, most centric diatoms lack genes annotated as encoding ^•^NO scavenging enzymes, whereas most pennate diatoms carry those genes (p-value = 3.8×10^-5^) (Fig \@ref(fig:NitOxPennateCentricPlot)). 
 
@@ -852,49 +611,6 @@ The larger fractional gene allocation to ^•^NO production, and smaller fractio
 Presence absence = centric diatoms have 0.5238095 probability of having a nitric oxide producing gene as opposed to a 0.125 probability in pennate diatoms (p-value = 1.7×10^-7^. Centric diatoms also have a 0.1904762 probability of having a nitric oxide scavenging gene, as opposed to a 0.875 probability in colony forming phytoplankton (p-value = 4.7×10^-13^.
 
 
-```r
-EnzymeRad <- MergedData %>% 
-  filter(Taxa != "Prokaryote") %>%
-  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, ROSGene_count, ECNumber, EnzymeName) %>%
-  unique() %>%
-  mutate(ROSGene_countL = ROSGene_count %>% as.logical() %>% as.numeric()) %>%
-  # filter(GeneModels_count != 0) %>% #This is because of introducing exposure
-  nest(data = -c(ECNumber, EnzymeName)) %>%
-  mutate(fit_b_offset = map(data, possibly(~glm(.$ROSGene_countL ~ .$log_Radius_um, data = ., family = binomial(link = "logit")), otherwise = NULL)),
-                    param_b_offset = map(fit_b_offset, tidy),
-                    pred_b_offset = map(fit_b_offset, augment)) 
-```
-
-
-```r
-# EnzymeRad$Includes <- "Eukaryotes"
-# EnzymeRadTaxa$Includes <- "Eukaryotes + Taxa"
-# in logit, y = e^(mx+b)/(1+e^(mx+b))
-EnzymeRadFig <- EnzymeRad %>%
-  unnest(param_b_offset) %>%
-  pivot_wider(names_from = term,
-              values_from =  c(estimate, std.error, statistic, p.value)) %>%
-  mutate(halfwaypointY = 0.5,
-         halfwaypointX = log((halfwaypointY/(exp(`estimate_(Intercept)`)-halfwaypointY*exp(`estimate_(Intercept)`)))^(1/`estimate_.$log_Radius_um`)),
-         ) %>%
-  filter(`p.value_.$log_Radius_um` < 0.05) %>%
-  unnest(data, pred_b_offset) %>%
-  # mutate(EnzymeName_facet = factor(EnzymeName, levels = desc(.$halfwaypointY))) %>%
-  ggplot() +
-  # geom_rect(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf, aes(fill = HyPe), alpha = 0.005) +
-  geom_point(aes(x = log_Radius_um, y = ROSGene_countL, color = Taxa)) +
-  geom_line(aes(x = log_Radius_um, y = logit2prob(.fitted))) +
-  geom_hline(yintercept = 0.5, linetype = "dashed", color = "black") +
-  geom_vline(aes(xintercept = halfwaypointX), linetype = "dashed") +
-  geom_line(aes(x = log_Radius_um, y = exp(`estimate_.$log_Radius_um`*log_Radius_um + `estimate_(Intercept)`)/(1+exp(`estimate_.$log_Radius_um`*log_Radius_um + `estimate_(Intercept)`))), color = "red") +
-  facet_grid(rows = vars(reorder(EnzymeName, halfwaypointX))) +
-  # geom_ribbon(aes(x = log_Radius_um, ymin = logit2prob(.fitted - `std.error_.$log_Radius_um`), ymax = logit2prob(.fitted + `std.error_.$log_Radius_um`)), alpha = 0.1) +
-  scale_colour_manual(name = "Taxa", values =TaxaColors) +
-  theme_bw()
-EnzymeRadFig
-```
-
-![](../Figures/unnamed-chunk-37-1.png)<!-- -->
 
 ## Summary {.unnumbered}
 
@@ -980,6 +696,25 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
 
 
 
+
+
+
+
+```r
+SupOxFlagRiboPlot <- knitr::include_graphics(file.path(Figures,"SupOxFlagRiboPlot.png"))
+```
+
+<div class="figure">
+<img src="../Figures/SupOxFlagRiboPlot.png" alt="**Comparison of total number of genes encoding O~2~^•−^ scavenging enzymes ('SupOx_count') normalized to the total number of genes present in each organism ('GeneModels_count')) vs. the presence or absence of flagella in the organism.** Symbol color corresponds to taxon lineage ('Phylum'). Notch spans ± standard error of the median. Box spans median ± 1 quartile of the data. Whiskers span the range excluding outliers in the data. Citations for data sources can be found in Supplementary Table S3." width="2100" />
+<p class="caption">(\#fig:SupOxFlagRiboPlot)**Comparison of total number of genes encoding O~2~^•−^ scavenging enzymes ('SupOx_count') normalized to the total number of genes present in each organism ('GeneModels_count')) vs. the presence or absence of flagella in the organism.** Symbol color corresponds to taxon lineage ('Phylum'). Notch spans ± standard error of the median. Box spans median ± 1 quartile of the data. Whiskers span the range excluding outliers in the data. Citations for data sources can be found in Supplementary Table S3.</p>
+</div>
+
+
+
+
+
+
+
 <div class="figure">
 <img src="../Figures/EukHyPeDotPlot-1.png" alt="**Summary of H~2~O~2~ metabolizing enzymes encoded within genomes and transcriptomes of eukaryotic phytoplankton analyzed, faceted by whether the enzymes Produce or Scavenge H~2~O~2~.** Taxa are ordered from top to bottom along the left according to increasing median cell diameter within each taxonomic lineage. Symbol colour corresponds to taxonomic lineages (‘Taxa’). Filled data points indicate that the data obtained from that organism was sourced from a genome, and unfilled data points were sourced from a transcriptome. The size of the symbol increases with the number of members of each enzyme found within each genome or transcriptome. Symbol absence means no sequences known to encode the enzyme family of interest were found in the target genome or transcriptome."  />
 <p class="caption">(\#fig:EukHyPeDotPlot)**Summary of H~2~O~2~ metabolizing enzymes encoded within genomes and transcriptomes of eukaryotic phytoplankton analyzed, faceted by whether the enzymes Produce or Scavenge H~2~O~2~.** Taxa are ordered from top to bottom along the left according to increasing median cell diameter within each taxonomic lineage. Symbol colour corresponds to taxonomic lineages (‘Taxa’). Filled data points indicate that the data obtained from that organism was sourced from a genome, and unfilled data points were sourced from a transcriptome. The size of the symbol increases with the number of members of each enzyme found within each genome or transcriptome. Symbol absence means no sequences known to encode the enzyme family of interest were found in the target genome or transcriptome.</p>
@@ -990,12 +725,44 @@ Annotations of all genes from genomes or transcriptomes of organisms used in thi
 <p class="caption">(\#fig:ProkHyPeDotPlot)**Summary of H~2~O~2~ metabolizing enzymes encoded within genomes of prokaryotic phytoplankton analyzed, faceted by whether the enzymes Produce or Scavenge H~2~O~2~.** Taxa are ordered from top to bottom along the left according to increasing median cell diameter within each taxonomic lineage. Symbol colour corresponds to the genus of the prokaryote.Filled data points indicate that the data obtained from that organism was sourced from a genome. The size of the symbol increases with the number of members of each enzyme found within each genome or transcriptome. Symbol absence means no sequences known to encode the enzyme family of interest were found in the target genome or transcriptome.</p>
 </div>
 
+
+
+
+```r
+HyPeColonyRiboPlot <- knitr::include_graphics(file.path(Figures,"HyPeColonyRiboPlot.png"))
+```
+
+
+
 <div class="figure">
 <img src="../Figures/EukNitOxDotPlot-1.png" alt="**Summary of ^•^NO metabolizing enzymes encoded within genomes and transcriptomes of eukaryotic phytoplankton analyzed, faceted by whether the enzymes Produce or Scavenge ^•^NO.** Taxa are ordered from top to bottom along the left according to increasing median cell diameter within each taxonomic lineage. Symbol colour corresponds to taxonomic lineages (‘Taxa’). Filled data points indicate that the data obtained from that organism was sourced from a genome, and unfilled data points were sourced from a transcriptome. The size of the symbol increases with the number of members of each enzyme found within each genome or transcriptome. Symbol absence means no sequences known to encode the enzyme family of interest were found in the target genome or transcriptome."  />
 <p class="caption">(\#fig:EukNitOxDotPlot)**Summary of ^•^NO metabolizing enzymes encoded within genomes and transcriptomes of eukaryotic phytoplankton analyzed, faceted by whether the enzymes Produce or Scavenge ^•^NO.** Taxa are ordered from top to bottom along the left according to increasing median cell diameter within each taxonomic lineage. Symbol colour corresponds to taxonomic lineages (‘Taxa’). Filled data points indicate that the data obtained from that organism was sourced from a genome, and unfilled data points were sourced from a transcriptome. The size of the symbol increases with the number of members of each enzyme found within each genome or transcriptome. Symbol absence means no sequences known to encode the enzyme family of interest were found in the target genome or transcriptome.</p>
 </div>
 
 
+
+<img src="../Figures/NitOxRadRiboPlots.png" width="3000" />
+
+
+
+![](../Figures/unnamed-chunk-28-1.png)<!-- -->
+
+
+
+
+![](../Figures/unnamed-chunk-30-1.png)<!-- -->
+
+
+
+
+
+![](../Figures/unnamed-chunk-32-1.png)<!-- -->
+
+<img src="../Figures/NitOxColonyRiboPlot.png" width="2100" />
+
+<img src="../Figures/NitOxFlagRiboPlot.png" width="2100" />
+
+<img src="../Figures/NitOxPennateCentricRiboPlot.png" width="2100" />
 
 ## Supplementary Tables {.unnumbered}
 
