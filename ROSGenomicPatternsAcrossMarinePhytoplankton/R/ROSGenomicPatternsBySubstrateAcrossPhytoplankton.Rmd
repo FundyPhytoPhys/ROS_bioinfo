@@ -449,7 +449,7 @@ The absence of transcripts encoding SOD from the *Micromonas polaris* transcript
 ### Influence of Cell Size on Gene Counts for Enzymes Metabolizing O~2~^•−^ {.unnumbered}
 
 ```{r, include = FALSE}
-SupOxRadPlots <- knitr::include_graphics(file.path(Figures,"SupOxRadPlots.png"))
+SupOxRadPlots <- knitr::include_graphics(file.path(Figures, "SupOxRadPlots.png"))
 ```
 
 
@@ -1774,7 +1774,7 @@ NitOxRadDiatomFig <- NitOxRadDiatom %>%
 NitOxRadDiatomFig
 ```
 
-```{r, echo=FALSE, fig.cap = NitOxFlagRiboPlot_cap}
+```{r, include=FALSE, fig.cap = NitOxFlagRiboPlot_cap}
 NitOxFlagRiboPlot <- knitr::include_graphics(file.path(Figures,"NitOxFlagRiboPlot.png"))
 NitOxFlagRiboPlot
 
@@ -1785,7 +1785,7 @@ NitOxFlagRiboPlot_cap <- glue("**Comparison of total number of genes encoding ^�
                            "Whiskers span the range excluding outliers in the data.",
                                        "Citations for data sources can be found in Supplementary Table S3.", .sep = " ")
 ```
-
+XXX
 ```{r, echo=FALSE, fig.cap = NitOxColonyRiboPlot_cap}
 NitOxColonyRiboPlot <- knitr::include_graphics(file.path(Figures,"NitOxColonyRiboPlot.png"))
 NitOxColonyRiboPlot
@@ -1800,7 +1800,7 @@ NitOxColonyRiboPlot_cap <- glue("**Comparison of total number of genes encoding 
 
 
 
-```{r, echo = FALSE, fig.cap = NitOxPennateCentricRiboPlot_cap}
+```{r, include = FALSE, fig.cap = NitOxPennateCentricRiboPlot_cap}
 NitOxPennateCentricRiboPlot <- knitr::include_graphics(file.path(Figures,"NitOxPennateCentricRiboPlot.png"))
 NitOxPennateCentricRiboPlot
 
