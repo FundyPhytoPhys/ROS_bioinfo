@@ -191,8 +191,8 @@ GeneModelsRadPlot <- MergedData %>%
   # filter(Taxa != "Prokaryote") %>%
   filter(GeneModels_count != "0") %>%
   ggplot(aes(x=log_Radius_um, y= log_GeneModels_count)) +
-  ggConvexHull::geom_convexhull(alpha = 0.2, aes(fill = Taxa, color = Taxa)) +
-  geom_point(aes(shape = Ome, colour = Taxa), size = 3)+
+  ggConvexHull::geom_convexhull(alpha = 0.2, aes(fill = Phylum, color = Phylum)) +
+  geom_point(aes(shape = Ome, colour = Phylum), size = 3)+
   # ggalt::geom_encircle(aes(color = Phylum), expand = 0) +
   scale_colour_manual(values =TaxaColors)+
   scale_fill_manual(values =TaxaColors)+
@@ -215,7 +215,7 @@ GeneModelsRadPlot_cap <- glue("**Comparison of log~10~ of the total number of ge
                               "Citations for data sources are in Supplementary Table S3.",
                               .sep = " ")
 
-# ggsave(paste("Figure2",".png",sep = ""), plot = GeneModelsRadPlot, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+ggsave(paste("GeneModelsRadPlot",".png",sep = ""), plot = GeneModelsRadPlot, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
 ```
 
 ```{r RibosomeRadPlot, fig.cap = RibosomeRadPlot_cap, echo=FALSE}
@@ -223,8 +223,8 @@ RibosomeRadPlot <- MergedData %>%
   # filter(Taxa != "Prokaryote") %>%
   filter(GeneModels_count != "0") %>%
   ggplot(aes(x=log_Radius_um, y= log10(RibosomeCount))) +
-  ggConvexHull::geom_convexhull(alpha = 0.2, aes(fill = Taxa, color = Taxa)) +
-  geom_point(aes(shape = Ome, colour = Taxa), size = 3)+
+  ggConvexHull::geom_convexhull(alpha = 0.2, aes(fill = Phylum, color = Phylum)) +
+  geom_point(aes(shape = Ome, colour = Phylum), size = 3)+
   # ggalt::geom_encircle(aes(color = Phylum), expand = 0) +
   scale_colour_manual(values =TaxaColors)+
   scale_fill_manual(values =TaxaColors)+
@@ -241,6 +241,8 @@ RibosomeRadPlot <- MergedData %>%
        y = ~log[10] ~ "(Total Number of Ribosomal Genes)")
 
 RibosomeRadPlot
+
+ggsave(paste("RibosomeRadPlot",".png",sep = ""), plot = RibosomeRadPlot, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
 ```
 XXX
 ```{r RibosomeGeneModels}
@@ -752,7 +754,7 @@ SupOxFlagPlot
 ```{r generate SupOxFlagRiboPlot, include = FALSE}
 SupOxFlagRiboPlot <- MergedData %>%
   filter(SupOx == "Production" | SupOx == "Scavenging",
-         GeneModels_count != 0,
+         RibosomeCount != 0,
          !is.na(Flagella), 
          !is.na(SupOx),
          Taxa != "Prokaryote") %>% #Taxa != "Prokaryote"
@@ -1421,7 +1423,7 @@ HyPeColonyPlot
 HyPeColonyRiboPlot <- MergedData %>%
   mutate(ColonySpecies == as.factor(ColonySpecies)) %>%
   filter(HyPe == "Production" | HyPe == "Scavenging",
-         GeneModels_count != 0,
+         RibosomeCount != 0,
          !is.na(ColonySpecies), 
          Taxa != "Prokaryote") %>% #Taxa != "Prokaryote"
   select(FileName, ColonySpecies, HyPe_count, GeneModels_count, Phylum, HyPe, Genus, RibosomeCount) %>%
@@ -1847,7 +1849,7 @@ NitOxFlagPlot_cap <- glue("**Comparison of total number of genes encoding ^•^N
 ```{r generate NitOxFlagRiboPlot, include = FALSE}
 NitOxFlagRiboPlot <- MergedData %>%
   filter(NitOx == "Production" | NitOx == "Scavenging",
-         GeneModels_count != 0,
+         RibosomeCount != 0,
          !is.na(Flagella), 
          !is.na(NitOx),
          Taxa != "Prokaryote") %>% #Taxa != "Prokaryote"
@@ -1953,7 +1955,7 @@ NitOxScavColonyPlot_pval <- MergedData %>%
 NitOxColonyPlot <- MergedData %>%
   mutate(ColonySpecies == as.factor(ColonySpecies)) %>%
   filter(NitOx == "Production" | NitOx == "Scavenging",
-         GeneModels_count != 0,
+         RibosomeCount != 0,
          !is.na(ColonySpecies),
          Taxa != "Prokaryote") %>%
   select(FileName, ColonySpecies, NitOx_count, GeneModels_count, Phylum, NitOx) %>%
@@ -2117,7 +2119,7 @@ NitOxPennateCentricPlot
 NitOxPennateCentricRiboPlot <- MergedData %>%
   filter(Taxa == "Diatom",
          NitOx == "Production" | NitOx == "Scavenging",
-         GeneModels_count != 0,
+         RibosomeCount != 0,
          !is.na(PennateCentric),) %>%
   select(FileName, PennateCentric, NitOx_count, GeneModels_count, Phylum, NitOx, Genus, RibosomeCount) %>%
   unique() %>%
@@ -2190,7 +2192,8 @@ NormalizeFlagellaPlot
 NormalizeColonyPlot <- MergedData %>%
   filter(Taxa != "Prokaryote",
          #NitOx == "Production" | NitOx == "Scavenging",
-         GeneModels_count != 0,
+          GeneModels_count != 0,
+         RibosomeCount != 0,
          !is.na(ColonySpecies),) %>%
   pivot_longer(c(GeneModels_count, RibosomeCount), names_to = "Normalizer", values_to = "Normalize_count") %>%
   select(FileName, ColonySpecies, Phylum, Normalizer, Normalize_count) %>%
@@ -2227,7 +2230,8 @@ NormalizeColonyPlot
 TotalGenePennateCentricPlot <- MergedData %>%
   filter(Taxa == "Diatom",
          #NitOx == "Production" | NitOx == "Scavenging",
-         GeneModels_count != 0,
+          GeneModels_count != 0,
+         RibosomeCount != 0,
          !is.na(PennateCentric),) %>%
   pivot_longer(c(GeneModels_count, RibosomeCount), names_to = "Normalizer", values_to = "Normalize_count") %>%
   select(FileName, PennateCentric, Normalize_count, Normalizer, Phylum, Genus) %>%
