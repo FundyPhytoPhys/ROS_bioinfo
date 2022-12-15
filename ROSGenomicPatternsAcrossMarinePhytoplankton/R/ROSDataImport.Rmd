@@ -140,7 +140,7 @@ TaxaColors = c("Green" = "darkgreen", # "Diatom" = "brown4",
                "Ochrophyte" = "brown4", 
                "Haptophyte" = "royalblue", # "Pelagophyte" = "navy",  # "Eustigmatophyte" = "purple", 
                "Dinoflagellate" = "orange", 
-               # "Ochromonadaceae" = "hotpink", 
+               "Chromerid" = "hotpink",
                "Cryptophyte" = "seashell4", 
                "Red" = "red2", 
                "Prokaryote" = "darkgoldenrod3")
