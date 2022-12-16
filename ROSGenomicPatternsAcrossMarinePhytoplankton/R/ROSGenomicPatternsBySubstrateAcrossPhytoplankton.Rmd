@@ -188,32 +188,32 @@ ROSDiffusion %>%
   kable_classic()
 ```
 
-Superoxide (O~2~^•−^), a radical anion generated through the monovalent reduction of O~2~ to O~2~^•−^ [@hayyanSuperoxideIonGeneration2016], is highly reactive [@fridovichOxygenToxicityRadical1998] with organic compounds including thiols [@winterbournThiolChemistrySpecificity2008] and with metals [@roeUptakeMechanismsInorganic2014; @roseInfluenceExtracellularSuperoxide2012]. As the first ROS in a sequential series of reductions of O~2~, O~2~^•−^ is a 'gateway' to production of other ROS. O~2~^•−^ is produced both inside and outside a cell [@kozulevaMinimizingElectronFlow2020; @blokhinaReactiveOxygenSpecies2010; @asadaUnivalentReductionMolecular1974; @kozulevaEvaluationParticipationFerredoxin2010;@pospisilProductionReactiveOxygen2009; @pospisilRoleMetalsProduction2014], but shows limited diffusion across the hydrophobic cell membrane [@korshunovPotentialRolePeriplasmic2002]. Multiple oxidases (Table \@ref(tab:ROSEnzymeList)) reduce O~2~ and generate either H~2~O [@solomonO2ReductionH2O2008], or alternately O~2~^•−^ and/or Hydrogen Peroxide (H~2~O~2~) [@messnerMechanismSuperoxideHydrogen2002; @mittlerOxidativeStressAntioxidants2002]. Biogenic production of extracellular ROS is significant in marine environments [@zhangExtensiveDarkBiological2016; @diazWidespreadProductionExtracellular2013; @diazProductionExtracellularReactive2018; @diazProductionExtracellularSuperoxide2018; @roseMeasurementImplicationsNonphotochemically2008; @schneiderSpeciesLevelVariabilityExtracellular2016; @sutherlandExtracellularSuperoxideProduction2019; @kustkaExtracellularProductionSuperoxide2005; @hanselDynamicsExtracellularSuperoxide2016; @marshallSuperoxideProductionMarine2005], and O~2~^•−^ in coastal waters is primarily attributable to extracellular production mediated by eukaryotic phytoplankton [@sutherlandSpatialHeterogeneityParticleAssociated2020]. Some extracellular O~2~^•−^ production likely contributes to cell growth [@hanselTightRegulationExtracellular2019]. 
+Superoxide (O~2~^•−^), a radical anion generated through the monovalent reduction of O~2~ to O~2~^•−^ [@hayyanSuperoxideIonGeneration2016], and is highly reactive [@fridovichOxygenToxicityRadical1998] with organic compounds including thiols [@winterbournThiolChemistrySpecificity2008], and with metals [@roeUptakeMechanismsInorganic2014; @roseInfluenceExtracellularSuperoxide2012]. As the first ROS in a sequential series of reductions of O~2~, O~2~^•−^ is a 'gateway' to production of other ROS. O~2~^•−^ is produced both inside and outside a cell [@kozulevaMinimizingElectronFlow2020; @blokhinaReactiveOxygenSpecies2010; @asadaUnivalentReductionMolecular1974; @kozulevaEvaluationParticipationFerredoxin2010;@pospisilProductionReactiveOxygen2009; @pospisilRoleMetalsProduction2014], but shows limited diffusion across the hydrophobic cell membrane [@korshunovPotentialRolePeriplasmic2002]. Multiple oxidases (Table \@ref(tab:ROSEnzymeList)) reduce O~2~ and generate either H~2~O [@solomonO2ReductionH2O2008], or alternately O~2~^•−^ and/or Hydrogen Peroxide (H~2~O~2~) [@messnerMechanismSuperoxideHydrogen2002; @mittlerOxidativeStressAntioxidants2002]. Biogenic production of extracellular ROS is significant in marine environments [@zhangExtensiveDarkBiological2016; @diazWidespreadProductionExtracellular2013; @diazProductionExtracellularReactive2018; @diazProductionExtracellularSuperoxide2018; @roseMeasurementImplicationsNonphotochemically2008; @schneiderSpeciesLevelVariabilityExtracellular2016; @sutherlandExtracellularSuperoxideProduction2019; @kustkaExtracellularProductionSuperoxide2005; @hanselDynamicsExtracellularSuperoxide2016; @marshallSuperoxideProductionMarine2005], and O~2~^•−^ in coastal waters is primarily attributable to extracellular production mediated by eukaryotic phytoplankton [@sutherlandSpatialHeterogeneityParticleAssociated2020]. Some extracellular O~2~^•−^ production likely contributes to cell growth [@hanselTightRegulationExtracellular2019]. 
 
-Two known enzymes mediate conversion of O~2~^•−^ to H~2~O~2~; the ubiquitous dismutation of O~2~^•−^ catalyzed by diverse Superoxide Dismutases (SOD) or the less prevalent reduction of O~2~^•−^, catalyzed by Superoxide Reductase (SOR) at the expense of metabolic reductant. O~2~^•−^ also dismutates spontaneously to produce H~2~O~2~ and O~2~ [@zafiriouChemistrySuperoxideIonradical1990], although @sutherlandDarkBiologicalSuperoxide2020 found that ~52% of dark O~2~^•−^ production instead likely undergoes oxidation back to O~2~. Extracellular production of O~2~^•−^ thus indirectly contributes to extracellular H~2~O~2~ pools [@wuttigPathwaysSuperoxideDecay2013; @sutherlandExtracellularSuperoxideProduction2019; @scanlanEcologicalGenomicsMarine2009; @schneiderSpeciesLevelVariabilityExtracellular2016].
+Two known enzymes mediate conversion of O~2~^•−^ to H~2~O~2~; the ubiquitous dismutation of O~2~^•−^ catalyzed by diverse Superoxide Dismutases (SOD) or the less prevalent reduction of O~2~^•−^, catalyzed by Superoxide Reductase (SOR) at the expense of metabolic reductant. O~2~^•−^ also dismutates spontaneously to produce H~2~O~2~ and O~2~ [@zafiriouChemistrySuperoxideIonradical1990], although @sutherlandDarkBiologicalSuperoxide2020 found that ~52% of dark O~2~^•−^ production likely undergoes oxidation back to O~2~. Extracellular production of O~2~^•−^ thus contributes to extracellular H~2~O~2~ pools [@wuttigPathwaysSuperoxideDecay2013; @sutherlandExtracellularSuperoxideProduction2019; @scanlanEcologicalGenomicsMarine2009; @schneiderSpeciesLevelVariabilityExtracellular2016].
 
 H~2~O~2~ passively traverses cell membranes [@halliwellFreeRadicalsBiology1999], primarily through aquaporins [@bienertAquaporinfacilitatedTransmembraneDiffusion2014; @almasalmehStructuralDeterminantsHydrogen2014; @wangCharacterizationAquaporindrivenHydrogen2020; @millerAquaporin3MediatesHydrogen2010], allowing exchange of intracellular and extracellular pools of H~2~O~2~, although cells can maintain a concentration gradient between internal and external H~2~O~2~ [@seaverHydrogenPeroxideFluxes2001].
 
-H~2~O~2~ is acutely toxic to most cells in the range of 10^-5^ to 10^-4^ mol L^-1^ [@halliwellFreeRadicalsBiology1999], reacting with thiols and methionine [@winterbournThiolChemistrySpecificity2008] and interfering with gene expression [@fedurayevHydrogenPeroxideParticipates2018]. Cytotoxic effects of H~2~O~2~, including lipid damage, are however, primarily caused by H~2~O~2~ dismutating into the hydroxyl radical, which is strongly oxidative [@lesserOxidativeStressMarine2006].
+H~2~O~2~ is acutely toxic to most cells in the range of 10^-5^ to 10^-4^ mol L^-1^ [@halliwellFreeRadicalsBiology1999], reacting with thiols and methionine [@winterbournThiolChemistrySpecificity2008] and interfering with gene expression [@fedurayevHydrogenPeroxideParticipates2018]. Cytotoxic effects of H~2~O~2~, including lipid damage, are however, primarily caused by H~2~O~2~ dismutating into the Hydroxyl Radical (HO^•^), which is strongly oxidative [@lesserOxidativeStressMarine2006].
 
 Multiple oxidases are important in producing H~2~O~2~ (Table \@ref(tab:ROSEnzymeList)), but abiotic processes, including rainfall, may be dominant sources of extracellular H~2~O~2~ in seawater [@averyHydrogenPeroxideBermuda2005; @kellyMeasurementsPeroxidesCloudwater1985; @willeyCoastalRainwaterHydrogen1996]. H~2~O~2~ concentrations in seawater follow a diurnal cycle with a peak at mid-day [@morrisDielRegulationHydrogen2016; @averyHydrogenPeroxideBermuda2005; @yuanDistributionHydrogenPeroxide2001], suggesting significant direct or indirect photochemical or photobiological generation of H~2~O~2~. Heterotrophs do not contribute much  H~2~O~2~ production but mediate H~2~O~2~ decomposition [@bondHeterotrophicBacteriaExhibit2020].  H~2~O~2~ also decomposes spontaneously, though slowly, into water and oxygen [@senguptaControllingNonCatalyticDecomposition2004], and contributes significantly to the redox cycling of copper and iron in seawater [@milleroRateReductionCopper1991; @moffettReactionKineticsHydrogen1987].
 
 Despite its radical nature and ability to react with biomolecules, ^•^NO functions widely as a signaling molecule [@vardiStressSurveillanceSystem2006; @thomsonEcophysiologyBrineDinoflagellate2000; @vardiDiatomGeneRegulating2008]. ^•^NO is produced both biogenically through arginine dependent Nitric Oxide Synthases (NOS) or Nitric Oxide Associated Proteins (NOA) [@vardiCellSignalingMarine2008], as well as through abiotic processes including nitrite photolysis [@zafiriouNitricOxideSeawater1980]. 
 ^•^NO can be enzymatically scavenged through Nitric Oxide Dioxygenase (NOD) or Nitric Oxide Reductases (NOR) [@fujiwaraCytochromeCbtypeNitric1996] (Table \@ref(tab:ROSEnzymeList)), and may also react non-enzymatically with reduced glutathione (GSH) to form S-nitrosoglutathione (GSNO) [@delrioReactiveOxygenSpecies2009; @jahnovaSNitrosoglutathioneReductaseMaster2019].
-Most cellular damage mediated by ^•^NO is attributed to the reaction of ^•^NO with O~2~^•−^ to produce Peroxinitrite (ONOO^−^). The reaction of ^•^NO with O~2~^•−^ to produce ONOO^-^ is limited by the low extracellular concentration of ^•^NO and is not a major ^•^NO sink in seawater [@adesinaPhotochemicallyGeneratedNitric2021]. 
+Most cellular damage mediated by ^•^NO is attributed to the reaction of ^•^NO with O~2~^•−^ to produce Peroxinitrite (ONOO^−^) but this reaction is limited by the low extracellular concentration of ^•^NO in seawater [@adesinaPhotochemicallyGeneratedNitric2021]. 
 
-Other important ROS, Singlet Oxygen (^1^O~2~), Peroxynitrite (ONOO^-^) and Hydroxyl Radical (HO^•^) are not known to be directly produced nor scavenged by enzymatic processes [@collinChemicalBasisReactive2019; [@marusawaHydroxylRadicalStrong2002; @gutteridgeReactivityHydroxylHydroxyllike1984; @mcgillChapterOxidantStress2013; @daviesProteinsDamagedOxygen1987; @halliwellFreeRadicalsBiology1999]. Because of the high reactivity of HO^•^, it is unlikely that there are any scavengers dedicated to HO^•^ specifically [@halliwellFreeRadicalsBiology1999], although reactions with dissolved organic matter non-specifically scavenge extracellular HO^•^ [@brezonikNitrateInducedPhotolysisNatural1998].
+Other important ROS, Singlet Oxygen (^1^O~2~), Peroxynitrite (ONOO^-^) and  HO^•^ are not known to be directly produced nor scavenged by enzymatic processes [@collinChemicalBasisReactive2019; [@marusawaHydroxylRadicalStrong2002; @gutteridgeReactivityHydroxylHydroxyllike1984; @mcgillChapterOxidantStress2013; @daviesProteinsDamagedOxygen1987; @halliwellFreeRadicalsBiology1999]. Because of the high reactivity of HO^•^, it is unlikely that there are any scavengers dedicated to HO^•^ specifically [@halliwellFreeRadicalsBiology1999], although reactions with dissolved organic matter non-specifically scavenge extracellular HO^•^ [@brezonikNitrateInducedPhotolysisNatural1998].
 
 ## The Black Queen Hypothesis {.unnumbered}
-The Black Queen Hypothesis states that loss of function mutations may proceed so long as some interacting community members retain the function, and the function can occur outside a given cell [@morrisBlackQueenHypothesis2012]. The Black Queen Hypothesis was formulated on the basis of *Prochlorococcus*, which lost the genes encoding enzymes which scavenge H~2~O~2~. Instead *Prochlorococcus* allows H~2~O~2~ outwards across the cell membrane to be dealt with by community members retaining the capacity to scavenge H~2~O~2~, thus saving *Prochlorococcus* the cost of maintaining the genes and metabolism for scavenging H~2~O~2~ [@morrisDependenceCyanobacteriumProchlorococcus2011; @morrisBlackQueenHypothesis2012]. Growth and survival of *Prochlorococcus* improves when co-cultured with 'helper' bacteria which carry genes for catalase [@zinserCrossprotectionHydrogenPeroxide2018; @morrisDependenceCyanobacteriumProchlorococcus2011; @morrisFacilitationRobustGrowth2008; @coeSurvivalProchlorococcusExtended2016]. 
+The Black Queen Hypothesis states that loss of function mutations may proceed so long as some interacting community members retain the function, and the function can occur outside a given cell [@morrisBlackQueenHypothesis2012]. The Black Queen Hypothesis was formulated on the basis of *Prochlorococcus*, which lost the genes encoding enzymes which scavenge H~2~O~2~. Instead *Prochlorococcus* allows H~2~O~2~ outwards across the cell membrane to be dealt with by community members retaining the capacity to scavenge H~2~O~2~, thus saving *Prochlorococcus* the cost of maintaining the genes and metabolism for scavenging H~2~O~2~ [@morrisDependenceCyanobacteriumProchlorococcus2011; @morrisBlackQueenHypothesis2012]. Growth and survival of *Prochlorococcus* indeed improves when co-cultured with 'helper' bacteria which carry genes for catalase [@zinserCrossprotectionHydrogenPeroxide2018; @morrisDependenceCyanobacteriumProchlorococcus2011; @morrisFacilitationRobustGrowth2008; @coeSurvivalProchlorococcusExtended2016]. 
 
 ## Hypotheses and Significance {.unnumbered}
 
-Given that ROS show differential abilities to cross cell membranes, and have widely different diffusion distances before destruction, we sought to study whether cell radius, colony formation, flagella, or diatom cell shape influence genomic allocations to ROS production and scavenging across diverse marine phytoplankters.
+Given that ROS show differential abilities to cross cell membranes, and have widely different diffusion distances before destruction [@omarDiffusionalInteractionsMarine2022], we sought to study whether cell radius, colony formation, flagella, or diatom cell shape influence genomic allocations to ROS production and scavenging across diverse marine phytoplankters.
 
 ```{hypothesis SupOx}
 **Cell radius across phytoplankton taxa does not influence the fraction of total gene content encoding O~2~^•−^ production, nor scavenging. **
-O~2~^•−^ is highly toxic, and not readily able to cross biological membranes [@korshunovPotentialRolePeriplasmic2002], so diffusional losses of O~2~^•−^ from cells are limited, and cells need to retain capacity for detoxification of O~2~^•−^ across cell sizes.
+O~2~^•−^ is highly toxic and does not readily cross biological membranes [@korshunovPotentialRolePeriplasmic2002], so diffusional losses of O~2~^•−^ from cells are limited, and cells need to retain capacity for detoxification of O~2~^•−^ across cell sizes.
 ```
 
 ```{hypothesis HyPeNitOxRad}
@@ -291,9 +291,11 @@ From the 'CombinedHits' data frame, we filtered out some enzymes where the BREND
 - Bacterial non heme ferritin is listed under H~2~O~2~ production and scavenging as it produces H~2~O~2~ in the first of a two-step reaction and scavenges H~2~O~2~ in the second step [@bou-abdallahFunctionalityThreeSiteFerroxidase2014].
 
 From the subset of 'CombinedHits' of enzymes annotated for ROS metabolism, we grouped orthologs together by EC number and their Kegg Orthology number (KO number) and determined the occurrences of individual orthologs encoding each EC number, or KO number when EC number was not available, in a given organism.
-We merged this data subset with `CellGenomeMetrics.csv` to generate a dataset of genes encoding ROS metabolizing enzymes, as defined by the EC or KO number, along with characteristics of the source organism, combined into 'MergedData'.
+We merged this data subset with `CellGenomeMetrics.csv` to generate a dataset of genes encoding ROS metabolizing enzymes, as defined by the EC or KO number, along with characteristics of the source organism, combined into 'MergedData'. From the 'CombinedHits' data frame, we extracted and counted all genes annotated by eggNOG as ribosomal (Genes with the GO annotation 'GO:0005840'; coded as Ribosome_count), which we subsequently use as a proxy for ribosomal genes.
 
-H~2~O~2~, O~2~^•−^ and ^•^NO differ in reactivity, stability, diffusion distance, effects on biomolecules and roles in cell signaling (Table \@ref(tab:ROSDiffusion)). We therefore generated the total gene counts coding for the production or scavenging of each different ROS in a given organism, which were used to generate Poisson or Quasi-Poisson regressions (Fig \@ref(fig:BioinformaticSummary)). For ^•^NO, we also ran Binomial probability models to infer the cell size at which organism has an equal probability of having (or not having) the genomic capacity to encode nitric oxide production or scavenging. These presence/absence analyses were not run for H~2~O~2~ and O~2~^•−^ as all organisms eukaryotic organisms either ubiquitously had the genomic capacity to scavenge H~2~O~2~ and O~2~^•−^; to produce H~2~O~2~; whereas neither organism had the genomic capacity to produce O~2~^•−^.
+H~2~O~2~, O~2~^•−^ and ^•^NO differ in reactivity, stability, diffusion distance, effects on biomolecules and roles in cell signaling (Table \@ref(tab:ROSDiffusion)). We therefore generated the total gene counts coding for the production or scavenging of each different ROS in a given organism, which were used to generate Poisson or Quasi-Poisson regressions (Fig \@ref(fig:BioinformaticSummary)). For ^•^NO, we also ran Binomial probability models to infer the cell size at which organism has an equal probability of having (or not having) the genomic capacity to encode nitric oxide production or scavenging. These presence/absence analyses were not run for H~2~O~2~ and O~2~^•−^ as all eukaryotic organisms either ubiquitously had the genomic capacity to scavenge H~2~O~2~ and O~2~^•−^; to produce H~2~O~2~; whereas neither organism had the genomic capacity to produce O~2~^•−^.
+
+XXXNEED TO ADD TEXT on HOW AND WHY RIBOSOMAL GENE COUNTS WERE DONEXXX
 
 ## Data Validation & Justification of Statistical Analyses {.unnumbered}
 
@@ -344,7 +346,7 @@ PoissonDistStats <- MergedData %>%
   rstatix::shapiro_test(ROS_count) 
 ```
 
-Fig \@ref(fig:PoissonDist) shows that the frequencies of counts of genes encoding the metabolism of O~2~^•−^, H~2~O~2~ or ^•^NO within an organism are not normally distributed (Shapiro-Wilk Test [@shapiroAnalysisVarianceTest1965] with a p-value of `r ScientificTen(PoissonDistStats$p[5])` for O~2~^•−^ scavenging, `r ScientificTen(PoissonDistStats$p[1])` for H~2~O~2~ production, `r ScientificTen(PoissonDistStats$p[2])` for H~2~O~2~ scavenging, `r ScientificTen(PoissonDistStats$p[3])` for ^•^NO production and  `r ScientificTen(PoissonDistStats$p[4])` for ^•^NO scavenging). The frequencies of gene counts instead follow a Poisson distribution. Therefore, for subsequent analyses we used Poisson or Quasi-Poisson regressions to compare the counts of genes that encode the production or scavenging of O~2~^•−^, H~2~O~2~ or ^•^NO within an organism to log~10~ of the median cell radius in µm. Code used to produce the Poisson and Quasi-Poisson models is on https://github.com/NaamanOmar/ROS_bioinfo/tree/master/ROSGenomicPatternsAcrossMarinePhytoplankton.
+Fig \@ref(fig:PoissonDist) shows that the frequencies of counts of genes encoding the metabolism of O~2~^•−^, H~2~O~2~ or ^•^NO within an organism are not normally distributed (Shapiro-Wilk Test [@shapiroAnalysisVarianceTest1965] with a p-value of `r ScientificTen(PoissonDistStats$p[5])` for O~2~^•−^ scavenging, `r ScientificTen(PoissonDistStats$p[1])` for H~2~O~2~ production, `r ScientificTen(PoissonDistStats$p[2])` for H~2~O~2~ scavenging, `r ScientificTen(PoissonDistStats$p[3])` for ^•^NO production and  `r ScientificTen(PoissonDistStats$p[4])` for ^•^NO scavenging). The frequencies of gene counts instead follow Poisson distributions. Therefore, for subsequent analyses we used Poisson or Quasi-Poisson regressions to compare the counts of genes that encode the production or scavenging of O~2~^•−^, H~2~O~2~ or ^•^NO within an organism to log~10~ of the median cell radius in µm. Code used to produce the Poisson and Quasi-Poisson models is on https://github.com/NaamanOmar/ROS_bioinfo/tree/master/ROSGenomicPatternsAcrossMarinePhytoplankton.
 
 Quasi-Poisson regressions were used when the Poisson regression was over-dispersed (dispersion > 1, p < 0.05) as determined by the 'AER' package [@kleiberAERAppliedEconometrics2020]. A Poisson regression followed by a chi-squared test, or a Quasi-Poisson regression followed by an F test, was used to obtain p-values [@AnovaGlmFunction], with an alpha value of ≤0.05 as the threshold for statistical significance of regressions. 
 
@@ -352,7 +354,7 @@ The total number of genes in each organism increased with the median cell radius
 
 The total number of ribosomal genes did not increase with median cell radius, but did vary with taxa (Fig \@ref(fig:RibosomeRadPlot)). Therefore, we also normalized the number of genes encoding the production or scavenging of H~2~O~2~, O~2~^•−^ or ^•^NO, to the total number of ribosomal genes in the organism ('Ribosome_count'), as a proxy for housekeeping genes. Because median cell radius and taxonomic lineage did not interact in this plot, we included Phylum, or 'Colony' and 'Flagella', as co-variates in our Poisson or Quasi-Poisson regressions of normalized ribosomal gene counts vs. median cell radius.
 
-To further investigate possible influences of colony formation, the presence of flagella or diatom cell shape (pennate or centric), independent of cell size, upon the fraction of genes that encode the metabolism of H~2~O~2~, O~2~^•−^ or ^•^NO, we used a Wilcoxon test [@kassambaraGgpubrGgplot2Based2018] after binning data across all cell sizes. 
+To further investigate possible influences of colony formation, the presence of flagella or diatom cell shape (pennate or centric), independent of cell size, upon the fraction of genes that encode the metabolism of H~2~O~2~, O~2~^•−^ or ^•^NO, we used a Wilcoxon test [@kassambaraGgpubrGgplot2Based2018] after binning data across all diatom sizes. 
 
 # Results and Discussion {.unnumbered}
 
@@ -368,12 +370,10 @@ SupOxRadRibo <- readRDS(file.path(DataProcessedModels, "SupOxRadRibo.Rds"))
 SupOxMerged <- readRDS(file.path(DataProcessed, "SupOxMerged.Rds"))
 ```
 
-Although there are enzymes producing O~2~^•−^ [@diazNADPHdependentExtracellularSuperoxide2019], in the marine phytoplankton genomes and transcriptomes that we analysed, we did not detect any genes that encode for such enzymes (Table \@ref(tab:ROSEnzymeList)) specifically producing O~2~^•−^, based on the BRENDA annotation of O~2~^•−^ scavenging. It is however worth noting the presence of genes annotated as encoding NADPH Oxidase (NOX) in some phytoplankton genomes. NOX can produce either H~2~O~2~ or O~2~^•−^ depending on the NOX isoform. NOX is included in our analyses as a H~2~O~2~ producer, in accordance with the BRENDA annotation of the enzyme (Table \@ref(tab:ROSEnzymeList)). Further analyses of the detected NOX isoforms might identify whether they are isoforms that produce O~2~^•−^. Sequences that are similar to Glutathione Reductase (GR) have been documented to produce enzymes that produce extracellular O~2~^•−^ in the diatom *Thalassiosira oceanica* [@diazNADPHdependentExtracellularSuperoxide2019]. We found sequences annotated as GR across all phytoplankton genomes (Data not visualized), which likely include genes encoding enzymes producing O~2~^•−^. In any case, we do not expect phytoplankton to differentially allocate a changing fraction of their total gene content to O~2~^•−^ production with increasing cell size, as O~2~^•−^ is weakly membrane diffusible. Phytoplankton may need to maintain working extracellular concentrations of O~2~^•−^, since decreasing the extracellular concentration of O~2~^•−^ can hinder cell growth [@sutherlandExtracellularSuperoxideProduction2019]. @sutherlandExtracellularSuperoxideProduction2019 further explains that the downregulation of Superoxide Dismutase (SOD, EC:1.15.1.1) genes at peak light levels by *Prochlorococcus* [@mella-floresProchlorococcusSynechococcusHave2012] would allow *Prochlorococcus* to maintain 'working levels' of extracellular O~2~^•−^.  Beyond putative enzymatically mediated production of O~2~^•−^, non-enzymatic processes associated with cells can also produce O~2~^•−^ to variable extents, notably from side-reactions of electron transport [@pospisilProductionReactiveOxygen2009; @pospisilMolecularMechanismsProduction2012; @pospisilProductionReactiveOxygen2016] particularly under stress conditions.
+Although there are enzymes producing O~2~^•−^ [@diazNADPHdependentExtracellularSuperoxide2019], in the marine phytoplankton genomes and transcriptomes that we analysed, we did not detect any genes that encode for such enzymes (Table \@ref(tab:ROSEnzymeList)), based on the BRENDA annotation. It is however worth noting the presence of genes annotated as encoding NADPH Oxidase (NOX) in some phytoplankton genomes. NOX can produce either H~2~O~2~ or O~2~^•−^ depending on the NOX isoform. NOX is included in our analyses as a H~2~O~2~ producer, in accordance with the BRENDA annotation of the enzyme (Table \@ref(tab:ROSEnzymeList)). Further analyses of the detected NOX isoforms might identify whether they include isoforms that produce O~2~^•−^. Sequences that are similar to Glutathione Reductase (GR) have been documented to produce enzymes that produce extracellular O~2~^•−^ in the diatom *Thalassiosira oceanica* [@diazNADPHdependentExtracellularSuperoxide2019]. We found sequences annotated as GR across all phytoplankton genomes (Figure \@ref(fig:ManualAutoCompareData)), which likely include genes encoding enzymes producing O~2~^•−^. Phytoplankton may need to maintain working extracellular concentrations of O~2~^•−^, since decreasing the extracellular concentration of O~2~^•−^ can hinder cell growth [@sutherlandExtracellularSuperoxideProduction2019]. @sutherlandExtracellularSuperoxideProduction2019 further explains that the downregulation of Superoxide Dismutase (SOD, EC:1.15.1.1) genes at peak light levels by *Prochlorococcus* [@mella-floresProchlorococcusSynechococcusHave2012] would allow *Prochlorococcus* to maintain 'working levels' of extracellular O~2~^•−^.  Beyond putative enzymatically mediated production of O~2~^•−^, non-enzymatic processes associated with cells can also produce O~2~^•−^ to variable extents, notably from side-reactions of electron transport [@pospisilProductionReactiveOxygen2009; @pospisilMolecularMechanismsProduction2012; @pospisilProductionReactiveOxygen2016] particularly under stress conditions.
 
-Given that the O~2~^•−^ is poorly diffusible across membranes, intracellularly produced O~2~^•−^ has to be scavenged to limit detrimental reactions of O~2~^•−^ [@bergaminiOxygenReactiveOxygen2004]. As a result, cells universally maintain the genomic capacity to scavenge O~2~^•−^.  All prokaryotic (Data not visualized) and eukaryotic (Fig \@ref(fig:EukSupOxDotPlot)) phytoplankton analyzed, with the exception of a single transcriptome from *Micromonas polaris*, have genes annotated as encoding the ubiquitous O~2~^•−^ scavenging enzyme SOD. Genes annotated as encoding the enzyme Superoxide Oxidase (SOO, EC:1.10.3.17) were present in a few diatom species (*Leptocylindrus danicus*, *Chaetoceros curvicetus* and *Thalassiosira minuscula CCMP1093*) and prokaryotes (*Crocosphaera* spp.). Genes encoding the enzyme Superoxide Reductase (SOR, EC:1.15.1.2) were detected in some diatoms (*Pseudo-nitzschia fradulenta WWA7* and *Seminavis robusta D6*), and in the haptophyte *Pleurochrysis carterae CCMP456*. To our knowledge, our results are the first detections of the occurences of genes encoding SOO and SOR in marine phytoplankton. BLAST searches support the identifications of genes for SOO and SOR in the genomes of some phytoplankters. These results should be confirmed by enzyme assays, to identify if the genes indeed encode active enzymes. Finer trends in genomic allocations to O~2~^•−^ scavenging may emerge among the metallo-forms of SOD [@millerSuperoxideDismutasesAncient2012]. For example, in pilot runs discriminating among SOD metallo-forms we found that pico-prasinophytes encode Mn-SOD instead of the Fe-SOD encoded in genomes from larger green algal phytoplankters (Data not visualized). 
+Given that the O~2~^•−^ is poorly diffusible across membranes, intracellularly produced O~2~^•−^ has to be scavenged to limit detrimental reactions of O~2~^•−^ [@bergaminiOxygenReactiveOxygen2004]. As a result, the analyzed phytoplankton universally maintain genomic capacity encoding the ubiquitous O~2~^•−^ scavenging enzyme SOD Fig \@ref(fig:EukSupOxDotPlot)), with the exception of a single transcriptome from *Micromonas polaris*. Genes annotated as encoding the enzyme Superoxide Oxidase (SOO, EC:1.10.3.17) were present in a few diatom species (*Leptocylindrus danicus*, *Chaetoceros curvicetus* and *Thalassiosira minuscula CCMP1093*) and prokaryotes (*Crocosphaera* spp.). Genes encoding the enzyme Superoxide Reductase (SOR, EC:1.15.1.2) were detected in some diatoms (*Pseudo-nitzschia fradulenta WWA7* and *Seminavis robusta D6*), and in the haptophyte *Pleurochrysis carterae CCMP456*. BLAST searches support these annotations of genes for SOO and SOR in the genomes of some phytoplankters. These results should be confirmed by enzyme assays, to identify if the genes indeed encode active enzymes. Finer trends in genomic allocations to O~2~^•−^ scavenging may emerge among the metallo-forms of SOD [@millerSuperoxideDismutasesAncient2012]. For example, in pilot runs discriminating among SOD metallo-forms we found that pico-prasinophytes encode Mn-SOD instead of the Fe-SOD encoded in genomes from larger green algal phytoplankters (Data not visualized). 
 
-
-### Influence of Cell Size on Gene Counts for Enzymes Metabolizing O~2~^•−^ {.unnumbered}
 
 ```{r, include = FALSE}
 SupOxRadPlots <- knitr::include_graphics(file.path(Figures, "SupOxRadPlots.png"))
@@ -391,11 +391,10 @@ SupOxRadPlots_cap <- glue("**Comparison of log~10~ (Total number of genes encodi
 SupOxRadPlots
 ```
 
-With increasing cell radius, eukaryotic phytoplankton have a smaller fraction of their total genes encoding scavenging of O~2~^•−^ (Fig \@ref(fig:SupOxRadPlots), Blue line, Slope = `r ScientificTen(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck('offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck('offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`, p-value = `r ScientificTen(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck('offset_model_regression', 1, "p.value", 2))`, pseudo R^2^ = `r 1-(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck('offset_model', 1, "deviance")/SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck('offset_model', 1, "null.deviance"))`). The negative slope does not support our Hypothesis \@ref(hyp:SupOx) that phytoplankton do not differentially allocate a changing fraction of their total gene content to O~2~^•−^ production nor scavenging with increasing cell size. 
+With increasing cell radius, eukaryotic phytoplankton have a smaller fraction of their total genes encoding scavenging of O~2~^•−^ (Fig \@ref(fig:SupOxRadPlots), Blue line, Slope = `r ScientificTen(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck('offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck('offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`, p-value = `r ScientificTen(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck('offset_model_regression', 1, "p.value", 2))`, pseudo R^2^ = `r signif(1-(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck('offset_model', 1, "deviance")/SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck('offset_model', 1, "null.deviance")), 2)`). The negative slope does not support our Hypothesis \@ref(hyp:SupOx) that phytoplankton do not differentially allocate a changing fraction of their total gene content to O~2~^•−^ scavenging with increasing cell size. 
 Including 'Flagella' and 'Colony' as co-variates in the regression results, however, in a slope that is not statistically different from zero (Fig \@ref(fig:SupOxRadPlots), Black line, Slope = `r ScientificTen(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck('flagcol_offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck('flagcol_offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`, p-value = `r ScientificTen(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck('flagcol_offset_model_regression', 1, "p.value", 2))`), driven by the influence of 'Flagella' (p-value = `r ScientificTen(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck("flagcol_offset_model_pvalue", 1, tidy, "p.value", 3))`) but not 'Colony' (p-value = `r ScientificTen(SupOxRad %>% filter(SupOx == "Scavenging") %>% pluck("flagcol_offset_model_pvalue", 1, tidy, "p.value", 4))`). O~2~^•−^ metabolism in phytoplankton appears to be mediated by a nearly fixed set of core genes that do not change with increasing gene count, thus the fractional gene allocation to O~2~^•−^ decreases as cell radius, and the co-varying total gene count increases. Therefore, gene dosage does not emerge as a factor in phytoplankton O~2~^•−^ metabolism.
-With increasing cell radius, eukarotic phytoplankton have no cell-size associated difference in genes encoding superoxide scavenging, when normalized to total ribosomal genes, suggesting that as a fraction of housekeeping genes, cells do not increase their genomic capacity to scavenge superoxide, again consistent with our hypothesis \@ref(hyp:SupOx) (Data not visualized, Slope = `r ScientificTen(SupOxRadRibo %>% filter(SupOx == "Scavenging") %>% pluck('offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(SupOxRadRibo %>% filter(SupOx == "Scavenging") %>% pluck('offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`, p-value = `r ScientificTen(SupOxRadRibo %>% filter(SupOx == "Scavenging") %>% pluck('offset_model_regression', 1, "p.value", 2))`). 
+With increasing cell radius, eukarotic phytoplankton have no cell-size associated difference in genes encoding superoxide scavenging, when normalized to total ribosomal genes, suggesting that as a fraction of housekeeping genes, cells do not increase their genomic capacity to scavenge superoxide, consistent with our hypothesis \@ref(hyp:SupOx) (Data not visualized, Slope = `r ScientificTen(SupOxRadRibo %>% filter(SupOx == "Scavenging") %>% pluck('offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(SupOxRadRibo %>% filter(SupOx == "Scavenging") %>% pluck('offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`, p-value = `r ScientificTen(SupOxRadRibo %>% filter(SupOx == "Scavenging") %>% pluck('offset_model_regression', 1, "p.value", 2))`). 
 
-### Influences of Flagella, Colony Formation and Cell Shape on Gene Counts for Enzymes Metabolizing O~2~^•−^ {.unnumbered}
 
 ```{r SupOxFlag_pval, include = FALSE}
 SupOxFlag_pval <- MergedData %>%
@@ -435,45 +434,7 @@ SupOxFlagPlot_cap <- glue("**Comparison of total number of genes encoding O~2~^�
 SupOxFlagPlot
 ```
 
-Consistent with the significant influence of flagella on the regressions vs. median cell radius (Fig \@ref(fig:SupOxRadPlots)), flagellated phytoplankton, irrespective of size, have a smaller proportion of their total gene content encoding O~2~^•−^ scavenging (Fig \@ref(fig:SupOxFlagPlot), p-value = `r ScientificTen(SupOxFlag_pval$p)`), than do non-flagellated phytoplankton. Similarly, irrespective of size, flagellated phytoplankton have a smaller ratio of genes encoding O~2~^•−^ scavenging to their total ribosomal genes  (Data not visualized, p-value = `r ScientificTen(SupOxFlagRibo_pval$p)`). This suggests that cellular motility contributes to phytoplankton homeostasis of O~2~^•−^, possibly by supporting escape from localized extracellular pockets of O~2~^•−^. This decrease in proportional allocation to O~2~^•−^ scavenging is also arithmetically consistent with the difference in the number of genes between flagellated and non flagellated organisms.
-
-```{r SupOxColony_pval, include = FALSE}
-SupOxColony_pval <- MergedData %>%
-  select(FileName, Flagella, SupOx_count, GeneModels_count, Phylum, SupOx, Genus, Taxa, ColonySpecies) %>%
-  filter(SupOx == "Scavenging",
-         !is.na(ColonySpecies),
-         GeneModels_count != 0, 
-         Taxa != "Prokaryote") %>%
-  mutate(norm_SupOx = SupOx_count/GeneModels_count) %>%  
-  unique() %>%
-  compare_means(norm_SupOx ~ ColonySpecies, data = ., method = "wilcox.test")
-
-SupOxColonyRibo_pval <- MergedData %>%
-  select(FileName, Flagella, SupOx_count, GeneModels_count, Phylum, SupOx, Genus, Taxa, ColonySpecies, RibosomeCount) %>%
-  filter(SupOx == "Scavenging",
-         !is.na(ColonySpecies),
-         RibosomeCount != 0, 
-         Taxa != "Prokaryote") %>%
-  mutate(norm_SupOx = SupOx_count/RibosomeCount) %>%  
-  unique() %>%
-  compare_means(norm_SupOx ~ ColonySpecies, data = ., method = "wilcox.test")
-```
-
-```{r generate SupOxColonyPlot, include = FALSE}
-SupOxColonyPlot <- knitr::include_graphics(file.path(Figures,"SupOxColonyPlot.png"))
-```
-
-```{r SupOxColonyPlot, fig.cap = SupOxColonyPlot_cap, fig.height= 7, fig.width= 3.5, echo = FALSE}
-SupOxColonyPlot_cap <- glue("**Comparison of total number of genes encoding O~2~^•−^ scavenging enzymes ('SupOx_count') normalized to the total number of genes present in each organism ('GeneModels_count') vs. the ability of the organism to form colonies.**",
-                            "Symbol color corresponds to taxon lineage ('Phylum').",
-                            "Notch spans ± standard error of the median.",
-                           "Box spans median ± 1 quartile of the data.",
-                           "Whiskers span the range excluding outliers in the data.",
-                            "Citations for data sources can be found in Supplementary Table S3.", .sep = " ")
-# SupOxColonyPlot
-```
-
-Setting aside any influence of cell size, colony and non-colony forming phytoplankton do not significantly differ in the fraction of their total gene content encoding O~2~^•−^ scavenging (p-value = `r ScientificTen(SupOxColony_pval$p)`) (Data not visualized), consistent with limited membrane permeability for O~2~^•−^ and thus limited colony level interactions for O~2~^•−^ metabolism. When normalizing the total number of genes encoding the scavenging of O~2~^•−^ to the total number of ribosomal genes, colony forming organisms have a larger fraction of their total housekeeping genes (p = `r ScientificTen(SupOxColonyRibo_pval$p)`) encoding superoxide scavenging compared to non-colony forming organisms, likely due to increased pressure from extracellular pockets of O~2~^•−^.
+Consistent with the significant influence of flagella on the regressions vs. median cell radius (Fig \@ref(fig:SupOxRadPlots)), flagellated phytoplankton, irrespective of size, have a smaller proportion of their total gene content encoding O~2~^•−^ scavenging (Fig \@ref(fig:SupOxFlagPlot), p-value = `r ScientificTen(SupOxFlag_pval$p)`), than do non-flagellated phytoplankton. Similarly, irrespective of size, flagellated phytoplankton have a smaller ratio of genes encoding O~2~^•−^ scavenging to their total ribosomal genes  (Data not visualized, p-value = `r ScientificTen(SupOxFlagRibo_pval$p)`). This suggests that cellular motility contributes to phytoplankton homeostasis of O~2~^•−^, possibly by supporting escape from localized extracellular pockets of O~2~^•−^. This decrease in proportional allocation to O~2~^•−^ scavenging is also arithmetically consistent with the difference in the number of genes between flagellated and non flagellated phytoplankton.
 
 ```{r SupOxDiatomShape_pval, include = FALSE}
 SupOxScavPennateCentricPlot_pval <- MergedData %>%
@@ -519,6 +480,7 @@ Differences between genomic patterns of pennate and centric diatoms may arise wh
 
 ```{r read in HyPe models, include = FALSE}
 HyPeRad <- readRDS(file.path(DataProcessedModels, "HyPeRad.Rds"))
+HyPeRadRibo <- readRDS(file.path(DataProcessedModels, "HyPeRadRibo.Rds"))
 OchrophyteHyPeRad <- readRDS(file.path(DataProcessedModels, "OchrophyteHyPeRad.Rds"))
 HyPeRadProk <- readRDS(file.path(DataProcessedModels, "HyPeRadProk.Rds"))
 # HyPeLat <- readRDS(file.path(DataProcessedModels, "HyPeLat.Rds"))
@@ -526,15 +488,14 @@ HyPeRadProk <- readRDS(file.path(DataProcessedModels, "HyPeRadProk.Rds"))
 HyPeMerged <- readRDS(file.path(DataProcessed, "HyPeMerged.Rds"))
 ```
 
-All prokaryotic (Fig \@ref(fig:ProkHyPeDotPlot)) and eukaryotic (Fig \@ref(fig:EukHyPeDotPlot)) phytoplankton, with the exception of a single transcriptome from the prasinophyte *Micromonas polaris*, have genes encoding H~2~O~2~ producing enzymes, as they all carry gene(s) encoding the ubiquitous enzyme Superoxide Dismutase. Genes encoding oxidases producing H~2~O~2~ include copropophyrinogen oxidase, found across all eukaryotic and prokaryotic phytoplankton, with the exception of one transcriptome. Genes encoding thiol oxidase and acyl CoA oxidase are also found in nearly all eukaryotic phytoplankton, with the exception of three transcriptomes. Genes encoding L-aspartate oxidase are found in nearly all prokaryotes, and all green algae, but are nearly absent from other eukaryotic taxa. Sarcosine oxidase is not present in small diatoms and small green algae, but is present in nearly all dinoflagellates and haptophytes. (S)-2-hydroxy-acid oxidase is found in most eukaryotic phytoplankton, but rarely in dinoflagellates.
+All prokaryotic (Fig \@ref(fig:ProkHyPeDotPlot)) and eukaryotic (Fig \@ref(fig:EukHyPeDotPlot)) phytoplankton, with the exception of a single transcriptome from the prasinophyte *Micromonas polaris*, have genes encoding H~2~O~2~ producing enzymes, as they all carry gene(s) encoding the ubiquitous enzyme Superoxide Dismutase. Genes encoding oxidases producing H~2~O~2~ include copropophyrinogen oxidase, found across all eukaryotic and prokaryotic phytoplankton, with the exception of one transcriptome. Genes encoding thiol oxidase and acyl CoA oxidase are also found in nearly all eukaryotic phytoplankton, with the exceptions of three transcriptomes. Genes encoding L-aspartate oxidase are found in nearly all prokaryotes, and all green algae, but are nearly absent from other eukaryotic taxa. Sarcosine oxidase is not present in small diatoms and small green algae, but is present in nearly all dinoflagellates and haptophytes. (S)-2-hydroxy-acid oxidase is found in most eukaryotic phytoplankton, but rarely in dinoflagellates.
 
 All eukaryotic (Fig \@ref(fig:EukHyPeDotPlot)) and most prokaryotic phytoplankton (Fig \@ref(fig:ProkHyPeDotPlot)), have genes encoding H~2~O~2~ scavenging enzymes. Some strains of *Prochlorococcus* and *Synechococcus* have lost all genomic capacity to scavenge H~2~O~2~, and appear to rely on co-occuring hosts for H~2~O~2~ scavenging [@morrisDependenceCyanobacteriumProchlorococcus2011; @morrisBlackQueenHypothesis2012; @coeSurvivalProchlorococcusExtended2016].
 
-The absence from catalase from most analyzed cyanobacterial genomes supports @bernroitnerOccurrencePhylogenyStructure2009 who analyzed 44 different cyanobacterial genomes and found that only *Nostoc punctiforme* PCC73102 retained a full gene encoding catalase. In our analyses, only *Synechococcus elongatus* PCC11802 maintained a catalase encoding gene (Fig \@ref(fig:ProkHyPeDotPlot)). In the greens, catalase has been lost from the smaller prasinophytes but is maintained in the larger greens (Fig \@ref(fig:EukHyPeDotPlot)). The loss of catalase from smaller green algae may be evidence of the Black Queen Hypothesis in action [@morrisBlackQueenHypothesis2012], in that H~2~O~2~ can passively diffuse out of the smaller green algae but diffuses less out of larger green algae. Loss of function mutations in catalase encoding genes in small algae are therefore less deleterious than they would be to large green algae. Catalase, with a K~M~ of ~220 mM,  may be poorly retained because the cells maintain some genomic capacity to scavenge H~2~O~2~ using the enzymes ascorbate peroxidase, glutathione peroxidase and Cytochrome C peroxidase (Fig \@ref(fig:EukHyPeDotPlot)), with K~M~ in the low µM range [@bernroitnerOccurrencePhylogenyStructure2009].
+The absence of catalase from most analyzed cyanobacterial genomes supports @bernroitnerOccurrencePhylogenyStructure2009 who analyzed 44 different cyanobacterial genomes and found that only *Nostoc punctiforme* PCC73102 retained a full gene encoding catalase. In our analyses, only *Synechococcus elongatus* PCC11802 maintained a catalase encoding gene (Fig \@ref(fig:ProkHyPeDotPlot)). In the greens, catalase has been lost from the smaller prasinophytes but is maintained in the larger greens (Fig \@ref(fig:EukHyPeDotPlot)). The loss of catalase from smaller green algae may be evidence of the Black Queen Hypothesis in action [@morrisBlackQueenHypothesis2012], in that H~2~O~2~ can passively diffuse out of the smaller green algae but diffuses less out of larger green algae. Loss of function mutations in catalase encoding genes in small algae are therefore less deleterious than they would be to large green algae. Catalase, with a K~M~ of ~220 mM,  may be poorly retained because the cells maintain some genomic capacity to scavenge H~2~O~2~ using the enzymes ascorbate peroxidase, glutathione peroxidase and Cytochrome C peroxidase (Fig \@ref(fig:EukHyPeDotPlot)), with K~M~ in the low µM range [@bernroitnerOccurrencePhylogenyStructure2009].
 
 Our results support an earlier suggestion that bigger genomic capacity for H~2~O~2~ scavenging in *Synechococcus* compared to *Prochlorococcus* is a result of the larger size in *Synechococcus* compared to *Prochlorococcus* [@morrisDependenceCyanobacteriumProchlorococcus2011] (Fig \@ref(fig:ProkHyPeDotPlot)). It is however important to note the vast differences between prokaryotic and eukaryotic phytoplankton, with most eukaryotic phytoplankton, regardless of lineage, maintaining the genomic capacity to produce ascorbate peroxidase, glutathione peroxidase and Cytochrome C peroxidase (Fig \@ref(fig:EukHyPeDotPlot)). Peroxidases are involved in pathways beyond simple ROS scavenging, including the Halliwell-Asada cycle for ascorbate peroxidase [@pandeyRedoxHomeostasisGene2015]. *Ostreococcus*, the smallest prasinophyte has a radius of 0.5 µm, comparable to that of the prokaryote *Synechococcus* (Table \@ref(tab:MetaData)), and would therefore share a similarly short diffusion path length. Nevertheless *Ostreococcus*, in common with other eukaryotes, retains genomic capacities to produce ascorbate peroxidase, glutathione peroxidase and Cytochrome C peroxidase, which may thus reflect the cost of being eukaryotic (Fig \@ref(fig:EukHyPeDotPlot)).
 
-### Influence of Cell Size on Gene Counts for Enzymes Metabolizing H~2~O~2~ {.unnumbered}
 
 ```{r, include = FALSE}
 HyPeDiff <- MergedData %>%
@@ -578,169 +539,17 @@ HyPeRadPlots_cap <- glue("**Comparison of log~10~ (Total number of genes encodin
 HyPeRadPlots
 ```
 
-With increasing cell radius, eukaryotic phytoplankton have a smaller fraction of their total genes encoding the production of H~2~O~2~ (Fig \@ref(fig:HyPeRadPlots), Blue line, Slope = `r ScientificTen(HyPeRad %>% filter(HyPe == "Production") %>% pluck('offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(HyPeRad %>% filter(HyPe == "Production") %>% pluck('offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`, p-value = `r ScientificTen(HyPeRad %>% filter(HyPe == "Production") %>% pluck('offset_model_regression', 1, "p.value", 2))`, pseudo R^2^ = `r 1-(HyPeRad %>% filter(HyPe == "Production") %>% pluck('offset_model', 1, "deviance")/HyPeRad %>% filter(HyPe == "Production") %>% pluck('offset_model', 1, "null.deviance"))`). Including 'Flagella' and 'Colony' as co-variates did not significantly alter this pattern (Black line, 'Flagella' p-value = `r ScientificTen(HyPeRad %>% pluck("flagcol_offset_model_pvalue",1) %>% tidy() %>% pluck("p.value", 3))`, 'Colony' p-value = `r ScientificTen(HyPeRad %>% pluck("flagcol_offset_model_pvalue",1) %>% tidy() %>% pluck("p.value", 4))`). The pattern of a smaller fraction of total genes for H~2~O~2~ production with increasing cell radius supports our Hypothesis \@ref(hyp:HyPeNitOxRad) that larger phytoplankton counter decreasing diffusional loss of H~2~O~2~ out of cells through a lower genomic capacity for H~2~O~2~ production, whereas losses of genes encoding H~2~O~2~ producing enzymes are more costly to small phytoplankton (Fig \@ref(fig:HyPeRadPlots)).  @diazProductionExtracellularReactive2018 found that a major influence upon the capacity for production of H~2~O~2~ is whether or not the organism can form blooms, with bloom forming species producing more H~2~O~2~. The ability to form blooms was not analyzed in our data as we did not find systematic information on potentials for bloom formation across taxa. 
+With increasing cell radius, eukaryotic phytoplankton have a smaller fraction of their total genes encoding the production of H~2~O~2~ (Fig \@ref(fig:HyPeRadPlots), Blue line, Slope = `r ScientificTen(HyPeRad %>% filter(HyPe == "Production") %>% pluck('offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(HyPeRad %>% filter(HyPe == "Production") %>% pluck('offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`, p-value = `r ScientificTen(HyPeRad %>% filter(HyPe == "Production") %>% pluck('offset_model_regression', 1, "p.value", 2))`, pseudo R^2^ = `r signif(1-(HyPeRad %>% filter(HyPe == "Production") %>% pluck('offset_model', 1, "deviance")/HyPeRad %>% filter(HyPe == "Production") %>% pluck('offset_model', 1, "null.deviance")), 2)`). Including 'Flagella' and 'Colony' as co-variates did not significantly alter this pattern (Black line, 'Flagella' p-value = `r ScientificTen(HyPeRad %>% pluck("flagcol_offset_model_pvalue",1) %>% tidy() %>% pluck("p.value", 3))`, 'Colony' p-value = `r ScientificTen(HyPeRad %>% pluck("flagcol_offset_model_pvalue",1) %>% tidy() %>% pluck("p.value", 4))`). The pattern of a smaller fraction of total genes for H~2~O~2~ production with increasing cell radius supports our Hypothesis \@ref(hyp:HyPeNitOxRad) that larger phytoplankton counter decreasing diffusional loss of H~2~O~2~ out of cells through a lower genomic capacity for H~2~O~2~ production, whereas losses of genes encoding H~2~O~2~ producing enzymes are more costly to small phytoplankton (Fig \@ref(fig:HyPeRadPlots)).  @diazProductionExtracellularReactive2018 found that a major influence upon the capacity for production of H~2~O~2~ is whether or not the organism can form blooms, with bloom forming species producing more H~2~O~2~. The ability to form blooms was not analyzed in our data as we did not find systematic information on potentials for bloom formation across taxa. 
 
-With increasing cell radius, eukaryotic phytoplankton also have a smaller fraction of their total genes encoding the capacity to scavenge H~2~O~2~ (Fig \@ref(fig:HyPeRadPlots), Blue line, Slope = `r ScientificTen(HyPeRad %>% filter(HyPe == "Scavenging") %>% pluck('offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(HyPeRad %>% filter(HyPe == "Scavenging") %>% pluck('offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`, p-value = `r ScientificTen(HyPeRad %>% filter(HyPe == "Scavenging") %>% pluck('offset_model_regression', 1, "p.value", 2))`, pseudo R^2^ = `r 1-(HyPeRad %>% filter(HyPe == "Scavenging") %>% pluck('offset_model', 1, "deviance")/HyPeRad %>% filter(HyPe == "Scavenging") %>% pluck('offset_model', 1, "null.deviance"))`). Including 'Flagella' and 'Colony' as co-variates did not influence the negative slope of the fraction of total genes encoding H~2~O~2~ scavenging with increasing median cell radius (Fig \@ref(fig:HyPeRadPlots), Black line, 'Flagella' p-value = `r ScientificTen(HyPeRad %>% pluck("flagcol_offset_model_pvalue",2) %>% tidy() %>% pluck("p.value", 3))`, 'Colony' p-value = `r ScientificTen(HyPeRad %>% pluck("flagcol_offset_model_pvalue",2) %>% tidy() %>% pluck("p.value", 4))`). A parallel analysis focusing only on small phytoplankton such as pico-cyanobacteria and pico-prasinophytes might yield different results as more such genomes are sequenced, especially considering that @randhawaApplicabilityHydrogenPeroxide2012 found that H~2~O~2~ added to seawater at a concentration of 1.6 mg L^-1^ did not affect cells with a radius larger than 1 to 1.5 μm, but differentially harmed the picoprasinophyte *Micromonas pusilla*.
+With increasing cell radius, eukaryotic phytoplankton also have a smaller fraction of their total genes encoding the capacity to scavenge H~2~O~2~ (Fig \@ref(fig:HyPeRadPlots), Blue line, Slope = `r ScientificTen(HyPeRad %>% filter(HyPe == "Scavenging") %>% pluck('offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(HyPeRad %>% filter(HyPe == "Scavenging") %>% pluck('offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`, p-value = `r ScientificTen(HyPeRad %>% filter(HyPe == "Scavenging") %>% pluck('offset_model_regression', 1, "p.value", 2))`, pseudo R^2^ = `r signif(1-(HyPeRad %>% filter(HyPe == "Scavenging") %>% pluck('offset_model', 1, "deviance")/HyPeRad %>% filter(HyPe == "Scavenging") %>% pluck('offset_model', 1, "null.deviance")), 2)`). Including 'Flagella' and 'Colony' as co-variates did not influence the negative slope of the fraction of total genes encoding H~2~O~2~ scavenging with increasing median cell radius (Fig \@ref(fig:HyPeRadPlots), Black line, 'Flagella' p-value = `r ScientificTen(HyPeRad %>% pluck("flagcol_offset_model_pvalue",2) %>% tidy() %>% pluck("p.value", 3))`, 'Colony' p-value = `r ScientificTen(HyPeRad %>% pluck("flagcol_offset_model_pvalue",2) %>% tidy() %>% pluck("p.value", 4))`). A parallel analysis focusing only on small phytoplankton such as pico-cyanobacteria and pico-prasinophytes might yield different results as more such genomes are sequenced, since @randhawaApplicabilityHydrogenPeroxide2012 found that H~2~O~2~ added to seawater at a concentration of 1.6 mg L^-1^ did not affect cells with a radius larger than 1 to 1.5 μm, but differentially harmed the picoprasinophyte *Micromonas pusilla*.
 
 Because median cell radius co-varied with Taxa, we generally excluded Taxa as a co-variate from our regressions, in order to focus on any cross-taxon patterns driven by changing median cell radius. Nevertheless, representatives of the Ochrophyte Phylum alone spanned more than an order of magnitude in median cell radius. We therefore tested whether the log~10~(total number of genes encoding the metabolism of O~2~^•−^, H~2~O~2~ or ^•^NO) varied with the log~10~ (median cell radius) across the Ochrophytes alone (Fig \@ref(fig:OchrophyteRadPlot)). We found that across Ochrophytes, the fraction of total genes encoding the production of H~2~O~2~ decreased with increasing cell radius (Slope = `r ScientificTen(OchrophyteHyPeRad %>% filter(HyPe == "Production") %>% pluck('offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(OchrophyteHyPeRad %>% filter(HyPe == "Production") %>% pluck('offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`), although the p-value for the regression was only `r ScientificTen(OchrophyteHyPeRad %>% filter(HyPe == "Production") %>% pluck('offset_model_regression', 1, "p.value", 2))`). This marginal decrease in the total number of genes encoding H~2~O~2~ production with increasing median cell radius in Ochrophytes again tends to support our Hypothesis \@ref(hyp:HyPeNitOxRad), with data from within a single phylum to limit confounding influences of diverse evolutionary histories and cell biologies upon patterns.
 
-H2O2 production and scavenging are a steady allocation with increasing cell size, relative to the ribosomal housekeeping gene proxy.
-But, genes for H2O2 production and scavenging are diluted by increasing total gene counts with increasing cell size, but production declines more than scavenging. XXX
-
-XXX no influence of cell size for both production and scavenging of H~2~O~2~ when normalized to total ribosomal genes XXX
-
-### Influences of Flagella, Colony Formation and Cell Shape on Gene Counts for Enzymes Metabolizing H~2~O~2~ {.unnumbered}
-
-```{r HyPeFlagPlot_pval, include = FALSE}
-
-HyPeFlagellaDelta <- MergedData %>%
-  filter(HyPe == "Production" | HyPe == "Scavenging",
-         GeneModels_count != 0,
-         !is.na(Flagella),
-         Taxa != "Prokaryote") %>% 
-  select(FileName, HyPe, HyPe_count, GeneModels_count, Flagella) %>%
-  unique() %>%
-  pivot_wider(names_from = HyPe, values_from = HyPe_count) %>%
-  mutate(prodNorm = Production/GeneModels_count,
-         scavNorm = Scavenging/GeneModels_count) %>%
-  group_by(Flagella) %>%
-  summarize(Production = median(prodNorm), 
-            Scavenging = median(scavNorm)) %>%
-  mutate(deltaProduction = (Production[2] - Production[1])/ Production[1],
-         deltaScavenging = (Scavenging[2] - Scavenging[1])/ Scavenging[1])
-  
-
-HyPeProdFlagPlot_pval <- MergedData %>%
-  select(FileName, Flagella, HyPe_count, GeneModels_count, Phylum, HyPe, Genus, Taxa, ColonySpecies, PennateCentric) %>%
-  filter(HyPe == "Production",
-         !is.na(Flagella), 
-         GeneModels_count != 0,
-         Phylum != "Prokaryote") %>%
-  mutate(norm_HyPe = HyPe_count/GeneModels_count) %>%
-  unique() %>%
-  compare_means(norm_HyPe ~ Flagella, data = ., method = "wilcox.test")
-
-HyPeScavFlagPlot_pval <- MergedData %>%
-  select(FileName, Flagella, HyPe_count, GeneModels_count, Phylum, HyPe, Genus) %>%
-  filter(HyPe == "Scavenging",
-         !is.na(Flagella), 
-         GeneModels_count != 0,
-         Phylum != "Prokaryote") %>%
-  mutate(norm_HyPe = HyPe_count/GeneModels_count) %>%
-  unique() %>%
-  compare_means(norm_HyPe ~ Flagella, data = ., method = "wilcox.test")
-
-HyPeFlagellaRiboDelta <- MergedData %>%
-  filter(HyPe == "Production" | HyPe == "Scavenging",
-         RibosomeCount != 0,
-         !is.na(Flagella),
-         Taxa != "Prokaryote") %>% 
-  select(FileName, HyPe, HyPe_count, RibosomeCount, Flagella) %>%
-  unique() %>%
-  pivot_wider(names_from = HyPe, values_from = HyPe_count) %>%
-  mutate(prodNorm = Production/RibosomeCount,
-         scavNorm = Scavenging/RibosomeCount) %>%
-  group_by(Flagella) %>%
-  summarize(Production = median(prodNorm), 
-            Scavenging = median(scavNorm)) %>%
-  mutate(deltaProduction = (Production[2] - Production[1])/ Production[1],
-         deltaScavenging = (Scavenging[2] - Scavenging[1])/ Scavenging[1])
-
-HyPeProdFlagRiboPlot_pval <- MergedData %>%
-  select(FileName, Flagella, HyPe_count, GeneModels_count, Phylum, HyPe, Genus, Taxa, ColonySpecies, PennateCentric, RibosomeCount) %>%
-  filter(HyPe == "Production",
-         !is.na(Flagella), 
-         RibosomeCount != 0,
-         Phylum != "Prokaryote") %>%
-  mutate(norm_HyPe = HyPe_count/RibosomeCount) %>%
-  unique() %>%
-  compare_means(norm_HyPe ~ Flagella, data = ., method = "wilcox.test")
-
-HyPeScavFlagRiboPlot_pval <- MergedData %>%
-  select(FileName, Flagella, HyPe_count, GeneModels_count, Phylum, HyPe, Genus, Taxa, ColonySpecies, PennateCentric, RibosomeCount) %>%
-  filter(HyPe == "Scavenging",
-         !is.na(Flagella), 
-         RibosomeCount != 0,
-         Phylum != "Prokaryote") %>%
-  mutate(norm_HyPe = HyPe_count/RibosomeCount) %>%
-  unique() %>%
-  compare_means(norm_HyPe ~ Flagella, data = ., method = "wilcox.test")
-```
- 
-```{r, include = FALSE}
-HyPeFlagPlot <- knitr::include_graphics(file.path(Figures,"HyPeFlagPlot.png"))
-```
+H~2~O~2~ production (Slope = `r ScientificTen(HyPeRadRibo %>% filter(HyPe == "Production") %>% pluck('offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(HyPeRadRibo %>% filter(HyPe == "Production") %>% pluck('offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`, p-value = `r ScientificTen(HyPeRadRibo %>% filter(HyPe == "Production") %>% pluck('offset_model_regression', 1, "p.value", 2))`) and scavenging (Slope = `r ScientificTen(HyPeRadRibo %>% filter(HyPe == "Scavenging") %>% pluck('offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(HyPeRadRibo %>% filter(HyPe == "Scavenging") %>% pluck('offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`, p-value = `r ScientificTen(HyPeRadRibo %>% filter(HyPe == "Scavenging") %>% pluck('offset_model_regression', 1, "p.value", 2))`) allocations were steady with increasing cell size, relative to the ribosomal housekeeping gene proxy. But, genes for H~2~O~2~ production and scavenging are diluted by increasing total gene counts with increasing cell size. 
 
 
-```{r HyPeFlagPlot, fig.cap = HyPeFlagPlot_cap, fig.height = 7, fig.width = 7, echo = FALSE}
-HyPeFlagPlot_cap <- glue("**Comparison of total number of genes encoding H~2~O~2~ metabolizing enzymes ('HyPe_count') normalized to the total number of genes present in each organism ('GeneModels_count') vs. the presence or absence of flagella in the organism.**", 
-                                       "Symbol color corresponds to taxon lineage ('Phylum').", 
-                         "Notch spans ± standard error of the median.",
-                           "Box spans median ± 1 quartile of the data.",
-                           "Whiskers span the range excluding outliers in the data.",
-                                       "Citations for data sources can be found in Supplementary Table S3.", .sep = " ")
-HyPeFlagPlot
-```
-
-Setting aside influences of median cell radius, non-flagellated vs. flagellated phytoplankton exhibit no statistically significant difference in the fraction of their total genes encoding the production of H~2~O~2~ (p-value = `r ScientificTen(HyPeProdFlagPlot_pval$p)`), whereas non-flagellated phytoplankton have a significantly larger proportion of their total gene content encoding H~2~O~2~ scavenging (p-value = `r ScientificTen(HyPeScavFlagPlot_pval$p)`), than do flagellated phytoplankton (Fig \@ref(fig:HyPeFlagPlot)). When normalized to total ribosomal genes, flagellated phytoplankton have a lower fraction of both H~2~O~2~ producing (p = `r ScientificTen(HyPeProdFlagRiboPlot_pval$p)`) and scavenging (p = `r ScientificTen(HyPeScavFlagRiboPlot_pval$p)`) genes compared to non flagellated phytoplankton. Thus, presence of flagella may contribute to the maintenance of H~2~O~2~ homeostasis across eukaryotic phytoplankton, but this potential influence is obscured by the range of cell sizes across eukaryotic phytoplankton when flagella are included as a co-variate in size regressions.
-
-```{r HyPeColonyPlot_pval, include = FALSE}
-
-HyPeColonyDelta <- MergedData %>%
-  filter(HyPe == "Production" | HyPe == "Scavenging",
-         GeneModels_count != 0,
-         !is.na(ColonySpecies),
-         Taxa != "Prokaryote") %>% 
-  select(FileName, HyPe, HyPe_count, GeneModels_count, ColonySpecies) %>%
-  unique() %>%
-  pivot_wider(names_from = HyPe, values_from = HyPe_count) %>%
-  mutate(prodNorm = Production/GeneModels_count,
-         scavNorm = Scavenging/GeneModels_count) %>%
-  group_by(ColonySpecies) %>%
-  summarize(Production = median(prodNorm), 
-            Scavenging = median(scavNorm)) %>%
-  mutate(deltaProduction = (Production[2] - Production[1])/ Production[1],
-         deltaScavenging = (Scavenging[2] - Scavenging[1])/ Scavenging[1])
-  
-
-HyPeProdColonyPlot_pval <- MergedData %>%
-  select(FileName, Flagella, HyPe_count, GeneModels_count, Phylum, HyPe, Genus, Taxa, ColonySpecies, PennateCentric) %>%
-  filter(HyPe == "Production",
-         GeneModels_count != 0,
-         !is.na(ColonySpecies), 
-         Taxa != "Prokaryote") %>%
-  mutate(norm_HyPe = HyPe_count/GeneModels_count) %>%
-  unique() %>%
-  compare_means(norm_HyPe ~ ColonySpecies, data = ., method = "wilcox.test")
-
-HyPeScavColonyPlot_pval <- MergedData %>%
-  select(FileName, Flagella, HyPe_count, GeneModels_count, Phylum, HyPe, Genus, Taxa, ColonySpecies, PennateCentric) %>%
-  filter(HyPe == "Scavenging",
-         GeneModels_count != 0,
-         !is.na(ColonySpecies), 
-         Taxa != "Prokaryote") %>%
-  mutate(norm_HyPe = HyPe_count/GeneModels_count) %>%
-  unique() %>%
-  compare_means(norm_HyPe ~ ColonySpecies, data = ., method = "wilcox.test")
-```
-
-```{r, include = FALSE}
-HyPeColonyPlot <- knitr::include_graphics(file.path(Figures,"HyPeColonyPlot.png"))
-```
 
 
-```{r HyPeColonyPlot, fig.cap = HyPeColonyPlot_cap, fig.height = 7, fig.width = 7, echo = FALSE}
-HyPeColonyPlot_cap <- glue("**Comparison of total number of genes encoding H~2~O~2~ metabolizing enzymes ('HyPe_count') normalized to the total number of genes present in each organism ('GeneModels_count') vs. the ability of the organism to form colonies.**", 
-                                       "Symbol color corresponds to taxon lineage ('Phylum').", 
-                           "Notch spans ± standard error of the median.",
-                           "Box spans median ± 1 quartile of the data.",
-                           "Whiskers span the range excluding outliers in the data.",
-                           
-                                       "Citations for data sources can be found in Supplementary Table S3.", .sep = " ")
-HyPeColonyPlot 
-```
-
-When binned across cell sizes, colony forming phytoplankton have a smaller proportion of their total gene content encoding both H~2~O~2~ production (p-value = `r ScientificTen(HyPeProdColonyPlot_pval$p)`), and also H~2~O~2~ scavenging (Fig \@ref(fig:HyPeColonyPlot), p-value = `r ScientificTen(HyPeScavColonyPlot_pval$p)`), than do non-colony forming phytoplankton. The decrease in the fraction of total genes encoding H~2~O~2~ production between non-colony and colony forming phytoplankton is larger (`r signif(HyPeColonyDelta$deltaProduction[[1]]*100, 4)`%), than the decrease in the fraction of total genes encoding H~2~O~2~ scavenging (`r signif(HyPeColonyDelta$deltaScavenging[[1]]*100, 4)`%). In contrast, XXX . H2O2 production and scavenging are a larger allocation in colony formers, relative to ribosomal housekeeping proxies. These contrasting patterns may reflect higher genomic complexity in colony forming strains, which dilutes H~2~O~2~ production and scavenging scavenging genes, even though H~2~O~2~ production and scavenging are enriched relative to a housekeeping proxy. 
 
 ```{r HyPeDiatomShape_pval, include = FALSE}
 
@@ -883,9 +692,8 @@ NitOxRadColony <- MergedData %>%
 
 In the genomes and transcriptomes that we analysed, Nitric Oxide Synthase (NOS, EC:1.14.13.39), although often absent, was the most frequently occurring ^•^NO producing enzyme encoded (Fig \@ref(fig:EukNitOxDotPlot)), but was not encoded, or at least not annotated, among prokaryotic phytoplankton (Data not visualized). 
 
-Nitric Oxide Dioxygenase (NOD, EC:1.14.12.17) was the most frequently occurring of the ^•^NO scavenging enzymes (Fig \@ref(fig:EukNitOxDotPlot)). NOD sequences were identified in some eukaryotes, but were either not annotated, or not present in *Prochlorococcus*, most green algae and most centric diatoms. A NOS-like sequence that also has Nitric Oxide Dioxygenase-like function [@piccianoNitricOxideSynthase2019] has recently been identified in *Synechococcus*, , which might encode NOD activity in some strains lacking annotated NOD sequences.
+Nitric Oxide Dioxygenase (NOD, EC:1.14.12.17) was the most frequently occurring of the ^•^NO scavenging enzymes (Fig \@ref(fig:EukNitOxDotPlot)). NOD sequences were identified in some eukaryotes, but were either not annotated, or not present in *Prochlorococcus*, most green algae and most centric diatoms. A NOS-like sequence that also has Nitric Oxide Dioxygenase-like function [@piccianoNitricOxideSynthase2019] has recently been identified in *Synechococcus*, which might encode NOD activity in some strains lacking annotated NOD sequences.
 
-### Influence of Cell Size on Gene Counts for Enzymes Metabolizing ^•^NO {.unnumbered}
 
 ```{r, include = FALSE}
 NitOxRadPlots <- knitr::include_graphics(file.path(Figures,"NitOxRadPlots.png"))
@@ -905,87 +713,16 @@ NitOxRadPlots
 
 
 With increasing cell radius eukaryotic phytoplankton do not vary in the fraction of total genes encoding the capacity to produce ^•^NO (Fig \@ref(fig:NitOxRadPlots), Blue line, Slope = `r ScientificTen(NitOxRad %>% filter(NitOx == "Production") %>% pluck('offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(NitOxRad %>% filter(NitOx == "Production") %>% pluck('offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`, p-value = `r ScientificTen(NitOxRad %>% filter(NitOx == "Production") %>% pluck('offset_model_regression', 1, "p.value", 2))`). 
-We re-ran the `r NitOxRad$offset_regression_type[[1]]`, excluding those organisms that completely lack genes encoding enzymes for ^•^NO production (NitOx_count = 0, points along the x-axis), which resulted in a decreasing slope with increasing cell radius. Thus those phytoplankton with any detected capacity to produce ^•^NO indeed have a smaller fraction of their total genes encoding ^•^NO production with increasing radius (Fig \@ref(fig:NitOxRadPlots), Blue line, Slope = `r ScientificTen(NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck('offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck('offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`, p-value = `r ScientificTen(NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck('offset_model_regression', 1, "p.value", 2))`, pseudo R^2^ = `r 1-(NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck('offset_model', 1, "deviance")/NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck('offset_model', 1, "null.deviance"))`). 
-Including 'Flagella' and 'Colony' as co-factors for the regression that solely looks at organisms with the genomic capacity to produce ^•^NO resulted in a slope that is no longer significantly different from zero (Fig \@ref(fig:NitOxRadPlots), Black line, Slope = `r ScientificTen(NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck('flagcol_offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck('flagcol_offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`, p-value = `r ScientificTen(NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck('flagcol_offset_model_regression', 1, "p.value", 2))`), driven by the influence of 'Flagella' (p-value = `r ScientificTen(NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck("flagcol_offset_model_pvalue", 1, tidy, "p.value", 3))`), but not 'Colony' (p-value = `r ScientificTen(NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck("flagcol_offset_model_pvalue", 1, tidy, "p.value", 4))`). 
+We re-ran the `r NitOxRad$offset_regression_type[[1]]`, excluding those phytoplankton that completely lack genes encoding enzymes for ^•^NO production (NitOx_count = 0, points along the x-axis), which resulted in a decreasing slope with increasing cell radius. Thus those phytoplankton with any detected capacity to produce ^•^NO indeed have a smaller fraction of their total genes encoding ^•^NO production with increasing radius (Fig \@ref(fig:NitOxRadPlots), Blue line, Slope = `r ScientificTen(NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck('offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck('offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`, p-value = `r ScientificTen(NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck('offset_model_regression', 1, "p.value", 2))`, pseudo R^2^ = `r signif(1-(NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck('offset_model', 1, "deviance")/NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck('offset_model', 1, "null.deviance")), 2)`). 
+Including 'Flagella' and 'Colony' as co-factors for the regression that solely looks at phytoplankton with the genomic capacity to produce ^•^NO resulted in a slope that is no longer significantly different from zero (Fig \@ref(fig:NitOxRadPlots), Black line, Slope = `r ScientificTen(NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck('flagcol_offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck('flagcol_offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`, p-value = `r ScientificTen(NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck('flagcol_offset_model_regression', 1, "p.value", 2))`), driven by the influence of 'Flagella' (p-value = `r ScientificTen(NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck("flagcol_offset_model_pvalue", 1, tidy, "p.value", 3))`), but not 'Colony' (p-value = `r ScientificTen(NitOxRadNoZero %>% filter(NitOx == "Production") %>% pluck("flagcol_offset_model_pvalue", 1, tidy, "p.value", 4))`). 
 
 With increasing cell radius, eukaryotic phytoplankton do not vary in the fraction of their total genes encoding the capacity to scavenge ^•^NO,  `r NitOxRad$offset_regression_type[[2]]` regression slope not significantly different from zero (Fig \@ref(fig:NitOxRadPlots), Blue line, Slope = `r ScientificTen(NitOxRad %>% filter(NitOx == "Scavenging") %>% pluck('offset_model_regression', 1, "estimate", 2)/ln_log10_conversion)` ± `r ScientificTen(NitOxRad %>% filter(NitOx == "Scavenging") %>% pluck('offset_model_regression', 1, "std.error", 2)/ln_log10_conversion)`, p-value = `r ScientificTen(NitOxRad %>% filter(NitOx == "Scavenging") %>% pluck('offset_model_regression', 1, "p.value", 2))`). 
 
 Non-enzymatic paths contribute to intracellular and extracellular ^•^NO production [@zweierNonenzymaticNitricOxide1999], and may explain the absences of genes encoding ^•^NO production from some genomes across taxonomic lineages. Alternately, ^•^NO homeostasis may be achieved in some lineages by regulating the active cellular uptake and release of intracellular ^•^NO, as has been recently demonstrated in humans [@chenCellPenetratingDeliveryNitric2021]. Although NOD sequences have only been identified from phytoplankton through metatranscriptomic analyses, in diatoms, haptophytes and dinoflagellates [@lampeStrategiesPhytoplanktonResponse2019], there is limited understanding as to what may contribute to the active removal of ^•^NO, and the lack of ^•^NO scavenging genes across multiple phytoplankters. More research is needed on possible contributions of NOD to the active removal of ^•^NO, as well as the NOS sequences detected in *Synechococcus* that also display NOD-like activity [@piccianoNitricOxideSynthase2019]. Perhaps the low toxicity of ^•^NO does not warrant the active removal of ^•^NO as long as the concentration does not exceed the toxic threshold. This explanation is plausible given that *Platymonas helgolandica*, *Platymonas subcordiformis*, *Skeletonema costatum*, *Gymnodinium* sp., and *Prorocentrum donghaiense* showed optimum growth in the presence of ^•^NO concentrations between 10^-9^ and 10^-6^ mol L^-1^ [@peifengEffectsNitricOxide2021], which are higher than the concentrations found in the ocean (Table \@ref(tab:ROSDiffusion)).
 
-A binomial model comparing the presence or absence of genes that encode the production of ^•^NO shows no cell size effect (slope = `r ScientificTen(NitOxRadBinom %>% filter(NitOx == "Production") %>% pluck("param_b_offset", 1, "estimate", 2))`, p = `r ScientificTen(NitOxRadBinom %>% filter(NitOx == "Production") %>% pluck("param_b_offset", 1, "p.value", 2))`). There is however a cell size effect on presence of ^•^NO producing genes including the influence of Flagella, with larger phytoplankton showing a lower probability for ^•^NO production presence, and flagellated phytoplankton showing a higher probability for presence of production of ^•^NO than their non flagellated counterparts (Figure XXX). In contrast, larger phytoplankton are more likely to have a gene encoding ^•^NO scavenging (slope = `r ScientificTen(NitOxRadBinom %>% filter(NitOx == "Scavenging") %>% pluck("param_b_offset", 1, "estimate", 2))`, p = `r ScientificTen(NitOxRadBinom %>% filter(NitOx == "Scavenging") %>% pluck("param_b_offset", 1, "p.value", 2))`). Flagellated phytoplankton have a higher likelihood of presence of ^•^NO scavenging than do their non flagellated phytoplankton XXX.
+A binomial model comparing the presence or absence of genes that encode the production of ^•^NO shows no cell size effect (slope = `r ScientificTen(NitOxRadBinom %>% filter(NitOx == "Production") %>% pluck("param_b_offset", 1, "estimate", 2))`, p = `r ScientificTen(NitOxRadBinom %>% filter(NitOx == "Production") %>% pluck("param_b_offset", 1, "p.value", 2))`). Including 'Flagella' as a co-variate does not alter these results, but does show that flagellated phytoplankton have higher likelihood of presence of ^•^NO production than do non-flagellated phytoplankton (Figure \@ref(fig:NitOxRadFlagellaBinomFig), p = `r ScientificTen(pluck(tidy(anova(NitOxRadFlagella[[3]][[1]], test = "LRT")), "p.value", 3))`). Including 'Colony' as a co-variate does not show a cell size effect, nor a difference in the likelihood of ^•^NO production between colony and non-colony forming phytoplankton (p = `r ScientificTen(pluck(tidy(anova(NitOxRadColony[[3]][[1]], test = "LRT")), "p.value", 3))`).
 
-
-### Influences of Flagella, Colony Formation and Cell Shape on Gene Counts for Enzymes Metabolizing ^•^NO {.unnumbered}
-
-```{r NitOxFlag_pval, include = FALSE}
-
-
-NitOxFlagellaDelta <- MergedData %>%
-  filter(NitOx == "Production" | NitOx == "Scavenging",
-         GeneModels_count != 0,
-         !is.na(Flagella),
-         !is.na(NitOx),
-         Taxa != "Prokaryote") %>% 
-  select(FileName, Flagella, NitOx_count, GeneModels_count, Phylum, NitOx) %>%
-  unique() %>%
-  pivot_wider(names_from = NitOx, values_from = NitOx_count) %>%
-  mutate(prodNorm = Production/GeneModels_count,
-         scavNorm = Scavenging/GeneModels_count) %>%
-  group_by(Flagella) %>%
-  summarize(Production = median(prodNorm), 
-            Scavenging = median(scavNorm)) %>%
-  mutate(deltaProduction = (Production[2] - Production[1])/ Production[1],
-         deltaScavenging = (Scavenging[2] - Scavenging[1])/ Scavenging[1])
-
-NitOxProdFlagPlot_pval <- MergedData %>%
-  select(FileName, Flagella, NitOx_count, GeneModels_count, Phylum, NitOx, Genus, Taxa, ColonySpecies, PennateCentric) %>%
-  filter(NitOx == "Production",
-         GeneModels_count != 0,
-         !is.na(Flagella), 
-         !is.na(NitOx),
-         Taxa != "Prokaryote") %>%
-  mutate(norm_NitOx = NitOx_count/GeneModels_count) %>%
-  unique() %>%
-  compare_means(norm_NitOx ~ Flagella, data = ., method = "wilcox.test")
-
-NitOxScavFlagPlot_pval <- MergedData %>%
-  select(FileName, Flagella, NitOx_count, GeneModels_count, Phylum, NitOx, Genus, Taxa, ColonySpecies, PennateCentric) %>%
-  filter(NitOx == "Scavenging",
-         GeneModels_count != 0,
-         !is.na(Flagella), 
-         !is.na(NitOx),
-         Taxa != "Prokaryote") %>%
-  mutate(norm_NitOx = NitOx_count/GeneModels_count) %>%
-  unique() %>%
-  compare_means(norm_NitOx ~ Flagella, data = ., method = "wilcox.test")
-
-NitOxProdFlagRiboPlot_pval <- MergedData %>%
-  select(FileName, Flagella, NitOx_count, GeneModels_count, Phylum, NitOx, Genus, Taxa, ColonySpecies, PennateCentric, RibosomeCount) %>%
-  filter(NitOx == "Production",
-         RibosomeCount != 0,
-         !is.na(Flagella), 
-         !is.na(NitOx),
-         Taxa != "Prokaryote") %>%
-  mutate(norm_NitOx = NitOx_count/RibosomeCount) %>%
-  unique() %>%
-  compare_means(norm_NitOx ~ Flagella, data = ., method = "wilcox.test")
-
-NitOxScavFlagRiboPlot_pval <- MergedData %>%
-  select(FileName, Flagella, NitOx_count, GeneModels_count, Phylum, NitOx, Genus, Taxa, ColonySpecies, PennateCentric,RibosomeCount) %>%
-  filter(NitOx == "Scavenging",
-         RibosomeCount != 0,
-         !is.na(Flagella), 
-         !is.na(NitOx),
-         Taxa != "Prokaryote") %>%
-  mutate(norm_NitOx = NitOx_count/RibosomeCount) %>%
-  unique() %>%
-  compare_means(norm_NitOx ~ Flagella, data = ., method = "wilcox.test")
-```
-
-```{r, include=FALSE}
-NitOxFlagPlot <- knitr::include_graphics(file.path(Figures,"NitOxFlagPlot.png"))
-```
-
+In contrast, larger phytoplankton are more likely to have a gene encoding ^•^NO scavenging (slope = `r ScientificTen(NitOxRadBinom %>% filter(NitOx == "Scavenging") %>% pluck("param_b_offset", 1, "estimate", 2))`, p = `r ScientificTen(NitOxRadBinom %>% filter(NitOx == "Scavenging") %>% pluck("param_b_offset", 1, "p.value", 2))`). This trend is not influenced by flagella (p = `r ScientificTen(pluck(tidy(anova(NitOxRadFlagella[[3]][[2]], test = "LRT")), "p.value", 3))`) nor colony formation (p = `r ScientificTen(pluck(tidy(anova(NitOxRadColony[[3]][[1]], test = "LRT")), "p.value", 3))`). This pattern supports our hypothesis that larger, diffusionally limited cells, have a stronger requirement for ^•^NO scavenging (Hypothesis \@ref(hyp:HyPeNitOxRad)).
 
 ```{r NitOxFlagella, include = FALSE}
 NitOxFlagella <- MergedData %>% 
@@ -1003,89 +740,6 @@ NitOxFlagella <- MergedData %>%
                     pred_b_offset = map(fit_b_offset, augment))
 ```
 
-```{r NitOxFlagPlot, fig.cap = NitOxFlagPlot_cap, fig.height= 5, fig.width= 5, echo = FALSE}
-NitOxFlagPlot_cap <- glue("**Comparison of total number of genes encoding ^•^NO metabolizing enzymes ('NitOx_count') normalized to the total number of genes present in each organism ('GeneModels_count') vs. the presence or absence of flagella in the organism.**", 
-                                       "Symbol color corresponds to taxon lineage ('Phylum').", 
-                          "Notch spans ± standard error of the median.",
-                           "Box spans median ± 1 quartile of the data.",
-                           "Whiskers span the range excluding outliers in the data.",
-                                       "Citations for data sources can be found in Supplementary Table S3.", .sep = " ")
-# NitOxFlagPlot
-```
-
-Setting aside the influence of cell size, non-flagellated and flagellated phytoplankton do not show statistically significant differences in the fractions of total gene content encoding ^•^NO production (p-value = `r ScientificTen(NitOxProdFlagPlot_pval$p)`) nor  ^•^NO scavenging (p-value = `r ScientificTen(NitOxScavFlagPlot_pval$p)`). Non-flagellated and flagellated phytoplankton also do not show statistically significant differences in the ratio of genes encoding ^•^NO production (p-value = `r ScientificTen(NitOxProdFlagRiboPlot_pval$p)`) nor  ^•^NO scavenging (p-value = `r ScientificTen(NitOxScavFlagRiboPlot_pval$p)`) (Data not visualized) normalized to ribosomal genes, suggesting ^•^NO does not have a generalized interaction with flagella presence across eukaryotic phytoplankton groups. 
-
-
-```{r NitOxColony_pval, include = FALSE}
-
-NitOxColonyDelta <- MergedData %>%
-  filter(NitOx == "Production" | NitOx == "Scavenging",
-         GeneModels_count != 0,
-         !is.na(ColonySpecies),
-         Taxa != "Prokaryote") %>% 
-  select(FileName, NitOx, NitOx_count, GeneModels_count, ColonySpecies) %>%
-  unique() %>%
-  pivot_wider(names_from = NitOx, values_from = NitOx_count) %>%
-  mutate(prodNorm = Production/GeneModels_count,
-         scavNorm = Scavenging/GeneModels_count) %>%
-  group_by(ColonySpecies) %>%
-  summarize(Production = median(prodNorm), 
-            Scavenging = median(scavNorm)) %>%
-  mutate(deltaProduction = (Production[2] - Production[1])/ Production[1],
-         deltaScavenging = (Scavenging[2] - Scavenging[1])/ Scavenging[1])
-
-NitOxProdColonyPlot_pval <- MergedData %>%
-  select(FileName, Flagella, NitOx_count, GeneModels_count, Phylum, NitOx, Genus, Taxa, ColonySpecies, PennateCentric) %>%
-  filter(NitOx == "Production",
-         GeneModels_count != 0,
-         !is.na(ColonySpecies),
-         Taxa != "Prokaryote") %>%
-  mutate(norm_NitOx = NitOx_count/GeneModels_count) %>%
-  unique() %>%
-  compare_means(norm_NitOx ~ ColonySpecies, data = ., method = "wilcox.test")
-
-NitOxScavColonyPlot_pval <- MergedData %>%
-  select(FileName, Flagella, NitOx_count, GeneModels_count, Phylum, NitOx, Genus, Taxa, ColonySpecies, PennateCentric) %>%
-  filter(NitOx == "Scavenging",
-         GeneModels_count != 0,
-         !is.na(ColonySpecies),
-         Taxa != "Prokaryote") %>%
-  mutate(norm_NitOx = NitOx_count/GeneModels_count) %>%
-  unique() %>%
-  compare_means(norm_NitOx ~ ColonySpecies, data = ., method = "wilcox.test")
-```
-
-```{r generate NitOxColonyPlot, include = FALSE}
-NitOxColonyPlot <- knitr::include_graphics(file.path(Figures,"NitOxColonyPlot.png"))
-```
-
-```{r, include = FALSE}
-NitOxColony <- MergedData %>% 
-  filter(Taxa != "Prokaryote", 
-         NitOx %in% c("Production", "Scavenging")) %>%
-  select(FileName, Genus, species, Strain, Name, Ome, Taxa, Rad1_um, Rad2_um, Rad3_um, Flagella, GenomeSize_mbp, GeneModels_count, Latitude, Longitude, Marine, HyPe, PennateCentric, SA_um2, Volume_um3, SAVol_um, Radius_um, log_Radius_um, log_GenomeSize_mbp, log_GeneModels_count, abs_Latitude, log_Volume_um3, log_SA_um2, log_SAVol_um, ROSGene_count, ECNumber, EnzymeName, ColonySpecies, NitOx_count, NitOx) %>%
-  unique() %>%
-  mutate(NitOx_countL = NitOx_count %>% as.logical() %>% as.numeric(),
-         ColonySpeciesL = ifelse(ColonySpecies == "1", 1, 0)) %>%
-  select(FileName, NitOx_count, NitOx_countL, ColonySpecies, ColonySpeciesL,NitOx, log_Radius_um) %>%
-  # filter(GeneModels_count != 0) %>% #This is because of introducing exposure
-  nest(data = -c(NitOx)) %>%
-  mutate(fit_b_offset = map(data, possibly(~glm(.$NitOx_countL ~ .$ColonySpeciesL, data = ., family = binomial(link = "logit")), otherwise = NULL)),
-                    param_b_offset = map(fit_b_offset, tidy),
-                    pred_b_offset = map(fit_b_offset, augment))
-```
-
-```{r NitOxColonyPlot, fig.cap = NitOxColonyPlot_cap, fig.height= 5, fig.width= 5, echo = FALSE}
-NitOxColonyPlot_cap <- glue("**Comparison of total number of genes encoding ^•^NO metabolizing enzymes ('NitOx_count') normalized to the total number of genes present in each organism ('GeneModels_count') vs. the ability of the organism to form colonies.**", 
-                                       "Symbol color corresponds to taxon lineage ('Phylum').", 
-                            "Notch spans ± standard error of the median.",
-                           "Box spans median ± 1 quartile of the data.",
-                           "Whiskers span the range excluding outliers in the data.",
-                                       "Citations for data sources can be found in Supplementary Table S3.", .sep = " ")
-# NitOxColonyPlot
-```
-
-Comparing non-colony to colony forming phytoplankton does not show a statistically significant difference in the fraction of total gene content encoding ^•^NO production (p-value = `r ScientificTen(NitOxProdColonyPlot_pval$p)`) nor  ^•^NO scavenging (p-value = `r ScientificTen(NitOxScavColonyPlot_pval$p)`) (Data not visualized), suggesting ^•^NO metabolism does not have a generalized role in colony formation across eukaryotic phytoplankton groups.
 
 ```{r NitOxDiatomShape_pval, include = FALSE}
 NitOxPennateCentricDelta <- MergedData %>%
@@ -1175,19 +829,17 @@ NitOxPennateCentricPlot_cap <- glue("**Comparison of total number of genes encod
 NitOxPennateCentricPlot
 ```
 
-
-
-Most centric diatoms carry genes annotated as encoding ^•^NO producing enzymes, whereas most pennate diatoms do not (p-value = `r ScientificTen(NitOxProdPennateCentricPlot_pval$p)` when normalized to total genes, and p value = `r ScientificTen(NitOxProdPennateCentricRiboPlot_pval$p)` when normalized to ribosomal genes). In contrast, most centric diatoms lack genes annotated as encoding ^•^NO scavenging enzymes, whereas most pennate diatoms carry those genes (p-value = `r ScientificTen(NitOxScavPennateCentricPlot_pval$p)` when normalized to total genes, and p value = `r ScientificTen(NitOxScavPennateCentricRiboPlot_pval$p)` when normalized to ribosomal genes) (Fig \@ref(fig:NitOxPennateCentricPlot)). 
+Most centric diatoms carry genes annotated as encoding ^•^NO producing enzymes, whereas most pennate diatoms do not (p-value = `r ScientificTen(NitOxProdPennateCentricPlot_pval$p)` when normalized to total genes, and when normalized to ribosomal genes (p value = `r ScientificTen(NitOxProdPennateCentricRiboPlot_pval$p)`). In contrast, most centric diatoms lack genes annotated as encoding ^•^NO scavenging enzymes, whereas most pennate diatoms carry those genes (p-value = `r ScientificTen(NitOxScavPennateCentricPlot_pval$p)` when normalized to total genes, and p value = `r ScientificTen(NitOxScavPennateCentricRiboPlot_pval$p)` when normalized to ribosomal genes) (Fig \@ref(fig:NitOxPennateCentricPlot)). 
 
 The larger fractional gene allocation to ^•^NO production, and smaller fraction of genes that encode ^•^NO scavenging enzymes, in centric diatoms (Fig \@ref(fig:NitOxPennateCentricPlot)) counters our hypothesis that diffusion from pennate diatoms would drive gene allocations in favor of ^•^NO production (Hypothesis \@ref(hyp:HyPeNitOxDiatom)). Given the strong contrast in annotated ^•^NO metabolism genes, it is likely that ^•^NO has regulatory or signaling roles that vary systematically between pennate and centric diatoms, outside any diffusional influences. For example, ^•^NO inhibits diatom adhesion to substrate [@thompsonRoleNitricOxide2008; @vardiDiatomGeneRegulating2008]. Pennates are more likely to grow adhered in biofilms [@hunsuckerSituMeasurementsDiatom2016], which may explain the striking differences in total gene allocation to  ^•^NO production and scavenging. Alternately, @didatoTranscriptomeSequencingThree2015 identified putative NOS sequences in the transcriptomes of three Pennate Diatom species (*Pseudo-nitzschia arenysensis*, *Pseudo-nitzschia delicatissima* and *Pseudo-nitzschia multistriata*), so it is possible the apparent lack of ^•^NO producing sequences in pennates is due to errors in the unsupervised annotations from eggNOG.
 
 ## Summary {.unnumbered}
 
-We analyzed the fraction of the total genes in the genome that are associated with the metabolisms of three major ROS. It is important to note that the content of genes encoding specific ROS metabolizing enzymes may be caused by genetic drift, or may relate to a selective advantage linked to other metabolites of the same enzymes, rather than an enzyme role in ROS metabolism, *per se*. Furthermore, the gene presence or gene count in a genome is only one influence on the potential activity of the encoded enzyme, and closely related enzymes may confer different activities in different organisms.
+We analyzed the fractions of the total genes in the genome that are associated with the metabolisms of three major ROS. It is important to note that the content of genes encoding specific ROS metabolizing enzymes may be caused by genetic drift, or may relate to a selective advantage linked to other metabolites of the same enzymes, rather than an enzyme role in ROS metabolism, *per se*. Furthermore, the gene presence or gene count in a genome is only one influence on the potential activity of the encoded enzyme, and closely related enzymes may confer different activities in different organisms.
 
 The differential reactivities, diffusion distances, diffusibilities across cell membranes, and roles in cell signaling of H~2~O~2~, O~2~^•−^ and ^•^NO (Table \@ref(tab:ROSDiffusion)) influence genomic allocation patterns for the production and scavenging of these three distinct ROS.
 
-O~2~^•−^ has high reactivity, short intracellular and extracellular lifetimes and limited cell membrane crossing. We did not find genes specifically encoding O~2~^•−^ production in eukaryotic phytoplankton genomes. As expected, genes encoding O~2~^•−^ scavenging were ubiquitous, but the fractional gene allocation to O~2~^•−^ scavenging decreases as cell radius, and the co-varying total gene count increases, consistent with a nearly fixed set of core genes scavenging O~2~^•−^ that do not change with increasing gene count. 
+O~2~^•−^ has high reactivity, short intracellular and extracellular lifetimes and limited cell membrane crossing. We did not find genes specifically encoding O~2~^•−^ production in eukaryotic phytoplankton genomes. As expected, genes encoding O~2~^•−^ scavenging were ubiquitous, but the fractional gene allocation to O~2~^•−^ scavenging decreases as cell radius, and the co-varying total gene count increases, consistent with a nearly fixed set of core genes scavenging O~2~^•−^ that do not change with increasing gene count in larger cells. 
 
 H~2~O~2~ has lower reactivity, longer intracellular and extracellular lifetimes and readily crosses cell membranes. Across eukaryotic phytoplankton, the fraction of the total genes encoding H~2~O~2~ producing and scavenging enzymes decreases with increasing cell radius. Presence of flagella and colony formation appear to influence H~2~O~2~ metabolism, supporting interactions between growth form and H~2~O~2~ homeostasis.
 
@@ -1764,7 +1416,7 @@ ProkNitOxDotPlot <- MergedData_na %>%
 # saveRDS(ProkSupOxDotPlot, file = file.path(Figures, "ProkSupOxDotPlot.Rds"))
 ```
 
-```{r, echo=FALSE, fig.cap = NitOxRadRiboPlots_cap}
+```{r, include=FALSE, fig.cap = NitOxRadRiboPlots_cap}
 NitOxRadRiboPlots_cap <- glue("**Comparison of log~10~ (Total number of genes encoding ^•^NO metabolizing enzymes ('NitOx_count') normalized to the total number of ribosomal genes present in each organism ('GeneModels_count')) vs. the log~10~ (median cell radius in µm ('log_Radius_um')).**", 
                             "Poisson (solid line) or Quasi-Poisson (dashed line) regressions fitted to data ± Standard Error (dotted line).",
                             "Regressions were run with (black line) or without (blue line) 'Colony' and 'Flagella' as co-variates.", 
@@ -1831,7 +1483,7 @@ NitOxRadFlagellaBinomFig <- NitOxRadFlagella %>%
 NitOxRadFlagellaBinomFig
 ```
 
-```{r NitOxRadColonyBinomFig, fig.cap = NitOxRadColonyBinomFig_cap, fig.width = 10, fig.height = 5, echo=FALSE}
+```{r NitOxRadColonyBinomFig, fig.cap = NitOxRadColonyBinomFig_cap, fig.width = 10, fig.height = 5, include=FALSE}
 NitOxRadColonyBinomFig_cap <- glue("**Comparison of the probability of having the genomic capacity to encode nitric oxide vs. the log~10~ (median cell radius in µm ('log_Radius_um')).**",
                                    "Colony (solid line) or Non-colony (dashed line) regressions fitted to data.", 
                                    "Points along the y-axis indicate whether an organism has flagella (1) or does not have flagella (0).")
@@ -1895,7 +1547,7 @@ NitOxRadDiatomFig <- NitOxRadDiatom %>%
 NitOxRadDiatomFig
 ```
 
-```{r, include=FALSE, fig.cap = NitOxFlagRiboPlot_cap}
+```{r NitOxFlagRiboPlot, include=FALSE, fig.cap = NitOxFlagRiboPlot_cap}
 NitOxFlagRiboPlot <- knitr::include_graphics(file.path(Figures,"NitOxFlagRiboPlot.png"))
 NitOxFlagRiboPlot
 
