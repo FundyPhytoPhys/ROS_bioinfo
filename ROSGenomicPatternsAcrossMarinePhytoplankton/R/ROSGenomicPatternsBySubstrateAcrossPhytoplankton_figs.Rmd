@@ -216,6 +216,8 @@ GeneModelsRadPlot_cap <- glue("**Comparison of log~10~ of the total number of ge
                               .sep = " ")
 
 ggsave(paste("GeneModelsRadPlot",".png",sep = ""), plot = GeneModelsRadPlot, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+
+ggsave(paste("Figure2",".png",sep = ""), plot = GeneModelsRadPlot, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
 ```
 
 ```{r RibosomeRadPlot, fig.cap = RibosomeRadPlot_cap, echo=FALSE}
@@ -243,6 +245,8 @@ RibosomeRadPlot <- MergedData %>%
 RibosomeRadPlot
 
 ggsave(paste("RibosomeRadPlot",".png",sep = ""), plot = RibosomeRadPlot, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+ggsave(paste("FigureS4",".png",sep = ""), plot = RibosomeRadPlot, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+
 ```
 XXX
 ```{r RibosomeGeneModels}
@@ -594,7 +598,7 @@ SupOxRadPlots <- rbind(SupOxRad, SupOxRadProk) %>%
        y = ~log[10] ~ "(Genes Encoding "~O[2]^`•-` ~" Metabolizing Enzymes Normalized to Total Genes)")
 
 ggsave(paste("SupOxRadPlots",".png",sep = ""), plot = SupOxRadPlots, device = NULL, path = Figures,scale = 1, height=7, width= 10, units = c("in"),dpi = 300, limitsize = TRUE)
-# ggsave(paste("Figure3",".png",sep = ""), plot = SupOxRadPlots, device = NULL, path = Figures,scale = 1, height=7, width= 10, units = c("in"),dpi = 300, limitsize = TRUE)
+ggsave(paste("Figure3",".png",sep = ""), plot = SupOxRadPlots, device = NULL, path = Figures,scale = 1, height=7, width= 10, units = c("in"),dpi = 300, limitsize = TRUE)
 ```
 
 ```{r SupOxRadPlots, fig.cap = SupOxRadPlots_cap, fig.height= 7, fig.width= 7, echo = FALSE}
@@ -738,7 +742,7 @@ SupOxFlagPlot <- MergedData %>%
 
 ggsave(paste("SupOxFlagPlot",".png",sep = ""), plot = SupOxFlagPlot, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
 
-# ggsave(paste("Figure4",".png",sep = ""), plot = SupOxFlagPlot, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+ggsave(paste("Figure4",".png",sep = ""), plot = SupOxFlagPlot, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
 ```
 
 ```{r SupOxFlagPlot, fig.cap = SupOxFlagPlot_cap, fig.height= 7, fig.width= 7, echo = FALSE}
@@ -872,6 +876,8 @@ SupOxColonyRiboPlot <- MergedData %>%
   labs(y = "Genes Encoding "~O[2]^`•-` ~" Metabolizing Enzymes Normalized to Total RibosomalGenes")
 
 ggsave(paste("SupOxColonyRiboPlot",".png",sep = ""), plot = SupOxColonyRiboPlot, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+
+ggsave(paste("FigureS8",".png",sep = ""), plot = SupOxColonyRiboPlot, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
 ```
 
 ```{r SupOxDiatomShape_pval, include = FALSE}
@@ -1083,7 +1089,7 @@ HyPeRadPlots <- rbind(HyPeRad, HyPeRadProk) %>%
 
 ggsave(paste("HyPeRadPlots",".png",sep = ""), plot = HyPeRadPlots, device = NULL, path = Figures,scale = 1, height=7, width= 10, units = c("in"),dpi = 300, limitsize = TRUE)
 
-# ggsave(paste("Figure5",".png",sep = ""), plot = HyPeRadPlots, device = NULL, path = Figures,scale = 1, height=7, width= 10, units = c("in"),dpi = 300, limitsize = TRUE)
+ggsave(paste("Figure5",".png",sep = ""), plot = HyPeRadPlots, device = NULL, path = Figures,scale = 1, height=7, width= 10, units = c("in"),dpi = 300, limitsize = TRUE)
 
 ```
 
@@ -1327,7 +1333,7 @@ HyPeFlagRiboPlot <- MergedData %>%
         strip.text = element_text(size=11)) +
   labs(y = "Genes Encoding "~H[2]~O[2]~" Metabolizing Enzymes Normalized to Total Ribosomal Genes")
 
-# ggsave(paste("Figure6",".png",sep = ""), plot = HyPeFlagPlot, device = NULL, path = Figures,scale = 1, height=7, width= 10, units = c("in"),dpi = 300, limitsize = TRUE)
+ggsave(paste("FigureS11",".png",sep = ""), plot = HyPeFlagRiboPlot, device = NULL, path = Figures,scale = 1, height=7, width= 10, units = c("in"),dpi = 300, limitsize = TRUE)
 ggsave(paste("HyPeFlagRiboPlot",".png",sep = ""), plot = HyPeFlagRiboPlot, device = NULL, path = Figures,scale = 1, height=7, width= 10, units = c("in"),dpi = 300, limitsize = TRUE)
 ```
 
@@ -1653,7 +1659,7 @@ NitOxRadPlots <- rbind(NitOxRad, NitOxRadProk, NitOxRadNoZero) %>%
   labs(x = ~log[10] ~ "(Median Cell Radius (µm))", 
        y = ~log[10] ~ "(Genes Encoding "~NO^`•` ~" Metabolizing Enzymes Normalized to Total Genes)")
 
-# ggsave(paste("Figure8",".png",sep = ""), plot = NitOxRadPlots, device = NULL, path = Figures,scale = 1, height=7, width= 10, units = c("in"),dpi = 300, limitsize = TRUE)
+ggsave(paste("Figure6",".png",sep = ""), plot = NitOxRadPlots, device = NULL, path = Figures,scale = 1, height=7, width= 10, units = c("in"),dpi = 300, limitsize = TRUE)
 ggsave(paste("NitOxRadPlots",".png",sep = ""), plot = NitOxRadPlots, device = NULL, path = Figures,scale = 1, height=7, width= 10, units = c("in"),dpi = 300, limitsize = TRUE)
 ```
 
@@ -2101,7 +2107,7 @@ NitOxPennateCentricPlot <- MergedData %>%
 
 ggsave(paste("NitOxPennateCentricPlot",".png",sep = ""), plot = NitOxPennateCentricPlot, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
 
-# ggsave(paste("Figure9",".png",sep = ""), plot = NitOxPennateCentricPlot, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+ggsave(paste("Figure7",".png",sep = ""), plot = NitOxPennateCentricPlot, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
 
 ```
 
@@ -2349,6 +2355,8 @@ RadTaxaviolin <- MergedData %>%
 RadTaxaviolin
 
 ggsave(paste("RadTaxaviolin",".png",sep = ""), plot = RadTaxaviolin, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+
+ggsave(paste("FigureS1",".png",sep = ""), plot = RadTaxaviolin, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
 ```
 
 ```{r generate LongLatMap, include = FALSE}
@@ -2365,6 +2373,8 @@ LongLatMap <- ggOceanMaps::basemap(data = data.frame(lon = c(-180, 0, 180), lat 
   theme_bw() 
 
 ggsave(paste("LongLatMap",".png",sep = ""), plot = LongLatMap, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+ggsave(paste("FigureS2",".png",sep = ""), plot = LongLatMap, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+
 ```
 
 ```{r LongLatMap, fig.cap = LongLatMap_cap, fig.height = 7, fig.width = 7, echo = FALSE}
@@ -2394,6 +2404,7 @@ ManualAutoCompare <- ManualAutoCompareData %>%
 ManualAutoCompare
 
 ggsave(paste("ManualAutoCompare",".png",sep = ""), plot = ManualAutoCompare, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+ggsave(paste("FigureS3",".png",sep = ""), plot = ManualAutoCompare, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
 ```
 
 ```{r generate PoissonDist, include = FALSE}
@@ -2418,6 +2429,8 @@ PoissonDist <- MergedData %>%
        y = "Frequency")
 
 ggsave(paste("PoissonDist",".png",sep = ""), plot = PoissonDist, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
+
+ggsave(paste("FigureS5",".png",sep = ""), plot = PoissonDist, device = NULL, path = Figures,scale = 1, height=7, width= 7, units = c("in"),dpi = 300, limitsize = TRUE)
 ```
 
 ```{r PoissonDist, fig.cap = PoissonDist_cap, echo = FALSE}
@@ -2629,6 +2642,8 @@ OchrophyteRadPlot <-  rbind(OchrophyteSupOxRad, OchrophyteHyPeRad, OchrophyteNit
        y = ~log[10] ~ "(Genes Encoding ROS Metabolizing Enzymes Normalized to Total Genes)") 
 
 ggsave(paste("OchrophyteRadPlot",".png",sep = ""), plot = OchrophyteRadPlot, device = NULL, path = Figures,scale = 1, height=6, width= 10, units = c("in"),dpi = 300, limitsize = TRUE)
+
+ggsave(paste("FigureS6",".png",sep = ""), plot = OchrophyteRadPlot, device = NULL, path = Figures,scale = 1, height=6, width= 10, units = c("in"),dpi = 300, limitsize = TRUE)
 ```
 
 ```{r OchrophyteRadPlot, fig.cap = OchrophyteRadPlot_cap, fig.height= 6, fig.width= 10, echo = FALSE}
@@ -2671,7 +2686,7 @@ EukSupOxDotPlot_cap <- glue("**Summary of O~2~^•−^ scavenging enzymes encode
                         "The size of the symbol increases with the number of members of each enzyme found within each genome or transcriptome.",
                         "Symbol absence means no sequences known to encode the enzyme family of interest were found in the target genome or transcriptome.", .sep = " ")
 
-# ggsave(paste("FigureS7",".png",sep = ""), plot = EukSupOxDotPlot, device = NULL, path = Figures,scale = 1, height=20, width= 10, units = c("in"),dpi = 300, limitsize = TRUE)
+ggsave(paste("FigureS7",".png",sep = ""), plot = EukSupOxDotPlot, device = NULL, path = Figures,scale = 1, height=20, width= 10, units = c("in"),dpi = 300, limitsize = TRUE)
 
 ```
 
@@ -2743,7 +2758,7 @@ EukHyPeDotPlot_cap <- glue("**Summary of H~2~O~2~ metabolizing enzymes encoded w
                            "Symbol absence means no sequences known to encode the enzyme family of interest were found in the target genome or transcriptome."
                            , .sep = " ")
 
-# ggsave(paste("FigureS8",".png",sep = ""), plot = EukHyPeDotPlot, device = NULL, path = Figures,scale = 1, height=20, width= 12, units = c("in"),dpi = 300, limitsize = TRUE)
+ggsave(paste("FigureS9",".png",sep = ""), plot = EukHyPeDotPlot, device = NULL, path = Figures,scale = 1, height=20, width= 12, units = c("in"),dpi = 300, limitsize = TRUE)
 
 ```
 
@@ -2778,7 +2793,7 @@ ProkHyPeDotPlot_cap <- glue("**Summary of H~2~O~2~ metabolizing enzymes encoded 
                                "The size of the symbol increases with the number of members of each enzyme found within each genome or transcriptome.", 
                                "Symbol absence means no sequences known to encode the enzyme family of interest were found in the target genome or transcriptome.", .sep = " ")
 
-# ggsave(paste("FigureS9",".png",sep = ""), plot = ProkHyPeDotPlot, device = NULL, path = Figures,scale = 1, height=10, width= 10, units = c("in"),dpi = 300, limitsize = TRUE)
+ggsave(paste("FigureS10",".png",sep = ""), plot = ProkHyPeDotPlot, device = NULL, path = Figures,scale = 1, height=10, width= 10, units = c("in"),dpi = 300, limitsize = TRUE)
 
 ```
 
@@ -2815,7 +2830,7 @@ EukNitOxDotPlot_cap <- glue("**Summary of ^•^NO metabolizing enzymes encoded w
                            "Symbol absence means no sequences known to encode the enzyme family of interest were found in the target genome or transcriptome.", 
                            .sep = " ")
 
-# ggsave(paste("FigureS10",".png",sep = ""), plot = EukNitOxDotPlot, device = NULL, path = Figures,scale = 1, height=20, width= 10, units = c("in"),dpi = 300, limitsize = TRUE)
+ggsave(paste("FigureS12",".png",sep = ""), plot = EukNitOxDotPlot, device = NULL, path = Figures,scale = 1, height=20, width= 10, units = c("in"),dpi = 300, limitsize = TRUE)
 
 ```
 
