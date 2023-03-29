@@ -961,6 +961,7 @@ PoissonDist
 OmesJust <- OmesPairs %>%
   select(EnzymeName, ECNumber, ROSGene_count.g, ROSGene_count.t, FileName.g) %>%
   mutate(EnzymeNameFileName = interaction(EnzymeName, FileName.g)) 
+
   # pivot_longer(c(ROSGene_count.g, ROSGene_count.t), names_to = "source", values_to = "ROSGene_count") #%>%
   # head(100) #%>%
   # compare_means(ROSGene_count ~ EnzymeNameFileName, paired = TRUE, data = ., method = "wilcox.test")
