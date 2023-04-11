@@ -1,0 +1,156 @@
+Ome,Genus,species,ProdOrScav,ROSEnzymeName,ROSEnzymeAbbrev,Manual_count,Automated_count,AutomatedECKO_count
+Fragilariopsis_cylindrus_CCMP1102-aa-gen,Fragilariopsis,cylindrus,Scavenging,Ascorbate peroxidase,APX,4,3,4
+Fragilariopsis_cylindrus_CCMP1102-aa-gen,Fragilariopsis,cylindrus,Scavenging,Catalase,CAT,0,0,0
+Fragilariopsis_cylindrus_CCMP1102-aa-gen,Fragilariopsis,cylindrus,Scavenging,Cytochrome C peroxidase,CCP,2,3,3
+Fragilariopsis_cylindrus_CCMP1102-aa-gen,Fragilariopsis,cylindrus,Scavenging,Dehydroascorbate reductase,DHAR,1,7,0
+Fragilariopsis_cylindrus_CCMP1102-aa-gen,Fragilariopsis,cylindrus,Scavenging,Glutathione peroxidase,GPx,4,4,6
+Fragilariopsis_cylindrus_CCMP1102-aa-gen,Fragilariopsis,cylindrus,Scavenging,Glutathione reductase,GR,2,2,1
+Fragilariopsis_cylindrus_CCMP1102-aa-gen,Fragilariopsis,cylindrus,Scavenging,Catalase peroxidase,Katg,2,2,2
+Fragilariopsis_cylindrus_CCMP1102-aa-gen,Fragilariopsis,cylindrus,Scavenging,Monodehydroascorbate reductase,MDHAR,0,0,0
+Fragilariopsis_cylindrus_CCMP1102-aa-gen,Fragilariopsis,cylindrus,Scavenging,Peroxiredoxin,Prxns,7,8,6
+Fragilariopsis_cylindrus_CCMP1102-aa-gen,Fragilariopsis,cylindrus,Scavenging,"Superoxide Dismutase (Fe, Mn, Cu/Zn, Ni)",SOD,3,4,5
+Guillardia_theta_CCMP2712-aa-gen,Guillardia,theta,Scavenging,Ascorbate peroxidase,APX,4,5,3
+Guillardia_theta_CCMP2712-aa-gen,Guillardia,theta,Scavenging,Catalase,CAT,0,0,1
+Guillardia_theta_CCMP2712-aa-gen,Guillardia,theta,Scavenging,Cytochrome C peroxidase,CCP,2,2,4
+Guillardia_theta_CCMP2712-aa-gen,Guillardia,theta,Scavenging,Dehydroascorbate reductase,DHAR,1,4,3
+Guillardia_theta_CCMP2712-aa-gen,Guillardia,theta,Scavenging,Glutathione peroxidase,GPx,3,2,3
+Guillardia_theta_CCMP2712-aa-gen,Guillardia,theta,Scavenging,Glutathione reductase,GR,2,2,0
+Guillardia_theta_CCMP2712-aa-gen,Guillardia,theta,Scavenging,Catalase peroxidase,Katg,1,0,0
+Guillardia_theta_CCMP2712-aa-gen,Guillardia,theta,Scavenging,Monodehydroascorbate reductase,MDHAR,0,0,0
+Guillardia_theta_CCMP2712-aa-gen,Guillardia,theta,Scavenging,Peroxiredoxin,Prxns,8,10,4
+Guillardia_theta_CCMP2712-aa-gen,Guillardia,theta,Scavenging,"Superoxide Dismutase (Fe, Mn, Cu/Zn, Ni)",SOD,7,7,6
+Phaeodactylum_tricornutum_CCAP10551-aa-gen,Phaeodactylum,tricornutum,Scavenging,Ascorbate peroxidase,APX,5,6,4
+Phaeodactylum_tricornutum_CCAP10551-aa-gen,Phaeodactylum,tricornutum,Scavenging,Catalase,CAT,1,1,1
+Phaeodactylum_tricornutum_CCAP10551-aa-gen,Phaeodactylum,tricornutum,Scavenging,Cytochrome C peroxidase,CCP,4,2,2
+Phaeodactylum_tricornutum_CCAP10551-aa-gen,Phaeodactylum,tricornutum,Scavenging,Dehydroascorbate reductase,DHAR,1,4,0
+Phaeodactylum_tricornutum_CCAP10551-aa-gen,Phaeodactylum,tricornutum,Scavenging,Glutathione peroxidase,GPx,3,3,3
+Phaeodactylum_tricornutum_CCAP10551-aa-gen,Phaeodactylum,tricornutum,Scavenging,Glutathione reductase,GR,2,2,2
+Phaeodactylum_tricornutum_CCAP10551-aa-gen,Phaeodactylum,tricornutum,Scavenging,Catalase peroxidase,Katg,1,1,1
+Phaeodactylum_tricornutum_CCAP10551-aa-gen,Phaeodactylum,tricornutum,Scavenging,Monodehydroascorbate reductase,MDHAR,0,0,0
+Phaeodactylum_tricornutum_CCAP10551-aa-gen,Phaeodactylum,tricornutum,Scavenging,Peroxiredoxin,Prxns,8,9,4
+Phaeodactylum_tricornutum_CCAP10551-aa-gen,Phaeodactylum,tricornutum,Scavenging,"Superoxide Dismutase (Fe, Mn, Cu/Zn, Ni)",SOD,3,4,3
+Polarella_glacialis_CCMP1383-aa-gen,Polarella,glacialis,Scavenging,Ascorbate peroxidase,APX,18,18,17
+Polarella_glacialis_CCMP1383-aa-gen,Polarella,glacialis,Scavenging,Catalase,CAT,0,0,0
+Polarella_glacialis_CCMP1383-aa-gen,Polarella,glacialis,Scavenging,Cytochrome C peroxidase,CCP,4,4,4
+Polarella_glacialis_CCMP1383-aa-gen,Polarella,glacialis,Scavenging,Dehydroascorbate reductase,DHAR,0,3,0
+Polarella_glacialis_CCMP1383-aa-gen,Polarella,glacialis,Production,Glycolate oxidase,GlyOx,0,9,0
+Polarella_glacialis_CCMP1383-aa-gen,Polarella,glacialis,Scavenging,Glutathione peroxidase,GPx,5,2,4
+Polarella_glacialis_CCMP1383-aa-gen,Polarella,glacialis,Scavenging,Glutathione reductase,GR,3,3,2
+Polarella_glacialis_CCMP1383-aa-gen,Polarella,glacialis,Scavenging,Catalase peroxidase,Katg,7,7,6
+Polarella_glacialis_CCMP1383-aa-gen,Polarella,glacialis,Scavenging,Monodehydroascorbate reductase,MDHAR,0,0,0
+Polarella_glacialis_CCMP1383-aa-gen,Polarella,glacialis,Production,Nitric oxide synthase,NOS,0,0,1
+Polarella_glacialis_CCMP1383-aa-gen,Polarella,glacialis,Scavenging,Peroxiredoxin,Prxns,15,15,13
+Polarella_glacialis_CCMP1383-aa-gen,Polarella,glacialis,Scavenging,"Superoxide Dismutase (Fe, Mn, Cu/Zn, Ni)",SOD,21,20,19
+Polarella_glacialis_CCMP1383-aa-gen,Polarella,glacialis,Production,Sulfite oxidase,SulOx,4,4,4
+Polarella_glacialis_CCMP2088-aa-gen,Polarella,glacialis,Scavenging,Ascorbate peroxidase,APX,12,13,12
+Polarella_glacialis_CCMP2088-aa-gen,Polarella,glacialis,Scavenging,Catalase,CAT,0,0,0
+Polarella_glacialis_CCMP2088-aa-gen,Polarella,glacialis,Scavenging,Cytochrome C peroxidase,CCP,4,3,4
+Polarella_glacialis_CCMP2088-aa-gen,Polarella,glacialis,Scavenging,Dehydroascorbate reductase,DHAR,0,2,0
+Polarella_glacialis_CCMP2088-aa-gen,Polarella,glacialis,Scavenging,Glutathione peroxidase,GPx,5,2,4
+Polarella_glacialis_CCMP2088-aa-gen,Polarella,glacialis,Scavenging,Glutathione reductase,GR,4,4,4
+Polarella_glacialis_CCMP2088-aa-gen,Polarella,glacialis,Scavenging,Catalase peroxidase,Katg,7,7,5
+Polarella_glacialis_CCMP2088-aa-gen,Polarella,glacialis,Scavenging,Monodehydroascorbate reductase,MDHAR,0,0,0
+Polarella_glacialis_CCMP2088-aa-gen,Polarella,glacialis,Scavenging,Peroxiredoxin,Prxns,18,19,13
+Polarella_glacialis_CCMP2088-aa-gen,Polarella,glacialis,Scavenging,"Superoxide Dismutase (Fe, Mn, Cu/Zn, Ni)",SOD,14,14,14
+Pseudo-nitzschia_multistriata_B856-aa-gen,Pseudo-nitzschia,multistriata,Scavenging,Ascorbate peroxidase,APX,4,4,1
+Pseudo-nitzschia_multistriata_B856-aa-gen,Pseudo-nitzschia,multistriata,Scavenging,Catalase,CAT,0,0,0
+Pseudo-nitzschia_multistriata_B856-aa-gen,Pseudo-nitzschia,multistriata,Scavenging,Cytochrome C peroxidase,CCP,1,1,1
+Pseudo-nitzschia_multistriata_B856-aa-gen,Pseudo-nitzschia,multistriata,Scavenging,Dehydroascorbate reductase,DHAR,1,4,0
+Pseudo-nitzschia_multistriata_B856-aa-gen,Pseudo-nitzschia,multistriata,Production,Glycolate oxidase,GlyOx,2,2,0
+Pseudo-nitzschia_multistriata_B856-aa-gen,Pseudo-nitzschia,multistriata,Scavenging,Glutathione peroxidase,GPx,0,0,0
+Pseudo-nitzschia_multistriata_B856-aa-gen,Pseudo-nitzschia,multistriata,Scavenging,Glutathione reductase,GR,3,3,1
+Pseudo-nitzschia_multistriata_B856-aa-gen,Pseudo-nitzschia,multistriata,Scavenging,Catalase peroxidase,Katg,1,1,0
+Pseudo-nitzschia_multistriata_B856-aa-gen,Pseudo-nitzschia,multistriata,Production,Nitric oxide synthase,NOS,0,0,0
+Pseudo-nitzschia_multistriata_B856-aa-gen,Pseudo-nitzschia,multistriata,Scavenging,Peroxiredoxin,Prxns,7,7,3
+Pseudo-nitzschia_multistriata_B856-aa-gen,Pseudo-nitzschia,multistriata,Scavenging,"Superoxide Dismutase (Fe, Mn, Cu/Zn, Ni)",SOD,3,3,5
+Pseudo-nitzschia_multistriata_B856-aa-gen,Pseudo-nitzschia,multistriata,Production,Sulfite oxidase,SulOx,1,1,1
+Symbiodinium_goreaui-aa-gen,(Symbiodinium) Cladocopium,goreaui,Scavenging,Ascorbate peroxidase,APX,11,8,7
+Symbiodinium_goreaui-aa-gen,(Symbiodinium) Cladocopium,goreaui,Scavenging,Catalase,CAT,0,0,0
+Symbiodinium_goreaui-aa-gen,(Symbiodinium) Cladocopium,goreaui,Scavenging,Cytochrome C peroxidase,CCP,3,5,2
+Symbiodinium_goreaui-aa-gen,(Symbiodinium) Cladocopium,goreaui,Scavenging,Dehydroascorbate reductase,DHAR,1,5,2
+Symbiodinium_goreaui-aa-gen,(Symbiodinium) Cladocopium,goreaui,Scavenging,Glutathione peroxidase,GPx,4,3,2
+Symbiodinium_goreaui-aa-gen,(Symbiodinium) Cladocopium,goreaui,Scavenging,Glutathione reductase,GR,4,4,4
+Symbiodinium_goreaui-aa-gen,(Symbiodinium) Cladocopium,goreaui,Scavenging,Catalase peroxidase,Katg,2,2,2
+Symbiodinium_goreaui-aa-gen,(Symbiodinium) Cladocopium,goreaui,Scavenging,Monodehydroascorbate reductase,MDHAR,1,1,1
+Symbiodinium_goreaui-aa-gen,(Symbiodinium) Cladocopium,goreaui,Scavenging,Peroxiredoxin,Prxns,12,12,8
+Symbiodinium_goreaui-aa-gen,(Symbiodinium) Cladocopium,goreaui,Scavenging,"Superoxide Dismutase (Fe, Mn, Cu/Zn, Ni)",SOD,4,4,8
+Symbiodinium_kawagutii-aa-gen,(Symbiodinium) Fugacium,kawagutii,Scavenging,Ascorbate peroxidase,APX,18,18,16
+Symbiodinium_kawagutii-aa-gen,(Symbiodinium) Fugacium,kawagutii,Scavenging,Catalase,CAT,0,0,0
+Symbiodinium_kawagutii-aa-gen,(Symbiodinium) Fugacium,kawagutii,Scavenging,Cytochrome C peroxidase,CCP,1,0,0
+Symbiodinium_kawagutii-aa-gen,(Symbiodinium) Fugacium,kawagutii,Scavenging,Glutathione peroxidase,GPx,1,0,1
+Symbiodinium_kawagutii-aa-gen,(Symbiodinium) Fugacium,kawagutii,Scavenging,Glutathione reductase,GR,2,2,1
+Symbiodinium_kawagutii-aa-gen,(Symbiodinium) Fugacium,kawagutii,Scavenging,Catalase peroxidase,Katg,3,3,1
+Symbiodinium_kawagutii-aa-gen,(Symbiodinium) Fugacium,kawagutii,Scavenging,Monodehydroascorbate reductase,MDHAR,0,0,0
+Symbiodinium_kawagutii-aa-gen,(Symbiodinium) Fugacium,kawagutii,Scavenging,Peroxiredoxin,Prxns,9,9,7
+Symbiodinium_kawagutii-aa-gen,(Symbiodinium) Fugacium,kawagutii,Scavenging,"Superoxide Dismutase (Fe, Mn, Cu/Zn, Ni)",SOD,7,7,5
+Symbiodinium_minutum-aa-gen,(Symbiodinium) Breviolum,minutum,Scavenging,Ascorbate peroxidase,APX,16,16,14
+Symbiodinium_minutum-aa-gen,(Symbiodinium) Breviolum,minutum,Scavenging,Catalase,CAT,0,0,0
+Symbiodinium_minutum-aa-gen,(Symbiodinium) Breviolum,minutum,Scavenging,Cytochrome C peroxidase,CCP,7,7,1
+Symbiodinium_minutum-aa-gen,(Symbiodinium) Breviolum,minutum,Scavenging,Dehydroascorbate reductase,DHAR,1,3,2
+Symbiodinium_minutum-aa-gen,(Symbiodinium) Breviolum,minutum,Production,Glycolate oxidase,GlyOx,2,5,2
+Symbiodinium_minutum-aa-gen,(Symbiodinium) Breviolum,minutum,Scavenging,Glutathione peroxidase,GPx,1,1,0
+Symbiodinium_minutum-aa-gen,(Symbiodinium) Breviolum,minutum,Scavenging,Glutathione reductase,GR,5,8,5
+Symbiodinium_minutum-aa-gen,(Symbiodinium) Breviolum,minutum,Scavenging,Catalase peroxidase,Katg,5,5,1
+Symbiodinium_minutum-aa-gen,(Symbiodinium) Breviolum,minutum,Scavenging,Monodehydroascorbate reductase,MDHAR,2,2,2
+Symbiodinium_minutum-aa-gen,(Symbiodinium) Breviolum,minutum,Production,Nitric oxide synthase,NOS,0,0,2
+Symbiodinium_minutum-aa-gen,(Symbiodinium) Breviolum,minutum,Scavenging,Peroxiredoxin,Prxns,8,9,8
+Symbiodinium_minutum-aa-gen,(Symbiodinium) Breviolum,minutum,Scavenging,"Superoxide Dismutase (Fe, Mn, Cu/Zn, Ni)",SOD,9,9,5
+Symbiodinium_minutum-aa-gen,(Symbiodinium) Breviolum,minutum,Production,Sulfite oxidase,SulOx,5,5,5
+Symbiodiniun_tridacnidorum-aa-gen,Symbiodinium,tridacnidorum,Scavenging,Ascorbate peroxidase,APX,16,11,7
+Symbiodiniun_tridacnidorum-aa-gen,Symbiodinium,tridacnidorum,Scavenging,Catalase,CAT,0,0,0
+Symbiodiniun_tridacnidorum-aa-gen,Symbiodinium,tridacnidorum,Scavenging,Cytochrome C peroxidase,CCP,2,5,2
+Symbiodiniun_tridacnidorum-aa-gen,Symbiodinium,tridacnidorum,Scavenging,Dehydroascorbate reductase,DHAR,0,5,0
+Symbiodiniun_tridacnidorum-aa-gen,Symbiodinium,tridacnidorum,Scavenging,Glutathione peroxidase,GPx,3,2,2
+Symbiodiniun_tridacnidorum-aa-gen,Symbiodinium,tridacnidorum,Scavenging,Glutathione reductase,GR,4,6,4
+Symbiodiniun_tridacnidorum-aa-gen,Symbiodinium,tridacnidorum,Scavenging,Catalase peroxidase,Katg,4,3,1
+Symbiodiniun_tridacnidorum-aa-gen,Symbiodinium,tridacnidorum,Scavenging,Monodehydroascorbate reductase,MDHAR,1,1,1
+Symbiodiniun_tridacnidorum-aa-gen,Symbiodinium,tridacnidorum,Scavenging,Peroxiredoxin,Prxns,13,14,4
+Symbiodiniun_tridacnidorum-aa-gen,Symbiodinium,tridacnidorum,Scavenging,"Superoxide Dismutase (Fe, Mn, Cu/Zn, Ni)",SOD,11,11,4
+Thalassiosira_antarctica_CCMP982-aa-trans,Thalassiosira,antarctica,Scavenging,Catalase,CAT,1,1,1
+Thalassiosira_antarctica_CCMP982-aa-trans,Thalassiosira,antarctica,Scavenging,Cytochrome C peroxidase,CCP,2,6,4
+Thalassiosira_antarctica_CCMP982-aa-trans,Thalassiosira,antarctica,Scavenging,Dehydroascorbate reductase,DHAR,0,4,0
+Thalassiosira_antarctica_CCMP982-aa-trans,Thalassiosira,antarctica,Production,Glycolate oxidase,GlyOx,3,3,2
+Thalassiosira_antarctica_CCMP982-aa-trans,Thalassiosira,antarctica,Scavenging,Glutathione peroxidase,GPx,6,5,5
+Thalassiosira_antarctica_CCMP982-aa-trans,Thalassiosira,antarctica,Scavenging,Glutathione reductase,GR,6,5,3
+Thalassiosira_antarctica_CCMP982-aa-trans,Thalassiosira,antarctica,Scavenging,Catalase peroxidase,Katg,3,3,2
+Thalassiosira_antarctica_CCMP982-aa-trans,Thalassiosira,antarctica,Scavenging,Monodehydroascorbate reductase,MDHAR,0,0,0
+Thalassiosira_antarctica_CCMP982-aa-trans,Thalassiosira,antarctica,Production,Nitric oxide synthase,NOS,2,3,5
+Thalassiosira_antarctica_CCMP982-aa-trans,Thalassiosira,antarctica,Scavenging,Peroxiredoxin,Prxns,8,8,5
+Thalassiosira_antarctica_CCMP982-aa-trans,Thalassiosira,antarctica,Scavenging,"Superoxide Dismutase (Fe, Mn, Cu/Zn, Ni)",SOD,7,7,11
+Thalassiosira_antarctica_CCMP982-aa-trans,Thalassiosira,antarctica,Production,Sulfite oxidase,SulOx,2,2,2
+Thalassiosira_oceanica_CCMP1005-aa-gen,Thalassiosira,oceanica,Scavenging,Ascorbate peroxidase,APX,14,11,6
+Thalassiosira_oceanica_CCMP1005-aa-gen,Thalassiosira,oceanica,Scavenging,Catalase,CAT,0,0,0
+Thalassiosira_oceanica_CCMP1005-aa-gen,Thalassiosira,oceanica,Scavenging,Cytochrome C peroxidase,CCP,2,3,1
+Thalassiosira_oceanica_CCMP1005-aa-gen,Thalassiosira,oceanica,Scavenging,Dehydroascorbate reductase,DHAR,0,5,0
+Thalassiosira_oceanica_CCMP1005-aa-gen,Thalassiosira,oceanica,Production,Glycolate oxidase,GlyOx,3,3,4
+Thalassiosira_oceanica_CCMP1005-aa-gen,Thalassiosira,oceanica,Scavenging,Glutathione peroxidase,GPx,7,5,6
+Thalassiosira_oceanica_CCMP1005-aa-gen,Thalassiosira,oceanica,Scavenging,Glutathione reductase,GR,4,3,0
+Thalassiosira_oceanica_CCMP1005-aa-gen,Thalassiosira,oceanica,Scavenging,Catalase peroxidase,Katg,4,4,4
+Thalassiosira_oceanica_CCMP1005-aa-gen,Thalassiosira,oceanica,Scavenging,Monodehydroascorbate reductase,MDHAR,0,0,0
+Thalassiosira_oceanica_CCMP1005-aa-gen,Thalassiosira,oceanica,Production,Nitric oxide synthase,NOS,1,1,3
+Thalassiosira_oceanica_CCMP1005-aa-gen,Thalassiosira,oceanica,Scavenging,Peroxiredoxin,Prxns,7,7,10
+Thalassiosira_oceanica_CCMP1005-aa-gen,Thalassiosira,oceanica,Scavenging,"Superoxide Dismutase (Fe, Mn, Cu/Zn, Ni)",SOD,5,5,5
+Thalassiosira_oceanica_CCMP1005-aa-gen,Thalassiosira,oceanica,Production,Sulfite oxidase,SulOx,4,4,3
+Thalassiosira_pseudonana_CCMP1335-aa-gen,Thalassiosira,pseudonana,Scavenging,Ascorbate peroxidase,APX,7,9,6
+Thalassiosira_pseudonana_CCMP1335-aa-gen,Thalassiosira,pseudonana,Scavenging,Catalase,CAT,0,0,0
+Thalassiosira_pseudonana_CCMP1335-aa-gen,Thalassiosira,pseudonana,Scavenging,Cytochrome C peroxidase,CCP,0,5,0
+Thalassiosira_pseudonana_CCMP1335-aa-gen,Thalassiosira,pseudonana,Scavenging,Dehydroascorbate reductase,DHAR,0,3,0
+Thalassiosira_pseudonana_CCMP1335-aa-gen,Thalassiosira,pseudonana,Scavenging,Glutathione peroxidase,GPx,2,2,2
+Thalassiosira_pseudonana_CCMP1335-aa-gen,Thalassiosira,pseudonana,Scavenging,Glutathione reductase,GR,3,3,2
+Thalassiosira_pseudonana_CCMP1335-aa-gen,Thalassiosira,pseudonana,Scavenging,Catalase peroxidase,Katg,1,2,1
+Thalassiosira_pseudonana_CCMP1335-aa-gen,Thalassiosira,pseudonana,Scavenging,Monodehydroascorbate reductase,MDHAR,0,0,0
+Thalassiosira_pseudonana_CCMP1335-aa-gen,Thalassiosira,pseudonana,Scavenging,Peroxiredoxin,Prxns,6,6,8
+Thalassiosira_pseudonana_CCMP1335-aa-gen,Thalassiosira,pseudonana,Scavenging,"Superoxide Dismutase (Fe, Mn, Cu/Zn, Ni)",SOD,3,3,5
+Thalassiosira_rotula_CCMP3096-aa-trans,Thalassiosira,rotula,Scavenging,Ascorbate peroxidase,APX,11,10,3
+Thalassiosira_rotula_CCMP3096-aa-trans,Thalassiosira,rotula,Scavenging,Catalase,CAT,0,0,0
+Thalassiosira_rotula_CCMP3096-aa-trans,Thalassiosira,rotula,Scavenging,Cytochrome C peroxidase,CCP,6,6,5
+Thalassiosira_rotula_CCMP3096-aa-trans,Thalassiosira,rotula,Scavenging,Dehydroascorbate reductase,DHAR,0,4,0
+Thalassiosira_rotula_CCMP3096-aa-trans,Thalassiosira,rotula,Production,Glycolate oxidase,GlyOx,2,2,1
+Thalassiosira_rotula_CCMP3096-aa-trans,Thalassiosira,rotula,Scavenging,Glutathione peroxidase,GPx,6,6,3
+Thalassiosira_rotula_CCMP3096-aa-trans,Thalassiosira,rotula,Scavenging,Glutathione reductase,GR,5,5,4
+Thalassiosira_rotula_CCMP3096-aa-trans,Thalassiosira,rotula,Scavenging,Catalase peroxidase,Katg,4,3,1
+Thalassiosira_rotula_CCMP3096-aa-trans,Thalassiosira,rotula,Scavenging,Monodehydroascorbate reductase,MDHAR,0,0,0
+Thalassiosira_rotula_CCMP3096-aa-trans,Thalassiosira,rotula,Production,Nitric oxide synthase,NOS,2,2,5
+Thalassiosira_rotula_CCMP3096-aa-trans,Thalassiosira,rotula,Scavenging,Peroxiredoxin,Prxns,8,10,3
+Thalassiosira_rotula_CCMP3096-aa-trans,Thalassiosira,rotula,Scavenging,"Superoxide Dismutase (Fe, Mn, Cu/Zn, Ni)",SOD,3,4,4
+Thalassiosira_rotula_CCMP3096-aa-trans,Thalassiosira,rotula,Production,Sulfite oxidase,SulOx,3,3,3
